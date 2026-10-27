@@ -41,7 +41,7 @@ describe('step and the save file', () => {
           { maxLength: 30 },
         ),
         (seed, wave, steps) => {
-          let state = stateAtWave(seed, wave, { blade: 40, foxfire: 10 });
+          let state = withTeam(stateAtWave(seed, wave, { blade: 40, foxfire: 10 }), [7, 8, 9]);
           for (const [dtMs, inputs] of steps) {
             state = step(state, dtMs, inputs).state;
           }
