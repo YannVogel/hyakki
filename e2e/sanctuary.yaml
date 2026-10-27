@@ -12,6 +12,8 @@ appId: com.parallaxworks.hyakki
     commands:
       - tapOn:
           id: battle-scene
+          # The scene never stops moving: do not wait for it to settle.
+          waitToSettleTimeoutMs: 500
 - tapOn:
     id: tab-sanctuary
 - assertVisible:
