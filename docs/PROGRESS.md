@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 3 · Boucle jouable (`milestone/3-boucle`) |
-| Dernière issue terminée | #26 Rendu Skia des yōkai et animations |
-| Prochaine issue | #29 Tokens du design system |
+| Dernière issue terminée | #29 Tokens du design system |
+| Prochaine issue | #30 Composants de base |
 
 ## Milestones
 
@@ -17,7 +17,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 0 · Fondations | Terminée | #52 |
 | 1 · Moteur de jeu | Terminée (#53 attend Yann) | #54 |
 | 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
-| 3 · Boucle jouable | À faire | — |
+| 3 · Boucle jouable | En cours | — |
 | 4 · Feel & finitions | À faire | — |
 | 5 · Publication | À faire | — |
 
@@ -30,7 +30,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 - Ordre de la milestone 0 : #9, #11, #10, #12, #13 (#10 et #11 sont parallèles après #9 ; les tests des règles de lint de #10 s'appuient sur Jest installé par #11).
 - iOS : modules Expo précompilés désactivés (voir `docs/DECISIONS.md`).
-- Écrans temporaires à retirer quand les vrais écrans existeront (milestone 3) : accueil (`src/features/home`) et vérification native (`src/features/dev`, route `app/dev/native-check.tsx`). Ils lisent encore `design/tokens.json` directement en attendant #29.
+- Écrans temporaires à retirer quand les vrais écrans existeront (milestone 3) : accueil (`src/features/home`) et vérification native (`src/features/dev`, route `app/dev/native-check.tsx`). Ils utilisent les tokens depuis #29.
 - Vérification locale : simulateur iOS « iPhone 17 » et AVD `Pixel_3a_API_33_arm64-v8a` ; Maestro dans `~/.maestro/bin`.
 
 ## Issues `besoin-yann`

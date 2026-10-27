@@ -6,7 +6,15 @@
 
 À éviter : interface sombre, dégradés décoratifs, textures réalistes, emojis, imitation d'un studio ou d'une licence existante.
 
-Les tokens de référence sont dans [`design/tokens.json`](../design/tokens.json). Dans l'app, ils sont exposés par `src/ui/tokens` ; aucun écran ne contient de valeur en dur.
+Les tokens de référence sont dans [`design/tokens.json`](../design/tokens.json). Dans l'app, ils sont exposés par `src/ui/tokens.ts` (import typé du fichier : le modifier change toute l'app, sans étape de génération) ; aucun écran ne contient de valeur en dur.
+
+| Module | Contenu |
+|---|---|
+| `src/ui/tokens.ts` | `colors`, `rarityColors`, `statColors`, `fontSizes`, `radii`, `strokes`, `spacing`, `shadows`, `touchTarget` |
+| `src/ui/styles.ts` | `hardShadow(token)` (ombre franche `boxShadow` sans flou, identique iOS et Android), `outline(épaisseur)`, `displayText(taille)`, `bodyText(taille, graisse)` |
+| `src/ui/OutlinedText.tsx` | Texte blanc cerné d'encre (8 copies décalées + ombre de 4 px vers le bas), lu une seule fois par les lecteurs d'écran |
+
+Règle de lint : aucune couleur littérale (`#…`, `rgb(…)`) dans `src/ui/` et `src/features/`, et `design/tokens.json` n'est lu que par `src/ui/tokens.ts`. Les couleurs d'art des yōkai générés sont des données du générateur et vivent dans `src/render/yokai/colors.ts`.
 
 ## 2. Couleurs
 

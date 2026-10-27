@@ -2,7 +2,8 @@ import { Link } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { strings } from '@/i18n';
-import { fontFamily } from '@/ui/fonts';
+import { bodyText, displayText } from '@/ui/styles';
+import { colors, spacing, touchTarget } from '@/ui/tokens';
 
 // Temporary welcome screen until the combat screen exists (#31).
 export function HomeScreen() {
@@ -40,22 +41,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: spacing[2],
+    backgroundColor: colors.cream,
   },
-  kanji: {
-    fontFamily: fontFamily.display,
-    fontSize: 22,
-  },
-  title: {
-    fontFamily: fontFamily.display,
-    fontSize: 42,
-  },
-  subtitle: {
-    fontFamily: fontFamily.body700,
-    fontSize: 16,
-  },
+  kanji: displayText('2xl'),
+  title: displayText('5xl'),
+  subtitle: bodyText('lg'),
   devLink: {
-    minHeight: 44,
+    minHeight: touchTarget,
     justifyContent: 'center',
   },
 });
