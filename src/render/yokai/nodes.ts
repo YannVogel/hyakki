@@ -49,7 +49,9 @@ export interface GroupNode {
     /** Start offset of the animation, in seconds. */
     readonly delay?: number;
     readonly rotate?: Rotation;
+    readonly translateX?: number;
     readonly translateY?: number;
+    readonly scale?: number;
     /** Center of the animation's scale or rotation (CSS transform-origin of the prototype). */
     readonly origin?: { readonly x: number; readonly y: number };
   };

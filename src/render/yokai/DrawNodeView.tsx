@@ -82,7 +82,7 @@ function DrawNodeView({ node, motion }: { node: DrawNode; motion: Motion | null 
   if (!isGroup(node)) {
     return <ShapeView node={node} />;
   }
-  const { animation, rotate, translateY, origin } = node.group;
+  const { animation, rotate, translateX, translateY, scale, origin } = node.group;
   const children = node.children.map((child, index) => (
     <DrawNodeView key={index} node={child} motion={motion} />
   ));
@@ -96,8 +96,18 @@ function DrawNodeView({ node, motion }: { node: DrawNode; motion: Motion | null 
       </Group>
     );
   }
-  if (translateY !== undefined) {
-    return <Group transform={[{ translateY }]}>{children}</Group>;
+  if (translateX !== undefined || translateY !== undefined || scale !== undefined) {
+    return (
+      <Group
+        transform={[
+          { translateX: translateX ?? 0 },
+          { translateY: translateY ?? 0 },
+          { scale: scale ?? 1 },
+        ]}
+      >
+        {children}
+      </Group>
+    );
   }
   if (animation !== undefined && motion !== null) {
     return (

@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 4 · Feel & finitions (`milestone/4-finitions`) |
-| Dernière issue terminée | #39 Illustrations HD (partie automatisable) |
-| Prochaine issue | #40 Icône et écran de lancement |
+| Dernière issue terminée | #40 Icône et écran de lancement |
+| Prochaine issue | #41 Effets de combat |
 
 ## Milestones
 
@@ -24,6 +24,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 ## Points en suspens
 
 - Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
+- Milestone 4 : rebuild natif nécessaire avant les vérifications sur simulateur (`expo-system-ui`, icône, écran de lancement) ; le regrouper avec #43 et #44. Maestro sur Android : 6 flows sur 7 échouent (écrans animés jamais « stables », voir commentaire sur #57) : à corriger avant les captures de #46.
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
 
@@ -39,3 +40,4 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - #53 Valider l'équilibrage (cibles et ressenti en jeu, après la milestone 3).
 - #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
 - #58 Régénérer les 20 illustrations en HD dans ChatGPT (procédure et outils prêts).
+- #59 Valider l'icône et l'écran de lancement.

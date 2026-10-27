@@ -69,3 +69,21 @@ Keep exactly the same design, proportions, colors, outline thickness and flat ce
 Square format, figure centered with empty space around it, transparent background (or plain flat #FFF4DC if transparency is not possible).
 No text, no shadow on the ground, no scenery.
 ```
+
+## 6. Icône et écran de lancement
+
+L'icône est dessinée en code, comme les yōkai ordinaires : la mascotte est **Hitotsume-Chōchin-obake** (graine 116 300 du générateur), une lanterne en papier cyclope qui tire la langue, sur le ciel du festival avec soleil et collines. Les compositions vectorielles vivent dans `src/render/icon/appIcon.ts` (cadre 200 × 200, couleurs des tokens) ; `scripts/render-icons.ts` les rend en PNG avec CanvasKit (le moteur de Skia, en Node) :
+
+| Fichier (`assets/images/app/`) | Contenu |
+|---|---|
+| `icon.png` | Icône iOS et stores, 1024 × 1024, opaque (Expo retire le canal alpha à la génération iOS) |
+| `android-icon-background.png` | Fond de l'icône adaptative : ciel, soleil, collines |
+| `android-icon-foreground.png` | Mascotte seule, dans la zone sûre de 66 dp sur 108 dp |
+| `android-icon-monochrome.png` | Silhouette blanche pour les icônes à thème (Android 13+) : les contours encrés deviennent des jours |
+| `splash-icon.png` | Mascotte seule sur transparence ; l'écran de lancement est crème (`imageWidth` 160 dans `app.config.ts`) |
+
+```bash
+npx tsx scripts/render-icons.ts /chemin/apercus   # le dossier d'aperçus (48, 96 et 180 px) est facultatif
+```
+
+L'icône dépend du générateur : la graine 116 300 doit continuer à donner la même lanterne (contrat de version, voir [`PROCEDURAL_YOKAI.md`](PROCEDURAL_YOKAI.md)). Un test le vérifie.
