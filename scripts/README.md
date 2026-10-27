@@ -3,6 +3,9 @@
 | Script | Rôle |
 |---|---|
 | [`cut_sheet.py`](cut_sheet.py) | Découpe une planche ChatGPT (fond uni) en figures PNG transparentes |
+| [`bench-bignum.ts`](bench-bignum.ts) | Spike de performance de `BigNum` (1 million de multiplications) |
+
+Les scripts TypeScript se lancent avec `npx tsx scripts/<script>.ts` : ils importent le moteur directement.
 
 ## `cut_sheet.py`
 

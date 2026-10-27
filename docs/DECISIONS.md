@@ -42,7 +42,8 @@ Chaque entrée : date, décision, raison, conséquence. Les plus récentes en ha
 
 - **Décision** : `break_infinity.js` derrière `src/engine/numbers`.
 - **Raison** : les croissances exponentielles dépassent `1e308` vers la vague 4 000.
-- **Conséquence** : interdiction d'utiliser `number` pour les grandeurs exponentielles. À valider par un spike de performance (issue de la milestone 1).
+- **Conséquence** : interdiction d'utiliser `number` pour les grandeurs exponentielles. Seul `src/engine/numbers/bigNum.ts` importe la bibliothèque (règle de lint) ; le reste du moteur manipule un type opaque `BigNum`.
+- **Spike de performance (2026-10-27)** : 1 million de multiplications `BigNum × number` en **35 ms** (médiane de 5 passes, Node 24.16, Mac Apple Silicon), largement sous la cible de 200 ms. Script : `npx tsx scripts/bench-bignum.ts`.
 
 ## Questions ouvertes
 

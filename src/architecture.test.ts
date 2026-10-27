@@ -55,11 +55,17 @@ describe('engine purity', () => {
     expect(await violations('src/engine/fixture.ts', code)).toEqual(['no-restricted-globals']);
   });
 
-  it('accepts relative imports and break_infinity.js', async () => {
-    const code =
-      "import Decimal from 'break_infinity.js';\nimport { clamp } from './math';\n" +
-      'export const x = clamp(new Decimal(1).toNumber(), 0, 1);\n';
+  it('accepts relative imports', async () => {
+    const code = "import { clamp } from './math';\nexport const x = clamp(1, 0, 1);\n";
     expect(await violations('src/engine/fixture.ts', code)).toEqual([]);
+  });
+
+  it('keeps break_infinity.js behind the BigNum adapter', async () => {
+    const code = "import Decimal from 'break_infinity.js';\nexport const d = new Decimal(1);\n";
+    expect(await violations('src/engine/combat/fixture.ts', code)).toEqual([
+      'no-restricted-imports',
+    ]);
+    expect(await violations('src/engine/numbers/bigNum.ts', code)).toEqual([]);
   });
 
   it('lets engine tests use test libraries', async () => {

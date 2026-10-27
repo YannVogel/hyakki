@@ -74,7 +74,7 @@ Ces règles sont vérifiées par ESLint ([`eslint.config.js`](../eslint.config.j
 | Règle | Outil |
 |---|---|
 | Frontières entre couches | `import/no-restricted-paths` (alias `@/` résolus par le resolver TypeScript) |
-| `engine` n'importe que lui-même et `break_infinity.js` | `no-restricted-imports` (hors fichiers de test) |
+| `engine` n'importe que lui-même ; `break_infinity.js` seulement dans `numbers/bigNum.ts` | `no-restricted-imports` (hors fichiers de test) |
 | Pas d'horloge dans `engine` (`Date`, `performance`) | `no-restricted-globals` |
 | Pas de `Math.random` ni de `crypto` dans `engine` | `no-restricted-properties`, `no-restricted-globals` |
 

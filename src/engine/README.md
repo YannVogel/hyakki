@@ -41,3 +41,15 @@ Chaque module apparaît avec l'issue qui l'implémente (milestones 1 et 2).
 | `deriveSeed(seed, index)` | Hash 32 bits stable : graine du yōkai de la vague `index` d'un défilé de graine `seed`. Bijectif en `index` pour une graine donnée (aucune collision entre vagues). |
 
 Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
+
+### `numbers/` — grands nombres
+
+| Fonction | Rôle |
+|---|---|
+| `BigNum` | Type opaque (adaptateur sur `break_infinity.js`, seul fichier autorisé à l'importer). |
+| `big(n)`, `ZERO`, `ONE` | Création. Les opérations acceptent aussi un `number` en entrée. |
+| `add`, `sub`, `mul`, `div`, `pow`, `floor`, `min`, `max` | Arithmétique, sans limite de `1e308`. |
+| `compare`, `eq`, `lt`, `lte`, `gt`, `gte` | Comparaisons. |
+| `toNumber`, `log10`, `toMantissaExponent` | Conversions (`toNumber` vaut `Infinity` au-delà de `1e308`). |
+| `stringifyBigNum`, `parseBigNum` | Forme texte sans perte pour la sauvegarde (`<mantisse>e<exposant>`) ; `BigNumParseError` si le texte est invalide. |
+| `formatNumber(n)` | Affichage français tronqué : `1 284`, `48,2 k`, `1,28 M`, `3,4 Md`, `1 aa`… (espace fine insécable, 3 chiffres significatifs). |
