@@ -81,7 +81,7 @@ Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque comp
 ## 6. Animation et effets
 
 - Effets de combat (Skia) : étoile d'impact jaune, chiffres de dégâts qui éclatent puis montent, « Critique ! » rouge cerné de blanc, lignes de vitesse, impact frame au critique.
-- Cut-in de Gardien : fond en rayons tournants, bande blanche des yeux qui glisse depuis la gauche, bandeau jaune du nom depuis la droite.
+- Cut-in de Gardien : fond en rayons tournants, bande blanche des yeux qui glisse depuis la gauche, bandeau jaune du nom depuis la droite. Implémentation : `src/features/combat/GuardianCutIn.tsx` (glissements de 500 ms avec rebond, le nom 150 ms après les yeux ; rayons et yeux en Skia dans `src/render/scene/`).
 - Respect strict de « réduire les animations » : les effets deviennent des fondus courts, rien ne tourne ni ne clignote.
 
 ## 7. Accessibilité

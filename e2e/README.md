@@ -6,6 +6,7 @@ Parcours de bout en bout joués sur un simulateur iOS ou un émulateur Android p
 |---|---|
 | `app-starts.yaml` | L'app démarre sur l'écran Combat |
 | `combat.yaml` | Le combat avance, une frappe touche, un talisman se lance et se recharge |
+| `guardian.yaml` | Le cut-in du Gardien s'affiche ; « Affronter ! » lance le combat et son chrono |
 | `sanctuary.yaml` | Après quelques frappes, une amélioration s'achète et son niveau monte aussitôt |
 | `native-check.yaml` | Skia et MMKV tournent dans le development build ; le compteur survit à un redémarrage |
 | `yokai-lab.yaml` | La Fabrique à yōkai (écran de développement) dessine les yōkai en Skia ; une tuile se sélectionne |

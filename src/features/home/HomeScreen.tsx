@@ -1,12 +1,16 @@
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { strings } from '@/i18n';
+import { useGameStore } from '@/state';
 import { bodyText, displayText } from '@/ui/styles';
+
+import { devGuardianState } from '../dev/devStates';
 import { colors, spacing, touchTarget } from '@/ui/tokens';
 
 // Development hub (route /dev): links to the development screens.
 export function HomeScreen() {
+  const store = useGameStore();
   return (
     <View style={styles.container}>
       <Text style={styles.kanji}>{strings.home.kanji}</Text>
@@ -30,6 +34,17 @@ export function HomeScreen() {
               <Text style={styles.subtitle}>{strings.home.yokaiLabLink}</Text>
             </Pressable>
           </Link>
+          <Pressable
+            accessibilityRole="button"
+            style={styles.devLink}
+            testID="dev-guardian"
+            onPress={() => {
+              store.setState({ game: devGuardianState(2026, 100) });
+              router.back();
+            }}
+          >
+            <Text style={styles.subtitle}>{strings.home.guardianShortcut}</Text>
+          </Pressable>
           <Link href="/dev/catalog" asChild>
             <Pressable accessibilityRole="link" style={styles.devLink} testID="home-catalog-link">
               <Text style={styles.subtitle}>{strings.home.catalogLink}</Text>

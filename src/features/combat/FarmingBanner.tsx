@@ -1,35 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { strings } from '@/i18n';
-import { bodyText, Button, Card, displayText, spacing } from '@/ui';
-
-export interface GuardianPanelProps {
-  readonly name: string;
-  readonly wave: number;
-  readonly onEngage: () => void;
-  readonly onFlee: () => void;
-}
-
-/** A guardian waits for the player: face it or go back one wave (the cut-in of #35 wraps this). */
-export function GuardianPanel({ name, wave, onEngage, onFlee }: GuardianPanelProps) {
-  return (
-    <Card style={styles.panel} testID="guardian-panel">
-      <Text style={displayText('xl')}>{strings.guardians.blocks(name)}</Text>
-      <Button
-        label={strings.guardians.engage}
-        size="large"
-        onPress={onEngage}
-        testID="guardian-engage"
-      />
-      <Button
-        label={strings.guardians.flee(wave - 1)}
-        variant="neutral"
-        onPress={onFlee}
-        testID="guardian-flee"
-      />
-    </Card>
-  );
-}
+import { bodyText, Button, spacing } from '@/ui';
 
 export interface FarmingBannerProps {
   readonly onChallenge: () => void;

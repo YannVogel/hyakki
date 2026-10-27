@@ -49,7 +49,8 @@ describe('CombatScreen', () => {
 
   it('asks the player to face or flee a waiting guardian', async () => {
     const store = await renderWith(atGuardian(false));
-    expect(screen.getByText(strings.guardians.blocks('Bake-danuki'))).toBeOnTheScreen();
+    expect(screen.getByTestId('guardian-cut-in')).toBeOnTheScreen();
+    expect(screen.getByTestId('cut-in-name')).toHaveTextContent('Bake-danuki');
     await fireEvent.press(screen.getByTestId('guardian-engage'));
     await fireEvent.press(screen.getByTestId('guardian-flee'));
     expect(store.getState().pendingInputs.map((input) => input.type)).toEqual([

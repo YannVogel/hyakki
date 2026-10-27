@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
+import { useReducedMotion } from 'react-native-reanimated';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { type CombatEvent, formatNumber } from '@/engine';
+import { BALANCE, type CombatEvent, formatNumber, GUARDIANS, guardianMaxHp } from '@/engine';
 import { strings } from '@/i18n';
 import {
   enemyView,
@@ -16,7 +17,8 @@ import { colors, spacing } from '@/ui';
 
 import { BattleScene, type LastHit } from './BattleScene';
 import { CombatHeader } from './CombatHeader';
-import { FarmingBanner, GuardianPanel } from './GuardianPanel';
+import { GuardianCutIn } from './GuardianCutIn';
+import { FarmingBanner } from './FarmingBanner';
 import { PowerRow } from './PowerRow';
 import { TalismanBar } from './TalismanBar';
 
@@ -35,6 +37,7 @@ export function CombatScreen() {
   const game = useGame((store) => store.game);
   const events = useGame((store) => store.events);
   const actions = useGameStore().getState();
+  const reduceMotion = useReducedMotion();
   const parade = paradeView(game);
   const enemy = enemyView(game);
   const lastHit = useMemo(() => lastHitOf(events), [events]);
@@ -52,21 +55,23 @@ export function CombatScreen() {
           onTap={actions.tap}
         />
       </View>
+      {parade.farming ? <FarmingBanner onChallenge={actions.challengeGuardian} /> : null}
+      <PowerRow power={formatNumber(powerPerSecond(game))} team={game.team} />
+      <TalismanBar talismans={talismanViews(game)} onCast={actions.castTalisman} />
+      <View style={styles.bottomGap} />
       {enemy.kind === 'guardian' && !enemy.engaged ? (
-        <GuardianPanel
+        <GuardianCutIn
+          index={enemy.index}
           name={name}
           wave={parade.wave}
+          hp={formatNumber(guardianMaxHp(parade.wave))}
+          weakness={GUARDIANS[enemy.index].weakness}
+          timeLimitSeconds={BALANCE.guardian.timeLimitMs / 1000}
+          reduceMotion={reduceMotion}
           onEngage={actions.engageGuardian}
           onFlee={actions.fleeGuardian}
         />
-      ) : (
-        <>
-          {parade.farming ? <FarmingBanner onChallenge={actions.challengeGuardian} /> : null}
-          <PowerRow power={formatNumber(powerPerSecond(game))} team={game.team} />
-          <TalismanBar talismans={talismanViews(game)} onCast={actions.castTalisman} />
-        </>
-      )}
-      <View style={styles.bottomGap} />
+      ) : null}
     </SafeAreaView>
   );
 }

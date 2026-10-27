@@ -1,0 +1,20 @@
+# Gardien : le cut-in s'affiche, « Affronter ! » lance le combat et son chrono de 30 s.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- longPressOn:
+    id: dev-hub
+- tapOn:
+    id: dev-guardian
+- extendedWaitUntil:
+    visible:
+      id: cut-in-name
+    timeout: 10000
+- assertVisible: 'Faible au.*'
+- tapOn:
+    id: guardian-engage
+- assertVisible:
+    id: guardian-timer
+- assertNotVisible:
+    id: guardian-cut-in
