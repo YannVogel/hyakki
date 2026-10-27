@@ -52,6 +52,7 @@ Combat automatique ──► âmes ──► Sanctuaire (améliorations) ──�
   - **Kitsune-bi** (火) : gros dégâts de feu + brûlure pendant 5 s.
   - **Raijin** (雷) : très gros dégâts instantanés.
   - **Kekkai** (結) : contre un Gardien, ajoute 5 s au chrono ; sinon, double les âmes pendant 10 s.
+- Valeurs de départ (`balance.ts`) : Kitsune-bi = 20 frappes du héros puis brûlure de 1 % des PV max par seconde pendant 5 s, recharge 30 s ; Raijin = 50 frappes, recharge 60 s ; Kekkai, recharge 45 s. Un talisman de l'élément faible du Gardien fait ×2. Les talismans ne font pas de critique. Ils sont refusés pendant le cut-in d'un Gardien ; les recharges suivent le temps réel.
 
 ### 4.2 Gardiens
 

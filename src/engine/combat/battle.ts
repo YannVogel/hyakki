@@ -1,5 +1,11 @@
 import { BALANCE } from '../balance';
-import { enemySeed, type GameState, type GuardianFight, type Shikigami } from '../gameState';
+import {
+  enemySeed,
+  type GameState,
+  type GuardianFight,
+  type Shikigami,
+  type TalismanId,
+} from '../gameState';
 import { add, type BigNum, div, gte, mul, sub, toNumber, ZERO } from '../numbers';
 import { createRng, type Rng } from '../rng';
 import { addCapture, captureChance } from '../shikigami';
@@ -35,6 +41,8 @@ export interface Battle {
   collection: Shikigami[];
   /** Time until the next attack: the hero, then each team member. */
   timers: number[];
+  cooldowns: Record<TalismanId, number>;
+  effects: { burnMs: number; soulsBoostMs: number };
   elapsed: number;
 }
 
@@ -62,6 +70,8 @@ export function startBattle(state: GameState): Battle {
     guardiansDefeated: [...state.guardiansDefeated],
     collection: [...state.shikigami],
     timers: [state.attackTimers.hero, ...state.attackTimers.team],
+    cooldowns: { ...state.cooldowns },
+    effects: { ...state.effects },
     elapsed: 0,
   };
 }
@@ -83,9 +93,15 @@ export function finishBattle(state: GameState, battle: Battle): GameState {
     guardiansDefeated: battle.guardiansDefeated,
     shikigami: battle.collection,
     attackTimers: { hero: battle.timers[0], team: battle.timers.slice(1) },
+    cooldowns: battle.cooldowns,
+    effects: battle.effects,
     rngState: battle.rng.getState(),
   };
 }
+
+/** Multiplier of the Kekkai talisman's souls boost, when active. */
+const soulsBoost = (battle: Battle): number =>
+  battle.effects.soulsBoostMs > 0 ? BALANCE.talismans.kekkai.soulsBoostMultiplier : 1;
 
 /** A guardian waiting for the player (cut-in): nothing fights until it is engaged. */
 export const isPaused = (battle: Battle): boolean =>
@@ -124,7 +140,10 @@ function defeatGuardian(battle: Battle): void {
   const ofuda = guardianOfuda(wave);
   const souls = mul(
     waveSouls(wave),
-    BALANCE.guardian.soulsMultiplier * tierMultiplier(wave) * battle.power.soulsMultiplier,
+    BALANCE.guardian.soulsMultiplier *
+      tierMultiplier(wave) *
+      battle.power.soulsMultiplier *
+      soulsBoost(battle),
   );
   const firstTime = !battle.guardiansDefeated.includes(index);
   if (firstTime) {
@@ -149,7 +168,10 @@ function defeatYokai(battle: Battle): void {
   const { wave, seed } = battle;
   const souls = mul(
     waveSouls(wave),
-    yokaiProfile(seed).soulsFactor * tierMultiplier(wave) * battle.power.soulsMultiplier,
+    yokaiProfile(seed).soulsFactor *
+      tierMultiplier(wave) *
+      battle.power.soulsMultiplier *
+      soulsBoost(battle),
   );
   battle.souls = add(battle.souls, souls);
   battle.events.push({ type: 'yokaiDefeated', wave, seed, souls, atMs: battle.elapsed });
@@ -179,11 +201,13 @@ function defeatEnemy(battle: Battle): void {
   }
 }
 
+/** Talismans never land critical hits. */
 export function hit(battle: Battle, baseDamage: BigNum, source: HitSource): void {
   if (isPaused(battle)) {
     return;
   }
-  const crit = battle.rng.next() < battle.power.critChance;
+  const canCrit = source === 'hero' || source === 'tap' || source === 'shikigami';
+  const crit = canCrit && battle.rng.next() < battle.power.critChance;
   const damage = crit ? mul(baseDamage, BALANCE.crit.multiplier) : baseDamage;
   battle.events.push({ type: 'hit', source, damage, crit, atMs: battle.elapsed });
   battle.damage = add(battle.damage, damage);
@@ -212,15 +236,22 @@ export function strike(battle: Battle, attacker: number): void {
 export function advance(battle: Battle, durationMs: number): void {
   let left = durationMs;
   while (left > 0 && !isPaused(battle)) {
+    const { effects } = battle;
+    const talismanBurn = effects.burnMs > 0 ? BALANCE.talismans.kitsunebi.burnRate : 0;
     const burnRate =
-      battle.power.burnRate * (battle.guardian === null ? 1 : BALANCE.guardian.burnFactor);
+      (battle.power.burnRate + talismanBurn) *
+      (battle.guardian === null ? 1 : BALANCE.guardian.burnFactor);
     const burnPerMs = mul(battle.maxHp, burnRate / 1000);
     const msToKill =
       burnRate > 0 ? toNumber(div(sub(battle.maxHp, battle.damage), burnPerMs)) : Infinity;
-    const piece = Math.min(left, msToKill);
+    // The talisman burn stops at its exact end: the burn rate changes there.
+    const burnEnd = effects.burnMs > 0 ? effects.burnMs : Infinity;
+    const piece = Math.min(left, msToKill, burnEnd);
     if (battle.guardian !== null) {
       battle.guardian.timeLeftMs -= piece;
     }
+    effects.burnMs = Math.max(0, effects.burnMs - piece);
+    effects.soulsBoostMs = Math.max(0, effects.soulsBoostMs - piece);
     battle.elapsed += piece;
     left -= piece;
     if (piece === msToKill) {

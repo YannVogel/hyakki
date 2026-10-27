@@ -1,4 +1,4 @@
-import type { GameState } from '../gameState';
+import { type GameState, TALISMAN_IDS } from '../gameState';
 import {
   advance,
   type Battle,
@@ -12,13 +12,14 @@ import {
 } from './battle';
 import type { CombatEvent, CombatInput } from './events';
 import { guardianAt } from './guardians';
+import { castTalisman } from './talismans';
 
 export interface StepResult {
   readonly state: GameState;
   readonly events: readonly CombatEvent[];
 }
 
-function applyInput(battle: Battle, input: CombatInput): void {
+function applyInput(battle: Battle, state: GameState, input: CombatInput): void {
   const { guardian } = battle;
   switch (input.type) {
     case 'tap':
@@ -35,6 +36,9 @@ function applyInput(battle: Battle, input: CombatInput): void {
         battle.events.push({ type: 'guardianFled', wave: battle.wave, atMs: battle.elapsed });
         retreat(battle);
       }
+      break;
+    case 'castTalisman':
+      castTalisman(battle, state, input.talisman);
       break;
     case 'challengeGuardian':
       if (battle.farming) {
@@ -72,7 +76,7 @@ export function step(
     return { state, events: [] };
   }
   const battle = startBattle(state);
-  inputs.forEach((input) => applyInput(battle, input));
+  inputs.forEach((input) => applyInput(battle, state, input));
 
   // Half-open interval [start, end[: what is due exactly at the end belongs to the next step.
   // Attackers due at the same time strike in order (hero, then team), before a guardian timeout.
@@ -100,5 +104,9 @@ export function step(
     }
   }
 
+  // Cooldowns follow real time, even while a guardian waits for the player.
+  for (const talisman of TALISMAN_IDS) {
+    battle.cooldowns[talisman] = Math.max(0, battle.cooldowns[talisman] - duration);
+  }
   return { state: finishBattle(state, battle), events: battle.events };
 }

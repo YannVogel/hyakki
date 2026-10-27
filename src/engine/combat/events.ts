@@ -1,6 +1,7 @@
+import type { TalismanId } from '../gameState';
 import type { BigNum } from '../numbers';
 
-export type HitSource = 'hero' | 'tap' | 'shikigami';
+export type HitSource = 'hero' | 'tap' | 'shikigami' | 'kitsunebi' | 'raijin';
 
 /** What happened during a step, for the UI to animate. `atMs` is the offset within the step. */
 export type CombatEvent =
@@ -57,7 +58,15 @@ export type CombatEvent =
       readonly index: number;
       readonly atMs: number;
     }
-  | { readonly type: 'guardianFled'; readonly wave: number; readonly atMs: number };
+  | { readonly type: 'guardianFled'; readonly wave: number; readonly atMs: number }
+  | { readonly type: 'talismanCast'; readonly talisman: TalismanId; readonly atMs: number }
+  | {
+      readonly type: 'talismanNotReady';
+      readonly talisman: TalismanId;
+      /** Cooldown left; 0 when refused because a guardian waits for the player. */
+      readonly cooldownMs: number;
+      readonly atMs: number;
+    };
 
 /** What the player did since the previous step. */
 export type CombatInput =
@@ -67,4 +76,5 @@ export type CombatInput =
   /** Runs from the guardian: back to the previous wave, farming. */
   | { readonly type: 'fleeGuardian' }
   /** Leaves farming to face the guardian again. */
-  | { readonly type: 'challengeGuardian' };
+  | { readonly type: 'challengeGuardian' }
+  | { readonly type: 'castTalisman'; readonly talisman: TalismanId };

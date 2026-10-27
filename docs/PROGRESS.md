@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 1 · Moteur de jeu (`milestone/1-moteur`) |
-| Dernière issue terminée | #19 Économie du Sanctuaire |
-| Prochaine issue | #20 Talismans : Kitsune-bi, Raijin et Kekkai |
+| Dernière issue terminée | #20 Talismans : Kitsune-bi, Raijin et Kekkai |
+| Prochaine issue | #21 Progression hors ligne |
 
 ## Milestones
 

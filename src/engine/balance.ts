@@ -59,4 +59,25 @@ export const BALANCE = {
     levelUpBaseCost: 100,
     levelUpCostGrowth: 1.18,
   },
+  talismans: {
+    kitsunebi: {
+      cooldownMs: 30_000,
+      /** Fire damage = hero hit × damageMultiplier, then burnRate of max HP per second. */
+      damageMultiplier: 20,
+      burnRate: 0.01,
+      burnDurationMs: 5_000,
+    },
+    raijin: { cooldownMs: 60_000, damageMultiplier: 50 },
+    kekkai: {
+      cooldownMs: 45_000,
+      /** Against an engaged guardian: extra time. Otherwise: souls boost. */
+      guardianExtraMs: 5_000,
+      soulsBoostMultiplier: 2,
+      soulsBoostDurationMs: 10_000,
+    },
+    /** Damage multiplier of a talisman matching the guardian's weakness. */
+    weaknessMultiplier: 2,
+    /** The Kekkai upgrade never cuts cooldowns by more than this. */
+    maxCooldownReduction: 0.5,
+  },
 } as const;
