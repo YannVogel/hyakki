@@ -2,18 +2,18 @@
 
 Miroir des [milestones](https://github.com/YannVogel/hyakki/milestones) et des epics GitHub. Chaque epic regroupe ses issues en sous-issues.
 
-| Milestone | Epics | Résultat attendu |
-|---|---|---|
-| **0 · Fondations** | #1 Fondations du projet | App Expo saine, lint avec règles de dépendances, tests, CI, development builds |
-| **1 · Moteur de jeu** | #2 Moteur de jeu (TypeScript pur) | Partie complète simulable en Node, équilibrage mesuré |
-| **2 · Fabrique à yōkai** | #3 Fabrique à yōkai | Yōkai générés, dessinés et animés en Skia, capture des shikigami |
-| **3 · Boucle jouable** | #4 Design system et composants, #5 Écrans et boucle de jeu | Une partie se joue de la première vague au premier Festival |
-| **4 · Feel & finitions** | #6 Art : héros et Gardiens, #7 Feel : effets, animations, haptique (+ #28 générateur V2) | Combat fluide et expressif, illustrations définitives |
-| **5 · Publication** | #8 Publication sur les stores | Disponible sur l'App Store et Google Play, étude de cas en ligne |
+| Milestone | Epics | Résultat attendu | État |
+|---|---|---|---|
+| **0 · Fondations** | #1 Fondations du projet | App Expo saine, lint avec règles de dépendances, tests, CI, development builds | Terminée (PR #52) |
+| **1 · Moteur de jeu** | #2 Moteur de jeu (TypeScript pur) | Partie complète simulable en Node, équilibrage mesuré | À faire |
+| **2 · Fabrique à yōkai** | #3 Fabrique à yōkai | Yōkai générés, dessinés et animés en Skia, capture des shikigami | À faire |
+| **3 · Boucle jouable** | #4 Design system et composants, #5 Écrans et boucle de jeu | Une partie se joue de la première vague au premier Festival | À faire |
+| **4 · Feel & finitions** | #6 Art : héros et Gardiens, #7 Feel : effets, animations, haptique (+ #28 générateur V2) | Combat fluide et expressif, illustrations définitives | À faire |
+| **5 · Publication** | #8 Publication sur les stores | Disponible sur l'App Store et Google Play, étude de cas en ligne | À faire |
 
 ## Ordre conseillé
 
-1. **#9 → #13** : fondations (#10, #11 et #13 peuvent avancer en parallèle après #9).
+1. **#9 → #13** : fondations (#10, #11 et #13 peuvent avancer en parallèle après #9). Fait dans l'ordre #9, #11, #10, #12, #13.
 2. **#14 → #23** : moteur. #14 et #15 d'abord, puis #16, #17, et le reste. **#23 (simulation) avant de construire les écrans** : les formules de départ sont des hypothèses.
 3. **#24 → #27** : générateur, en parallèle de la fin du moteur dès que #14 est fait.
 4. **#29, #30** puis **#31 → #37** : design system, puis écrans.

@@ -6,15 +6,15 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 | | |
 |---|---|
-| Milestone en cours | 0 · Fondations (`milestone/0-fondations`) |
+| Milestone en cours | 1 · Moteur de jeu (`milestone/1-moteur`) |
 | Dernière issue terminée | #13 Development builds iOS et Android |
-| Prochaine issue | Clôture de la milestone 0 (PR, CI, revue, merge), puis #14 RNG à graine |
+| Prochaine issue | #14 RNG à graine et dérivation des graines |
 
 ## Milestones
 
 | Milestone | État | PR |
 |---|---|---|
-| 0 · Fondations | En cours | — |
+| 0 · Fondations | Terminée | #52 |
 | 1 · Moteur de jeu | À faire | — |
 | 2 · Fabrique à yōkai | À faire | — |
 | 3 · Boucle jouable | À faire | — |
@@ -22,6 +22,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 5 · Publication | À faire | — |
 
 ## Points en suspens
+
+- Les branches de milestone ne sont jamais réécrites une fois poussées (pas de push forcé) : un correctif de revue devient un commit `fix` qui référence l'issue.
 
 - Ordre de la milestone 0 : #9, #11, #10, #12, #13 (#10 et #11 sont parallèles après #9 ; les tests des règles de lint de #10 s'appuient sur Jest installé par #11).
 - iOS : modules Expo précompilés désactivés (voir `docs/DECISIONS.md`).
