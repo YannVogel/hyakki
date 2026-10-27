@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 4 · Feel & finitions (`milestone/4-finitions`) |
-| Dernière issue terminée | #37 Retour hors ligne |
-| Prochaine issue | #39 Illustrations HD (préparation + besoin-yann), puis #40, #41, #42, #43, #44, #28 |
+| Dernière issue terminée | #39 Illustrations HD (partie automatisable) |
+| Prochaine issue | #40 Icône et écran de lancement |
 
 ## Milestones
 
@@ -18,7 +18,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 1 · Moteur de jeu | Terminée (#53 attend Yann) | #54 |
 | 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
 | 3 · Boucle jouable | Terminée | #57 |
-| 4 · Feel & finitions | À faire | — |
+| 4 · Feel & finitions | En cours | — |
 | 5 · Publication | À faire | — |
 
 ## Points en suspens
@@ -38,3 +38,4 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 - #53 Valider l'équilibrage (cibles et ressenti en jeu, après la milestone 3).
 - #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
+- #58 Régénérer les 20 illustrations en HD dans ChatGPT (procédure et outils prêts).

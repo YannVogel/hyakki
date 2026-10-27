@@ -44,6 +44,13 @@ python3 scripts/cut_sheet.py design/sources/planche-heros.png assets/images/hero
 
 Le script détecte les figures, rattache les petits éléments (flammes, gouttes, bulles, flocons) à la figure la plus proche, rend le fond transparent et adoucit les bords. Détails dans [`scripts/README.md`](../scripts/README.md).
 
+Le découpage laisse un liseré crème anticrénelé autour du trait encré, visible sur fond coloré : le retirer avec `scripts/defringe.py`, puis vérifier avec `scripts/check_figures.py` (hauteur, frange, ligne des pieds des poses du héros).
+
+```bash
+python3 scripts/defringe.py assets/images/hero/*.png assets/images/bosses/*.png
+python3 scripts/check_figures.py assets/images/hero assets/images/bosses --min-height 900
+```
+
 Toujours vérifier le résultat sur un fond coloré avant de committer.
 
 ## 4. Nommage
@@ -54,7 +61,7 @@ Toujours vérifier le résultat sur un fond coloré avant de committer.
 
 ## 5. Haute définition
 
-Les figures découpées depuis les planches font ~300 × 450 px : suffisant pour les maquettes, un peu juste sur tablette. Avant publication, régénérer chaque figure seule en grand (prompt ci-dessous, planche jointe), puis découper et remplacer.
+Les figures découpées depuis les planches font ~300 × 450 px : suffisant pour les maquettes, un peu juste sur tablette. Avant publication, régénérer chaque figure seule en grand (prompt ci-dessous, planche jointe), puis découper, défranger, vérifier et remplacer. Procédure pas à pas et liste des 20 figures : [`art/hd-regeneration.md`](art/hd-regeneration.md).
 
 ```text
 Using the attached model sheet as the exact style reference, redraw ONLY figure [NUMBER] ([NAME]) as a single large standalone illustration.

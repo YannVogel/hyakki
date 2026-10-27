@@ -3,6 +3,8 @@
 | Script | Rôle |
 |---|---|
 | [`cut_sheet.py`](cut_sheet.py) | Découpe une planche ChatGPT (fond uni) en figures PNG transparentes |
+| [`defringe.py`](defringe.py) | Retire le liseré crème laissé autour des figures découpées (réécrit les PNG) |
+| [`check_figures.py`](check_figures.py) | Vérifie les figures : hauteur minimale, absence de frange crème, ligne des pieds des poses du héros |
 | [`bench-bignum.ts`](bench-bignum.ts) | Spike de performance de `BigNum` (1 million de multiplications) |
 | [`simulate.ts`](simulate.ts) | Harnais d'équilibrage : 3 profils de joueurs sur N jours, courbes dans `docs/balancing/` (logique dans `balancing/`) |
 
@@ -10,7 +12,7 @@ Les scripts TypeScript se lancent avec `npx tsx scripts/<script>.ts` : ils impor
 
 ## `cut_sheet.py`
 
-Dépendances : Python 3, Pillow, numpy, scipy (`pip install pillow numpy scipy`).
+Dépendances : Python 3, Pillow, numpy, scipy (`pip install pillow numpy scipy`). `defringe.py` et `check_figures.py` n'utilisent que Pillow et numpy.
 
 ```bash
 # Poses du héros
