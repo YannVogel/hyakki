@@ -14,14 +14,53 @@ Ce document s'adresse à tout agent de code (Claude Code, Codex…) qui travaill
 - Prose en **français** : docs, commentaires, issues, descriptions de PR, messages de commit, textes affichés au joueur.
 - Code, noms de fichiers, identifiants, logs, messages d'erreur techniques : **anglais**.
 
-## 3. Workflow
+## 3. Workflow (mode autonome)
 
-1. **Une issue = une branche = une PR.** Branche nommée `<type>/<numéro>-<slug>`, par exemple `feat/9-boucle-de-combat`.
-2. Lis l'issue, son epic et les docs qu'elle référence avant d'écrire du code.
-3. Écris les tests **en même temps** que le code (ou avant). Une PR sans tests sur la logique ajoutée est incomplète.
-4. Commits au format Conventional Commits, description en français : `feat(engine): ajoute le calcul des gains hors ligne`. Types : `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`.
-5. Ouvre la PR avec le modèle (`.github/pull_request_template.md`), lie l'issue (`Closes #9`).
-6. Ne pousse jamais directement sur `main`.
+Le projet avance **milestone par milestone**, de « 0 · Fondations » à « 5 · Publication ». L'agent travaille seul : il décide, documente et continue sans attendre de validation.
+
+### 3.1 Une milestone = une branche = une PR
+
+1. Crée une branche `milestone/<n>-<slug>` depuis `main` à jour (ex. `milestone/0-fondations`).
+2. Traite les issues de la milestone dans l'ordre de [`docs/ROADMAP.md`](docs/ROADMAP.md), en respectant les « Dépend de » de chaque issue. Une issue d'une autre milestone n'est commencée qu'à la fin de la milestone en cours, sauf si elle bloque.
+
+### 3.2 Une issue = un commit
+
+1. Lis l'issue, son epic et les docs qu'elle référence avant d'écrire du code.
+2. Écris les tests **en même temps** que le code (ou avant). Une logique sans tests est incomplète.
+3. `npm run lint`, `npm run typecheck` et `npm test` passent avant le commit.
+4. Mets à jour les docs concernées et [`docs/PROGRESS.md`](docs/PROGRESS.md).
+5. **Un seul commit par issue** (squash local des commits intermédiaires), au format Conventional Commits en français, avec `Closes #N` dans le corps : `feat(engine): ajoute le calcul des gains hors ligne`. Types : `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`.
+6. Coche dans l'issue les cases réellement réalisées et vérifiées, puis commente en 3 à 6 lignes : ce qui est fait, les choix, les limites.
+
+### 3.3 Fin de milestone
+
+1. Pousse la branche et ouvre une PR « Milestone <n> · <titre> » (modèle `.github/pull_request_template.md`) qui liste les issues fermées, celles restées ouvertes et pourquoi.
+2. Attends que la CI soit verte.
+3. Relis le diff complet comme un reviewer exigeant (pureté du moteur, règles de dépendances, tests réels, pas de valeurs en dur) et corrige.
+4. Merge avec un **merge commit** (jamais squash : on garde un commit par issue), puis supprime la branche.
+5. Ferme la milestone si toutes ses issues sont fermées ; [`docs/ROADMAP.md`](docs/ROADMAP.md) et [`docs/PROGRESS.md`](docs/PROGRESS.md) sont à jour.
+
+### 3.4 Quand une action de Yann est nécessaire
+
+Comptes stores ou EAS, paiement, testeurs humains, génération d'image dans ChatGPT, validation subjective finale :
+
+- fais tout ce qui est faisable sans lui ;
+- si une partie reste bloquée, crée une issue de suivi labellisée `besoin-yann`, rattachée à la même epic et milestone, qui décrit **exactement** quoi faire (étapes, liens, fichiers prêts) ; ferme l'issue d'origine avec la partie réalisée ;
+- si rien n'est faisable, label `besoin-yann` et commentaire précis sur l'issue, qui reste ouverte ;
+- une issue `besoin-yann` ne bloque jamais le merge d'une milestone.
+
+Une décision non tranchée par les docs : choisis l'option la plus simple compatible, consigne-la dans [`docs/DECISIONS.md`](docs/DECISIONS.md), continue.
+
+### 3.5 Interdits
+
+- Pousser directement sur `main` (hors mise en place de ce workflow), `git push --force` sur `main`, `--no-verify`.
+- Désactiver, affaiblir ou supprimer un test ou une règle de lint pour faire passer la CI.
+- Cocher un critère d'acceptation non vérifié (simulateur, émulateur ou Maestro indisponible : case non cochée et issue `besoin-yann` de vérification).
+- Inventer des valeurs de référence : celles du générateur s'obtiennent en exécutant le script du prototype dans Node.
+
+### 3.6 Reprise
+
+[`docs/PROGRESS.md`](docs/PROGRESS.md) est le journal de reprise : milestone en cours, dernière issue terminée, prochaine issue, points en suspens, issues `besoin-yann`. Après une interruption, reprends à partir de ce fichier, de `git log` et des issues ouvertes, sans refaire ce qui est fait.
 
 ## 4. Définition de « terminé »
 

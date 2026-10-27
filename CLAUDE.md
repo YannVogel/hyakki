@@ -30,7 +30,8 @@ npm run test:e2e    # Maestro (parcours principaux)
 
 ## Où trouver quoi
 
-- Règles de travail, workflow issue → branche → PR : [`AGENTS.md`](AGENTS.md)
+- Règles de travail, workflow milestone → branche → PR (un commit par issue) : [`AGENTS.md`](AGENTS.md)
+- Journal de reprise du travail autonome : [`docs/PROGRESS.md`](docs/PROGRESS.md)
 - Architecture et structure des dossiers : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - Générateur de yōkai : [`docs/PROCEDURAL_YOKAI.md`](docs/PROCEDURAL_YOKAI.md) et le prototype [`design/prototypes/fabrique-a-yokai.html`](design/prototypes/fabrique-a-yokai.html)
 - Direction artistique et tokens : [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)
