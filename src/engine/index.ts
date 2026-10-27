@@ -1,6 +1,7 @@
 // Public API of the engine: other layers import from here only.
 export { BALANCE } from './balance';
 export * from './combat';
+export * from './economy';
 export * from './gameState';
 export * from './numbers';
 export * from './rng';

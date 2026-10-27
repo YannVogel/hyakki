@@ -81,6 +81,8 @@ Améliorations payées en âmes, achetables par ×1, ×10 ou Max :
 | Kekkai | −2 % de recharge des talismans (max −50 %) | 5 000 |
 | Lanternes de veille | +1 h de plafond hors ligne (max 24 h) | 50 000 |
 
+Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,15^n × (1,15^k − 1) / 0,15` ; « Max » achète autant de niveaux que le solde le permet ; près du niveau maximal (Kekkai 25, Lanternes 16), « ×10 » achète ce qui reste. Le Feu de renard brûle le yōkai en cours en continu ; Lame d'ofuda, Clochette sacrée et équipe se multiplient entre elles.
+
 ### 4.4 Shikigami
 
 - À chaque yōkai purifié, tirage de **capture** selon sa rareté : commun 2 %, rare 1 %, épique 0,4 %, légendaire 0,1 %.

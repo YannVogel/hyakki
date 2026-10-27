@@ -99,3 +99,11 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `setTeam(state, seeds)` | Équipe active (3 au plus, distincts, possédés) ; résultat typé. |
 | `levelUpCost(level)`, `levelUpShikigami(state, seed)` | Montée de niveau contre des âmes ; résultat typé. |
 | `teamBonus(seeds)`, `shikigamiHitRatio`, `shikigamiIntervalMs`, `shikigamiStats` | Bonus d'équipe et puissance d'un shikigami (voir `docs/GAME_DESIGN.md` § 4.4). |
+
+### `economy/` — Sanctuaire
+
+| Élément | Rôle |
+|---|---|
+| `upgradeCost(upgrade, level, count)` | Coût de `count` niveaux en forme close. |
+| `maxAffordable(upgrade, level, souls)` | Niveaux achetables au plus (logarithme, puis vérification exacte), plafonnés au niveau maximal. |
+| `buyUpgrade(state, upgrade, mode)` | Achat ×1, ×10 ou Max ; résultat typé (`not-enough-souls`, `max-level`). Le solde n'est jamais négatif. |
