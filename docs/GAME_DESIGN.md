@@ -60,6 +60,14 @@ Combat automatique ──► âmes ──► Sanctuaire (améliorations) ──�
 - Victoire : ofuda, palier franchi (les vagues suivantes donnent plus d'âmes), Gardien ajouté à la galerie.
 - Ordre V1 : Bake-danuki, Kappa, Karasu-tengu, Tsuchigumo, Yuki-onna, Gashadokuro, Nue, Ibaraki-dōji, Kyūbi no kitsune, Nurarihyon.
 - Au-delà de la vague 1000 : les Gardiens reviennent en version « éveillée » (palette et multiplicateur) en attendant de nouvelles planches.
+- **Implémentation** :
+  - À son apparition, le Gardien **attend** (cut-in) : rien ne combat et le chrono ne tourne pas tant que le joueur n'a pas choisi « Affronter » (`engageGuardian`) ou « Fuir » (`fleeGuardian`).
+  - PV = 12 × PV(v) (×2 par cycle éveillé). Âmes = âmes(v) × 15. Ofuda = 5 × rang du Gardien (1 à 10) × (cycle + 1).
+  - Échec ou fuite : retour à la vague précédente en **farm** ; chaque yōkai vaincu y est remplacé par un nouveau (graine dérivée de la répétition). « Affronter le Gardien » (`challengeGuardian`) le fait revenir.
+  - Palier : chaque centaine de vagues franchie donne **+50 % d'âmes** aux vagues suivantes.
+  - Les brûlures en % des PV max ne font que **20 %** de leur effet sur un Gardien (sinon elles le videraient en 30 s).
+  - Faiblesses (talisman ×2) : feu pour Bake-danuki, Karasu-tengu, Tsuchigumo, Yuki-onna, Nurarihyon ; foudre pour Kappa, Gashadokuro, Nue, Ibaraki-dōji, Kyūbi.
+  - Un Gardien ne se capture pas.
 
 ### 4.3 Sanctuaire
 

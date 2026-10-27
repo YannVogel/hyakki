@@ -1,6 +1,16 @@
 export { waveHp, waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
 export type { YokaiProfile } from './enemy';
 export type { CombatEvent, CombatInput, HitSource } from './events';
+export {
+  type Element,
+  type Guardian,
+  guardianAt,
+  guardianMaxHp,
+  guardianOfuda,
+  GUARDIANS,
+  isGuardianWave,
+  tierMultiplier,
+} from './guardians';
 export { combatPower } from './power';
 export type { CombatPower } from './power';
 export { step } from './step';

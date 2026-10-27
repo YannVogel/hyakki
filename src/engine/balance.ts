@@ -11,6 +11,22 @@ export const BALANCE = {
   souls: {
     base: 2,
     growth: 1.14,
+    /** +50 % souls per guardian tier passed (waves 101+, 201+…). */
+    tierBonus: 0.5,
+  },
+  guardian: {
+    /** A guardian appears every `every` waves. */
+    every: 100,
+    count: 10,
+    /** Guardian HP = hpMultiplier × wave HP, × awakeningHpMultiplier per cycle past wave 1000. */
+    hpMultiplier: 12,
+    awakeningHpMultiplier: 2,
+    soulsMultiplier: 15,
+    timeLimitMs: 30_000,
+    /** Ofuda = baseOfuda × guardian rank (1 to 10) × (cycle + 1). */
+    baseOfuda: 5,
+    /** Burns in % of max HP are this effective against guardians (they would trivialize them). */
+    burnFactor: 0.2,
   },
   hero: {
     baseDamage: 1,

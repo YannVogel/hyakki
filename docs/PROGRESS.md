@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 1 · Moteur de jeu (`milestone/1-moteur`) |
-| Dernière issue terminée | #27 Capture des shikigami |
-| Prochaine issue | #18 Gardiens : vagues ×100, chrono et échec |
+| Dernière issue terminée | #18 Gardiens : vagues ×100, chrono et échec |
+| Prochaine issue | #19 Économie du Sanctuaire |
 
 ## Milestones
 

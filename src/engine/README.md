@@ -24,7 +24,7 @@ Ces règles sont appliquées par `npm run lint` ([`eslint.config.js`](../../esli
 | `prestige/` | Festival |
 | `offline/` | gains hors ligne |
 | `save/` | sérialisation versionnée, validation et migrations |
-| `testing/` | générateurs fast-check partagés par les tests |
+| `testing/` | générateurs fast-check et états de test partagés (`stateAtWave`) |
 
 Chaque module apparaît avec l'issue qui l'implémente (milestones 1 et 2).
 
@@ -85,6 +85,8 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `CombatEvent` | Ce que l'UI anime : `hit` (source, dégâts, critique), `yokaiDefeated` (âmes), `waveStarted`… avec `atMs`, le décalage dans le pas. |
 | `combatPower(state)` | Dégâts, chance de critique, brûlure et multiplicateur d'âmes dérivés de l'état. |
 | `waveHp`, `waveSouls`, `yokaiMaxHp`, `yokaiProfile` | Formules de `docs/GAME_DESIGN.md` § 5. |
+| `GUARDIANS`, `isGuardianWave`, `guardianAt`, `guardianMaxHp`, `guardianOfuda`, `tierMultiplier` | Gardiens : ordre, faiblesse, cycle éveillé, PV, ofuda, bonus de palier. |
+| Entrées `engageGuardian`, `fleeGuardian`, `challengeGuardian` | Affronter après le cut-in, fuir, retenter depuis le farm. |
 
 `balance.ts` regroupe toutes les constantes réglables.
 
