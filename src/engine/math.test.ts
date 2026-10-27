@@ -1,4 +1,4 @@
-import fc from 'fast-check';
+import * as fc from 'fast-check';
 
 import { clamp } from './math';
 
@@ -15,12 +15,17 @@ describe('clamp', () => {
 
   it('always returns a value within the bounds', () => {
     fc.assert(
-      fc.property(fc.double({ noNaN: true }), fc.double({ noNaN: true }), fc.double({ noNaN: true }), (value, a, b) => {
-        const [min, max] = a <= b ? [a, b] : [b, a];
-        const result = clamp(value, min, max);
-        expect(result).toBeGreaterThanOrEqual(min);
-        expect(result).toBeLessThanOrEqual(max);
-      }),
+      fc.property(
+        fc.double({ noNaN: true }),
+        fc.double({ noNaN: true }),
+        fc.double({ noNaN: true }),
+        (value, a, b) => {
+          const [min, max] = a <= b ? [a, b] : [b, a];
+          const result = clamp(value, min, max);
+          expect(result).toBeGreaterThanOrEqual(min);
+          expect(result).toBeLessThanOrEqual(max);
+        },
+      ),
     );
   });
 });

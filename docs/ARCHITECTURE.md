@@ -69,7 +69,16 @@ app ─► features ─► ui
 - `ui` n'importe ni `features`, ni `state`, ni `engine`.
 - `services` n'importe pas `features`.
 
-Ces règles sont vérifiées par ESLint (`import/no-restricted-paths` ou équivalent) : une violation fait échouer la CI.
+Ces règles sont vérifiées par ESLint ([`eslint.config.js`](../eslint.config.js)) : une violation fait échouer `npm run lint` et la CI.
+
+| Règle | Outil |
+|---|---|
+| Frontières entre couches | `import/no-restricted-paths` (alias `@/` résolus par le resolver TypeScript) |
+| `engine` n'importe que lui-même et `break_infinity.js` | `no-restricted-imports` (hors fichiers de test) |
+| Pas d'horloge dans `engine` (`Date`, `performance`) | `no-restricted-globals` |
+| Pas de `Math.random` ni de `crypto` dans `engine` | `no-restricted-properties`, `no-restricted-globals` |
+
+[`src/architecture.test.ts`](../src/architecture.test.ts) prouve chaque règle en lintant des extraits placés dans chaque couche.
 
 ## 4. Moteur
 

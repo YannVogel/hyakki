@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 0 · Fondations (`milestone/0-fondations`) |
-| Dernière issue terminée | #11 Tests : Jest, Testing Library, fast-check et Maestro |
-| Prochaine issue | #10 Outillage qualité : ESLint, Prettier et règles de dépendances |
+| Dernière issue terminée | #10 Outillage qualité : ESLint, Prettier et règles de dépendances |
+| Prochaine issue | #12 CI GitHub Actions |
 
 ## Milestones
 

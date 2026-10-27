@@ -10,6 +10,8 @@ TypeScript **pur** : la vérité du jeu. Testable en Node, sans simulateur.
 - Toute grandeur exponentielle (PV, dégâts, âmes, coûts) est un `BigNum`, jamais un `number`.
 - L'API publique est exposée par `index.ts` ; les autres couches n'importent que depuis là.
 
+Ces règles sont appliquées par `npm run lint` ([`eslint.config.js`](../../eslint.config.js)) et prouvées par [`src/architecture.test.ts`](../architecture.test.ts). Les fichiers de test (`*.test.ts`) peuvent importer leurs outils (`fast-check`…).
+
 ## Modules
 
 | Dossier | Rôle |
