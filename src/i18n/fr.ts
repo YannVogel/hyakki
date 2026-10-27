@@ -136,6 +136,13 @@ export const fr = {
     back: 'Retour',
     farming: 'Le Gardien attend que tu sois prêt.',
   },
+  notifications: {
+    cap: {
+      title: 'Les lanternes sont pleines !',
+      body: 'Tes shikigami ont récolté tout ce qu’ils pouvaient porter. Reviens relancer le défilé !',
+      channel: 'Rappels du défilé',
+    },
+  },
   settings: {
     title: 'Réglages',
     open: 'Réglages',

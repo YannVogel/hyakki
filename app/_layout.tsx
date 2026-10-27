@@ -6,12 +6,15 @@ import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { strings } from '@/i18n';
 import { playHaptic } from '@/services/haptics';
+import { createCapReminder } from '@/services/notifications';
 import {
   createAppSettingsStore,
   createAppStore,
   GameStoreProvider,
   SettingsStoreProvider,
+  useCapReminder,
   useGameLoop,
 } from '@/state';
 import { fontAssets } from '@/ui/fonts';
@@ -25,6 +28,7 @@ export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(fontAssets);
   const [store] = useState(createAppStore);
   const [settings] = useState(createAppSettingsStore);
+  const [reminder] = useState(() => createCapReminder(strings.notifications.cap));
   const reduceMotion = useStore(settings, (state) => state.settings.reduceMotion);
   const haptic = useCallback(
     (kind: HapticKind) => {
@@ -36,6 +40,7 @@ export default function RootLayout() {
   );
   const ready = fontsLoaded || fontError !== null;
   useGameLoop(store);
+  useCapReminder(store, settings, reminder);
 
   useEffect(() => {
     if (ready) {

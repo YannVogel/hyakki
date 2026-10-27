@@ -31,6 +31,15 @@ const config: ExpoConfig = {
   },
   plugins: [
     'expo-router',
+    [
+      // Local reminders only: no push, hence no APNs entitlement.
+      'expo-notifications',
+      {
+        enableRemoteNotifications: false,
+        icon: './assets/images/app/android-icon-monochrome.png',
+        color: tokens.color.red.$value,
+      },
+    ],
     // The SDK 58 precompiled XCFrameworks are out of sync (ExpoFileSystem crashes at launch
     // on a missing ExpoModulesCore symbol): build Expo modules from source instead.
     ['expo-build-properties', { ios: { usePrecompiledModules: false } }],

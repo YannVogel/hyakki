@@ -7,3 +7,5 @@ export { AUTOSAVE_MS, TICK_MS, useGameLoop } from './useGameLoop';
 export { createSettingsStore, DEFAULT_SETTINGS, parseSettings } from './settings';
 export type { SettingKey, Settings, SettingsStore, SettingsStoreState } from './settings';
 export { SettingsStoreProvider, useSettings } from './SettingsStoreProvider';
+export { useCapReminder } from './useCapReminder';
+export type { CapReminder } from './useCapReminder';
