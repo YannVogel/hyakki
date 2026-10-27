@@ -19,14 +19,16 @@ Idle RPG mobile (Expo / React Native) de fantasy japonaise, style cartoon/animé
 
 ## Commandes
 
-Elles seront créées par l'issue d'initialisation du projet (milestone 0). Une fois en place :
-
 ```bash
-npm run lint        # ESLint + règles de dépendances
-npm run typecheck   # tsc --noEmit
-npm test            # Jest (moteur + composants)
-npm run test:e2e    # Maestro (parcours principaux)
+npm run lint           # ESLint + Prettier + règles de dépendances (0 avertissement toléré)
+npm run format         # corrige le formatage (eslint --fix)
+npm run typecheck      # tsc --noEmit
+npm test               # Jest (moteur + composants)
+npm run test:coverage  # Jest + seuil de couverture du moteur (90 % des lignes)
+npm run test:e2e       # Maestro (parcours principaux, simulateur requis)
 ```
+
+Ajoute une dépendance native avec `npx expo install <paquet>` (puis déplace-la en `devDependencies` si c'est un outil).
 
 ## Où trouver quoi
 

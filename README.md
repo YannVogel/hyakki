@@ -1,5 +1,7 @@
 # Hyakki
 
+[![CI](https://github.com/YannVogel/hyakki/actions/workflows/ci.yml/badge.svg)](https://github.com/YannVogel/hyakki/actions/workflows/ci.yml)
+
 > 百鬼夜行 — le défilé des cent démons.
 
 **Hyakki** est un idle RPG mobile (iOS + Android) dans un univers de fantasy japonaise, au style cartoon/animé très coloré. Un jeune onmyōji affronte le Hyakki Yagyō, un défilé sans fin de yōkai : il les purifie vague après vague, et chaque yōkai purifié peut rejoindre son équipe comme shikigami.
@@ -23,6 +25,25 @@ Le jeu est **100 % gratuit** : ni publicité, ni achat intégré, ni compte, ni 
 | Shikigami | Yōkai capturés : collection, équipe active de trois, bonus tirés de leur apparence. |
 | Festival | Le prestige : on relance le défilé plus fort en échange d'Étincelles (bonus permanent). |
 | Hors ligne | Les shikigami continuent le combat pendant l'absence du joueur, dans la limite d'un plafond. |
+
+## Démarrer
+
+Prérequis : Node 24, Xcode (iOS) ou Android Studio (Android). L'app utilise des modules natifs : elle tourne dans un **development build**, pas dans Expo Go.
+
+```bash
+npm install
+npm run ios        # build et lance sur le simulateur iOS
+npm run android    # build et lance sur l'émulateur Android
+npm start          # relance seulement le serveur Metro
+```
+
+## Tester
+
+```bash
+npm test               # Jest : moteur, composants
+npm run test:coverage  # idem, avec le seuil de couverture du moteur
+npm run test:e2e       # Maestro, sur un simulateur où tourne l'app (voir e2e/README.md)
+```
 
 ## Documentation
 

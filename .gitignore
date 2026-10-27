@@ -1,11 +1,41 @@
 # macOS
 .DS_Store
 
-# Node / Expo (complété à l'initialisation du projet)
+# Node / Expo
 node_modules/
 .expo/
 dist/
 web-build/
+expo-env.d.ts
+
+# Native (générés par Continuous Native Generation)
+/ios
+/android
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Env local
+.env*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Tests
+coverage/
 
 # Python
 __pycache__/

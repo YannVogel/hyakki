@@ -1,0 +1,9 @@
+# L'app démarre et affiche l'écran d'accueil.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: home-title
+    timeout: 60000
