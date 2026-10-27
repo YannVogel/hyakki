@@ -7,6 +7,7 @@ export const fr = {
     yokaiLabLink: 'Fabrique à yōkai',
     catalogLink: 'Catalogue des composants',
     guardianShortcut: 'Aller au Gardien de la vague 100',
+    absenceShortcut: 'Simuler une absence de 2 h',
   },
   nativeCheck: {
     title: 'Vérification native',
@@ -222,6 +223,26 @@ export const fr = {
     cancel: 'Annuler',
     heroLabel: 'L’onmyōji célèbre la fête',
     sceneLabel: 'Feux d’artifice et lanternes au-dessus du torii',
+  },
+  offline: {
+    title: 'Pendant ton absence',
+    duration: (hours: number, minutes: number) =>
+      hours === 0 ? `${minutes} min` : minutes === 0 ? `${hours} h` : `${hours} h ${minutes} min`,
+    subtitle: 'Tes shikigami ont tenu le défilé sans toi !',
+    yokai: 'Yōkai purifiés',
+    souls: 'Âmes récoltées',
+    soulsValue: (value: string) => `+ ${value}`,
+    waves: 'Vagues franchies',
+    wavesValue: (from: number, to: number) => `${from} → ${to}`,
+    levelUp: (name: string, from: number, to: number) =>
+      from === 0 ? `${name} rejoint ta bande !` : `${name} · Nv ${from} → ${to}`,
+    stoppedAtGuardian: 'Un Gardien t’attend pour continuer.',
+    cap: 'Plafond hors ligne',
+    capValue: (used: string, cap: string) => `${used} / ${cap}`,
+    capLabel: (used: string, cap: string) => `Plafond hors ligne : ${used} sur ${cap}`,
+    capReached: 'Plafond atteint : augmente-le au Sanctuaire (Lanternes de veille).',
+    collect: 'Récolter !',
+    heroLabel: 'L’onmyōji dort pendant que ses shikigami veillent',
   },
   catalog: {
     title: 'Catalogue',

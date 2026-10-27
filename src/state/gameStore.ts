@@ -17,6 +17,8 @@ import {
   type TalismanId,
   type UpgradeId,
   type FestivalResult,
+  type OfflineReport,
+  simulateOffline,
 } from '@/engine';
 
 /** What the store needs from the outside world (persistence, clock, randomness). */
@@ -37,6 +39,11 @@ export interface GameStoreState {
   readonly savedAt: number;
   readonly loadError: string | null;
   readonly pendingInputs: readonly CombatInput[];
+  /** What the team achieved while the player was away, until the player collects it. */
+  readonly offlineReport: OfflineReport | null;
+  /** Applies the time elapsed since the last save (launch, back to the foreground). */
+  readonly resume: () => void;
+  readonly dismissOfflineReport: () => void;
   readonly tap: () => void;
   readonly castTalisman: (talisman: TalismanId) => void;
   readonly engageGuardian: () => void;
@@ -54,6 +61,9 @@ export type GameStore = StoreApi<GameStoreState>;
 
 /** Longest step the loop applies at once: a stalled app does not replay minutes of combat. */
 export const MAX_STEP_MS = 1000;
+
+/** Below this absence, no offline report: the player barely left. */
+export const MIN_OFFLINE_MS = 60_000;
 
 function initialGame(deps: GameStoreDeps): {
   game: GameState;
@@ -89,6 +99,18 @@ export function createGameStore(deps: GameStoreDeps): GameStore {
       events: [],
       eventBatch: 0,
       pendingInputs: [],
+      offlineReport: null,
+      resume: () => {
+        const now = deps.now();
+        const elapsed = now - get().savedAt;
+        if (elapsed < MIN_OFFLINE_MS) {
+          return;
+        }
+        const { state, report } = simulateOffline(get().game, elapsed);
+        deps.writeSave(state, now);
+        set({ game: state, savedAt: now, offlineReport: report });
+      },
+      dismissOfflineReport: () => set({ offlineReport: null }),
       tap: () => queue({ type: 'tap' }),
       castTalisman: (talisman) => queue({ type: 'castTalisman', talisman }),
       engageGuardian: () => queue({ type: 'engageGuardian' }),

@@ -22,6 +22,20 @@ describe('useGameLoop', () => {
     expect(saves).toHaveLength(1);
   });
 
+  it('computes the absence at launch and when the app comes back', async () => {
+    const { store } = createFakeStore();
+    const resume = jest.spyOn(store.getState(), 'resume');
+    const listeners: ((status: string) => void)[] = [];
+    jest.spyOn(AppState, 'addEventListener').mockImplementation((_type, listener) => {
+      listeners.push(listener as (status: string) => void);
+      return { remove: jest.fn() };
+    });
+    await renderHook(() => useGameLoop(store, () => 0));
+    expect(resume).toHaveBeenCalledTimes(1);
+    listeners.forEach((listener) => listener('active'));
+    expect(resume).toHaveBeenCalledTimes(2);
+  });
+
   it('saves and stops when the app leaves the foreground', async () => {
     const { store, saves } = createFakeStore();
     const listeners: ((status: string) => void)[] = [];

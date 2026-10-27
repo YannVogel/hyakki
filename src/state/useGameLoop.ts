@@ -8,7 +8,8 @@ export const AUTOSAVE_MS = 5000;
 
 /**
  * Runs the engine about 10 times per second while the app is in the foreground, and saves every
- * 5 s and whenever the app leaves the foreground. Time comes from a monotonic clock.
+ * 5 s and whenever the app leaves the foreground. At launch and when the app comes back, the
+ * absence is computed offline (store.resume). Time comes from a monotonic clock.
  */
 export function useGameLoop(
   store: GameStore,
@@ -43,9 +44,11 @@ export function useGameLoop(
       }
     };
 
+    store.getState().resume();
     start();
     const subscription = AppState.addEventListener('change', (status) => {
       if (status === 'active') {
+        store.getState().resume();
         start();
       } else {
         stop();

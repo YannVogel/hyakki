@@ -9,6 +9,8 @@ import { devGuardianState } from '../dev/devStates';
 import { colors, spacing, touchTarget } from '@/ui/tokens';
 
 // Development hub (route /dev): links to the development screens.
+const DEV_ABSENCE_MS = 2 * 3_600_000;
+
 export function HomeScreen() {
   const store = useGameStore();
   return (
@@ -44,6 +46,19 @@ export function HomeScreen() {
             }}
           >
             <Text style={styles.subtitle}>{strings.home.guardianShortcut}</Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            style={styles.devLink}
+            testID="dev-absence"
+            onPress={() => {
+              // Simulated clock: as if the last save happened two hours ago.
+              store.setState({ savedAt: store.getState().savedAt - DEV_ABSENCE_MS });
+              store.getState().resume();
+              router.back();
+            }}
+          >
+            <Text style={styles.subtitle}>{strings.home.absenceShortcut}</Text>
           </Pressable>
           <Link href="/dev/catalog" asChild>
             <Pressable accessibilityRole="link" style={styles.devLink} testID="home-catalog-link">

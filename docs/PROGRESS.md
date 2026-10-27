@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 3 · Boucle jouable (`milestone/3-boucle`) |
-| Dernière issue terminée | #36 Écran Festival |
-| Prochaine issue | #37 Retour hors ligne |
+| Dernière issue terminée | #37 Retour hors ligne |
+| Prochaine issue | Clôture de la milestone 3, puis milestone 4 (#38 → #44, #28) |
 
 ## Milestones
 

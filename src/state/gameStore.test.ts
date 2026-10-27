@@ -1,6 +1,6 @@
 import { big, createNewGame, eq, step } from '@/engine';
 
-import { MAX_STEP_MS } from './gameStore';
+import { MAX_STEP_MS, MIN_OFFLINE_MS } from './gameStore';
 import { createFakeStore } from './testing/fakeStore';
 
 describe('game store', () => {
@@ -90,5 +90,43 @@ describe('game store', () => {
     expect(saves[0].savedAt).toBe(5_000_000);
     expect(store.getState().savedAt).toBe(5_000_000);
     expect(eq(saves[0].state.souls, store.getState().game.souls)).toBe(true);
+  });
+});
+
+describe('resume (offline return)', () => {
+  it('does nothing after an absence shorter than a minute', () => {
+    const { store, clock, saves } = createFakeStore();
+    clock.now += MIN_OFFLINE_MS - 1;
+    const before = store.getState().game;
+    store.getState().resume();
+    expect(store.getState().game).toBe(before);
+    expect(store.getState().offlineReport).toBeNull();
+    expect(saves).toHaveLength(0);
+  });
+
+  it('applies the absence, reports it and saves', () => {
+    const { store, clock, saves } = createFakeStore({
+      game: { ...createNewGame(2026), sanctuary: { ...createNewGame(2026).sanctuary, blade: 20 } },
+    });
+    clock.now += 2 * 3_600_000;
+    const before = store.getState().game;
+    store.getState().resume();
+    const report = store.getState().offlineReport;
+    expect(report?.durationMs).toBe(2 * 3_600_000);
+    expect(report?.yokaiDefeated).toBeGreaterThan(0);
+    expect(store.getState().game.parade.wave).toBeGreaterThan(before.parade.wave);
+    expect(saves).toHaveLength(1);
+    expect(store.getState().savedAt).toBe(clock.now);
+    store.getState().dismissOfflineReport();
+    expect(store.getState().offlineReport).toBeNull();
+  });
+
+  it('gives nothing when the clock went backwards', () => {
+    const { store, clock } = createFakeStore();
+    clock.now -= 3_600_000;
+    const before = store.getState().game;
+    store.getState().resume();
+    expect(store.getState().game).toBe(before);
+    expect(store.getState().offlineReport).toBeNull();
   });
 });
