@@ -4,6 +4,7 @@
 |---|---|
 | [`cut_sheet.py`](cut_sheet.py) | Découpe une planche ChatGPT (fond uni) en figures PNG transparentes |
 | [`bench-bignum.ts`](bench-bignum.ts) | Spike de performance de `BigNum` (1 million de multiplications) |
+| [`simulate.ts`](simulate.ts) | Harnais d'équilibrage : 3 profils de joueurs sur N jours, courbes dans `docs/balancing/` (logique dans `balancing/`) |
 
 Les scripts TypeScript se lancent avec `npx tsx scripts/<script>.ts` : ils importent le moteur directement.
 
@@ -31,6 +32,3 @@ Si le script trouve moins de figures que de noms :
 
 Toujours contrôler le résultat sur un fond coloré avant de committer.
 
-## À venir
-
-- `simulate.ts` : harnais de simulation d'équilibrage (milestone 1).

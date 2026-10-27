@@ -1,6 +1,6 @@
 # Game design
 
-> Valeurs chiffrées = **points de départ**. Elles seront ajustées avec le harnais de simulation (milestone 1) avant toute finition.
+> Valeurs chiffrées calibrées avec le harnais de simulation (§ 5.2, `docs/balancing/`). Elles restent à valider par Yann en jeu.
 
 ## 1. Pitch
 
@@ -76,13 +76,13 @@ Améliorations payées en âmes, achetables par ×1, ×10 ou Max :
 
 | Amélioration | Effet par niveau | Coût de base |
 |---|---|---|
-| Lame d'ofuda | +8 % de dégâts de frappe et automatiques | 10 |
+| Lame d'ofuda | ×1,0925 sur les dégâts de frappe et automatiques (cumulatif) | 10 |
 | Feu de renard | Brûlure : +0,2 % des PV max par seconde | 500 |
 | Clochette sacrée | +5 % d'âmes récoltées | 150 |
 | Kekkai | −2 % de recharge des talismans (max −50 %) | 5 000 |
 | Lanternes de veille | +1 h de plafond hors ligne (max 24 h) | 50 000 |
 
-Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,15^n × (1,15^k − 1) / 0,15` ; « Max » achète autant de niveaux que le solde le permet ; près du niveau maximal (Kekkai 25, Lanternes 16), « ×10 » achète ce qui reste. Le Feu de renard brûle le yōkai en cours en continu ; Lame d'ofuda, Clochette sacrée et équipe se multiplient entre elles.
+Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n × (1,12^k − 1) / 0,12` ; « Max » achète autant de niveaux que le solde le permet ; près du niveau maximal (Kekkai 25, Lanternes 16), « ×10 » achète ce qui reste. Le Feu de renard brûle le yōkai en cours en continu ; Lame d'ofuda, Clochette sacrée et équipe se multiplient entre elles.
 
 ### 4.4 Shikigami
 
@@ -90,7 +90,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,15^n ×
 - Capturer une graine déjà possédée donne +1 niveau à ce shikigami.
 - L'**équipe active** (3 places) ajoute ses dégâts automatiques et ses **bonus d'apparence** (cornes = attaque, yeux = critique, etc. — table complète dans [`PROCEDURAL_YOKAI.md`](PROCEDURAL_YOKAI.md)).
 - Un shikigami monte de niveau contre des âmes : `100 × 1,18^(niveau − 1)`.
-- **Frappe d'un shikigami** = frappe du héros × 0,5 × attaque / 100 × (1 + 25 % par niveau au-delà du premier), toutes les `1 000 ms × 100 / vitesse` : l'attaque fait la force, la vitesse la cadence.
+- **Frappe d'un shikigami** = frappe du héros × 0,5 × attaque / 100 × (1 + 10 % par niveau au-delà du premier), toutes les `1 000 ms × 100 / vitesse` : l'attaque fait la force, la vitesse la cadence. La progression par niveau est linéaire : la frappe du héros, dont elle dépend, se multiplie déjà avec la Lame.
 - **Bonus d'équipe** = somme des traits offensifs des trois membres : attaque (+% de dégâts pour tous), critique (+ points de chance de critique, plafonnée à 75 %), vitesse (+% de cadence pour tous), âmes, brûlure. Les traits de PV et de défense ne jouent que lorsque le yōkai est un ennemi (sa résistance).
 - Les bonus de sources différentes se multiplient (Sanctuaire × équipe × Festival) ; ceux d'une même source s'additionnent.
 - Un nouveau membre d'équipe commence un cycle d'attaque complet (pas de frappe gratuite en changeant d'équipe).
@@ -114,16 +114,22 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,15^n ×
 - Sur 10 minutes à efficacité 100 %, le résultat reste à ±1 vague et ±15 % d'âmes du combat actif (test de cohérence).
 - Le rapport donne : durée prise en compte, plafond atteint ou non, yōkai purifiés, âmes, vagues (de → à), arrêt devant un Gardien, montées de niveau des shikigami (captures et doublons).
 
-## 5. Formules de départ
+## 5. Formules
 
 | Grandeur | Formule | Remarque |
 |---|---|---|
-| PV d'un yōkai à la vague `v` | `12 × 1.165^(v−1) × m_objet` | `m_objet` = PV de base de l'objet / 100 |
-| PV d'un Gardien | `12 × PV(v)` | |
-| Âmes par yōkai | `2 × 1.14^(v−1)` | Gardien : ×15 |
-| Dégâts de base | `1 × (1 + 0,08 × niv_lame)` | × multiplicateurs (Festival, shikigami, critique) |
-| Coût d'achat de `k` niveaux | `base × 1.15^niv × (1.15^k − 1) / 0.15` | |
-| Critique | 5 % de base, ×3 dégâts | + bonus d'apparence des shikigami |
+| PV d'un yōkai à la vague `v` | `12 × 1,13^(v−1) × PV du yōkai / 100` | La stat PV (objet, traits, rareté) fait la résistance |
+| PV d'un Gardien | `12 × 12 × 1,13^(v−1)` | ×2 par cycle éveillé au-delà de 1000 |
+| Âmes par yōkai | `2 × 1,13^(v−1)` | × rareté × clochette ; Gardien ×15 ; +50 % par palier de 100 vagues |
+| Frappe du héros | `1 × 1,0925^niv_lame` | × (1 + attaque d'équipe) × Festival ; critique ×3 |
+| Frappe d'un shikigami | `frappe du héros × 0,5 × attaque / 100 × (1 + 10 % × (niveau − 1))` | toutes les `1 000 ms × 100 / vitesse` |
+| Coût de `k` niveaux au Sanctuaire | `base × 1,12^niv × (1,12^k − 1) / 0,12` | |
+| Coût d'un niveau de shikigami | `100 × 1,18^(niveau − 1)` | |
+| Critique | 5 % de base (75 % au plus), ×3 dégâts | + bonus d'apparence des shikigami |
+| Brûlures | % des PV max par seconde, jusqu'à 10 % des PV restants | ×0,2 contre un Gardien |
+| Festival | `étincelles = ⌊5 × (record / 100)^1,8⌋`, bonus `× (1 + 0,05 × étincelles)` | Dégâts et âmes |
+
+**Pourquoi des niveaux qui se multiplient** : les coûts croissent de façon exponentielle (×1,12 par niveau). Avec des dégâts linéaires (« +8 % par niveau » des formules de départ), les dégâts ne croissent que comme le logarithme des âmes et le joueur bute contre un mur dès la vague 40, quel que soit son temps de jeu (mesuré par le harnais). Chaque niveau de Lame multiplie donc les dégâts par 1,0925 ; l'écart entre la croissance des PV (×1,13 par vague) et celle des dégâts achetables crée un mur progressif, que le Festival repousse.
 
 Ces croissances dépassent vite la limite d'un `number` JavaScript (vers la vague 4 000) : toutes ces grandeurs utilisent le type `BigNum` du moteur.
 
@@ -135,10 +141,31 @@ Toutes ces constantes sont dans `src/engine/balance.ts` : c'est le seul endroit 
 - **PV d'un yōkai** = `PV(v) × PV du yōkai / 100` : la stat PV (objet, traits, rareté) fait office de résistance. Un yōkai légendaire est donc plus coriace.
 - **Âmes d'un yōkai** = `âmes(v) × multiplicateur de rareté × (1 + bonus de clochette du yōkai) × (1 + 5 % × Clochette sacrée)` : un yōkai coriace rapporte plus.
 - La **défense** ne sert pas au combat en V1 (aucun ennemi ne frappe le héros).
-- **Brûlures** (Feu de renard, puis onibi et Kitsune-bi) : dégâts continus en % des PV max par seconde, qui peuvent achever un yōkai entre deux frappes.
+- **Brûlures** (Feu de renard, onibi, Kitsune-bi) : dégâts continus en % des PV max par seconde, qui s'arrêtent quand il reste 10 % des PV : une brûlure n'achève jamais, les frappes finissent. Sans cette règle, une brûlure en % des PV tue tout yōkai en un temps fixe et la progression devient indépendante de la puissance (mesuré : vague 512 000 en 2 jours).
 - Les dégâts en trop sur un yōkai vaincu sont perdus ; le yōkai suivant arrive aussitôt.
 - Un pas de simulation couvre l'intervalle semi-ouvert [début, fin[ : découper une durée en plusieurs pas donne les mêmes frappes, dans le même ordre, et le même état (à 1e-9 près sur les dégâts quand une brûlure est active).
 
+
+### 5.2 Équilibrage : cibles et mesures
+
+Mesuré par `npx tsx scripts/simulate.ts` (bot simple et déterministe : il achète toujours le moins cher, aligne ses trois shikigami les plus forts, garde ses talismans d'attaque pour les Gardiens, affronte chaque Gardien et lance un Festival quand il bloque et que le bonus progresse d'au moins 15 %). Trois profils sur 30 jours ; courbes et jalons dans [`docs/balancing/`](balancing/README.md).
+
+| Cible (joueur régulier : 3 sessions de 5 min par jour) | Visé | Mesuré |
+|---|---|---|
+| Premier Gardien (vague 100) | jour 1 | jour 0,5 (15 min de jeu actif) |
+| Premier Festival | jours 1 à 3 | jour 1 |
+| Gardien 5 (vague 500) | jours 4 à 10 | jour 5 |
+| Record de 800 | jours 15 à 25 | jour 18 |
+| Gardien 10 (vague 1000) | au-delà du jour 30 (objectif de long terme) | non atteint à J30 (record 889) |
+
+| Cible (autres profils) | Visé | Mesuré |
+|---|---|---|
+| Joueur actif (2 h par jour) : premier Gardien | ≤ 45 min de jeu | 29 min |
+| Joueur actif : Gardien 5 | ≤ 3 jours | jour 1 |
+| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 800 / 889 = 90 % |
+| Temps de calcul | 3 profils × 30 jours < 30 s | 13 s |
+
+Limites connues : le bot ne fait pas de choix fins (il ne garde pas Kekkai pour un Gardien, ne tape pas pendant le hors ligne, ne choisit pas l'équipe selon les bonus). La progression de long terme est bornée par le Festival : les trois profils convergent vers les mêmes records, le temps actif accélère surtout le début. À valider en jeu par Yann.
 ## 6. Écrans (maquettes)
 
 Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../design/README.md)) :

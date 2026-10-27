@@ -1,6 +1,6 @@
 import { BALANCE } from '../balance';
 import type { GameState } from '../gameState';
-import { type BigNum, mul } from '../numbers';
+import { type BigNum, mul, pow } from '../numbers';
 import { festivalBonus } from '../prestige';
 import { shikigamiHitRatio, shikigamiIntervalMs, teamBonus } from '../shikigami';
 
@@ -34,8 +34,8 @@ export function combatPower(state: GameState): CombatPower {
   const speed = 1 + bonus.speed;
   const festival = festivalBonus(state.sparks);
   const heroHitDamage = mul(
-    hero.baseDamage,
-    (1 + upgrades.blade.damagePerLevel * blade) * (1 + bonus.attack) * festival,
+    pow(upgrades.blade.damageGrowth, blade),
+    hero.baseDamage * (1 + bonus.attack) * festival,
   );
   const team = state.team.map((seed) => {
     const level = state.shikigami.find((shikigami) => shikigami.seed === seed)?.level ?? 1;

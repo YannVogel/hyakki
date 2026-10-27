@@ -30,7 +30,7 @@ describe('upgradeCost', () => {
     expect(UPGRADE_IDS.map((id) => toNumber(upgradeCost(id, 0, 1)))).toEqual([
       10, 500, 150, 5000, 50_000,
     ]);
-    expect(toNumber(upgradeCost('blade', 1, 1))).toBeCloseTo(11.5, 10);
+    expect(toNumber(upgradeCost('blade', 1, 1))).toBeCloseTo(11.2, 10);
   });
 
   it('costs exactly ten single purchases for a ×10 purchase', () => {

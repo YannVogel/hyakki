@@ -83,7 +83,7 @@ describe('simulateOffline', () => {
   });
 
   it('stops in front of the next guardian and farms the wave before it', () => {
-    const state = stateAtWave(3, 95, { blade: 1e9 });
+    const state = stateAtWave(3, 95, { blade: 300 });
     const { state: after, report } = simulateOffline(state, HOUR);
     expect(report.stoppedAtGuardian).toBe(true);
     expect(report.waveFrom).toBe(95);
@@ -95,7 +95,7 @@ describe('simulateOffline', () => {
   });
 
   it('never fights a guardian left mid-fight: it waits again, with its full timer', () => {
-    const engaged = step(stateAtWave(4, 200, { blade: 1e20 }), 0, [
+    const engaged = step(stateAtWave(4, 200, { blade: 400 }), 0, [
       { type: 'engageGuardian' },
     ]).state;
     const { state: after, report } = simulateOffline(engaged, HOUR);
@@ -105,15 +105,22 @@ describe('simulateOffline', () => {
   });
 
   it('keeps farming when the player was farming', () => {
-    const fled = step(stateAtWave(5, 300, { blade: 1e20 }), 0, [{ type: 'fleeGuardian' }]).state;
+    const fled = step(stateAtWave(5, 300, { blade: 400 }), 0, [{ type: 'fleeGuardian' }]).state;
     const { state: after, report } = simulateOffline(fled, HOUR);
     expect(after.parade).toMatchObject({ wave: 299, farming: true });
     expect(report.stoppedAtGuardian).toBe(false);
     expect(after.parade.repeat).toBeGreaterThan(fled.parade.repeat);
   });
 
+  it('never defeats yōkai faster than one hit each', () => {
+    const state = stateAtWave(12, 99, { blade: 5000 });
+    const { report } = simulateOffline(state, HOUR);
+    expect(report.yokaiDefeated).toBeLessThanOrEqual(3600);
+    expect(report.yokaiDefeated).toBeGreaterThan(3500);
+  });
+
   it('extrapolates long absences linearly beyond the simulated sample', () => {
-    const state = stateAtWave(6, 99, { blade: 1e9 });
+    const state = stateAtWave(6, 99, { blade: 300 });
     const twelve = simulateOffline(
       { ...state, sanctuary: { ...state.sanctuary, lanterns: 16 } },
       12 * HOUR,
@@ -127,7 +134,7 @@ describe('simulateOffline', () => {
   });
 
   it('draws captures reproducibly and reports level changes', () => {
-    const state: GameState = { ...stateAtWave(8, 99, { blade: 1e9 }), shikigami: [] };
+    const state: GameState = { ...stateAtWave(8, 99, { blade: 300 }), shikigami: [] };
     const first = simulateOffline(state, 8 * HOUR);
     expect(simulateOffline(state, 8 * HOUR)).toEqual(first);
     expect(first.report.levelUps.length).toBeGreaterThan(0);

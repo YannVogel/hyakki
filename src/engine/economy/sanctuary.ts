@@ -43,21 +43,20 @@ export function maxAffordable(upgrade: UpgradeId, level: number, souls: BigNum):
   return count;
 }
 
-/** Buys ×1, ×10 (or what is left below the max level) or as many levels as possible. */
-export function buyUpgrade(
+/** Buys exactly `count` levels (fewer if the max level is closer). */
+export function buyUpgradeLevels(
   state: GameState,
   upgrade: UpgradeId,
-  mode: PurchaseMode,
+  count: number,
 ): PurchaseResult {
   const level = state.sanctuary[upgrade];
   const remaining = upgradeMaxLevel(upgrade) - level;
   if (remaining <= 0) {
     return { ok: false, reason: 'max-level' };
   }
-  const levels =
-    mode === 'max' ? maxAffordable(upgrade, level, state.souls) : Math.min(mode, remaining);
+  const levels = Math.min(count, remaining);
   const cost = upgradeCost(upgrade, level, levels);
-  if (levels === 0 || gt(cost, state.souls)) {
+  if (levels <= 0 || gt(cost, state.souls)) {
     return { ok: false, reason: 'not-enough-souls' };
   }
   return {
@@ -70,4 +69,15 @@ export function buyUpgrade(
       sanctuary: { ...state.sanctuary, [upgrade]: level + levels },
     },
   };
+}
+
+/** Buys ×1, ×10 (or what is left below the max level) or as many levels as possible. */
+export function buyUpgrade(
+  state: GameState,
+  upgrade: UpgradeId,
+  mode: PurchaseMode,
+): PurchaseResult {
+  const count =
+    mode === 'max' ? maxAffordable(upgrade, state.sanctuary[upgrade], state.souls) : mode;
+  return buyUpgradeLevels(state, upgrade, count);
 }

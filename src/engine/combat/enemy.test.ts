@@ -5,15 +5,15 @@ import { generate, rarityMultiplier, statsOf } from '../yokai';
 import { waveHp, waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
 
 describe('enemy formulas', () => {
-  it('follows 12 × 1.165^(v − 1) for the wave HP', () => {
+  it('follows 12 × 1.13^(v − 1) for the wave HP', () => {
     expect(toNumber(waveHp(1))).toBe(12);
-    expect(toNumber(waveHp(2))).toBeCloseTo(13.98, 10);
-    expect(log10(waveHp(4001))).toBeCloseTo(Math.log10(12) + 4000 * Math.log10(1.165), 6);
+    expect(toNumber(waveHp(2))).toBeCloseTo(13.56, 10);
+    expect(log10(waveHp(4001))).toBeCloseTo(Math.log10(12) + 4000 * Math.log10(1.13), 6);
   });
 
-  it('follows 2 × 1.14^(v − 1) for the wave souls', () => {
+  it('follows 2 × 1.13^(v − 1) for the wave souls', () => {
     expect(toNumber(waveSouls(1))).toBe(2);
-    expect(toNumber(waveSouls(11))).toBeCloseTo(2 * 1.14 ** 10, 10);
+    expect(toNumber(waveSouls(11))).toBeCloseTo(2 * 1.13 ** 10, 10);
   });
 
   it('scales a yōkai HP with its HP stat', () => {

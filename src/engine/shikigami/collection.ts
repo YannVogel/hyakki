@@ -1,6 +1,6 @@
 import { BALANCE } from '../balance';
 import { type GameState, type Shikigami, TEAM_SIZE } from '../gameState';
-import { type BigNum, gte, mul, pow, sub } from '../numbers';
+import { type BigNum, div, gte, mul, pow, sub } from '../numbers';
 import { generate } from '../yokai';
 import { shikigamiIntervalMs } from './profile';
 
@@ -55,19 +55,20 @@ export function setTeam(state: GameState, seeds: readonly number[]): RosterResul
   };
 }
 
-/** Souls needed to go from `level` to `level + 1`. */
-export function levelUpCost(level: number): BigNum {
+/** Souls needed to gain `count` levels from `level`: a geometric sum, like the Sanctuary. */
+export function levelUpCost(level: number, count = 1): BigNum {
   const { levelUpBaseCost, levelUpCostGrowth } = BALANCE.shikigami;
-  return mul(levelUpBaseCost, pow(levelUpCostGrowth, level - 1));
+  const first = mul(levelUpBaseCost, pow(levelUpCostGrowth, level - 1));
+  return div(mul(first, sub(pow(levelUpCostGrowth, count), 1)), levelUpCostGrowth - 1);
 }
 
-export function levelUpShikigami(state: GameState, seed: number): RosterResult {
+export function levelUpShikigami(state: GameState, seed: number, count = 1): RosterResult {
   const owned = state.shikigami.find((shikigami) => shikigami.seed === seed);
   if (owned === undefined) {
     return { ok: false, reason: 'not-owned' };
   }
-  const cost = levelUpCost(owned.level);
-  if (!gte(state.souls, cost)) {
+  const cost = levelUpCost(owned.level, count);
+  if (count < 1 || !gte(state.souls, cost)) {
     return { ok: false, reason: 'not-enough-souls' };
   }
   return {
@@ -76,7 +77,7 @@ export function levelUpShikigami(state: GameState, seed: number): RosterResult {
       ...state,
       souls: sub(state.souls, cost),
       shikigami: state.shikigami.map((entry) =>
-        entry.seed === seed ? { ...entry, level: entry.level + 1 } : entry,
+        entry.seed === seed ? { ...entry, level: entry.level + count } : entry,
       ),
     },
   };

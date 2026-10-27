@@ -17,7 +17,7 @@ import { step } from './step';
 const types = (events: readonly CombatEvent[]) => events.map((event) => event.type);
 const ENGAGE = { type: 'engageGuardian' } as const;
 // Strong enough to one-shot anything before wave 1100, weak = level 0.
-const STRONG = { blade: 1e100 };
+const STRONG = { blade: 2000 };
 
 describe('guardian formulas', () => {
   it('only puts guardians on multiples of 100', () => {
@@ -151,7 +151,7 @@ describe('guardian fights', () => {
   });
 
   it('does not depend on the tick size during a guardian fight', () => {
-    const engaged = step(stateAtWave(5, 200, { blade: 2e10 }), 0, [ENGAGE]).state;
+    const engaged = step(stateAtWave(5, 200, { blade: 250 }), 0, [ENGAGE]).state;
     const single = step(engaged, 40_000).state;
     let split = engaged;
     for (let i = 0; i < 40; i++) {

@@ -98,7 +98,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `captureChance(seed)` | Chance de capture selon la rareté (2 %, 1 %, 0,4 %, 0,1 %). Le tirage a lieu dans `step` à chaque yōkai vaincu (événement `shikigamiCaptured`). |
 | `addCapture(collection, seed, version)` | Nouveau shikigami au niveau 1, ou +1 niveau pour une graine déjà possédée. |
 | `setTeam(state, seeds)` | Équipe active (3 au plus, distincts, possédés) ; résultat typé. |
-| `levelUpCost(level)`, `levelUpShikigami(state, seed)` | Montée de niveau contre des âmes ; résultat typé. |
+| `levelUpCost(level, count)`, `levelUpShikigami(state, seed, count)` | Montée d'un ou plusieurs niveaux contre des âmes ; résultat typé. |
 | `teamBonus(seeds)`, `shikigamiHitRatio`, `shikigamiIntervalMs`, `shikigamiStats` | Bonus d'équipe et puissance d'un shikigami (voir `docs/GAME_DESIGN.md` § 4.4). |
 
 ### `economy/` — Sanctuaire
@@ -108,6 +108,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `upgradeCost(upgrade, level, count)` | Coût de `count` niveaux en forme close. |
 | `maxAffordable(upgrade, level, souls)` | Niveaux achetables au plus (logarithme, puis vérification exacte), plafonnés au niveau maximal. |
 | `buyUpgrade(state, upgrade, mode)` | Achat ×1, ×10 ou Max ; résultat typé (`not-enough-souls`, `max-level`). Le solde n'est jamais négatif. |
+| `buyUpgradeLevels(state, upgrade, count)` | Achat d'un nombre exact de niveaux (utilisé par `buyUpgrade` et le harnais d'équilibrage). |
 
 ### `offline/` — progression hors ligne
 

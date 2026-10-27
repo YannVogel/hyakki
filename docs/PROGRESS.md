@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 1 · Moteur de jeu (`milestone/1-moteur`) |
-| Dernière issue terminée | #22 Festival : étincelles, remise à zéro et bonus permanent |
-| Prochaine issue | #23 Harnais de simulation d'équilibrage |
+| Dernière issue terminée | #23 Harnais de simulation d'équilibrage |
+| Prochaine issue | Clôture de la milestone 1 (PR, CI, revue, merge), puis milestone 2 (#26) |
 
 ## Milestones
 

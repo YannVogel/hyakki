@@ -117,8 +117,8 @@ describe('shikigami power', () => {
     fc.assert(
       fc.property(anySeed, fc.integer({ min: 1, max: 200 }), (seed, level) => {
         const attack = statsOf(generate(seed)).attack;
-        expect(shikigamiHitRatio(seed, level)).toBeCloseTo(
-          0.5 * (attack / 100) * (1 + 0.25 * (level - 1)),
+        expect(toNumber(shikigamiHitRatio(seed, level))).toBeCloseTo(
+          0.5 * (attack / 100) * (1 + 0.1 * (level - 1)),
           12,
         );
       }),

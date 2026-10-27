@@ -6,7 +6,7 @@ import {
   type Shikigami,
   type TalismanId,
 } from '../gameState';
-import { add, type BigNum, div, gte, mul, sub, toNumber, ZERO } from '../numbers';
+import { add, type BigNum, div, gte, lt, mul, sub, toNumber, ZERO } from '../numbers';
 import { createRng, type Rng } from '../rng';
 import { addCapture, captureChance } from '../shikigami';
 import { waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
@@ -229,9 +229,13 @@ export function strike(battle: Battle, attacker: number): void {
   }
 }
 
+/** Burns stop when this share of the max HP is left: hits must finish the enemy. */
+export const burnFloor = (maxHp: BigNum): BigNum => mul(maxHp, 1 - BALANCE.burn.floorFraction);
+
 /**
- * Lets `durationMs` pass with the continuous effects: burn (which may defeat enemies) and the
- * guardian timer. Stops early if a waiting guardian shows up.
+ * Lets `durationMs` pass with the continuous effects: burn and the guardian timer. A burn never
+ * finishes an enemy: it stops at 10 % of its max HP, so that percentage burns cannot make
+ * progress independent of the player's power.
  */
 export function advance(battle: Battle, durationMs: number): void {
   let left = durationMs;
@@ -241,12 +245,13 @@ export function advance(battle: Battle, durationMs: number): void {
     const burnRate =
       (battle.power.burnRate + talismanBurn) *
       (battle.guardian === null ? 1 : BALANCE.guardian.burnFactor);
+    const floor = burnFloor(battle.maxHp);
+    const burning = burnRate > 0 && lt(battle.damage, floor);
     const burnPerMs = mul(battle.maxHp, burnRate / 1000);
-    const msToKill =
-      burnRate > 0 ? toNumber(div(sub(battle.maxHp, battle.damage), burnPerMs)) : Infinity;
+    const msToFloor = burning ? toNumber(div(sub(floor, battle.damage), burnPerMs)) : Infinity;
     // The talisman burn stops at its exact end: the burn rate changes there.
     const burnEnd = effects.burnMs > 0 ? effects.burnMs : Infinity;
-    const piece = Math.min(left, msToKill, burnEnd);
+    const piece = Math.min(left, msToFloor, burnEnd);
     if (battle.guardian !== null) {
       battle.guardian.timeLeftMs -= piece;
     }
@@ -254,9 +259,9 @@ export function advance(battle: Battle, durationMs: number): void {
     effects.soulsBoostMs = Math.max(0, effects.soulsBoostMs - piece);
     battle.elapsed += piece;
     left -= piece;
-    if (piece === msToKill) {
-      defeatEnemy(battle);
-    } else if (burnRate > 0) {
+    if (piece === msToFloor) {
+      battle.damage = floor;
+    } else if (burning) {
       battle.damage = add(battle.damage, mul(burnPerMs, piece));
     }
   }

@@ -55,7 +55,7 @@ describe('talismans', () => {
   });
 
   it('Kekkai doubles souls for 10 s otherwise', () => {
-    const state = stateAtWave(5, 10, { blade: 1e6 });
+    const state = stateAtWave(5, 10, { blade: 100 });
     const boosted = step(state, 0, [cast('kekkai'), { type: 'tap' }]);
     const plain = step(state, 0, [{ type: 'tap' }]);
     expect(toNumber(div(boosted.state.souls, plain.state.souls))).toBeCloseTo(2, 9);

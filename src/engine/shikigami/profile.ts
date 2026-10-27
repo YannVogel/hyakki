@@ -1,4 +1,5 @@
 import { BALANCE } from '../balance';
+import { big, type BigNum } from '../numbers';
 import { generate, statsOf, type YokaiStats } from '../yokai';
 
 const statsCache = new Map<number, YokaiStats>();
@@ -24,9 +25,11 @@ export function shikigamiIntervalMs(seed: number): number {
 }
 
 /** Multiplier of the hero's hit for one hit of this shikigami. */
-export function shikigamiHitRatio(seed: number, level: number): number {
+export function shikigamiHitRatio(seed: number, level: number): BigNum {
   const { damageRatio, damagePerLevel } = BALANCE.shikigami;
-  return damageRatio * (shikigamiStats(seed).attack / 100) * (1 + damagePerLevel * (level - 1));
+  return big(
+    damageRatio * (shikigamiStats(seed).attack / 100) * (1 + damagePerLevel * (level - 1)),
+  );
 }
 
 export interface TeamBonus {

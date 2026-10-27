@@ -77,7 +77,7 @@ describe('step', () => {
   });
 
   it('defeats a yōkai, pays its souls and starts the next wave', () => {
-    const state = withSanctuary(createNewGame(11), { blade: 10_000 });
+    const state = withSanctuary(createNewGame(11), { blade: 100 });
     const { state: next, events } = step(state, 1);
     const seed = state.enemy.seed;
     const souls = mul(waveSouls(1), yokaiProfile(seed).soulsFactor);
@@ -123,18 +123,20 @@ describe('step', () => {
     expect(step(state, 0, taps)).toEqual(step(state, 0, taps));
   });
 
-  it('burns the enemy continuously with the fox fire upgrade', () => {
+  it('burns the enemy continuously with the fox fire upgrade, down to 10 % of its HP', () => {
     const state = withSanctuary(createNewGame(13), { foxfire: 50 });
     const maxHp = yokaiMaxHp(1, state.enemy.seed);
-    // 50 levels × 0.2 % = 10 % of max HP per second: dead in 10 s even without attacks.
-    const burnt = step({ ...state, attackTimers: { hero: 1e9, team: [] } }, 9_000).state;
-    expect(toNumber(div(burnt.enemy.damage, maxHp))).toBeCloseTo(0.9, 9);
-    const killed = step({ ...state, attackTimers: { hero: 1e9, team: [] } }, 10_001);
-    expect(killed.events.some((event) => event.type === 'yokaiDefeated')).toBe(true);
+    const idle = { ...state, attackTimers: { hero: 1e9, team: [] } };
+    // 50 levels × 0.2 % = 10 % of max HP per second.
+    const burnt = step(idle, 4_000).state;
+    expect(toNumber(div(burnt.enemy.damage, maxHp))).toBeCloseTo(0.4, 9);
+    const floored = step(idle, 60_000);
+    expect(toNumber(div(floored.state.enemy.damage, maxHp))).toBeCloseTo(0.9, 9);
+    expect(floored.events.some((event) => event.type === 'yokaiDefeated')).toBe(false);
   });
 
   it('pays more souls with the sacred bell', () => {
-    const base = withSanctuary(createNewGame(21), { blade: 10_000 });
+    const base = withSanctuary(createNewGame(21), { blade: 100 });
     const plain = step(base, 1).state.souls;
     const belled = step(withSanctuary(base, { bell: 10 }), 1).state.souls;
     expect(toNumber(div(belled, plain))).toBeCloseTo(1.5, 9);
@@ -177,7 +179,7 @@ describe('step with a team and captures', () => {
 
   it('captures yōkai reproducibly, without duplicates in the collection', () => {
     // One-shots every yōkai below wave 100: 98 taps defeat 98 yōkai at 2 % capture chance or less.
-    const state = withSanctuary(createNewGame(2), { blade: 1e12 });
+    const state = withSanctuary(createNewGame(2), { blade: 300 });
     const taps = Array.from({ length: 98 }, () => ({ type: 'tap' as const }));
     const first = step(state, 0, taps);
     expect(step(state, 0, taps)).toEqual(first);
