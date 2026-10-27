@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 3 · Boucle jouable (`milestone/3-boucle`) |
-| Dernière issue terminée | #31 Écran Combat |
-| Prochaine issue | #32 Écran Sanctuaire |
+| Dernière issue terminée | #32 Écran Sanctuaire |
+| Prochaine issue | #33 Écran Shikigami |
 
 ## Milestones
 

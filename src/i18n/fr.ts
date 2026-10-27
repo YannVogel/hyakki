@@ -82,6 +82,49 @@ export const fr = {
     challenge: 'Affronter le Gardien',
     farming: 'Le Gardien attend que tu sois prêt.',
   },
+  sanctuary: {
+    title: 'Sanctuaire',
+    subtitle: 'Dépense tes âmes pour booster ton onmyōji !',
+    souls: 'Âmes',
+    perSecond: (value: string) => `+ ${value} / s`,
+    quantity: 'Quantité à acheter',
+    modes: { one: '×1', ten: '×10', max: 'Max' },
+    level: (level: number) => `Nv ${level}`,
+    buyLabel: (count: number) => `×${count}`,
+    maxed: 'Max',
+    buy: (name: string, count: number, cost: string) =>
+      `Acheter ${count} niveau${count > 1 ? 'x' : ''} de ${name} pour ${cost} âmes`,
+    notEnough: (name: string, cost: string) => `${name} : ${cost} âmes, âmes insuffisantes`,
+    maxedLabel: (name: string) => `${name} : niveau maximal atteint`,
+    heroLabel: "L'onmyōji se prépare au sanctuaire",
+    upgrades: {
+      blade: {
+        name: 'Lame d’ofuda',
+        kanji: '刃',
+        effect: (percent: string) => `+ ${percent} % de dégâts par niveau, cumulés`,
+      },
+      foxfire: {
+        name: 'Feu de renard',
+        kanji: '狐',
+        effect: (percent: string) => `Brûlure : + ${percent} % des PV par seconde`,
+      },
+      bell: {
+        name: 'Clochette sacrée',
+        kanji: '鈴',
+        effect: (percent: string) => `+ ${percent} % d’âmes récoltées`,
+      },
+      kekkai: {
+        name: 'Kekkai',
+        kanji: '結',
+        effect: (percent: string) => `− ${percent} % de recharge des talismans`,
+      },
+      lanterns: {
+        name: 'Lanternes de veille',
+        kanji: '灯',
+        effect: (hours: string) => `+ ${hours} h de plafond hors ligne`,
+      },
+    },
+  },
   catalog: {
     title: 'Catalogue',
     buttons: 'Boutons',

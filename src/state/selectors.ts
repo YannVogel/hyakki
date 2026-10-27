@@ -4,6 +4,18 @@ import {
   combatPower,
   div,
   expectedDps,
+  gte,
+  maxAffordable,
+  min,
+  mul,
+  type PurchaseMode,
+  tierMultiplier,
+  UPGRADE_IDS,
+  upgradeCost,
+  type UpgradeId,
+  upgradeMaxLevel,
+  waveHp,
+  waveSouls,
   type GameState,
   generate,
   guardianAt,
@@ -102,4 +114,45 @@ export function talismanViews(state: GameState): TalismanView[] {
     const cooldownMs = state.cooldowns[id];
     return { id, cooldownMs, cooldownRatio: total > 0 ? Math.min(1, cooldownMs / total) : 0 };
   });
+}
+
+export type PurchaseView = {
+  readonly id: UpgradeId;
+  readonly level: number;
+  readonly maxed: boolean;
+  /** Levels the chosen mode would buy (at least 1, to show the next price). */
+  readonly count: number;
+  readonly cost: BigNum;
+  readonly affordable: boolean;
+};
+
+/** The Sanctuary's upgrades for a purchase mode (×1, ×10, Max). */
+export function upgradeViews(state: GameState, mode: PurchaseMode): PurchaseView[] {
+  return UPGRADE_IDS.map((id) => {
+    const level = state.sanctuary[id];
+    const remaining = upgradeMaxLevel(id) - level;
+    const wanted = mode === 'max' ? maxAffordable(id, level, state.souls) : mode;
+    const count = Math.max(1, Math.min(wanted, remaining));
+    const cost = upgradeCost(id, level, count);
+    return {
+      id,
+      level,
+      maxed: remaining <= 0,
+      count,
+      cost,
+      affordable: remaining > 0 && gte(state.souls, cost),
+    };
+  });
+}
+
+/** Souls earned per second at the current wave, with the expected damage. */
+export function soulsPerSecond(state: GameState): BigNum {
+  const power = combatPower(state);
+  const { wave } = state.parade;
+  const attacksPerSecond = [
+    power.heroIntervalMs,
+    ...power.team.map((member) => member.intervalMs),
+  ].reduce((total, interval) => total + 1000 / interval, 0);
+  const killsPerSecond = min(div(expectedDps(power), waveHp(wave)), attacksPerSecond);
+  return mul(mul(waveSouls(wave), power.soulsMultiplier * tierMultiplier(wave)), killsPerSecond);
 }

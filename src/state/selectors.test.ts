@@ -1,6 +1,13 @@
-import { createNewGame, enemySeed, generate, nameOf, step } from '@/engine';
+import { big, createNewGame, enemySeed, generate, gt, nameOf, step } from '@/engine';
 
-import { enemyView, paradeView, powerPerSecond, talismanViews } from './selectors';
+import {
+  enemyView,
+  paradeView,
+  powerPerSecond,
+  soulsPerSecond,
+  talismanViews,
+  upgradeViews,
+} from './selectors';
 
 const atWave = (wave: number) => {
   const state = createNewGame(3);
@@ -54,5 +61,37 @@ describe('selectors', () => {
     const raijin = talismanViews(cast).find((talisman) => talisman.id === 'raijin');
     expect(raijin).toEqual({ id: 'raijin', cooldownMs: 60_000, cooldownRatio: 1 });
     expect(talismanViews(state).every((talisman) => talisman.cooldownRatio === 0)).toBe(true);
+  });
+});
+
+describe('Sanctuary selectors', () => {
+  const rich = (souls: number) => ({ ...createNewGame(1), souls: big(souls) });
+
+  it('price ×1, ×10 and Max, and tell what is affordable', () => {
+    const one = upgradeViews(rich(25), 1).find((view) => view.id === 'blade');
+    expect(one).toMatchObject({ level: 0, count: 1, affordable: true, maxed: false });
+    const ten = upgradeViews(rich(25), 10).find((view) => view.id === 'blade');
+    expect(ten).toMatchObject({ count: 10, affordable: false });
+    const max = upgradeViews(rich(25), 'max').find((view) => view.id === 'blade');
+    expect(max?.count).toBe(2);
+    const none = upgradeViews(rich(0), 'max').find((view) => view.id === 'blade');
+    expect(none).toMatchObject({ count: 1, affordable: false });
+  });
+
+  it('mark maxed upgrades', () => {
+    const state = { ...rich(1e9), sanctuary: { ...createNewGame(1).sanctuary, kekkai: 25 } };
+    expect(upgradeViews(state, 1).find((view) => view.id === 'kekkai')).toMatchObject({
+      maxed: true,
+      affordable: false,
+    });
+  });
+
+  it('estimate the souls earned per second', () => {
+    expect(gt(soulsPerSecond(createNewGame(1)), 0)).toBe(true);
+    const stronger = {
+      ...createNewGame(1),
+      sanctuary: { ...createNewGame(1).sanctuary, bell: 20 },
+    };
+    expect(gt(soulsPerSecond(stronger), soulsPerSecond(createNewGame(1)))).toBe(true);
   });
 });
