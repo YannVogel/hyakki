@@ -18,6 +18,7 @@ const toDecimal = (value: BigNumSource): Decimal =>
 const fromDecimal = (value: Decimal): BigNum => value as unknown as BigNum;
 
 export const big = (value: number): BigNum => fromDecimal(new Decimal(value));
+export const isBigNum = (value: unknown): value is BigNum => value instanceof Decimal;
 export const ZERO = big(0);
 export const ONE = big(1);
 

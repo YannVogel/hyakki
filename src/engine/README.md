@@ -23,7 +23,8 @@ Ces règles sont appliquées par `npm run lint` ([`eslint.config.js`](../../esli
 | `economy/` | coûts, gains, Sanctuaire, captures |
 | `prestige/` | Festival |
 | `offline/` | gains hors ligne |
-| `save/` | schéma de sauvegarde versionné et migrations |
+| `save/` | sérialisation versionnée, validation et migrations |
+| `testing/` | générateurs fast-check partagés par les tests |
 
 Chaque module apparaît avec l'issue qui l'implémente (milestones 1 et 2).
 
@@ -65,3 +66,12 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `statsOf(spec)` | PV, attaque, défense, vitesse (arrondis comme le prototype), chance de critique, brûlure, bonus d'âmes, traits. |
 | `traitsOf(spec)` | Traits visibles et leurs effets (fractions : `0.08` = +8 %), dans l'ordre des pièces. |
 | `nameOf(spec)` | Nom japonais (`Mitsume-Taiko-obake`), identique dans toutes les langues. La description française est dans `src/i18n/yokai.ts`. |
+
+### État et sauvegarde
+
+| Élément | Rôle |
+|---|---|
+| `GameState` | État complet et sérialisable : défilé, ennemi (graine + dégâts subis), âmes, ofuda, étincelles, Sanctuaire, shikigami, équipe, recharges, minuteurs d'attaque, état du RNG, galerie. |
+| `createNewGame(seed)` | Premier défilé, vague 1. |
+| `enemySeed(paradeSeed, wave, repeat)` | Graine du yōkai d'une vague ; les répétitions (farm devant un Gardien) ont leur propre graine. |
+| `serialize(state, savedAt)` / `deserialize(text)` | Fichier de sauvegarde ; `deserialize` renvoie un résultat typé, jamais d'exception. |

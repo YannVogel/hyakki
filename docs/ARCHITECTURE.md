@@ -33,7 +33,9 @@ src/
     economy/              coûts, gains, Sanctuaire, captures
     prestige/             Festival
     offline/              gains hors ligne
-    save/                 schéma de sauvegarde versionné + migrations
+    save/                 sérialisation versionnée, validation, migrations
+    testing/              générateurs fast-check partagés par les tests (hors couverture)
+    gameState.ts          état complet du jeu (GameState) et nouvelle partie
     index.ts              API publique du moteur
   render/                 Skia : dessine une spec de yōkai, la scène, les effets
   ui/                     design system : tokens, composants de base
@@ -103,11 +105,13 @@ Tout tirage passe par `engine/rng`. La graine d'un yōkai dérive du défilé et
 
 ## 5. Sauvegarde
 
-- Un objet JSON unique, avec `schemaVersion` et `generatorVersion`.
+- Un objet JSON unique : `{ savedAt, state }`. `state` est le `GameState` (avec `schemaVersion` et `generatorVersion`), les `BigNum` y sont écrits sous forme texte sans perte (`4.8249e4`).
+- Le moteur ne stocke que l'essentiel : l'ennemi courant est une graine et des dégâts subis, ses PV max se recalculent.
 - Écrit dans MMKV toutes les 5 s et à chaque passage en arrière-plan.
-- Les shikigami sont stockés par **graine** (quelques octets chacun), jamais par apparence.
-- Chaque changement de schéma ajoute une migration testée (`save/migrations`).
-- Horodatage de la dernière sauvegarde : sert au calcul hors ligne. Une heure système qui recule ne donne jamais de gains négatifs ni de gains bonus.
+- Les shikigami sont stockés par **graine** (quelques octets chacun) avec la version du générateur de leur capture, jamais par apparence.
+- `deserialize(texte)` ne lève jamais d'exception : il renvoie `{ ok: true, state, savedAt }` ou `{ ok: false, error }` avec une raison typée (`invalid-json`, `unsupported-version`, `invalid-shape`). La validation vérifie chaque champ et la cohérence (équipe possédée, graines uniques…).
+- Chaque changement de schéma ajoute une migration testée (`save/migrations/vN-to-vN+1.ts`), appliquée avant la validation.
+- `savedAt` (horloge murale, fournie par `services`) sert au calcul hors ligne. Une heure système qui recule ne donne jamais de gains négatifs ni de gains bonus.
 
 ## 6. Build
 
