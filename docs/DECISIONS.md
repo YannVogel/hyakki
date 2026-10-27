@@ -2,6 +2,13 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-27 — Socle technique : Expo SDK 58, iPhone uniquement, polices chargées au démarrage
+
+- **Décision** : Expo SDK 58 (React Native 0.88, React 19.3, TypeScript 6.0), routes expo-router dans `app/` à la racine, identifiant `com.parallaxworks.hyakki` sur iOS et Android. Sur iOS, `supportsTablet: false` : l'app tourne en mode iPhone sur iPad. Les polices sont chargées par `useFonts` derrière l'écran de lancement.
+- **Raison** : SDK stable le plus récent ; `app/` à la racine conforme à [`ARCHITECTURE.md`](ARCHITECTURE.md) ; pas de captures iPad à produire pour l'App Store en V1 ; `useFonts` donne le même nom de famille sur les deux plateformes.
+- **Conséquence** : la prise en charge de l'iPad (orientation, captures, mise en page) est hors V1.
+- **Modules précompilés désactivés sur iOS** (`expo-build-properties`, `ios.usePrecompiledModules: false`) : avec les XCFrameworks précompilés du SDK 58.0.19, l'app plante au lancement (`ExpoFileSystem` ne trouve pas un symbole d'`ExpoModulesCore`). Les modules Expo sont donc compilés depuis les sources : premier build plus long, comportement identique. À réévaluer à la prochaine montée de SDK.
+
 ## 2026-10-27 — Nurarihyon coiffé d'un chapeau de cour
 
 - **Décision** : Nurarihyon porte un haut chapeau de cour noir laqué qui cache entièrement son crâne allongé.

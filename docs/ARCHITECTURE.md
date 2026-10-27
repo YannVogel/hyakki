@@ -4,7 +4,7 @@
 
 | Besoin | Choix | Pourquoi |
 |---|---|---|
-| App | **Expo** (SDK stable le plus récent), **TypeScript strict**, **expo-router** | Stack maîtrisée, builds iOS + Android depuis un seul code |
+| App | **Expo SDK 58** (React Native 0.88, React 19.3), **TypeScript 6 strict**, **expo-router** | Stack maîtrisée, builds iOS + Android depuis un seul code |
 | Rendu de la scène, des yōkai et des effets | **@shopify/react-native-skia** | Dessin vectoriel performant, chemins SVG, shaders |
 | Animations, gestes | **react-native-reanimated**, **react-native-gesture-handler** | Animations et tap sur le thread UI |
 | État de l'UI | **zustand** | Store minimal qui orchestre moteur ↔ écrans |
@@ -18,7 +18,7 @@
 
 MMKV et Skia demandent un **development build** (pas Expo Go).
 
-Les versions exactes sont fixées à l'initialisation du projet (issue de la milestone 0) et consignées dans `package.json`.
+Les versions exactes sont dans `package.json`. Ajoute toujours une dépendance native avec `npx expo install <paquet>` pour obtenir la version compatible avec le SDK.
 
 ## 2. Structure des dossiers
 
@@ -42,13 +42,17 @@ src/
   services/               persistance MMKV, notifications, haptique, horloge
   i18n/                   textes du jeu (FR en V1)
 assets/
+  images/app/             icône et écran de lancement
   images/hero/            10 poses du héros (PNG détourés)
   images/bosses/          10 Gardiens (PNG détourés)
-  fonts/                  Mochiy Pop One, M PLUS Rounded 1c
+  fonts/                  Mochiy Pop One, M PLUS Rounded 1c (+ licences OFL)
 design/                   maquettes, tokens, planches sources, prototype du générateur
 docs/                     documentation du projet
 scripts/                  outils (découpe des planches, simulation d'équilibrage)
+app.config.ts             configuration Expo (lit les couleurs dans design/tokens.json)
 ```
+
+L'alias `@/` pointe vers `src/` (et `@/assets/` vers `assets/`).
 
 ## 3. Règles de dépendances
 

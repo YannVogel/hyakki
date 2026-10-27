@@ -24,6 +24,17 @@ Le jeu est **100 % gratuit** : ni publicité, ni achat intégré, ni compte, ni 
 | Festival | Le prestige : on relance le défilé plus fort en échange d'Étincelles (bonus permanent). |
 | Hors ligne | Les shikigami continuent le combat pendant l'absence du joueur, dans la limite d'un plafond. |
 
+## Démarrer
+
+Prérequis : Node 24, Xcode (iOS) ou Android Studio (Android). L'app utilise des modules natifs : elle tourne dans un **development build**, pas dans Expo Go.
+
+```bash
+npm install
+npm run ios        # build et lance sur le simulateur iOS
+npm run android    # build et lance sur l'émulateur Android
+npm start          # relance seulement le serveur Metro
+```
+
 ## Documentation
 
 | Document | Contenu |
