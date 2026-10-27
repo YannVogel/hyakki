@@ -192,3 +192,20 @@ describe('starPath', () => {
     expect(path.split(' L')).toHaveLength(8);
   });
 });
+
+describe('damage numbers', () => {
+  it('scatter over an area instead of a line', () => {
+    const hits = Array.from({ length: 8 }, (_, index) => hit('shikigami', false, index * 10));
+    const numbers = effectsForEvents(hits, stage, 'full', 3).filter(
+      (effect) => effect.kind === 'damage',
+    );
+    const xs = numbers.map((number) => number.x);
+    const ys = numbers.map((number) => number.y);
+    const range = (values: number[]) => Math.max(...values) - Math.min(...values);
+    expect(range(xs)).toBeGreaterThan(40);
+    expect(range(ys)).toBeGreaterThan(20);
+    // Not on one line: the y offset does not follow the x offset.
+    const slopes = numbers.slice(1).map((n, i) => (n.y - ys[i]) / (n.x - xs[i]));
+    expect(new Set(slopes.map((slope) => slope.toFixed(2))).size).toBeGreaterThan(1);
+  });
+});
