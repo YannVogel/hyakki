@@ -6,6 +6,7 @@ import { Card, colors, displayText, Icon, spacing, type Tab, TabBar } from '@/ui
 
 import { CombatScreen } from '../combat/CombatScreen';
 import { SanctuaryScreen } from '../sanctuary/SanctuaryScreen';
+import { ShikigamiScreen } from '../shikigami/ShikigamiScreen';
 import { TAB_ICONS } from '../shared/icons';
 
 export type MainTab = 'combat' | 'shikigami' | 'sanctuary' | 'festival';
@@ -31,7 +32,7 @@ function Upcoming({ title }: { title: string }) {
 
 const SCREENS: Record<MainTab, () => ReactNode> = {
   combat: () => <CombatScreen />,
-  shikigami: () => <Upcoming title={strings.tabs.shikigami} />,
+  shikigami: () => <ShikigamiScreen />,
   sanctuary: () => <SanctuaryScreen />,
   festival: () => <Upcoming title={strings.tabs.festival} />,
 };

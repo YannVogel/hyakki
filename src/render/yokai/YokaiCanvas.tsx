@@ -1,5 +1,5 @@
 import { Canvas, Group, type Transforms3d } from '@shopify/react-native-skia';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import {
   useDerivedValue,
   useFrameCallback,
@@ -61,3 +61,26 @@ export function YokaiCanvas({ spec, size, accessibilityLabel, testID }: YokaiCan
     </Canvas>
   );
 }
+
+export interface YokaiThumbnailProps {
+  readonly spec: YokaiSpec;
+  readonly size: number;
+}
+
+/**
+ * Still drawing of a yōkai for long lists: no animation clock, and memoized so that a list
+ * re-render never redraws thumbnails whose seed did not change.
+ */
+export const YokaiThumbnail = memo(
+  function YokaiThumbnail({ spec, size }: YokaiThumbnailProps) {
+    const drawing = useMemo(() => drawYokai(spec), [spec]);
+    return (
+      <Canvas style={{ width: size, height: size }} accessible={false} pointerEvents="none">
+        <Group transform={[{ scale: size / YOKAI_FRAME }]}>
+          <DrawNodeView node={drawing} motion={null} />
+        </Group>
+      </Canvas>
+    );
+  },
+  (previous, next) => previous.spec.seed === next.spec.seed && previous.size === next.size,
+);

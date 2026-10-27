@@ -156,3 +156,33 @@ export function soulsPerSecond(state: GameState): BigNum {
   const killsPerSecond = min(div(expectedDps(power), waveHp(wave)), attacksPerSecond);
   return mul(mul(waveSouls(wave), power.soulsMultiplier * tierMultiplier(wave)), killsPerSecond);
 }
+
+export interface ShikigamiView {
+  readonly seed: number;
+  readonly level: number;
+  readonly spec: YokaiSpec;
+  readonly name: string;
+  readonly inTeam: boolean;
+}
+
+/** The collection, team members first, then by rarity and level. */
+export function collectionView(state: GameState): ShikigamiView[] {
+  const rank = { legendary: 0, epic: 1, rare: 2, common: 3 } as const;
+  return state.shikigami
+    .map((shikigami) => {
+      const spec = generate(shikigami.seed);
+      return {
+        seed: shikigami.seed,
+        level: shikigami.level,
+        spec,
+        name: nameOf(spec),
+        inTeam: state.team.includes(shikigami.seed),
+      };
+    })
+    .sort(
+      (a, b) =>
+        Number(b.inTeam) - Number(a.inTeam) ||
+        rank[a.spec.rarity] - rank[b.spec.rarity] ||
+        b.level - a.level,
+    );
+}

@@ -1,6 +1,7 @@
 import { big, createNewGame, enemySeed, generate, gt, nameOf, step } from '@/engine';
 
 import {
+  collectionView,
   enemyView,
   paradeView,
   powerPerSecond,
@@ -93,5 +94,26 @@ describe('Sanctuary selectors', () => {
       sanctuary: { ...createNewGame(1).sanctuary, bell: 20 },
     };
     expect(gt(soulsPerSecond(stronger), soulsPerSecond(createNewGame(1)))).toBe(true);
+  });
+});
+
+describe('collectionView', () => {
+  it('puts team members first, then rarer and higher-level shikigami', () => {
+    const state = {
+      ...createNewGame(1),
+      shikigami: [1, 2, 3, 4, 5, 6].map((seed, index) => ({
+        seed,
+        level: index + 1,
+        generatorVersion: 1,
+      })),
+      team: [6],
+    };
+    const view = collectionView(state);
+    expect(view[0]).toMatchObject({ seed: 6, inTeam: true });
+    expect(view).toHaveLength(6);
+    const rank = { legendary: 0, epic: 1, rare: 2, common: 3 };
+    for (let i = 2; i < view.length; i++) {
+      expect(rank[view[i].spec.rarity]).toBeGreaterThanOrEqual(rank[view[i - 1].spec.rarity]);
+    }
   });
 });
