@@ -39,7 +39,8 @@ export const fr = {
     team: 'Équipe',
     noTeam: 'Aucun shikigami',
     crit: 'Critique !',
-    hit: 'Paf !',
+    lastHit: (damage: string, crit: boolean) =>
+      `Dernier coup${crit ? ' critique' : ''} : ${damage}`,
     heroLabel: "L'onmyōji, ofuda en main",
     talismanReady: (name: string) => `Lancer ${name}`,
     talismanWaiting: (name: string, seconds: number) => `${name}, prêt dans ${seconds} s`,

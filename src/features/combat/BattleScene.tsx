@@ -4,19 +4,18 @@ import { GestureDetector, useTapGesture } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 
 import { strings } from '@/i18n';
-import { BattleBackdrop, sceneLayout, toBox, YokaiCanvas } from '@/render';
-import type { EnemyView } from '@/state';
 import {
-  bodyText,
-  colors,
-  hardShadow,
-  OutlinedText,
-  outline,
-  radii,
-  spacing,
-  strokes,
-  displayText,
-} from '@/ui';
+  BattleBackdrop,
+  type EffectPool,
+  EffectsLayer,
+  type EffectStage,
+  type MotionLevel,
+  sceneLayout,
+  toBox,
+  YokaiCanvas,
+} from '@/render';
+import type { EnemyView } from '@/state';
+import { bodyText, colors, hardShadow, outline, radii, spacing, strokes } from '@/ui';
 
 import { GUARDIAN_IMAGES, HERO_ASPECT, HERO_POSES } from '../shared/images';
 import { EnemyHud } from './EnemyHud';
@@ -31,6 +30,8 @@ export interface BattleSceneProps {
   readonly enemyName: string;
   readonly wave: number;
   readonly lastHit: LastHit | null;
+  readonly effects: EffectPool;
+  readonly motion: MotionLevel;
   readonly onTap: () => void;
 }
 
@@ -38,10 +39,26 @@ export interface BattleSceneProps {
 const HERO = { x: 0, y: 108, height: 194 };
 const ENEMY = { x: 270, y: 222, size: 160 };
 const GUARDIAN = { x: 270, y: 216, size: 190 };
-const HIT_LABEL = { x: 132, y: 82 };
+/** Where the damage numbers burst, announced to screen readers as the last hit. */
+const HIT_AREA = { x: 132, y: 82, width: 160, height: 90 };
+const HERO_HAND = { x: 100, y: 165 };
+
+/** Where the ofuda flies from and to, for the combat effects. */
+export const effectStage = (guardian: boolean): EffectStage => ({
+  hand: HERO_HAND,
+  target: guardian ? { x: GUARDIAN.x, y: GUARDIAN.y } : { x: ENEMY.x, y: ENEMY.y },
+});
 
 /** The battlefield: backdrop, hero, enemy and its HUD; a tap anywhere strikes. */
-export function BattleScene({ enemy, enemyName, wave, lastHit, onTap }: BattleSceneProps) {
+export function BattleScene({
+  enemy,
+  enemyName,
+  wave,
+  lastHit,
+  effects,
+  motion,
+  onTap,
+}: BattleSceneProps) {
   const [box, setBox] = useState<{ width: number; height: number } | null>(null);
   // Detected on the UI thread, then queued as an engine input on the JS thread.
   const tap = useTapGesture({
@@ -68,12 +85,24 @@ export function BattleScene({ enemy, enemyName, wave, lastHit, onTap }: BattleSc
       : place(ENEMY.x, ENEMY.y, ENEMY.size);
   const heroTop = layout === null ? { x: 0, y: 0 } : toBox(layout, HERO.x, HERO.y);
   const heroHeight = layout === null ? 0 : HERO.height * layout.scale;
-  const hitAt = layout === null ? null : toBox(layout, HIT_LABEL.x, HIT_LABEL.y);
+  const hitAt = layout === null ? null : toBox(layout, HIT_AREA.x, HIT_AREA.y);
+  const effectLayer = (layer: 'under' | 'over') =>
+    box === null ? null : (
+      <EffectsLayer
+        pool={effects}
+        layer={layer}
+        width={box.width}
+        height={box.height}
+        motion={motion}
+        critText={strings.combat.crit}
+      />
+    );
 
   return (
     <GestureDetector gesture={tap}>
       <View style={styles.scene} onLayout={onLayout} testID="battle-scene">
         {box === null ? null : <BattleBackdrop width={box.width} height={box.height} />}
+        {effectLayer('under')}
         {/* Screen readers strike through this button; touches go to the gesture above. */}
         <View
           style={StyleSheet.absoluteFill}
@@ -124,6 +153,7 @@ export function BattleScene({ enemy, enemyName, wave, lastHit, onTap }: BattleSc
             ]}
           />
         )}
+        {effectLayer('over')}
         <EnemyHud
           name={enemyName}
           wave={wave}
@@ -135,19 +165,23 @@ export function BattleScene({ enemy, enemyName, wave, lastHit, onTap }: BattleSc
           }
           timeRatio={enemy.kind === 'guardian' ? enemy.timeRatio : undefined}
         />
-        {lastHit === null || hitAt === null ? null : (
+        {/* The damage numbers are drawn by Skia: screen readers read the last hit here. */}
+        {lastHit === null || hitAt === null || layout === null ? null : (
           <View
-            style={[styles.absolute, { left: hitAt.x, top: hitAt.y }]}
+            style={[
+              styles.absolute,
+              {
+                left: hitAt.x,
+                top: hitAt.y,
+                width: HIT_AREA.width * layout.scale,
+                height: HIT_AREA.height * layout.scale,
+              },
+            ]}
             pointerEvents="none"
+            accessible
+            accessibilityLabel={strings.combat.lastHit(lastHit.damage, lastHit.crit)}
             testID="last-hit"
-          >
-            <Text style={[displayText('lg'), styles.hitLabel]}>
-              {lastHit.crit ? strings.combat.crit : strings.combat.hit}
-            </Text>
-            <OutlinedText style={displayText('4xl')} width={2}>
-              {lastHit.damage}
-            </OutlinedText>
-          </View>
+          />
         )}
         <Text style={[bodyText('sm', 800), styles.hint]} pointerEvents="none">
           {strings.combat.tapHint}
@@ -170,7 +204,6 @@ const styles = StyleSheet.create({
   },
   absolute: { position: 'absolute' },
   hero: { position: 'absolute' },
-  hitLabel: { color: colors.red },
   hint: {
     position: 'absolute',
     alignSelf: 'center',

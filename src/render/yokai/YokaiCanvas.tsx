@@ -1,23 +1,16 @@
 import { Canvas, Group, type Transforms3d } from '@shopify/react-native-skia';
 import { memo, useMemo } from 'react';
-import {
-  useDerivedValue,
-  useFrameCallback,
-  useReducedMotion,
-  useSharedValue,
-} from 'react-native-reanimated';
+import { useDerivedValue, useReducedMotion } from 'react-native-reanimated';
 
 import type { YokaiSpec } from '@/engine';
 
+import { useFrameClock } from '../frameClock';
 import { DrawNodeView, type Motion } from './DrawNodeView';
 import { drawYokai, YOKAI_FRAME } from './drawYokai';
 import { blinkScale, flameScale, floatOffset, sparkle, tongueAngle } from './motion';
 
 function useMotion(delaySeconds: number, running: boolean): Motion {
-  const clock = useSharedValue(0);
-  useFrameCallback((frame) => {
-    clock.value = frame.timeSinceFirstFrame;
-  }, running);
+  const clock = useFrameClock(running);
   return {
     float: useDerivedValue<Transforms3d>(() => [
       { translateY: floatOffset(clock.value, delaySeconds) },

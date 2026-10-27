@@ -7,3 +7,7 @@ export type { SceneLayout } from './scene/backdrop';
 export { drawYokai, YOKAI_FRAME } from './yokai/drawYokai';
 export { YokaiCanvas, YokaiThumbnail } from './yokai/YokaiCanvas';
 export type { YokaiCanvasProps, YokaiThumbnailProps } from './yokai/YokaiCanvas';
+export { EffectsLayer, useEffectPool } from './effects/EffectsLayer';
+export type { EffectLayer, EffectPool, EffectsLayerProps } from './effects/EffectsLayer';
+export { effectsForEvents } from './effects/effects';
+export type { EffectStage, MotionLevel } from './effects/effects';

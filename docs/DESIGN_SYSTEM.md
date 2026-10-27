@@ -80,9 +80,9 @@ Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque comp
 
 ## 6. Animation et effets
 
-- Effets de combat (Skia) : étoile d'impact jaune, chiffres de dégâts qui éclatent puis montent, « Critique ! » rouge cerné de blanc, lignes de vitesse, impact frame au critique.
+- Effets de combat (Skia) : étoile d'impact jaune, chiffres de dégâts qui éclatent puis montent, « Critique ! » rouge cerné de blanc, lignes de vitesse, impact frame au critique. Implémentation : `src/render/effects/` ; `effects.ts` (pur, testé) traduit les événements du moteur en effets, garde un pool fixe d'emplacements (le plus ancien d'un type est recyclé) et calcule chaque image ; `EffectsLayer.tsx` dessine deux calques (l'étoile sous les combattants, le reste au-dessus) sans rendu React pendant le combat. Le héros et les frappes lancent un ofuda qui touche à l'atterrissage ; un yōkai vaincu laisse s'envoler des pétales de sakura. L'éclair d'impact est limité à 2,5 par seconde (seuil de photosensibilité : 3 par seconde).
 - Cut-in de Gardien : fond en rayons tournants, bande blanche des yeux qui glisse depuis la gauche, bandeau jaune du nom depuis la droite. Implémentation : `src/features/combat/GuardianCutIn.tsx` (glissements de 500 ms avec rebond, le nom 150 ms après les yeux ; rayons et yeux en Skia dans `src/render/scene/`).
-- Respect strict de « réduire les animations » : les effets deviennent des fondus courts, rien ne tourne ni ne clignote.
+- Respect strict de « réduire les animations » : les effets deviennent des fondus courts, rien ne tourne ni ne clignote (en combat : chiffres, « Critique ! » et étoile en fondu sur place ; ni ofuda en vol, ni lignes de vitesse, ni éclair, ni pétales).
 
 ## 7. Accessibilité
 
