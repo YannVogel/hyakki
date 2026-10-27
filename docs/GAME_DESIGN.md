@@ -101,6 +101,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,15^n ×
 - Étincelles gagnées : `E = floor(5 × (vague_max / 100) ^ 1.8)`.
 - Effet : remise à zéro des vagues, des âmes et des niveaux du Sanctuaire ; **conservation** des shikigami, des ofuda et de la galerie des Gardiens.
 - Bonus permanent : `× (1 + 0,05 × étincelles_totales)` sur les dégâts et les âmes.
+- **Implémentation** : débloqué dès que le record du défilé dépasse la vague 100. Le nouveau défilé a sa propre graine (dérivée de la précédente) ; l'équipe active est conservée avec la collection ; les recharges des talismans et les effets repartent de zéro. Le bonus s'applique partout où le moteur calcule dégâts et âmes (combat actif et hors ligne).
 
 ### 4.6 Hors ligne
 

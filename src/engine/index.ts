@@ -5,6 +5,7 @@ export * from './economy';
 export * from './gameState';
 export * from './numbers';
 export * from './offline';
+export * from './prestige';
 export * from './rng';
 export * from './save';
 export * from './shikigami';

@@ -1,6 +1,7 @@
 import { BALANCE } from '../balance';
 import type { GameState } from '../gameState';
 import { type BigNum, mul } from '../numbers';
+import { festivalBonus } from '../prestige';
 import { shikigamiHitRatio, shikigamiIntervalMs, teamBonus } from '../shikigami';
 
 export interface TeamAttacker {
@@ -23,7 +24,7 @@ export interface CombatPower {
 }
 
 /**
- * Bonuses of different sources multiply (Sanctuary × team); bonuses of one source add up.
+ * Bonuses of different sources multiply (Sanctuary × team × Festival); bonuses of one source add up.
  * Intervals stay whole milliseconds so that attack timings do not drift.
  */
 export function combatPower(state: GameState): CombatPower {
@@ -31,9 +32,10 @@ export function combatPower(state: GameState): CombatPower {
   const { upgrades, hero, crit } = BALANCE;
   const bonus = teamBonus(state.team);
   const speed = 1 + bonus.speed;
+  const festival = festivalBonus(state.sparks);
   const heroHitDamage = mul(
     hero.baseDamage,
-    (1 + upgrades.blade.damagePerLevel * blade) * (1 + bonus.attack),
+    (1 + upgrades.blade.damagePerLevel * blade) * (1 + bonus.attack) * festival,
   );
   const team = state.team.map((seed) => {
     const level = state.shikigami.find((shikigami) => shikigami.seed === seed)?.level ?? 1;
@@ -50,6 +52,6 @@ export function combatPower(state: GameState): CombatPower {
     team,
     critChance: Math.min(crit.maxChance, crit.baseChance + bonus.crit),
     burnRate: upgrades.foxfire.burnPerLevel * foxfire + bonus.burn,
-    soulsMultiplier: (1 + upgrades.bell.soulsPerLevel * bell) * (1 + bonus.souls),
+    soulsMultiplier: (1 + upgrades.bell.soulsPerLevel * bell) * (1 + bonus.souls) * festival,
   };
 }

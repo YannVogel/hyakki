@@ -116,3 +116,11 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `simulateOffline(state, elapsedMs)` | Ce que l'équipe a accompli en l'absence du joueur : `{ state, report }`. Analytique, plafonné, s'arrête devant le Gardien suivant ; `elapsedMs ≤ 0` ne donne rien. |
 | `offlineCapMs(state)` | Plafond : 8 h + 1 h par niveau de Lanternes, 24 h au plus. |
 | `expectedDps(power)` | Dégâts espérés par seconde (critiques moyennés). |
+
+### `prestige/` — Festival
+
+| Élément | Rôle |
+|---|---|
+| `festivalPreview(state)` | Débloqué ou non, étincelles à gagner, bonus avant et après (pour l'écran Festival). |
+| `startFestival(state)` | Relance le défilé : remise à zéro des vagues, âmes, Sanctuaire ; conservation des shikigami, de l'équipe, des ofuda et de la galerie ; résultat typé (`locked`). |
+| `festivalSparks(record)`, `festivalBonus(sparks)` | Formules de `docs/GAME_DESIGN.md` § 4.5. |

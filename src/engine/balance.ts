@@ -88,4 +88,13 @@ export const BALANCE = {
     /** Yōkai simulated one by one; beyond, souls are extrapolated from them. */
     maxSimulatedKills: 2000,
   },
+  festival: {
+    /** Unlocked once the record wave is above this one (the first guardian is behind). */
+    unlockWave: 100,
+    /** Sparks = floor(sparksBase × (record wave / 100)^sparksExponent). */
+    sparksBase: 5,
+    sparksExponent: 1.8,
+    /** Permanent bonus on damage and souls: × (1 + bonusPerSpark × total sparks). */
+    bonusPerSpark: 0.05,
+  },
 } as const;
