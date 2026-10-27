@@ -28,6 +28,12 @@ const config: ExpoConfig = {
       monochromeImage: './assets/images/app/android-icon-monochrome.png',
     },
     predictiveBackGestureEnabled: false,
+    // Added by the Expo template but never used: the game reads no files and draws no overlay.
+    blockedPermissions: [
+      'android.permission.READ_EXTERNAL_STORAGE',
+      'android.permission.WRITE_EXTERNAL_STORAGE',
+      'android.permission.SYSTEM_ALERT_WINDOW',
+    ],
   },
   plugins: [
     'expo-router',

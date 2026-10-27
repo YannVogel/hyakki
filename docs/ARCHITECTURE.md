@@ -53,6 +53,7 @@ assets/
   fonts/                  Mochiy Pop One, M PLUS Rounded 1c (+ licences OFL)
 design/                   maquettes, tokens, planches sources, prototype du générateur
 docs/                     documentation du projet
+site/                     site public (GitHub Pages) : présentation, politique de confidentialité
 scripts/                  outils (découpe des planches, simulation d'équilibrage, rendu de l'icône)
 app.config.ts             configuration Expo (lit les couleurs dans design/tokens.json)
 ```

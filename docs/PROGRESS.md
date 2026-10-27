@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 5 · Publication (`milestone/5-publication`) |
-| Dernière issue terminée | #28 Générateur V2 (milestone 4 fusionnée, PR #60) |
-| Prochaine issue | #45 Politique de confidentialité |
+| Dernière issue terminée | #45 Politique de confidentialité |
+| Prochaine issue | #46 Fiches stores |
 
 ## Milestones
 
@@ -19,7 +19,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
 | 3 · Boucle jouable | Terminée | #57 |
 | 4 · Feel & finitions | Terminée (#58 et #59 attendent Yann) | #60 |
-| 5 · Publication | À faire | — |
+| 5 · Publication | En cours | — |
 
 ## Points en suspens
 
@@ -43,3 +43,4 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
 - #58 Régénérer les 20 illustrations en HD dans ChatGPT (procédure et outils prêts).
 - #59 Valider l'icône et l'écran de lancement.
+- #61 Déclarer « aucune donnée collectée » dans les deux consoles (réponses prêtes dans `docs/store/confidentialite.md`).

@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-27 — Site public sur GitHub Pages, permissions Android au plus juste
+
+- **Décision** : la politique de confidentialité (exigée par les deux stores) et une page de présentation vivent dans `site/`, publiées sur GitHub Pages par un workflow (`.github/workflows/pages.yml`) : <https://yannvogel.github.io/hyakki/confidentialite/>. Le site n'utilise que des polices système et aucun script. Les permissions Android ajoutées par le modèle Expo et inutiles (stockage externe, affichage par-dessus les autres apps) sont bloquées dans `app.config.ts`.
+- **Raison** : hébergement gratuit, versionné avec le code, sans dépendance ni service tiers ; publier les docs du projet (`docs/`) en même temps n'aurait servi à rien. Moins de permissions = déclarations « aucune donnée » sans ambiguïté en revue.
+- **Conséquence** : modifier `site/` sur `main` republie le site. Les déclarations dans les consoles (Apple, Google) restent à saisir par Yann (`docs/store/confidentialite.md`).
+
 ## 2026-10-27 — Générateur V2 et Lame d'ofuda moins chère au départ
 
 - **Décision** : le générateur passe en version 2 pour les nouveaux défilés : 6 objets (bouilloire, éventail, masque, sandale, cloche, mortier) et 4 accessoires (feuille de tanuki, chapelet, queue de renard, kiseru) ajoutés à la suite des listes V1. Les objets V2 ont les mêmes moyennes que la V1 (PV, attaque × vitesse). Le premier niveau de la Lame d'ofuda coûte 5 âmes au lieu de 10.

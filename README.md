@@ -58,8 +58,11 @@ npm run test:e2e       # Maestro, sur un simulateur où tourne l'app (voir e2e/R
 | [`docs/ART_PIPELINE.md`](docs/ART_PIPELINE.md) | Production des illustrations (prompts, découpe, nommage) |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | Journal des décisions |
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Milestones et epics |
+| [`docs/store/`](docs/store/README.md) | Publication : politique de confidentialité, déclarations et fiches des stores |
 | [`design/`](design/README.md) | Maquettes, tokens, planches sources, prototype du générateur |
 
 ## État
 
-Pré-production : la direction artistique, les maquettes, le prototype du générateur et les illustrations du héros et des Gardiens sont prêts. Le code de l'application démarre avec la milestone **0 · Fondations** (voir les issues).
+Le jeu est jouable de bout en bout (milestones 0 à 4 : moteur, générateur, écrans, effets, icône). La milestone **5 · Publication** prépare les stores ; avancement dans [`docs/PROGRESS.md`](docs/PROGRESS.md).
+
+Site public et politique de confidentialité : <https://yannvogel.github.io/hyakki/>.
