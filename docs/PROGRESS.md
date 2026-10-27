@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 3 · Boucle jouable (`milestone/3-boucle`) |
-| Dernière issue terminée | #30 Composants de base |
-| Prochaine issue | #31 Écran Combat (boucle step via src/state) |
+| Dernière issue terminée | #31 Écran Combat |
+| Prochaine issue | #32 Écran Sanctuaire |
 
 ## Milestones
 
@@ -23,7 +23,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 ## Points en suspens
 
-- Milestone 3 : ordre #29, #30, puis #31 → #37. Les écrans temporaires (accueil, vérification native, Fabrique) restent accessibles en développement.
+- Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Onglets Shikigami, Sanctuaire et Festival provisoires jusqu'à #32, #33, #36. Le cut-in (#35) remplacera `GuardianPanel`.
+- Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
 
 - Les branches de milestone ne sont jamais réécrites une fois poussées (pas de push forcé) : un correctif de revue devient un commit `fix` qui référence l'issue.

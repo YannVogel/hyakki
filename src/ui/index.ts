@@ -4,6 +4,8 @@ export { Card } from './Card';
 export { Chip } from './Chip';
 export { fontAssets, fontFamily } from './fonts';
 export { HapticsProvider, useHaptics } from './haptics';
+export { Icon } from './Icon';
+export type { IconPart } from './Icon';
 export type { HapticKind, HapticTrigger } from './haptics';
 export { OutlinedText } from './OutlinedText';
 export { Pill } from './Pill';

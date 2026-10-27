@@ -5,7 +5,7 @@ import { strings } from '@/i18n';
 import { bodyText, displayText } from '@/ui/styles';
 import { colors, spacing, touchTarget } from '@/ui/tokens';
 
-// Temporary welcome screen until the combat screen exists (#31).
+// Development hub (route /dev): links to the development screens.
 export function HomeScreen() {
   return (
     <View style={styles.container}>

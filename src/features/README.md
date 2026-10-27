@@ -8,3 +8,11 @@ Un dossier par écran ou flux (combat, sanctuaire, shikigami, gardiens, festival
 - Aucune logique de jeu : elle vit dans `engine` et s'orchestre dans `state`.
 - Aucun texte joueur en dur : tout vient de `src/i18n/`.
 - Aucune valeur de style en dur : tout vient des tokens de `src/ui`.
+
+| Dossier | Contenu |
+|---|---|
+| `shell/` | Écran principal à onglets |
+| `combat/` | Écran Combat : en-tête, scène (frappe détectée sur le thread UI), HUD de l'ennemi, puissance et équipe, talismans, décisions face au Gardien |
+| `shared/` | Icônes des maquettes, illustrations (héros, Gardiens) |
+| `dev/`, `home/` | Écrans de développement (hub, vérification native, Fabrique, catalogue) |
+| `testing/` | `renderScreen` : rendu d'un écran avec les fournisseurs de l'app et un store en mémoire |
