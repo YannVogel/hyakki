@@ -80,13 +80,15 @@ Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque comp
 
 ## 6. Animation et effets
 
-- Effets de combat (Skia) : étoile d'impact jaune, chiffres de dégâts qui éclatent puis montent, « Critique ! » rouge cerné de blanc, lignes de vitesse, impact frame au critique.
+- Effets de combat (Skia) : étoile d'impact jaune, chiffres de dégâts qui éclatent puis montent, « Critique ! » rouge cerné de blanc, lignes de vitesse, impact frame au critique. Implémentation : `src/render/effects/` ; `effects.ts` (pur, testé) traduit les événements du moteur en effets, garde un pool fixe d'emplacements (le plus ancien d'un type est recyclé) et calcule chaque image ; `EffectsLayer.tsx` dessine deux calques (l'étoile sous les combattants, le reste au-dessus) sans rendu React pendant le combat. Le héros et les frappes lancent un ofuda qui touche à l'atterrissage ; un yōkai vaincu laisse s'envoler des pétales de sakura. L'éclair d'impact est limité à 2,5 par seconde (seuil de photosensibilité : 3 par seconde).
+- Héros en combat (`src/features/combat/HeroFigure.tsx`, règles pures dans `heroPose.ts`) : il frappe (attaque et frappes du joueur, 250 ms), lance ses sorts (feu, foudre, barrière selon le talisman, 700 ms), est surpris par un Gardien, fête une victoire, tombe K.-O. sur un échec, est touché quand il fuit, et dort pendant le bilan d'absence. Une réaction forte n'est jamais coupée par une plus faible. Chaque changement de pose s'écrase depuis les pieds en 120 ms ; le héros respire (3 unités en 1,6 s, comme `hk-bob` de la maquette).
 - Cut-in de Gardien : fond en rayons tournants, bande blanche des yeux qui glisse depuis la gauche, bandeau jaune du nom depuis la droite. Implémentation : `src/features/combat/GuardianCutIn.tsx` (glissements de 500 ms avec rebond, le nom 150 ms après les yeux ; rayons et yeux en Skia dans `src/render/scene/`).
-- Respect strict de « réduire les animations » : les effets deviennent des fondus courts, rien ne tourne ni ne clignote.
+- Respect strict de « réduire les animations » : les effets deviennent des fondus courts, rien ne tourne ni ne clignote (en combat : chiffres, « Critique ! » et étoile en fondu sur place ; ni ofuda en vol, ni lignes de vitesse, ni éclair, ni pétales).
 
 ## 7. Accessibilité
 
 - Cibles tactiles ≥ 44 pt.
 - Contraste texte ≥ 4,5:1 (≥ 3:1 au-delà de 24 px ou 18,7 px gras). Le texte blanc n'est autorisé sur couleur vive qu'avec le contour encre.
 - Libellé d'accessibilité sur chaque bouton-icône et chaque illustration informative.
-- Haptique désactivable dans les réglages.
+- Haptique désactivable dans les réglages : frappe légère au toucher, moyenne sur un critique du héros ou du joueur (pas sur ceux de l'équipe, trop fréquents), succès quand un Gardien tombe ; sélection sur les boutons, onglets et interrupteurs.
+- Écran Réglages (bouton en bas du Sanctuaire) : vibrations, notifications, réduire les animations. Ce dernier s'ajoute au réglage du téléphone, toujours respecté : `useReduceMotion()` (`src/ui/motion.tsx`) vaut vrai si l'un des deux le demande.

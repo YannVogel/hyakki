@@ -9,6 +9,7 @@ import {
 import { add, type BigNum, div, gte, lt, mul, sub, toNumber, ZERO } from '../numbers';
 import { createRng, type Rng } from '../rng';
 import { addCapture, captureChance } from '../shikigami';
+import type { GeneratorVersion } from '../yokai';
 import { waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
 import type { CombatEvent, HitSource } from './events';
 import {
@@ -23,7 +24,7 @@ import { type CombatPower, combatPower } from './power';
 /** Mutable working copy of the fight during one step. */
 export interface Battle {
   readonly paradeSeed: number;
-  readonly generatorVersion: number;
+  readonly generatorVersion: GeneratorVersion;
   readonly power: CombatPower;
   readonly rng: Rng;
   readonly events: CombatEvent[];
@@ -46,8 +47,8 @@ export interface Battle {
   elapsed: number;
 }
 
-const enemyMaxHp = (wave: number, seed: number): BigNum =>
-  isGuardianWave(wave) ? guardianMaxHp(wave) : yokaiMaxHp(wave, seed);
+const enemyMaxHp = (wave: number, seed: number, version: GeneratorVersion): BigNum =>
+  isGuardianWave(wave) ? guardianMaxHp(wave) : yokaiMaxHp(wave, seed, version);
 
 export function startBattle(state: GameState): Battle {
   const { parade, enemy } = state;
@@ -63,7 +64,7 @@ export function startBattle(state: GameState): Battle {
     farming: parade.farming,
     seed: enemy.seed,
     damage: enemy.damage,
-    maxHp: enemyMaxHp(parade.wave, enemy.seed),
+    maxHp: enemyMaxHp(parade.wave, enemy.seed, state.generatorVersion),
     guardian: enemy.guardian === null ? null : { ...enemy.guardian },
     souls: state.souls,
     ofuda: state.ofuda,
@@ -122,7 +123,7 @@ export function spawnEnemy(battle: Battle, wave: number, repeat: number): void {
   battle.maxWave = Math.max(battle.maxWave, wave);
   battle.seed = enemySeed(battle.paradeSeed, wave, repeat);
   battle.damage = ZERO;
-  battle.maxHp = enemyMaxHp(wave, battle.seed);
+  battle.maxHp = enemyMaxHp(wave, battle.seed, battle.generatorVersion);
   battle.events.push({ type: 'waveStarted', wave, seed: battle.seed, atMs: battle.elapsed });
   if (isGuardianWave(wave)) {
     battle.guardian = { engaged: false, timeLeftMs: BALANCE.guardian.timeLimitMs };
@@ -177,14 +178,14 @@ function defeatYokai(battle: Battle): void {
   const { wave, seed } = battle;
   const souls = mul(
     waveSouls(wave),
-    yokaiProfile(seed).soulsFactor *
+    yokaiProfile(seed, battle.generatorVersion).soulsFactor *
       tierMultiplier(wave) *
       battle.power.soulsMultiplier *
       soulsBoost(battle),
   );
   battle.souls = add(battle.souls, souls);
   battle.events.push({ type: 'yokaiDefeated', wave, seed, souls, atMs: battle.elapsed });
-  if (battle.rng.next() < captureChance(seed)) {
+  if (battle.rng.next() < captureChance(seed, battle.generatorVersion)) {
     const capture = addCapture(battle.collection, seed, battle.generatorVersion);
     battle.collection = capture.collection;
     battle.events.push({

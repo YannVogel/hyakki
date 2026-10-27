@@ -31,7 +31,7 @@ describe('ShikigamiScreen', () => {
     expect(screen.getByText(strings.shikigami.count(3), { exact: false })).toBeOnTheScreen();
     await fireEvent.press(screen.getByTestId('shikigami-22'));
     expect(screen.getByTestId('shikigami-sheet')).toBeOnTheScreen();
-    expect(screen.getAllByText(nameOf(generate(22))).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(nameOf(generate(22, 1))).length).toBeGreaterThan(0);
     expect(screen.getByText(strings.shikigami.traits)).toBeOnTheScreen();
   });
 

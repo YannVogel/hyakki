@@ -80,7 +80,7 @@ describe('step', () => {
     const state = withSanctuary(createNewGame(11), { blade: 100 });
     const { state: next, events } = step(state, 1);
     const seed = state.enemy.seed;
-    const souls = mul(waveSouls(1), yokaiProfile(seed).soulsFactor);
+    const souls = mul(waveSouls(1), yokaiProfile(seed, state.generatorVersion).soulsFactor);
     expect(events).toEqual([
       expect.objectContaining({ type: 'hit', source: 'hero', atMs: 0 }),
       { type: 'yokaiDefeated', wave: 1, seed, souls, atMs: 0 },
@@ -125,7 +125,7 @@ describe('step', () => {
 
   it('burns the enemy continuously with the fox fire upgrade, down to 10 % of its HP', () => {
     const state = withSanctuary(createNewGame(13), { foxfire: 50 });
-    const maxHp = yokaiMaxHp(1, state.enemy.seed);
+    const maxHp = yokaiMaxHp(1, state.enemy.seed, state.generatorVersion);
     const idle = { ...state, attackTimers: { hero: 1e9, team: [] } };
     // 50 levels × 0.2 % = 10 % of max HP per second.
     const burnt = step(idle, 4_000).state;
@@ -147,7 +147,7 @@ describe('step with a team and captures', () => {
   const withTeam = (state: GameState, seeds: number[]): GameState => {
     const owned = {
       ...state,
-      shikigami: seeds.map((seed) => ({ seed, level: 1, generatorVersion: 1 })),
+      shikigami: seeds.map((seed) => ({ seed, level: 1, generatorVersion: 1 as const })),
     };
     const result = setTeam(owned, seeds);
     if (!result.ok) throw new Error(result.reason);
@@ -161,7 +161,8 @@ describe('step with a team and captures', () => {
       (event) => event.type === 'hit' && event.source === 'shikigami',
     );
     const expected = [10, 20].reduce(
-      (total, seed) => total + Math.floor((10_000 - 1) / shikigamiIntervalMs(seed)),
+      (total, seed) =>
+        total + Math.floor((10_000 - 1) / shikigamiIntervalMs({ seed, generatorVersion: 1 })),
       0,
     );
     expect(shikigamiHits).toHaveLength(expected);

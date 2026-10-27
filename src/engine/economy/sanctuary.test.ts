@@ -28,9 +28,9 @@ const withSouls = (
 describe('upgradeCost', () => {
   it('starts at the base cost of the game design', () => {
     expect(UPGRADE_IDS.map((id) => toNumber(upgradeCost(id, 0, 1)))).toEqual([
-      10, 500, 150, 5000, 50_000,
+      5, 500, 150, 5000, 50_000,
     ]);
-    expect(toNumber(upgradeCost('blade', 1, 1))).toBeCloseTo(11.2, 10);
+    expect(toNumber(upgradeCost('blade', 1, 1))).toBeCloseTo(5.6, 10);
   });
 
   it('costs exactly ten single purchases for a ×10 purchase', () => {
@@ -78,7 +78,7 @@ describe('buyUpgrade', () => {
     const result = buyUpgrade(withSouls(big(25)), 'blade', 1);
     expect(result.ok && result.levels).toBe(1);
     expect(result.ok && result.state.sanctuary.blade).toBe(1);
-    expect(result.ok && toNumber(result.state.souls)).toBe(15);
+    expect(result.ok && toNumber(result.state.souls)).toBe(20);
   });
 
   it('buys ten levels at the cost of ten', () => {
@@ -88,15 +88,16 @@ describe('buyUpgrade', () => {
   });
 
   it('refuses when the souls are not enough', () => {
-    expect(buyUpgrade(withSouls(big(9)), 'blade', 1)).toEqual({
+    expect(buyUpgrade(withSouls(big(4)), 'blade', 1)).toEqual({
       ok: false,
       reason: 'not-enough-souls',
     });
-    expect(buyUpgrade(withSouls(big(100)), 'blade', 10)).toEqual({
+    // Ten levels of the Blade cost 5 × (1.12¹⁰ − 1) / 0.12 ≈ 87.7 souls.
+    expect(buyUpgrade(withSouls(big(80)), 'blade', 10)).toEqual({
       ok: false,
       reason: 'not-enough-souls',
     });
-    expect(buyUpgrade(withSouls(big(9)), 'blade', 'max')).toEqual({
+    expect(buyUpgrade(withSouls(big(4)), 'blade', 'max')).toEqual({
       ok: false,
       reason: 'not-enough-souls',
     });

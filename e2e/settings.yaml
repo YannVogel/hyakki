@@ -1,0 +1,37 @@
+# Réglages : « Réduire les animations » s'active depuis le Sanctuaire et reste actif après un redémarrage.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: combat-wave
+    timeout: 60000
+- tapOn:
+    id: tab-sanctuary
+- scrollUntilVisible:
+    element:
+      id: open-settings
+    direction: DOWN
+- tapOn:
+    id: open-settings
+- assertVisible: 'Réglages'
+- tapOn:
+    id: setting-reduceMotion
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: combat-wave
+    timeout: 60000
+- tapOn:
+    id: tab-sanctuary
+- scrollUntilVisible:
+    element:
+      id: open-settings
+    direction: DOWN
+- tapOn:
+    id: open-settings
+- assertVisible:
+    id: setting-reduceMotion
+    checked: true

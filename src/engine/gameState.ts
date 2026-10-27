@@ -1,6 +1,6 @@
 import { type BigNum, ZERO } from './numbers';
 import { deriveSeed } from './rng';
-import { GENERATOR_VERSION } from './yokai';
+import { GENERATOR_VERSION, type GeneratorVersion } from './yokai';
 
 export const SCHEMA_VERSION = 1;
 
@@ -16,7 +16,7 @@ export interface Shikigami {
   readonly seed: number;
   readonly level: number;
   /** Generator version at capture time: the shikigami keeps its look forever. */
-  readonly generatorVersion: number;
+  readonly generatorVersion: GeneratorVersion;
 }
 
 export interface GuardianFight {
@@ -47,8 +47,8 @@ export interface ParadeState {
 
 export interface GameState {
   readonly schemaVersion: number;
-  /** Generator version of the yōkai of the current parade. */
-  readonly generatorVersion: number;
+  /** Generator version of the yōkai of the current parade (the latest for a new parade). */
+  readonly generatorVersion: GeneratorVersion;
   readonly parade: ParadeState;
   readonly enemy: EnemyState;
   readonly souls: BigNum;

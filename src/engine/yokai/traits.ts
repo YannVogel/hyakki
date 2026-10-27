@@ -69,6 +69,10 @@ export const ACCESSORY_EFFECTS: Record<AccessoryId, readonly TraitEffect[]> = {
   hachimaki: [stat('speed', 0.2)],
   bell: [{ kind: 'souls', value: 0.1 }],
   bandage: [stat('hp', 0.2)],
+  leaf: [{ kind: 'souls', value: 0.1 }],
+  beads: [stat('hp', 0.15)],
+  tail: [crit(0.06)],
+  pipe: [stat('attack', 0.1)],
 };
 
 export function rarityMultiplier(spec: YokaiSpec): number {

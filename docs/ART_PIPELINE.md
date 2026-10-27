@@ -28,6 +28,8 @@ Le jeu est **hybride** :
 
 Ordre des poses du héros : 01 attente, 02 attaque, 03 sort de feu, 04 sort de foudre, 05 barrière, 06 touché, 07 K.-O., 08 victoire, 09 sommeil, 10 surpris.
 
+Chaque pose garde sa propre taille (de 221 × 446 à 384 × 332 px), toutes à la même échelle et les pieds à 6–7 px du bord bas. Le code connaît ces tailles (`HERO_POSES` dans `src/features/shared/images.ts`, vérifiées par un test contre les en-têtes PNG) et dessine chaque pose à l'échelle de la pose d'attente, ancrée par le bas : les pieds ne bougent pas d'une pose à l'autre. Une figure régénérée doit garder cette marge sous les pieds (`scripts/check_figures.py` le vérifie) et mettre à jour sa taille dans `HERO_POSES`.
+
 Ordre des Gardiens : 01 Bake-danuki, 02 Kappa, 03 Karasu-tengu, 04 Tsuchigumo, 05 Yuki-onna, 06 Gashadokuro, 07 Nue, 08 Ibaraki-dōji, 09 Kyūbi no kitsune, 10 Nurarihyon.
 
 ### Nurarihyon : version 3
@@ -44,6 +46,13 @@ python3 scripts/cut_sheet.py design/sources/planche-heros.png assets/images/hero
 
 Le script détecte les figures, rattache les petits éléments (flammes, gouttes, bulles, flocons) à la figure la plus proche, rend le fond transparent et adoucit les bords. Détails dans [`scripts/README.md`](../scripts/README.md).
 
+Le découpage laisse un liseré crème anticrénelé autour du trait encré, visible sur fond coloré : le retirer avec `scripts/defringe.py`, puis vérifier avec `scripts/check_figures.py` (hauteur, frange, ligne des pieds des poses du héros).
+
+```bash
+python3 scripts/defringe.py assets/images/hero/*.png assets/images/bosses/*.png
+python3 scripts/check_figures.py assets/images/hero assets/images/bosses --min-height 900
+```
+
 Toujours vérifier le résultat sur un fond coloré avant de committer.
 
 ## 4. Nommage
@@ -54,7 +63,7 @@ Toujours vérifier le résultat sur un fond coloré avant de committer.
 
 ## 5. Haute définition
 
-Les figures découpées depuis les planches font ~300 × 450 px : suffisant pour les maquettes, un peu juste sur tablette. Avant publication, régénérer chaque figure seule en grand (prompt ci-dessous, planche jointe), puis découper et remplacer.
+Les figures découpées depuis les planches font ~300 × 450 px : suffisant pour les maquettes, un peu juste sur tablette. Avant publication, régénérer chaque figure seule en grand (prompt ci-dessous, planche jointe), puis découper, défranger, vérifier et remplacer. Procédure pas à pas et liste des 20 figures : [`art/hd-regeneration.md`](art/hd-regeneration.md).
 
 ```text
 Using the attached model sheet as the exact style reference, redraw ONLY figure [NUMBER] ([NAME]) as a single large standalone illustration.
@@ -62,3 +71,21 @@ Keep exactly the same design, proportions, colors, outline thickness and flat ce
 Square format, figure centered with empty space around it, transparent background (or plain flat #FFF4DC if transparency is not possible).
 No text, no shadow on the ground, no scenery.
 ```
+
+## 6. Icône et écran de lancement
+
+L'icône est dessinée en code, comme les yōkai ordinaires : la mascotte est **Hitotsume-Chōchin-obake** (graine 116 300 du générateur), une lanterne en papier cyclope qui tire la langue, sur le ciel du festival avec soleil et collines. Les compositions vectorielles vivent dans `src/render/icon/appIcon.ts` (cadre 200 × 200, couleurs des tokens) ; `scripts/render-icons.ts` les rend en PNG avec CanvasKit (le moteur de Skia, en Node) :
+
+| Fichier (`assets/images/app/`) | Contenu |
+|---|---|
+| `icon.png` | Icône iOS et stores, 1024 × 1024, opaque (Expo retire le canal alpha à la génération iOS) |
+| `android-icon-background.png` | Fond de l'icône adaptative : ciel, soleil, collines |
+| `android-icon-foreground.png` | Mascotte seule, dans la zone sûre de 66 dp sur 108 dp |
+| `android-icon-monochrome.png` | Silhouette blanche pour les icônes à thème (Android 13+) : les contours encrés deviennent des jours |
+| `splash-icon.png` | Mascotte seule sur transparence ; l'écran de lancement est crème (`imageWidth` 160 dans `app.config.ts`) |
+
+```bash
+npx tsx scripts/render-icons.ts /chemin/apercus   # le dossier d'aperçus (48, 96 et 180 px) est facultatif
+```
+
+L'icône dépend du générateur : la graine 116 300 doit continuer à donner la même lanterne (contrat de version, voir [`PROCEDURAL_YOKAI.md`](PROCEDURAL_YOKAI.md)). Un test le vérifie.

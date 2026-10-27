@@ -39,7 +39,8 @@ export const fr = {
     team: 'Équipe',
     noTeam: 'Aucun shikigami',
     crit: 'Critique !',
-    hit: 'Paf !',
+    lastHit: (damage: string, crit: boolean) =>
+      `Dernier coup${crit ? ' critique' : ''} : ${damage}`,
     heroLabel: "L'onmyōji, ofuda en main",
     talismanReady: (name: string) => `Lancer ${name}`,
     talismanWaiting: (name: string, seconds: number) => `${name}, prêt dans ${seconds} s`,
@@ -134,6 +135,31 @@ export const fr = {
       `${name}, ${description}, vague ${wave}, ${status}`,
     back: 'Retour',
     farming: 'Le Gardien attend que tu sois prêt.',
+  },
+  notifications: {
+    cap: {
+      title: 'Les lanternes sont pleines !',
+      body: 'Tes shikigami ont récolté tout ce qu’ils pouvaient porter. Reviens relancer le défilé !',
+      channel: 'Rappels du défilé',
+    },
+  },
+  settings: {
+    title: 'Réglages',
+    open: 'Réglages',
+    back: 'Retour',
+    haptics: {
+      label: 'Vibrations',
+      description: 'Frappes, coups critiques et Gardiens vaincus.',
+    },
+    notifications: {
+      label: 'Notifications',
+      description: 'Te prévenir quand les gains hors ligne atteignent leur plafond.',
+    },
+    reduceMotion: {
+      label: 'Réduire les animations',
+      description:
+        'Effets en fondus courts, rien ne tourne ni ne clignote. Le réglage du téléphone est toujours respecté.',
+    },
   },
   sanctuary: {
     title: 'Sanctuaire',

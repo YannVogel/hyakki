@@ -19,6 +19,12 @@ export const ART = {
   onibiCore: '#E6F8FF',
   goldSpark: '#FFE45C',
   epicSpark: '#D9C2FF',
+  // Version 2 accessories.
+  leaf: '#5CC88A',
+  beads: '#9B6A4A',
+  tail: '#FF9F45',
+  pipeStem: '#9B6A4A',
+  pipeMetal: '#E0A800',
 } as const;
 
 export interface PaletteColors {

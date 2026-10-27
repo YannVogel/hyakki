@@ -11,6 +11,7 @@ import {
   lt,
   mul,
   setTeam,
+  type Shikigami,
   shikigamiHitRatio,
   shikigamiIntervalMs,
   TEAM_SIZE,
@@ -128,13 +129,13 @@ export function spendSouls(state: GameState): GameState {
 }
 
 /** log10 of the damage per second of a shikigami, per unit of hero damage. */
-const shikigamiStrength = (seed: number, level: number) =>
-  log10(shikigamiHitRatio(seed, level)) + Math.log10(1000 / shikigamiIntervalMs(seed));
+const shikigamiStrength = (shikigami: Shikigami) =>
+  log10(shikigamiHitRatio(shikigami)) + Math.log10(1000 / shikigamiIntervalMs(shikigami));
 
 /** Fields the strongest shikigami. */
 export function pickTeam(state: GameState): GameState {
   const best = [...state.shikigami]
-    .sort((a, b) => shikigamiStrength(b.seed, b.level) - shikigamiStrength(a.seed, a.level))
+    .sort((a, b) => shikigamiStrength(b) - shikigamiStrength(a))
     .slice(0, TEAM_SIZE)
     .map((shikigami) => shikigami.seed);
   const unchanged =

@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { useReducedMotion } from 'react-native-reanimated';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,17 +9,21 @@ import {
   paradeView,
   powerPerSecond,
   talismanViews,
+  teamView,
   useGame,
   useGameStore,
 } from '@/state';
-import { colors, spacing } from '@/ui';
+import { colors, spacing, useHaptics, useReduceMotion } from '@/ui';
 
 import { BattleScene, type LastHit } from './BattleScene';
+import { useCombatHaptics } from './combatHaptics';
 import { CombatHeader } from './CombatHeader';
 import { GuardianCutIn } from './GuardianCutIn';
 import { FarmingBanner } from './FarmingBanner';
 import { PowerRow } from './PowerRow';
 import { TalismanBar } from './TalismanBar';
+import { useCombatEffects } from './useCombatEffects';
+import { useHeroPose } from './useHeroPose';
 
 function lastHitOf(events: readonly CombatEvent[]): LastHit | null {
   const hit = events.findLast((event) => event.type === 'hit');
@@ -37,7 +40,16 @@ export function CombatScreen() {
   const game = useGame((store) => store.game);
   const events = useGame((store) => store.events);
   const actions = useGameStore().getState();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReduceMotion();
+  const motion = reduceMotion ? 'reduced' : 'full';
+  const effects = useCombatEffects(motion);
+  const heroPose = useHeroPose();
+  const haptics = useHaptics();
+  useCombatHaptics();
+  const strike = () => {
+    haptics('light');
+    actions.tap();
+  };
   const parade = paradeView(game);
   const enemy = enemyView(game);
   const lastHit = useMemo(() => lastHitOf(events), [events]);
@@ -52,11 +64,14 @@ export function CombatScreen() {
           enemyName={name}
           wave={parade.wave}
           lastHit={lastHit}
-          onTap={actions.tap}
+          heroPose={heroPose}
+          effects={effects}
+          motion={motion}
+          onTap={strike}
         />
       </View>
       {parade.farming ? <FarmingBanner onChallenge={actions.challengeGuardian} /> : null}
-      <PowerRow power={formatNumber(powerPerSecond(game))} team={game.team} />
+      <PowerRow power={formatNumber(powerPerSecond(game))} team={teamView(game)} />
       <TalismanBar talismans={talismanViews(game)} onCast={actions.castTalisman} />
       <View style={styles.bottomGap} />
       {enemy.kind === 'guardian' && !enemy.engaged ? (

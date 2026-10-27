@@ -76,7 +76,7 @@ Améliorations payées en âmes, achetables par ×1, ×10 ou Max :
 
 | Amélioration | Effet par niveau | Coût de base |
 |---|---|---|
-| Lame d'ofuda | ×1,0925 sur les dégâts de frappe et automatiques (cumulatif) | 10 |
+| Lame d'ofuda | ×1,0925 sur les dégâts de frappe et automatiques (cumulatif) | 5 |
 | Feu de renard | Brûlure : +0,2 % des PV max par seconde | 500 |
 | Clochette sacrée | +5 % d'âmes récoltées | 150 |
 | Kekkai | −2 % de recharge des talismans (max −50 %) | 5 000 |
@@ -108,7 +108,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 - Au retour, le jeu calcule ce que l'équipe a accompli pendant l'absence : yōkai purifiés, âmes, vagues franchies, captures.
 - Efficacité hors ligne : 50 % du rendement actif. Les Gardiens ne sont jamais vaincus hors ligne (la progression s'arrête au Gardien suivant).
 - Plafond : 8 h au départ, +1 h par niveau de Lanternes de veille, 24 h maximum.
-- Une notification locale prévient quand le plafond est atteint (si le joueur l'a autorisée).
+- Une notification locale prévient quand le plafond est atteint (si le joueur l'a autorisée) : « Les lanternes sont pleines ! ». Elle est planifiée quand l'app passe en arrière-plan, à l'heure où le plafond sera atteint, et annulée au retour. La permission n'est jamais demandée au premier lancement : seulement après la fermeture du premier bilan d'absence (le joueur sait alors à quoi elle sert) ou quand il active « Notifications » dans les Réglages. Refusée, ou réglage coupé : aucune notification. Aucun push, aucun serveur (`src/services/notifications.ts`, `src/state/useCapReminder.ts`).
 - **Implémentation** (`simulateOffline`) : calcul yōkai par yōkai avec les **dégâts espérés** (critiques moyennés, brûlures comprises), sans rejouer de ticks. La progression s'arrête devant le Gardien suivant : le reste du temps, l'équipe farme la vague d'avant, et le joueur retrouve le Gardien qui l'attend (un Gardien quitté en plein combat l'attend de nouveau, chrono plein). Un joueur parti en farm continue de farmer.
 - Au-delà de **2 000 yōkai** simulés un par un, les âmes de la suite du farm sont extrapolées depuis cet échantillon (même vague, même rendement moyen) ; les captures ne sont tirées que sur l'échantillon. Cela garde le calcul sous la centaine de millisecondes sur mobile.
 - Sur 10 minutes à efficacité 100 %, le résultat reste à ±1 vague et ±15 % d'âmes du combat actif (test de cohérence).
@@ -152,18 +152,20 @@ Mesuré par `npx tsx scripts/simulate.ts` (bot simple et déterministe : il ach�
 
 | Cible (joueur régulier : 3 sessions de 5 min par jour) | Visé | Mesuré |
 |---|---|---|
-| Premier Gardien (vague 100) | jour 1 | jour 0,5 (15 min de jeu actif) |
+| Premier Gardien (vague 100) | jour 1 | jour 0,5 (11 min de jeu actif) |
 | Premier Festival | jours 1 à 3 | jour 1 |
-| Gardien 5 (vague 500) | jours 4 à 10 | jour 5 |
-| Record de 800 | jours 15 à 25 | jour 18 |
-| Gardien 10 (vague 1000) | au-delà du jour 30 (objectif de long terme) | non atteint à J30 (record 889) |
+| Gardien 5 (vague 500) | jours 4 à 10 | jour 4,2 |
+| Record de 800 | jours 15 à 25 | jour 16 |
+| Gardien 10 (vague 1000) | au-delà du jour 30 (objectif de long terme) | non atteint à J30 (record 900) |
 
 | Cible (autres profils) | Visé | Mesuré |
 |---|---|---|
-| Joueur actif (2 h par jour) : premier Gardien | ≤ 45 min de jeu | 29 min |
-| Joueur actif : Gardien 5 | ≤ 3 jours | jour 1 |
-| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 800 / 889 = 90 % |
-| Temps de calcul | 3 profils × 30 jours < 30 s | 13 s |
+| Joueur actif (2 h par jour) : premier Gardien | ≤ 45 min de jeu | 30 min |
+| Joueur actif : Gardien 5 | ≤ 3 jours | jour 0,6 |
+| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 800 / 900 = 89 % |
+| Temps de calcul | 3 profils × 30 jours < 30 s | 25 s |
+
+Mesures avec le générateur V2 (défilés neufs). Sensibilité : d'un défilé à l'autre (graine), le premier Gardien du joueur régulier tombe ou non au jour 1 selon la chance des premiers yōkai et des captures ; sur 12 défilés, il tombe au jour 1 dans 10 cas avec la Lame à 5 âmes (contre 4 avec l'ancien coût de 10). Le harnais mesure une graine fixe (2026) : une cible « au jour près » est donc indicative.
 
 Limites connues : le bot ne fait pas de choix fins (il ne garde pas Kekkai pour un Gardien, ne tape pas pendant le hors ligne, ne choisit pas l'équipe selon les bonus). La progression de long terme est bornée par le Festival : les trois profils convergent vers les mêmes records, le temps actif accélère surtout le début. À valider en jeu par Yann.
 ## 6. Écrans (maquettes)

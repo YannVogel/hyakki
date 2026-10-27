@@ -1,18 +1,29 @@
 import { BALANCE } from '../balance';
 import { type GameState, type Shikigami, TEAM_SIZE } from '../gameState';
 import { type BigNum, div, gte, mul, pow, sub } from '../numbers';
-import { generate } from '../yokai';
+import { generate, type GeneratorVersion } from '../yokai';
 import { shikigamiIntervalMs } from './profile';
 
-export function captureChance(seed: number): number {
-  return BALANCE.shikigami.captureChance[generate(seed).rarity];
+export function captureChance(seed: number, version: GeneratorVersion): number {
+  return BALANCE.shikigami.captureChance[generate(seed, version).rarity];
 }
 
-/** Adds a captured yōkai, or +1 level if its seed is already in the collection. */
+/** The active team's shikigami, in team order. */
+export function teamMembers(state: Pick<GameState, 'team' | 'shikigami'>): Shikigami[] {
+  return state.team.flatMap((seed) => {
+    const member = state.shikigami.find((shikigami) => shikigami.seed === seed);
+    return member === undefined ? [] : [member];
+  });
+}
+
+/**
+ * Adds a captured yōkai, or +1 level if its seed is already in the collection (an owned seed
+ * keeps the look of its first capture).
+ */
 export function addCapture(
   collection: readonly Shikigami[],
   seed: number,
-  generatorVersion: number,
+  generatorVersion: GeneratorVersion,
 ): { collection: Shikigami[]; shikigami: Shikigami; isNew: boolean } {
   const owned = collection.find((shikigami) => shikigami.seed === seed);
   if (owned === undefined) {
@@ -42,12 +53,13 @@ export function setTeam(state: GameState, seeds: readonly number[]): RosterResul
   if (new Set(seeds).size !== seeds.length) {
     return { ok: false, reason: 'duplicate' };
   }
-  if (!seeds.every((seed) => state.shikigami.some((shikigami) => shikigami.seed === seed))) {
+  const members = teamMembers({ team: seeds, shikigami: state.shikigami });
+  if (members.length !== seeds.length) {
     return { ok: false, reason: 'not-owned' };
   }
-  const timers = seeds.map((seed) => {
-    const index = state.team.indexOf(seed);
-    return index >= 0 ? state.attackTimers.team[index] : shikigamiIntervalMs(seed);
+  const timers = members.map((member) => {
+    const index = state.team.indexOf(member.seed);
+    return index >= 0 ? state.attackTimers.team[index] : shikigamiIntervalMs(member);
   });
   return {
     ok: true,

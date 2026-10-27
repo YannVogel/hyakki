@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-27 — Générateur V2 et Lame d'ofuda moins chère au départ
+
+- **Décision** : le générateur passe en version 2 pour les nouveaux défilés : 6 objets (bouilloire, éventail, masque, sandale, cloche, mortier) et 4 accessoires (feuille de tanuki, chapelet, queue de renard, kiseru) ajoutés à la suite des listes V1. Les objets V2 ont les mêmes moyennes que la V1 (PV, attaque × vitesse). Le premier niveau de la Lame d'ofuda coûte 5 âmes au lieu de 10.
+- **Raison** : plus de variété sans toucher un seul yōkai déjà rencontré (défilé en cours et shikigami gardent leur version). En vérifiant le harnais sur 12 défilés au lieu d'un, le premier Gardien du joueur régulier ne tombait au jour 1 que grâce à une graine chanceuse (1 défilé sur 8 en V1, 4 sur 12 en V2) ; la Lame à 5 âmes le fait tomber au jour 1 dans 10 défilés sur 12, sans déplacer les autres cibles (`GAME_DESIGN.md` § 5.2).
+- **Conséquence** : à valider en jeu par Yann avec le reste de l'équilibrage (#53). Le harnais reste sur une graine fixe ; une cible « au jour près » est indicative.
+
 ## 2026-10-27 — Équilibrage : niveaux qui se multiplient, brûlures plafonnées
 
 - **Décision** : la Lame d'ofuda multiplie les dégâts par 1,0925 à chaque niveau (au lieu de +8 % linéaires) ; PV et âmes croissent de ×1,13 par vague (au lieu de 1,165 et 1,14) ; les coûts du Sanctuaire de ×1,12 par niveau (au lieu de 1,15). Les niveaux de shikigami restent linéaires (+10 %). Une brûlure s'arrête quand il reste 10 % des PV de l'ennemi. Le bonus du Festival reste à +5 % par étincelle.

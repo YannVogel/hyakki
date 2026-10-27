@@ -9,7 +9,7 @@ import { stateAtWave } from '../testing/states';
 function withTeam(state: GameState, seeds: number[]): GameState {
   const owned = {
     ...state,
-    shikigami: seeds.map((seed) => ({ seed, level: 1, generatorVersion: 1 })),
+    shikigami: seeds.map((seed) => ({ seed, level: 1, generatorVersion: 1 as const })),
   };
   const result = setTeam(owned, seeds);
   if (!result.ok) throw new Error(result.reason);

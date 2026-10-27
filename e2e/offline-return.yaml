@@ -1,4 +1,4 @@
-# Retour hors ligne, horloge simulée : après 2 h d'absence, la modale de récolte s'affiche.
+# Retour hors ligne, horloge simulée : après 2 h d’absence, la modale de récolte s’affiche ; à sa fermeture, l’app demande la permission de notifier.
 appId: com.parallaxworks.hyakki
 ---
 - launchApp:
@@ -20,3 +20,9 @@ appId: com.parallaxworks.hyakki
     id: offline-collect
 - assertNotVisible:
     id: offline-report
+# La fermeture du premier bilan demande la permission de notifier (#44) : on répond à l'invite
+# système ici, pour qu'elle ne masque pas les parcours suivants.
+- extendedWaitUntil:
+    visible: "Refuser|Don’t Allow|Don't Allow"
+    timeout: 10000
+- tapOn: "Refuser|Don’t Allow|Don't Allow"

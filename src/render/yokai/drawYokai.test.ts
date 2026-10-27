@@ -1,6 +1,6 @@
 import * as fc from 'fast-check';
 
-import { generate } from '@/engine';
+import { generate, GENERATOR_VERSIONS } from '@/engine';
 import { loadPrototype } from '@/engine/yokai/testing/prototype';
 
 import { drawYokai } from './drawYokai';
@@ -19,13 +19,15 @@ const animations = (node: DrawNode): string[] =>
       ]
     : [];
 
+const anyVersion = fc.constantFrom(...GENERATOR_VERSIONS);
+
 describe('drawYokai', () => {
   const prototype = loadPrototype() as PrototypeWithSvg;
 
   it('draws exactly what the prototype draws (3 000 seeds)', () => {
     for (let seed = 0; seed < 3000; seed++) {
       const expected = normalizePrototype(parseSvg(prototype.svgOf(prototype.generate(seed), 'x')));
-      expect(toSvgTree(drawYokai(generate(seed)))).toEqual(expected);
+      expect(toSvgTree(drawYokai(generate(seed, 1)))).toEqual(expected);
     }
   });
 
@@ -35,15 +37,15 @@ describe('drawYokai', () => {
         const expected = normalizePrototype(
           parseSvg(prototype.svgOf(prototype.generate(seed), 'x')),
         );
-        expect(toSvgTree(drawYokai(generate(seed)))).toEqual(expected);
+        expect(toSvgTree(drawYokai(generate(seed, 1)))).toEqual(expected);
       }),
     );
   });
 
   it('animates what the yōkai has: floating always, tongue, flame and sparkles when present', () => {
     fc.assert(
-      fc.property(fc.integer({ min: 0, max: 2 ** 31 - 1 }), (seed) => {
-        const spec = generate(seed);
+      fc.property(fc.integer({ min: 0, max: 2 ** 31 - 1 }), anyVersion, (seed, version) => {
+        const spec = generate(seed, version);
         const used = animations(drawYokai(spec));
         expect(used.filter((name) => name === 'float')).toHaveLength(1);
         expect(used.includes('tongue')).toBe(spec.mouth === 'tongue');
@@ -55,11 +57,18 @@ describe('drawYokai', () => {
   });
 
   it('offsets the floating animation by the seed delay', () => {
-    const spec = generate(42);
+    const spec = generate(42, 1);
     const [, float] = drawYokai(spec).children;
     expect(isGroup(float) && float.group).toEqual({
       animation: 'float',
       delay: spec.animationDelay,
     });
+  });
+
+  it('draws every part of version 2 inside the frame, with valid geometry', () => {
+    for (let seed = 0; seed < 2000; seed++) {
+      const svg = JSON.stringify(toSvgTree(drawYokai(generate(seed, 2))));
+      expect(svg).not.toMatch(/NaN|undefined|Infinity/);
+    }
   });
 });

@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -5,10 +6,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BALANCE, formatNumber, type PurchaseMode, type UpgradeId } from '@/engine';
 import { strings } from '@/i18n';
 import { soulsPerSecond, upgradeViews, useGame, useGameStore } from '@/state';
-import { bodyText, Card, colors, displayText, Icon, Segmented, spacing } from '@/ui';
+import { bodyText, Button, Card, colors, displayText, Icon, Segmented, spacing } from '@/ui';
 
 import { SOULS_ICON } from '../shared/icons';
-import { HERO_ASPECT, HERO_POSES } from '../shared/images';
+import { HERO_POSES, heroPoseSize } from '../shared/images';
 import { UpgradeRow } from './UpgradeRow';
 
 const percent = (fraction: number) => String(Math.round(fraction * 10_000) / 100).replace('.', ',');
@@ -52,9 +53,9 @@ export function SanctuaryScreen() {
             <Text style={bodyText('base', 700)}>{strings.sanctuary.subtitle}</Text>
           </View>
           <Image
-            source={HERO_POSES.barrier}
+            source={HERO_POSES.barrier.source}
             accessibilityLabel={strings.sanctuary.heroLabel}
-            style={{ height: HERO_HEIGHT, width: HERO_HEIGHT * HERO_ASPECT }}
+            style={heroPoseSize('barrier', HERO_HEIGHT)}
           />
         </View>
         <Card style={styles.souls}>
@@ -83,6 +84,12 @@ export function SanctuaryScreen() {
             onBuy={(upgrade) => store.getState().buyUpgrade(upgrade, mode)}
           />
         ))}
+        <Button
+          label={strings.settings.open}
+          variant="neutral"
+          onPress={() => router.push('/settings')}
+          testID="open-settings"
+        />
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,8 +1,10 @@
 import * as fc from 'fast-check';
 
 import { div, log10, toNumber } from '../numbers';
-import { generate, rarityMultiplier, statsOf } from '../yokai';
+import { generate, GENERATOR_VERSIONS, rarityMultiplier, statsOf } from '../yokai';
 import { waveHp, waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
+
+const version = fc.constantFrom(...GENERATOR_VERSIONS);
 
 describe('enemy formulas', () => {
   it('follows 12 × 1.13^(v − 1) for the wave HP', () => {
@@ -21,9 +23,10 @@ describe('enemy formulas', () => {
       fc.property(
         fc.integer({ min: 0, max: 2 ** 31 - 1 }),
         fc.integer({ min: 1, max: 5000 }),
-        (seed, wave) => {
-          const ratio = toNumber(div(yokaiMaxHp(wave, seed), waveHp(wave)));
-          expect(ratio).toBeCloseTo(statsOf(generate(seed)).hp / 100, 10);
+        version,
+        (seed, wave, drawn) => {
+          const ratio = toNumber(div(yokaiMaxHp(wave, seed, drawn), waveHp(wave)));
+          expect(ratio).toBeCloseTo(statsOf(generate(seed, drawn)).hp / 100, 10);
         },
       ),
     );
@@ -31,19 +34,27 @@ describe('enemy formulas', () => {
 
   it('pays rare and bell-wearing yōkai more souls', () => {
     fc.assert(
-      fc.property(fc.integer({ min: 0, max: 2 ** 31 - 1 }), (seed) => {
-        const spec = generate(seed);
+      fc.property(fc.integer({ min: 0, max: 2 ** 31 - 1 }), version, (seed, drawn) => {
+        const spec = generate(seed, drawn);
         const expected = rarityMultiplier(spec) * (1 + statsOf(spec).soulsBonus);
-        expect(yokaiProfile(seed).soulsFactor).toBeCloseTo(expected, 12);
-        expect(yokaiProfile(seed)).toBe(yokaiProfile(seed));
+        expect(yokaiProfile(seed, drawn).soulsFactor).toBeCloseTo(expected, 12);
+        expect(yokaiProfile(seed, drawn)).toBe(yokaiProfile(seed, drawn));
       }),
     );
   });
 
   it('keeps the profile cache bounded', () => {
     for (let seed = 0; seed < 3000; seed++) {
-      yokaiProfile(seed);
+      yokaiProfile(seed, 2);
     }
-    expect(yokaiProfile(1).hpFactor).toBe(statsOf(generate(1)).hp / 100);
+    expect(yokaiProfile(1, 2).hpFactor).toBe(statsOf(generate(1, 2)).hp / 100);
+  });
+
+  it('keeps the yōkai of each version apart', () => {
+    const differs = Array.from({ length: 50 }, (_, seed) => seed).some(
+      (seed) => yokaiProfile(seed, 1).hpFactor !== yokaiProfile(seed, 2).hpFactor,
+    );
+    expect(differs).toBe(true);
+    expect(yokaiProfile(3, 1).hpFactor).toBe(statsOf(generate(3, 1)).hp / 100);
   });
 });

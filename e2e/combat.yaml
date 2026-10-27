@@ -11,10 +11,16 @@ appId: com.parallaxworks.hyakki
     id: enemy-hp
 - tapOn:
     id: battle-scene
+    # The scene never stops moving: do not wait for it to settle.
+    waitToSettleTimeoutMs: 500
 - tapOn:
     id: battle-scene
+    # The scene never stops moving: do not wait for it to settle.
+    waitToSettleTimeoutMs: 500
 - tapOn:
     id: battle-scene
+    # The scene never stops moving: do not wait for it to settle.
+    waitToSettleTimeoutMs: 500
 - assertVisible:
     id: last-hit
 - tapOn:

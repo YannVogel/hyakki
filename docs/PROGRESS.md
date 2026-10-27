@@ -6,9 +6,9 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 | | |
 |---|---|
-| Milestone en cours | 4 · Feel & finitions (`milestone/4-finitions`) |
-| Dernière issue terminée | #37 Retour hors ligne |
-| Prochaine issue | #39 Illustrations HD (préparation + besoin-yann), puis #40, #41, #42, #43, #44, #28 |
+| Milestone en cours | 5 · Publication (`milestone/5-publication`) |
+| Dernière issue terminée | #28 Générateur V2 (milestone 4 fusionnée, PR #60) |
+| Prochaine issue | #45 Politique de confidentialité |
 
 ## Milestones
 
@@ -18,12 +18,15 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 1 · Moteur de jeu | Terminée (#53 attend Yann) | #54 |
 | 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
 | 3 · Boucle jouable | Terminée | #57 |
-| 4 · Feel & finitions | À faire | — |
+| 4 · Feel & finitions | Terminée (#58 et #59 attendent Yann) | #60 |
 | 5 · Publication | À faire | — |
 
 ## Points en suspens
 
 - Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
+- Maestro sur Android : rebuild Android nécessaire (expo-system-ui, plugin expo-notifications) puis rejouer les parcours (frappes avec `waitToSettleTimeoutMs`) avant les captures de #46. Sur iOS : 8/8 avec le build de la milestone 4.
+- CocoaPods exige une locale UTF-8 : `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 npx expo run:ios`.
+- Équilibrage : le harnais mesure une graine ; vérifier une cible « au jour près » sur plusieurs défilés (`runProfile(profil, jours, graine)`).
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
 
@@ -38,3 +41,5 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 - #53 Valider l'équilibrage (cibles et ressenti en jeu, après la milestone 3).
 - #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
+- #58 Régénérer les 20 illustrations en HD dans ChatGPT (procédure et outils prêts).
+- #59 Valider l'icône et l'écran de lancement.

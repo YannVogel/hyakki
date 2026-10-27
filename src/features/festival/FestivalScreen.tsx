@@ -16,7 +16,7 @@ import { FestivalScene } from '@/render';
 import { paradeView, useGame, useGameStore } from '@/state';
 import { bodyText, Button, Card, colors, displayText, OutlinedText, spacing } from '@/ui';
 
-import { HERO_ASPECT, HERO_POSES } from '../shared/images';
+import { HERO_POSES, heroPoseSize } from '../shared/images';
 
 const multiplier = (value: number) => (Math.round(value * 10) / 10).toFixed(1).replace('.', ',');
 const HERO_HEIGHT = 140;
@@ -51,9 +51,9 @@ export function FestivalScreen({ onDone }: FestivalScreenProps) {
         <View style={styles.scene}>
           <FestivalScene width={width - spacing[4] * 2} accessibilityLabel={text.sceneLabel} />
           <Image
-            source={HERO_POSES.victory}
+            source={HERO_POSES.victory.source}
             accessibilityLabel={text.heroLabel}
-            style={[styles.hero, { height: HERO_HEIGHT, width: HERO_HEIGHT * HERO_ASPECT }]}
+            style={[styles.hero, heroPoseSize('victory', HERO_HEIGHT)]}
           />
         </View>
         <Text style={[bodyText('sm', 800), styles.muted]}>

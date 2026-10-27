@@ -2,23 +2,32 @@ import * as fc from 'fast-check';
 
 import { createNewGame, type GameState, type Shikigami } from '../gameState';
 import { big, eq, toNumber } from '../numbers';
-import { generate, statsOf } from '../yokai';
-import { addCapture, captureChance, levelUpCost, levelUpShikigami, setTeam } from './collection';
+import { generate, GENERATOR_VERSIONS, statsOf } from '../yokai';
+import {
+  addCapture,
+  captureChance,
+  levelUpCost,
+  levelUpShikigami,
+  setTeam,
+  teamMembers,
+} from './collection';
 import { shikigamiHitRatio, shikigamiIntervalMs, teamBonus } from './profile';
 
 const anySeed = fc.integer({ min: 0, max: 2 ** 31 - 1 });
+const anyVersion = fc.constantFrom(...GENERATOR_VERSIONS);
+const v1 = (seed: number): Shikigami => ({ seed, level: 1, generatorVersion: 1 });
 
 const owning = (seeds: number[], state: GameState = createNewGame(1)): GameState => ({
   ...state,
-  shikigami: seeds.map((seed) => ({ seed, level: 1, generatorVersion: 1 })),
+  shikigami: seeds.map(v1),
 });
 
 describe('captures', () => {
   it('uses the rarity capture rates of the game design', () => {
     const rates = { common: 0.02, rare: 0.01, epic: 0.004, legendary: 0.001 };
     fc.assert(
-      fc.property(anySeed, (seed) => {
-        expect(captureChance(seed)).toBe(rates[generate(seed).rarity]);
+      fc.property(anySeed, anyVersion, (seed, version) => {
+        expect(captureChance(seed, version)).toBe(rates[generate(seed, version).rarity]);
       }),
     );
   });
@@ -30,7 +39,7 @@ describe('captures', () => {
     expect(collection).toEqual([shikigami]);
   });
 
-  it('levels up a duplicate instead of adding it', () => {
+  it('levels up a duplicate instead of adding it, keeping the look of its first capture', () => {
     const owned: Shikigami[] = [{ seed: 42, level: 3, generatorVersion: 1 }];
     const { collection, shikigami, isNew } = addCapture(owned, 42, 2);
     expect(isNew).toBe(false);
@@ -57,8 +66,8 @@ describe('team', () => {
     const result = setTeam(owning([1, 2, 3]), [3, 1]);
     expect(result.ok && result.state.team).toEqual([3, 1]);
     expect(result.ok && result.state.attackTimers.team).toEqual([
-      shikigamiIntervalMs(3),
-      shikigamiIntervalMs(1),
+      shikigamiIntervalMs(v1(3)),
+      shikigamiIntervalMs(v1(1)),
     ]);
   });
 
@@ -67,7 +76,7 @@ describe('team', () => {
     if (!first.ok) throw new Error(first.reason);
     const started = { ...first.state, attackTimers: { hero: 0, team: [5] } };
     const second = setTeam(started, [2, 1]);
-    expect(second.ok && second.state.attackTimers.team).toEqual([shikigamiIntervalMs(2), 5]);
+    expect(second.ok && second.state.attackTimers.team).toEqual([shikigamiIntervalMs(v1(2)), 5]);
   });
 
   it.each([
@@ -80,13 +89,14 @@ describe('team', () => {
 
   it('sums the offensive traits of the team', () => {
     fc.assert(
-      fc.property(fc.uniqueArray(anySeed, { maxLength: 3 }), (seeds) => {
+      fc.property(fc.uniqueArray(anySeed, { maxLength: 3 }), anyVersion, (seeds, version) => {
+        const members = seeds.map((seed) => ({ seed, generatorVersion: version }));
         const effects = seeds.flatMap((seed) =>
-          statsOf(generate(seed)).traits.flatMap((trait) => trait.effects),
+          statsOf(generate(seed, version)).traits.flatMap((trait) => trait.effects),
         );
         const sum = (keep: (effect: (typeof effects)[number]) => number) =>
           effects.reduce((total, effect) => total + keep(effect), 0);
-        const bonus = teamBonus(seeds);
+        const bonus = teamBonus(members);
         expect(bonus.attack).toBeCloseTo(
           sum((e) => (e.kind === 'stat' && e.stat === 'attack' ? e.value : 0)),
           12,
@@ -104,20 +114,40 @@ describe('team', () => {
   });
 });
 
+describe('versions', () => {
+  it('draws each shikigami with the generator of its capture', () => {
+    const seeds = Array.from({ length: 40 }, (_, seed) => seed);
+    const looks = (version: 1 | 2) =>
+      seeds.map((seed) => shikigamiIntervalMs({ seed, generatorVersion: version }));
+    expect(looks(1)).toEqual(
+      seeds.map((seed) => Math.round(100_000 / statsOf(generate(seed, 1)).speed)),
+    );
+    expect(looks(1)).not.toEqual(looks(2));
+  });
+
+  it('lists the team members in team order', () => {
+    const state = { ...owning([1, 2, 3]), team: [3, 1] };
+    expect(teamMembers(state).map((member) => member.seed)).toEqual([3, 1]);
+  });
+});
+
 describe('shikigami power', () => {
   it('attacks faster when faster', () => {
     fc.assert(
-      fc.property(anySeed, (seed) => {
-        expect(shikigamiIntervalMs(seed)).toBe(Math.round(100_000 / statsOf(generate(seed)).speed));
+      fc.property(anySeed, anyVersion, (seed, version) => {
+        expect(shikigamiIntervalMs({ seed, generatorVersion: version })).toBe(
+          Math.round(100_000 / statsOf(generate(seed, version)).speed),
+        );
       }),
     );
   });
 
   it('hits harder with attack and levels', () => {
     fc.assert(
-      fc.property(anySeed, fc.integer({ min: 1, max: 200 }), (seed, level) => {
-        const attack = statsOf(generate(seed)).attack;
-        expect(toNumber(shikigamiHitRatio(seed, level))).toBeCloseTo(
+      fc.property(anySeed, fc.integer({ min: 1, max: 200 }), anyVersion, (seed, level, version) => {
+        const attack = statsOf(generate(seed, version)).attack;
+        const shikigami = { seed, level, generatorVersion: version };
+        expect(toNumber(shikigamiHitRatio(shikigami))).toBeCloseTo(
           0.5 * (attack / 100) * (1 + 0.1 * (level - 1)),
           12,
         );

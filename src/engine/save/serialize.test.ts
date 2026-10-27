@@ -80,6 +80,15 @@ describe('serialize / deserialize', () => {
       },
     ],
     [
+      'a parade drawn by an unknown generator version',
+      (raw: { state: Record<string, unknown> }) => (raw.state.generatorVersion = 3),
+    ],
+    [
+      'a shikigami drawn by an unknown generator version',
+      (raw: { state: Record<string, unknown> }) =>
+        (raw.state.shikigami = [{ seed: 5, level: 1, generatorVersion: 0 }]),
+    ],
+    [
       'a record below the current wave',
       (raw: { state: Record<string, unknown> }) =>
         (raw.state.parade = { ...(raw.state.parade as object), wave: 9, maxWave: 3 }),

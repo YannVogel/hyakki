@@ -12,6 +12,8 @@
 | Grands nombres | **break_infinity.js** derrière un adaptateur `BigNum` | Les grandeurs dépassent `1e308` ; l'adaptateur permet de changer de lib |
 | Notifications | **expo-notifications** (locales uniquement) | Plafond hors ligne atteint |
 | Haptique | **expo-haptics** | Frappes, critiques, Gardien vaincu |
+| Fond de l'app | **expo-system-ui** | Couleur crème de la vue racine et thème clair forcé sur Android (pas de flash blanc après l'écran de lancement) |
+| Icône | **canvaskit-wasm** (dev, même version que celle embarquée par Skia) | `scripts/render-icons.ts` rend l'icône vectorielle en PNG, en Node |
 | Tests | **Jest** (`jest-expo`), **@testing-library/react-native**, **fast-check**, **Maestro** | Unitaires, propriétés, composants, parcours. Sous Jest : Reanimated en implémentation JS (`jest.resolver.js`), Skia et Nitro simulés (`jest.setup.js`), MMKV en mémoire |
 | Qualité | **ESLint**, **Prettier**, règles d'imports (voir § 3) | |
 | CI | **GitHub Actions** ([`ci.yml`](../.github/workflows/ci.yml)) | Lint, typecheck, tests avec seuil de couverture, sur chaque PR et chaque push sur `main` |
@@ -51,7 +53,7 @@ assets/
   fonts/                  Mochiy Pop One, M PLUS Rounded 1c (+ licences OFL)
 design/                   maquettes, tokens, planches sources, prototype du générateur
 docs/                     documentation du projet
-scripts/                  outils (découpe des planches, simulation d'équilibrage)
+scripts/                  outils (découpe des planches, simulation d'équilibrage, rendu de l'icône)
 app.config.ts             configuration Expo (lit les couleurs dans design/tokens.json)
 ```
 
@@ -121,6 +123,7 @@ Tout tirage passe par `engine/rng`. La graine d'un yōkai dérive du défilé et
 - `deserialize(texte)` ne lève jamais d'exception : il renvoie `{ ok: true, state, savedAt }` ou `{ ok: false, error }` avec une raison typée (`invalid-json`, `unsupported-version`, `invalid-shape`). La validation vérifie chaque champ et la cohérence (équipe possédée, graines uniques…).
 - Chaque changement de schéma ajoute une migration testée (`save/migrations/vN-to-vN+1.ts`), appliquée avant la validation.
 - `savedAt` (horloge murale, fournie par `services`) sert au calcul hors ligne. Une heure système qui recule ne donne jamais de gains négatifs ni de gains bonus.
+- Les réglages du joueur (vibrations, notifications, réduire les animations) vivent à part, sous la clé MMKV `settings` : un petit store zustand (`src/state/settings.ts`) les relit au lancement (chaque valeur absente ou invalide reprend sa valeur par défaut) et les écrit à chaque changement. Ils ne touchent jamais la sauvegarde de la partie.
 
 ## 6. Build
 
