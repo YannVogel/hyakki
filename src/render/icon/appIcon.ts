@@ -9,6 +9,8 @@ import { type DrawNode, group, type GroupNode, isGroup, shape } from '../yokai/n
 
 export const ICON_FRAME = 200;
 export const ICON_MASCOT_SEED = 116_300;
+/** The mascot was picked in version 1 of the generator: it keeps that look. */
+export const ICON_MASCOT_VERSION = 1;
 /** Android adaptive icons only show the central 66 dp of 108 dp: keep the mascot inside. */
 export const ADAPTIVE_SAFE_ZONE = 66 / 108;
 
@@ -45,7 +47,7 @@ function still(node: DrawNode): DrawNode {
 /** The mascot, scaled by `scale` and centered on (cx, cy). */
 export function mascot(scale: number, cx: number, cy: number): GroupNode {
   const half = YOKAI_FRAME / 2;
-  return group([still(drawYokai(generate(ICON_MASCOT_SEED)))], {
+  return group([still(drawYokai(generate(ICON_MASCOT_SEED, ICON_MASCOT_VERSION)))], {
     translateX: cx - half * scale,
     translateY: cy - half * scale,
     scale,

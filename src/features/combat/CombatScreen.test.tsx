@@ -29,7 +29,9 @@ describe('CombatScreen', () => {
     await renderWith(game);
     expect(screen.getByText(strings.combat.wave(1), { exact: false })).toBeOnTheScreen();
     expect(screen.getByLabelText(strings.combat.souls(formatNumber(game.souls)))).toBeOnTheScreen();
-    expect(screen.getByText(nameOf(generate(game.enemy.seed)))).toBeOnTheScreen();
+    expect(
+      screen.getByText(nameOf(generate(game.enemy.seed, game.generatorVersion))),
+    ).toBeOnTheScreen();
     expect(screen.getAllByRole('button', { name: /Lancer/ })).toHaveLength(3);
   });
 

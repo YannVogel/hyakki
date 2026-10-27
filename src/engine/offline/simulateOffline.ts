@@ -7,11 +7,14 @@ import { enemySeed, type GameState, type Shikigami, TALISMAN_IDS } from '../game
 import { add, type BigNum, div, lt, mul, sub, toNumber, ZERO } from '../numbers';
 import { createRng } from '../rng';
 import { addCapture, captureChance } from '../shikigami';
+import type { GeneratorVersion } from '../yokai';
 
 const HOUR_MS = 3_600_000;
 
 export interface LevelUp {
   readonly seed: number;
+  /** Generator of the shikigami's look (its first capture). */
+  readonly generatorVersion: GeneratorVersion;
   /** 0 when the shikigami was captured for the first time. */
   readonly from: number;
   readonly to: number;
@@ -128,7 +131,8 @@ export function simulateOffline(
 
   while (remaining > 0 && sim.kills < BALANCE.offline.maxSimulatedKills) {
     const stuck = sim.farming || sim.guardianWave !== null;
-    const maxHp = mul(waveHp(sim.wave), yokaiProfile(sim.seed).hpFactor);
+    const profile = yokaiProfile(sim.seed, state.generatorVersion);
+    const maxHp = mul(waveHp(sim.wave), profile.hpFactor);
     const fight = fightTimeline(maxHp, sim.damage, dps, burnRate);
     // A yōkai never falls faster than one hit of the fastest attacker.
     const msToKill = Math.max(fight.msToKill, fastestAttackMs);
@@ -140,7 +144,7 @@ export function simulateOffline(
     remaining -= msToKill;
     const souls = mul(
       waveSouls(sim.wave),
-      yokaiProfile(sim.seed).soulsFactor * tierMultiplier(sim.wave) * power.soulsMultiplier,
+      profile.soulsFactor * tierMultiplier(sim.wave) * power.soulsMultiplier,
     );
     sim.souls = add(sim.souls, souls);
     sim.kills += 1;
@@ -149,12 +153,13 @@ export function simulateOffline(
       farmedSouls = add(farmedSouls, souls);
       farmedKills += 1;
     }
-    if (rng.next() < captureChance(sim.seed)) {
+    if (rng.next() < captureChance(sim.seed, state.generatorVersion)) {
       const capture = addCapture(sim.collection, sim.seed, state.generatorVersion);
       sim.collection = capture.collection;
       const previous = levelUps.get(sim.seed);
       levelUps.set(sim.seed, {
         seed: sim.seed,
+        generatorVersion: capture.shikigami.generatorVersion,
         from: previous?.from ?? capture.shikigami.level - 1,
         to: capture.shikigami.level,
       });

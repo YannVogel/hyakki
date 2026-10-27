@@ -29,7 +29,9 @@ describe('selectors', () => {
     const state = createNewGame(3);
     const view = enemyView(state);
     expect(view.kind).toBe('yokai');
-    expect(view.kind === 'yokai' && view.name).toBe(nameOf(generate(state.enemy.seed)));
+    expect(view.kind === 'yokai' && view.name).toBe(
+      nameOf(generate(state.enemy.seed, state.generatorVersion)),
+    );
     expect(view.hpRatio).toBe(1);
     const hit = step(state, 0, [{ type: 'tap' }]).state;
     expect(enemyView(hit).hpRatio).toBeLessThan(1);
@@ -74,8 +76,9 @@ describe('Sanctuary selectors', () => {
     expect(one).toMatchObject({ level: 0, count: 1, affordable: true, maxed: false });
     const ten = upgradeViews(rich(25), 10).find((view) => view.id === 'blade');
     expect(ten).toMatchObject({ count: 10, affordable: false });
+    // 5 + 5.6 + 6.27 + 7.02 ≈ 23.9 souls: four levels.
     const max = upgradeViews(rich(25), 'max').find((view) => view.id === 'blade');
-    expect(max?.count).toBe(2);
+    expect(max?.count).toBe(4);
     const none = upgradeViews(rich(0), 'max').find((view) => view.id === 'blade');
     expect(none).toMatchObject({ count: 1, affordable: false });
   });
@@ -105,7 +108,7 @@ describe('collectionView', () => {
       shikigami: [1, 2, 3, 4, 5, 6].map((seed, index) => ({
         seed,
         level: index + 1,
-        generatorVersion: 1,
+        generatorVersion: 1 as const,
       })),
       team: [6],
     };

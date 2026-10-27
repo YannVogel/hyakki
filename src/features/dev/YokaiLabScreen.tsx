@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { generate, nameOf, type YokaiSpec } from '@/engine';
+import { generate, GENERATOR_VERSION, nameOf, type YokaiSpec } from '@/engine';
 import { describeYokai, RARITY_NAMES, strings } from '@/i18n';
 import { YokaiCanvas } from '@/render';
 import { bodyText, displayText, outline } from '@/ui/styles';
@@ -39,9 +39,12 @@ function YokaiTile({ spec, onSelect }: { spec: YokaiSpec; onSelect: (seed: numbe
 export function YokaiLabScreen() {
   const [seed, setSeed] = useState(2026);
   const [input, setInput] = useState(String(seed));
-  const spec = useMemo(() => generate(seed), [seed]);
+  const spec = useMemo(() => generate(seed, GENERATOR_VERSION), [seed]);
   const sheet = useMemo(
-    () => Array.from({ length: SHEET_SIZE }, (_, index) => generate(seed + 1 + index)),
+    () =>
+      Array.from({ length: SHEET_SIZE }, (_, index) =>
+        generate(seed + 1 + index, GENERATOR_VERSION),
+      ),
     [seed],
   );
   const select = (next: number) => {

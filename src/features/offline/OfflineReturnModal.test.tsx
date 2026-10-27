@@ -16,7 +16,7 @@ const report = (overrides: Partial<OfflineReport> = {}): OfflineReport => ({
   waveFrom: 38,
   waveTo: 47,
   stoppedAtGuardian: false,
-  levelUps: [{ seed: 9, from: 18, to: 19 }],
+  levelUps: [{ seed: 9, generatorVersion: 1, from: 18, to: 19 }],
   ...overrides,
 });
 
@@ -38,7 +38,7 @@ describe('OfflineReturnModal', () => {
     expect(screen.getByLabelText(`${strings.offline.souls} : + 2,41 M`)).toBeOnTheScreen();
     expect(screen.getByLabelText(`${strings.offline.waves} : 38 → 47`)).toBeOnTheScreen();
     expect(
-      screen.getByText(strings.offline.levelUp(nameOf(generate(9)), 18, 19)),
+      screen.getByText(strings.offline.levelUp(nameOf(generate(9, 1)), 18, 19)),
     ).toBeOnTheScreen();
     expect(
       screen.getByRole('progressbar', { name: strings.offline.capLabel('7 h 32 min', '8 h') }),

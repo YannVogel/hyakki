@@ -79,7 +79,7 @@ describe('game store', () => {
     const result = store.getState().buyUpgrade('blade', 1);
     expect(result.ok).toBe(true);
     expect(store.getState().game.sanctuary.blade).toBe(1);
-    expect(eq(store.getState().game.souls, 90)).toBe(true);
+    expect(eq(store.getState().game.souls, 95)).toBe(true);
   });
 
   it('saves with the wall-clock time', () => {

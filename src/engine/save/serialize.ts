@@ -1,5 +1,6 @@
 import { type GameState, SCHEMA_VERSION, TALISMAN_IDS, TEAM_SIZE, UPGRADE_IDS } from '../gameState';
 import { stringifyBigNum } from '../numbers';
+import { GENERATOR_VERSION, type GeneratorVersion } from '../yokai';
 import {
   array,
   bigNum,
@@ -29,10 +30,12 @@ export type LoadResult =
 const seed = integer(-(2 ** 31), 2 ** 32 - 1);
 const positive = integer(1);
 const count = integer(0);
+// A save from a newer app (unknown generator) is refused rather than drawn wrong.
+const generatorVersion = integer(1, GENERATOR_VERSION) as Check<GeneratorVersion>;
 
 const gameStateCheck: Check<GameState> = object<GameState>({
   schemaVersion: integer(SCHEMA_VERSION, SCHEMA_VERSION),
-  generatorVersion: positive,
+  generatorVersion,
   parade: object({
     number: positive,
     seed,
@@ -50,7 +53,7 @@ const gameStateCheck: Check<GameState> = object<GameState>({
   ofuda: count,
   sparks: count,
   sanctuary: keyed(UPGRADE_IDS, count),
-  shikigami: array(object({ seed, level: positive, generatorVersion: positive })),
+  shikigami: array(object({ seed, level: positive, generatorVersion })),
   team: array(seed, TEAM_SIZE),
   cooldowns: keyed(TALISMAN_IDS, nonNegative),
   effects: object({ burnMs: nonNegative, soulsBoostMs: nonNegative }),

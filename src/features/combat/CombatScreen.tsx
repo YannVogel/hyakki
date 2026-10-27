@@ -9,6 +9,7 @@ import {
   paradeView,
   powerPerSecond,
   talismanViews,
+  teamView,
   useGame,
   useGameStore,
 } from '@/state';
@@ -70,7 +71,7 @@ export function CombatScreen() {
         />
       </View>
       {parade.farming ? <FarmingBanner onChallenge={actions.challengeGuardian} /> : null}
-      <PowerRow power={formatNumber(powerPerSecond(game))} team={game.team} />
+      <PowerRow power={formatNumber(powerPerSecond(game))} team={teamView(game)} />
       <TalismanBar talismans={talismanViews(game)} onCast={actions.castTalisman} />
       <View style={styles.bottomGap} />
       {enemy.kind === 'guardian' && !enemy.engaged ? (

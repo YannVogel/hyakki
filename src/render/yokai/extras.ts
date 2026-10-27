@@ -31,6 +31,26 @@ export function backLayer(spec: YokaiSpec, anchors: Anchors, palette: PaletteCol
       ),
     );
   }
+  if (has(spec, 'tail')) {
+    const x = sides.r - 10;
+    const y = sides.y + 34;
+    nodes.push(
+      shape(
+        {
+          kind: 'path',
+          d: `M${x} ${y} C${x + 34} ${y + 8} ${x + 46} ${y - 24} ${x + 30} ${y - 48} C${x + 24} ${y - 30} ${x + 10} ${y - 24} ${x - 6} ${y - 16} Z`,
+        },
+        { fill: ART.tail, stroke: INK, strokeWidth: 3, strokeLinejoin: 'round' },
+      ),
+      shape(
+        {
+          kind: 'path',
+          d: `M${x + 30} ${y - 48} C${x + 40} ${y - 34} ${x + 40} ${y - 26} ${x + 36} ${y - 20} C${x + 30} ${y - 26} ${x + 28} ${y - 34} ${x + 30} ${y - 48} Z`,
+        },
+        { fill: ART.white, stroke: INK, strokeWidth: 2, strokeLinejoin: 'round' },
+      ),
+    );
+  }
   if (spec.limbs === 'leg' && bottom !== null) {
     const { x, y } = bottom;
     nodes.push(
@@ -166,6 +186,69 @@ export function topLayer(spec: YokaiSpec, anchors: Anchors): DrawNode[] {
         { stroke: INK, strokeWidth: 2 },
       ),
       shape({ kind: 'circle', cx: x, cy: y + 27, r: 1.6 }, { fill: INK }),
+    );
+  }
+  if (has(spec, 'beads')) {
+    const x = anchors.sides.l;
+    const y = anchors.sides.y;
+    nodes.push(
+      shape(
+        { kind: 'path', d: `M${x + 10} ${y} Q${x - 2} ${y + 4} ${x} ${y + 12}` },
+        { fill: 'none', stroke: INK, strokeWidth: 2 },
+      ),
+      ...[12, 20, 28, 36].map((dy, index) =>
+        shape(
+          { kind: 'circle', cx: x - index, cy: y + dy, r: 4 },
+          { fill: ART.beads, stroke: INK, strokeWidth: 1.5 },
+        ),
+      ),
+      shape(
+        {
+          kind: 'path',
+          d: `M${x - 3} ${y + 40} L${x - 6} ${y + 52} M${x - 3} ${y + 40} L${x} ${y + 52}`,
+        },
+        { fill: 'none', stroke: ART.red, strokeWidth: 3, strokeLinecap: 'round' },
+      ),
+    );
+  }
+  if (has(spec, 'leaf')) {
+    const y = anchors.horn.y;
+    nodes.push(
+      shape(
+        {
+          kind: 'path',
+          d: `M100 ${y - 26} C116 ${y - 20} 118 ${y - 2} 100 ${y + 8} C82 ${y - 2} 84 ${y - 20} 100 ${y - 26} Z`,
+        },
+        { fill: ART.leaf, stroke: INK, strokeWidth: 2.5, strokeLinejoin: 'round' },
+      ),
+      shape(
+        { kind: 'path', d: `M100 ${y - 20} L100 ${y + 12}` },
+        { fill: 'none', stroke: INK, strokeWidth: 1.8, strokeLinecap: 'round' },
+      ),
+    );
+  }
+  if (has(spec, 'pipe')) {
+    const f = anchors.face;
+    const x = r1(f.x + f.w * 0.2);
+    const y = r1(f.y + f.w * 0.36);
+    nodes.push(
+      shape(
+        { kind: 'path', d: `M${x} ${y} L${x + 36} ${y + 14}` },
+        { fill: 'none', stroke: INK, strokeWidth: 6, strokeLinecap: 'round' },
+      ),
+      shape(
+        { kind: 'path', d: `M${x} ${y} L${x + 36} ${y + 14}` },
+        { fill: 'none', stroke: ART.pipeStem, strokeWidth: 2.5, strokeLinecap: 'round' },
+      ),
+      outlinedRect(x + 32, y + 4, 10, 10, 2, ART.pipeMetal, 2.2),
+      shape(
+        { kind: 'circle', cx: x + 40, cy: y - 6, r: 4 },
+        { fill: ART.white, stroke: INK, strokeWidth: 1.5 },
+      ),
+      shape(
+        { kind: 'circle', cx: x + 46, cy: y - 16, r: 5 },
+        { fill: ART.white, stroke: INK, strokeWidth: 1.5 },
+      ),
     );
   }
   if (has(spec, 'onibi')) {

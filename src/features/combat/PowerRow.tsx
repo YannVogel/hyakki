@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { generate, nameOf } from '@/engine';
+import { nameOf, type YokaiSpec } from '@/engine';
 import { OBJECT_KANJI, RARITY_NAMES, strings } from '@/i18n';
 import { bodyText, colors, displayText, outline, rarityColors, spacing } from '@/ui';
 
@@ -15,7 +15,7 @@ const BADGE = 34;
 export interface PowerRowProps {
   /** Formatted damage per second. */
   readonly power: string;
-  readonly team: readonly number[];
+  readonly team: readonly YokaiSpec[];
 }
 
 /** « Puissance » of the player and the badges of the active team. */
@@ -34,11 +34,10 @@ export function PowerRow({ power, team }: PowerRowProps) {
         {team.length === 0 ? (
           <Text style={[bodyText('sm', 700), styles.muted]}>{strings.combat.noTeam}</Text>
         ) : (
-          team.map((seed) => {
-            const spec = generate(seed);
+          team.map((spec) => {
             return (
               <View
-                key={seed}
+                key={spec.seed}
                 accessible
                 accessibilityLabel={`${nameOf(spec)}, ${RARITY_NAMES[spec.rarity]}`}
                 style={[

@@ -13,7 +13,7 @@ graine ──► RNG (mulberry32) ──► spec (objet, regard, bouche, membres
                                    └──► dessin Skia + animations  (render)
 ```
 
-- `generate(seed): YokaiSpec` est **pur et déterministe**.
+- `generate(seed, version): YokaiSpec` est **pur et déterministe** : même graine et même version du générateur, même yōkai.
 - La spec ne contient que des identifiants et quelques paramètres (direction du regard, décalage d'animation), jamais de géométrie.
 - La géométrie (chemins, ancres) vit dans `render`, et se calcule depuis la spec.
 
@@ -23,17 +23,28 @@ Les tirages se font **dans cet ordre exact** : objet, regard, bouche, membres, n
 
 Changer cet ordre, ajouter un tirage au milieu, ou modifier une liste de pièces change le yōkai de **toutes** les graines. C'est une rupture : incrémente `GENERATOR_VERSION` et prévois une migration (les shikigami déjà capturés doivent garder leur apparence).
 
-Pour ajouter des pièces sans rupture : versionner les listes (`PARTS_V1`, `PARTS_V2`) et choisir la liste selon la version du générateur.
+Pour ajouter des pièces sans rupture : versionner les listes et choisir la liste selon la version du générateur. C'est ce que fait la V2 (§ 3) : elle ajoute ses objets et accessoires **à la suite** des listes V1, dans une nouvelle version.
+
+### Versions
+
+| Version | Utilisée par | Objets | Accessoires | Combinaisons |
+|---|---|---|---|---|
+| 1 | le prototype ; les défilés commencés avant la V2 et les shikigami capturés en V1 ; la mascotte de l'icône | 6 | 8 | 285 696 |
+| 2 | les nouveaux défilés (`GENERATOR_VERSION = 2`) | 12 | 12 | 1 245 696 |
+
+- Le défilé en cours garde sa version (`GameState.generatorVersion`) jusqu'au prochain Festival, qui en démarre un nouveau avec la version courante.
+- Chaque shikigami garde la version de sa capture (`Shikigami.generatorVersion`) : il ne change jamais d'apparence. Une graine déjà possédée et recapturée dans une autre version reste celle de sa première capture.
+- Une sauvegarde dont la version est inconnue (app plus récente) est refusée plutôt que dessinée de travers.
 
 ### Dans le code
 
-- `src/engine/yokai/parts.ts` contient les listes V1 (sans géométrie), dans l'ordre du prototype ; `generate.ts` fait les tirages. `GENERATOR_VERSION = 1`.
+- `src/engine/yokai/parts.ts` contient les listes (sans géométrie) : `PARTS[1]` dans l'ordre du prototype, `PARTS[2]` = V1 + nouvelles pièces ; `generate.ts` fait les tirages. `GENERATOR_VERSION = 2`.
 - Les identifiants sont en anglais (`lantern`, `cyclops`, `horns`, `gold`…) ; la correspondance avec ceux du prototype est dans `src/engine/yokai/testing/prototype.ts`.
-- `generate.test.ts` exécute le script du prototype dans Node et vérifie que les 10 000 premières graines (et des graines aléatoires) donnent exactement la même spec. Si ce test casse, c'est une rupture.
+- `generate.test.ts` exécute le script du prototype dans Node et vérifie que les 10 000 premières graines (et des graines aléatoires) donnent exactement la même spec **en version 1**. Si ce test casse, c'est une rupture. Les graines de référence ont un snapshot par version.
 
-## 3. Pièces (V1)
+## 3. Pièces
 
-### Objets (6)
+### Objets (6 en V1, 12 en V2)
 
 | Objet | Nom japonais | Genre FR | PV | ATQ | DÉF | VIT | Particularités |
 |---|---|---|---|---|---|---|---|
@@ -43,6 +54,14 @@ Pour ajouter des pièces sans rupture : versionner les listes (`PARTS_V1`, `PART
 | Tambour | Taiko | m | 130 | 100 | 100 | 70 | |
 | Geta | Geta | f | 90 | 120 | 90 | 100 | Pas de jambes, pas de hachimaki |
 | Rouleau | Makimono | m | 85 | 90 | 75 | 120 | |
+| Bouilloire (V2) | Yakan | f | 115 | 95 | 100 | 85 | |
+| Éventail (V2) | Uchiwa | m | 75 | 95 | 70 | 140 | Pas de hachimaki |
+| Masque (V2) | Men | m | 90 | 120 | 90 | 95 | |
+| Sandale (V2) | Waraji | f | 85 | 105 | 80 | 125 | Pas de jambes, pas de hachimaki |
+| Cloche (V2) | Tsurigane | f | 140 | 90 | 115 | 55 | |
+| Mortier (V2) | Usu | m | 120 | 105 | 105 | 65 | |
+
+Les objets V2 ont les mêmes moyennes que la V1 (PV 104, attaque × vitesse ≈ 9 600) : le défilé et les shikigami gardent leur force moyenne, l'équilibrage tient (mesuré par le harnais, `GAME_DESIGN.md` § 5.2).
 
 Chaque objet définit ses **ancres** : zone du visage (centre, largeur), point des cornes, point des jambes, points des bras.
 
@@ -58,9 +77,9 @@ Sourire, Crocs, Langue pendante, Bouche en O, Bouche tremblante, Grandes dents.
 
 Aucun, Jambe unique (avec geta), Deux jambes, Deux bras.
 
-### Accessoires (8, de 0 à 2 par yōkai)
+### Accessoires (8 en V1, 12 en V2 ; de 0 à 2 par yōkai)
 
-Cornes, Corne unique (exclusive avec Cornes), Onibi, Ofuda, Fissures, Hachimaki, Clochette, Pansement.
+Cornes, Corne unique (exclusive avec Cornes), Onibi, Ofuda, Fissures, Hachimaki, Clochette, Pansement ; en V2 : Feuille de tanuki (exclusive avec Corne unique, elle pousse au même endroit), Chapelet, Queue de renard, Kiseru (pipe).
 
 Tirage du nombre : 0 (35 %), 1 (45 %), 2 (20 %).
 
@@ -73,7 +92,7 @@ Tirage du nombre : 0 (35 %), 1 (45 %), 2 (20 %).
 | Épique | 11 % | Spectral (translucide) | ×1,6 |
 | Légendaire | 4 % | Or (scintillements) | ×2,2 |
 
-Total V1 : **285 696** combinaisons.
+Total : **285 696** combinaisons en V1, **1 245 696** en V2 (`countCombinations(version)`).
 
 ## 4. L'apparence fixe les stats
 
@@ -98,6 +117,10 @@ Total V1 : **285 696** combinaisons.
 | Hachimaki | +20 % vitesse |
 | Clochette | +10 % d'âmes |
 | Pansement | +20 % PV |
+| Feuille de tanuki (V2) | +10 % d'âmes |
+| Chapelet (V2) | +15 % PV |
+| Queue de renard (V2) | +6 % critique |
+| Kiseru (V2) | +10 % attaque |
 
 Stat finale = `stat de l'objet × (1 + somme des bonus de cette stat) × multiplicateur de rareté`. Critique de base : 5 %.
 
@@ -120,7 +143,8 @@ Ces bonus servent deux fois : comme ennemi (sa résistance) et comme shikigami (
 - `src/render/yokai/drawYokai.ts` décrit le dessin d'une spec sous forme d'arbre de primitives pures (formes, peintures, groupes animés) dans le repère 200 × 200 ; la géométrie (ancres, chemins) vit dans `objects.ts`, `face.ts` et `extras.ts`.
 - `drawYokai.test.ts` reconvertit cet arbre en SVG et le compare à celui du prototype (`svgOf`) sur 3 000 graines et des graines aléatoires : même ordre de calques, mêmes coordonnées, mêmes couleurs.
 - `YokaiCanvas` traduit l'arbre en Skia (remplissage puis contour) ; les animations sont des fonctions pures du temps (`motion.ts`) pilotées par une horloge Reanimated sur le thread UI, coupées quand « réduire les animations » est actif.
-- Comparaison visuelle prototype / Skia : [`docs/images/fabrique-prototype-vs-skia.png`](images/fabrique-prototype-vs-skia.png). En développement, l'écran « Fabrique à yōkai » (lien depuis l'accueil) affiche une graine et la planche des 12 suivantes.
+- Comparaison visuelle prototype / Skia : [`docs/images/fabrique-prototype-vs-skia.png`](images/fabrique-prototype-vs-skia.png). En développement, l'écran « Fabrique à yōkai » (hub de développement : appui long sur l'en-tête du défilé) affiche une graine et la planche des 12 suivantes, avec la version courante du générateur.
+- Pièces V2 (sans équivalent dans le prototype) : géométrie dans `objects.ts` (6 objets) et `extras.ts` (feuille et kiseru au-dessus, chapelet à gauche comme la clochette à droite, queue derrière l'objet). `drawYokai.test.ts` vérifie sur 2 000 graines V2 que le dessin ne contient aucune coordonnée invalide. Planche des nouvelles pièces : [`docs/images/fabrique-v2.png`](images/fabrique-v2.png).
 
 ## 7. Tests attendus
 

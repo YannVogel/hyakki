@@ -2,7 +2,7 @@ import { BALANCE } from '../balance';
 import type { GameState } from '../gameState';
 import { type BigNum, mul, pow } from '../numbers';
 import { festivalBonus } from '../prestige';
-import { shikigamiHitRatio, shikigamiIntervalMs, teamBonus } from '../shikigami';
+import { shikigamiHitRatio, shikigamiIntervalMs, teamBonus, teamMembers } from '../shikigami';
 
 export interface TeamAttacker {
   readonly seed: number;
@@ -30,21 +30,19 @@ export interface CombatPower {
 export function combatPower(state: GameState): CombatPower {
   const { blade, foxfire, bell } = state.sanctuary;
   const { upgrades, hero, crit } = BALANCE;
-  const bonus = teamBonus(state.team);
+  const members = teamMembers(state);
+  const bonus = teamBonus(members);
   const speed = 1 + bonus.speed;
   const festival = festivalBonus(state.sparks);
   const heroHitDamage = mul(
     pow(upgrades.blade.damageGrowth, blade),
     hero.baseDamage * (1 + bonus.attack) * festival,
   );
-  const team = state.team.map((seed) => {
-    const level = state.shikigami.find((shikigami) => shikigami.seed === seed)?.level ?? 1;
-    return {
-      seed,
-      hitDamage: mul(heroHitDamage, shikigamiHitRatio(seed, level)),
-      intervalMs: Math.max(1, Math.round(shikigamiIntervalMs(seed) / speed)),
-    };
-  });
+  const team = members.map((member) => ({
+    seed: member.seed,
+    hitDamage: mul(heroHitDamage, shikigamiHitRatio(member)),
+    intervalMs: Math.max(1, Math.round(shikigamiIntervalMs(member) / speed)),
+  }));
   return {
     heroHitDamage,
     tapDamage: mul(heroHitDamage, hero.tapMultiplier),

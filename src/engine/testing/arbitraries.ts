@@ -9,6 +9,7 @@ import {
   UPGRADE_IDS,
 } from '../gameState';
 import { type BigNum, mul, pow } from '../numbers';
+import { GENERATOR_VERSIONS } from '../yokai';
 
 // fast-check generators of valid engine values, shared by the engine's property tests.
 
@@ -24,7 +25,7 @@ const arbitraryShikigami: fc.Arbitrary<Shikigami[]> = fc.uniqueArray(
   fc.record({
     seed: uint32,
     level: fc.integer({ min: 1, max: 500 }),
-    generatorVersion: fc.constant(1),
+    generatorVersion: fc.constantFrom(...GENERATOR_VERSIONS),
   }),
   { selector: (shikigami) => shikigami.seed, maxLength: 12 },
 );
@@ -40,7 +41,7 @@ export const arbitraryGameState: fc.Arbitrary<GameState> = fc
       .chain((team) =>
         fc.record({
           schemaVersion: fc.constant(SCHEMA_VERSION),
-          generatorVersion: fc.constant(1),
+          generatorVersion: fc.constantFrom(...GENERATOR_VERSIONS),
           parade: fc.record({
             number: fc.integer({ min: 1, max: 50 }),
             seed: int32,

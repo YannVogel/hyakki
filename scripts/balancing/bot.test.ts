@@ -9,6 +9,7 @@ import {
   levelUpCost,
   mul,
   pow,
+  type Shikigami,
   shikigamiHitRatio,
   shikigamiIntervalMs,
   log10,
@@ -28,7 +29,7 @@ const anySouls = fc
 
 const withCollection = (seeds: number[], state: GameState = createNewGame(1)): GameState => ({
   ...state,
-  shikigami: seeds.map((seed, index) => ({ seed, level: 1 + index, generatorVersion: 1 })),
+  shikigami: seeds.map((seed, index) => ({ seed, level: 1 + index, generatorVersion: 1 as const })),
 });
 
 describe('spendSouls', () => {
@@ -53,9 +54,9 @@ describe('spendSouls', () => {
   });
 
   it('buys the cheapest option first', () => {
-    const state = { ...createNewGame(1), souls: mul(1, 10) };
+    // Exactly the price of the first Blade level (5 souls): the only affordable option.
+    const state = { ...createNewGame(1), souls: upgradeCost('blade', 0, 1) };
     const after = spendSouls(state);
-    // The Blade (10 souls) is the only affordable option.
     expect(after.sanctuary.blade).toBe(1);
     expect(eq(after.souls, 0)).toBe(true);
   });
@@ -75,10 +76,10 @@ describe('pickTeam', () => {
   it('fields the three strongest shikigami', () => {
     const seeds = [5, 6, 7, 8, 9, 10];
     const state = pickTeam(withCollection(seeds));
-    const strength = (seed: number, level: number) =>
-      log10(shikigamiHitRatio(seed, level)) - Math.log10(shikigamiIntervalMs(seed));
+    const strength = (shikigami: Shikigami) =>
+      log10(shikigamiHitRatio(shikigami)) - Math.log10(shikigamiIntervalMs(shikigami));
     const ranked = withCollection(seeds)
-      .shikigami.map((entry) => ({ seed: entry.seed, value: strength(entry.seed, entry.level) }))
+      .shikigami.map((entry) => ({ seed: entry.seed, value: strength(entry) }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 3)
       .map((entry) => entry.seed);

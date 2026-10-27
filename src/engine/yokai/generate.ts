@@ -1,31 +1,32 @@
 import { createRng, pick, type Random } from '../rng';
 import {
-  ACCESSORIES,
   ACCESSORY_COUNT_THRESHOLDS,
   type AccessoryId,
   type AccessoryPart,
   EYES,
   type EyesId,
+  type GeneratorVersion,
   LIMBS,
   type LimbsId,
   MOUTHS,
   type MouthId,
   type ObjectId,
   type ObjectPart,
-  OBJECTS,
   type PaletteId,
   PALETTES,
+  PARTS,
   type Rarity,
   RARITIES,
   type SuffixId,
   SUFFIXES,
 } from './parts';
 
-export const GENERATOR_VERSION = 1;
+/** Version of the new parades. Yōkai already met keep the version they were drawn with. */
+export const GENERATOR_VERSION: GeneratorVersion = 2;
 
 export interface YokaiSpec {
   readonly seed: number;
-  readonly generatorVersion: number;
+  readonly generatorVersion: GeneratorVersion;
   readonly object: ObjectId;
   readonly eyes: EyesId;
   readonly mouth: MouthId;
@@ -43,17 +44,21 @@ export interface YokaiSpec {
 
 const roundToTenth = (value: number) => Math.round(value * 10) / 10;
 
-function drawAccessories(random: Random, object: ObjectPart): AccessoryId[] {
+function drawAccessories(
+  random: Random,
+  object: ObjectPart,
+  accessories: readonly AccessoryPart[],
+): AccessoryId[] {
   const roll = random();
   const count = ACCESSORY_COUNT_THRESHOLDS.filter((threshold) => roll >= threshold).length;
-  let pool: AccessoryPart[] = ACCESSORIES.filter(
+  let pool: AccessoryPart[] = accessories.filter(
     (accessory) => !object.excludedAccessories.includes(accessory.id),
   );
   const drawn: AccessoryId[] = [];
   while (drawn.length < count && pool.length > 0) {
     const [accessory] = pool.splice(Math.floor(random() * pool.length), 1);
     drawn.push(accessory.id);
-    pool = pool.filter((candidate) => candidate.id !== accessory.conflictsWith);
+    pool = pool.filter((candidate) => !(accessory.conflicts ?? []).includes(candidate.id));
   }
   return drawn;
 }
@@ -65,20 +70,22 @@ function drawRarity(random: Random): Rarity {
 }
 
 /**
- * The yōkai of a seed. Pure and deterministic; the draw order is a contract shared with the
- * prototype (docs/PROCEDURAL_YOKAI.md § 2): object, eyes, mouth, limbs, accessory count,
- * accessories, rarity, palette, gaze x, gaze y, animation delay, suffix.
+ * The yōkai of a seed, with the parts of a generator version. Pure and deterministic; the draw
+ * order is a contract shared with the prototype (docs/PROCEDURAL_YOKAI.md § 2): object, eyes,
+ * mouth, limbs, accessory count, accessories, rarity, palette, gaze x, gaze y, animation delay,
+ * suffix. Version 1 is the prototype's.
  */
-export function generate(seed: number): YokaiSpec {
+export function generate(seed: number, version: GeneratorVersion): YokaiSpec {
+  const parts = PARTS[version];
   const random = createRng(seed).next;
-  const object = pick(random, OBJECTS);
+  const object = pick(random, parts.objects);
   const eyes = pick(random, EYES).id;
   const mouth = pick(random, MOUTHS);
   const limbs = pick(
     random,
     LIMBS.filter((limb) => object.hasLegs || !limb.needsLegs),
   ).id;
-  const accessories = drawAccessories(random, object);
+  const accessories = drawAccessories(random, object, parts.accessories);
   const rarity = drawRarity(random);
   const palette = pick(
     random,
@@ -91,7 +98,7 @@ export function generate(seed: number): YokaiSpec {
 
   return {
     seed,
-    generatorVersion: GENERATOR_VERSION,
+    generatorVersion: version,
     object: object.id,
     eyes,
     mouth,
@@ -105,14 +112,29 @@ export function generate(seed: number): YokaiSpec {
   };
 }
 
-/** Number of distinct yōkai the parts can produce (gaze and animation delay aside). */
-export function countCombinations(): number {
-  const perObject = OBJECTS.reduce((total, object) => {
-    const accessories = ACCESSORIES.filter(
+/** Unordered pairs of accessories the draw can produce (conflicting pairs never meet). */
+function accessoryPairs(pool: readonly AccessoryPart[]): number {
+  let pairs = 0;
+  pool.forEach((first, index) => {
+    for (const second of pool.slice(index + 1)) {
+      const apart =
+        !(first.conflicts ?? []).includes(second.id) &&
+        !(second.conflicts ?? []).includes(first.id);
+      pairs += apart ? 1 : 0;
+    }
+  });
+  return pairs;
+}
+
+/** Number of distinct yōkai a version can produce (gaze and animation delay aside). */
+export function countCombinations(version: GeneratorVersion): number {
+  const { objects, accessories } = PARTS[version];
+  const perObject = objects.reduce((total, object) => {
+    const pool = accessories.filter(
       (accessory) => !object.excludedAccessories.includes(accessory.id),
-    ).length;
-    // None, one, or an unordered pair minus the forbidden horns + horn pair.
-    const accessorySets = 1 + accessories + (accessories * (accessories - 1)) / 2 - 1;
+    );
+    // None, one, or a pair.
+    const accessorySets = 1 + pool.length + accessoryPairs(pool);
     const limbs = LIMBS.filter((limb) => object.hasLegs || !limb.needsLegs).length;
     return total + limbs * accessorySets;
   }, 0);

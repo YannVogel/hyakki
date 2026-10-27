@@ -59,10 +59,10 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 
 | Élément | Rôle |
 |---|---|
-| `generate(seed)` | Spec d'un yōkai (identifiants seulement, aucune géométrie). Pure, identique au prototype. |
-| `GENERATOR_VERSION` | Version des listes de pièces (1). Toute modification qui change une graine existante l'incrémente. |
-| `OBJECTS`, `EYES`, `MOUTHS`, `LIMBS`, `ACCESSORIES`, `PALETTES`, `RARITIES`, `SUFFIXES` | Listes de pièces V1 : leur ordre est un contrat. |
-| `countCombinations()` | Nombre de yōkai distincts (285 696 en V1). |
+| `generate(seed, version)` | Spec d'un yōkai avec les pièces d'une version du générateur (identifiants seulement, aucune géométrie). Pure ; la version 1 est identique au prototype. |
+| `GENERATOR_VERSION` | Version des nouveaux défilés (2). Le défilé en cours garde la sienne (`state.generatorVersion`), chaque shikigami celle de sa capture. Toute modification qui changerait une graine existante crée une nouvelle version. |
+| `PARTS[version]` (objets, accessoires), `EYES`, `MOUTHS`, `LIMBS`, `PALETTES`, `RARITIES`, `SUFFIXES` | Listes de pièces : leur ordre est un contrat. La V2 ajoute ses pièces à la suite de celles de la V1. |
+| `countCombinations(version)` | Nombre de yōkai distincts (285 696 en V1, 1 245 696 en V2). |
 | `statsOf(spec)` | PV, attaque, défense, vitesse (arrondis comme le prototype), chance de critique, brûlure, bonus d'âmes, traits. |
 | `traitsOf(spec)` | Traits visibles et leurs effets (fractions : `0.08` = +8 %), dans l'ordre des pièces. |
 | `nameOf(spec)` | Nom japonais (`Mitsume-Taiko-obake`), identique dans toutes les langues. La description française est dans `src/i18n/yokai.ts`. |
@@ -95,11 +95,11 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 
 | Élément | Rôle |
 |---|---|
-| `captureChance(seed)` | Chance de capture selon la rareté (2 %, 1 %, 0,4 %, 0,1 %). Le tirage a lieu dans `step` à chaque yōkai vaincu (événement `shikigamiCaptured`). |
+| `captureChance(seed, version)` | Chance de capture selon la rareté (2 %, 1 %, 0,4 %, 0,1 %). Le tirage a lieu dans `step` à chaque yōkai vaincu (événement `shikigamiCaptured`). |
 | `addCapture(collection, seed, version)` | Nouveau shikigami au niveau 1, ou +1 niveau pour une graine déjà possédée. |
 | `setTeam(state, seeds)` | Équipe active (3 au plus, distincts, possédés) ; résultat typé. |
 | `levelUpCost(level, count)`, `levelUpShikigami(state, seed, count)` | Montée d'un ou plusieurs niveaux contre des âmes ; résultat typé. |
-| `teamBonus(seeds)`, `shikigamiHitRatio`, `shikigamiIntervalMs`, `shikigamiStats` | Bonus d'équipe et puissance d'un shikigami (voir `docs/GAME_DESIGN.md` § 4.4). |
+| `teamMembers(state)`, `teamBonus(members)`, `shikigamiHitRatio`, `shikigamiIntervalMs`, `shikigamiStats` | Bonus d'équipe et puissance d'un shikigami (voir `docs/GAME_DESIGN.md` § 4.4). |
 
 ### `economy/` — Sanctuaire
 

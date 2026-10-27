@@ -1,5 +1,5 @@
 import type { YokaiSpec } from './generate';
-import { OBJECTS, type StatId } from './parts';
+import { PARTS, type StatId } from './parts';
 import { rarityMultiplier, type Trait, traitsOf } from './traits';
 
 export const BASE_CRIT_CHANCE = 0.05;
@@ -26,7 +26,9 @@ const STAT_IDS: readonly StatId[] = ['hp', 'attack', 'defense', 'speed'];
  * matches it exactly.
  */
 export function statsOf(spec: YokaiSpec): YokaiStats {
-  const object = OBJECTS.find((candidate) => candidate.id === spec.object);
+  const object = PARTS[spec.generatorVersion].objects.find(
+    (candidate) => candidate.id === spec.object,
+  );
   if (object === undefined) {
     throw new RangeError(`Unknown object: ${spec.object}`);
   }

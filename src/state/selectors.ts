@@ -26,6 +26,7 @@ import {
   TALISMAN_IDS,
   talismanCooldownMs,
   type TalismanId,
+  teamMembers,
   toNumber,
   yokaiMaxHp,
   type YokaiSpec,
@@ -52,6 +53,10 @@ export type EnemyView =
 const remainingRatio = (maxHp: BigNum, damage: BigNum) =>
   Math.min(1, Math.max(0, toNumber(div(sub(maxHp, damage), maxHp))));
 
+/** The active team's yōkai, in team order, each drawn with the generator of its capture. */
+export const teamView = (state: GameState): YokaiSpec[] =>
+  teamMembers(state).map((member) => generate(member.seed, member.generatorVersion));
+
 export function enemyView(state: GameState): EnemyView {
   const { parade, enemy } = state;
   if (enemy.guardian !== null && isGuardianWave(parade.wave)) {
@@ -64,12 +69,15 @@ export function enemyView(state: GameState): EnemyView {
       timeRatio: Math.min(1, enemy.guardian.timeLeftMs / BALANCE.guardian.timeLimitMs),
     };
   }
-  const spec = generate(enemy.seed);
+  const spec = generate(enemy.seed, state.generatorVersion);
   return {
     kind: 'yokai',
     spec,
     name: nameOf(spec),
-    hpRatio: remainingRatio(yokaiMaxHp(parade.wave, enemy.seed), enemy.damage),
+    hpRatio: remainingRatio(
+      yokaiMaxHp(parade.wave, enemy.seed, state.generatorVersion),
+      enemy.damage,
+    ),
   };
 }
 
@@ -170,7 +178,7 @@ export function collectionView(state: GameState): ShikigamiView[] {
   const rank = { legendary: 0, epic: 1, rare: 2, common: 3 } as const;
   return state.shikigami
     .map((shikigami) => {
-      const spec = generate(shikigami.seed);
+      const spec = generate(shikigami.seed, shikigami.generatorVersion);
       return {
         seed: shikigami.seed,
         level: shikigami.level,

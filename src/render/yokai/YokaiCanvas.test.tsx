@@ -8,7 +8,7 @@ describe('YokaiCanvas', () => {
   it('mounts an image with the given label and size', async () => {
     await render(
       <YokaiCanvas
-        spec={generate(7)}
+        spec={generate(7, 1)}
         size={120}
         accessibilityLabel="Hitotsume-Chōchin-obake"
         testID="canvas"

@@ -6,12 +6,13 @@ import {
   adaptiveForeground,
   appIcon,
   ICON_MASCOT_SEED,
+  ICON_MASCOT_VERSION,
   mascot,
 } from './appIcon';
 
 describe('app icon', () => {
   it('uses a real generated yōkai: a one-eyed paper lantern sticking its tongue out', () => {
-    const spec = generate(ICON_MASCOT_SEED);
+    const spec = generate(ICON_MASCOT_SEED, ICON_MASCOT_VERSION);
     expect(spec).toMatchObject({
       object: 'lantern',
       eyes: 'cyclops',

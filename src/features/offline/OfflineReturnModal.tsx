@@ -59,7 +59,11 @@ export function OfflineReturnModal({ report, onCollect }: OfflineReturnModalProp
             <Row label={text.waves} value={text.wavesValue(report.waveFrom, report.waveTo)} />
             {report.levelUps.map((levelUp) => (
               <Text key={levelUp.seed} style={bodyText('base', 800)}>
-                {text.levelUp(nameOf(generate(levelUp.seed)), levelUp.from, levelUp.to)}
+                {text.levelUp(
+                  nameOf(generate(levelUp.seed, levelUp.generatorVersion)),
+                  levelUp.from,
+                  levelUp.to,
+                )}
               </Text>
             ))}
             {report.stoppedAtGuardian ? (

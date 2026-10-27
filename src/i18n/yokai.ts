@@ -13,7 +13,7 @@ import type {
   YokaiSpec,
 } from '@/engine';
 
-// French texts of the yōkai generator (V1). The engine only knows ids.
+// French texts of the yōkai generator (every version). The engine only knows ids.
 
 type Gender = 'm' | 'f';
 /** Adjective as [masculine, feminine]. Those starting with « à » go after the other ones. */
@@ -28,6 +28,12 @@ export const OBJECT_NAMES: Record<ObjectId, { readonly name: string; readonly ge
   drum: { name: 'Tambour', gender: 'm' },
   geta: { name: 'Geta', gender: 'f' },
   scroll: { name: 'Rouleau', gender: 'm' },
+  kettle: { name: 'Bouilloire', gender: 'f' },
+  fan: { name: 'Éventail', gender: 'm' },
+  mask: { name: 'Masque', gender: 'm' },
+  sandal: { name: 'Sandale', gender: 'f' },
+  templeBell: { name: 'Cloche', gender: 'f' },
+  mortar: { name: 'Mortier', gender: 'm' },
 };
 
 /** One kanji per object, for small badges (team members). */
@@ -38,6 +44,12 @@ export const OBJECT_KANJI: Record<ObjectId, string> = {
   drum: '鼓',
   geta: '駄',
   scroll: '巻',
+  kettle: '缶',
+  fan: '扇',
+  mask: '面',
+  sandal: '鞋',
+  templeBell: '鐘',
+  mortar: '臼',
 };
 
 export const EYES_NAMES: Record<EyesId, string> = {
@@ -76,6 +88,10 @@ export const ACCESSORY_NAMES: Record<AccessoryId, string> = {
   hachimaki: 'Hachimaki',
   bell: 'Clochette',
   bandage: 'Pansement',
+  leaf: 'Feuille de tanuki',
+  beads: 'Chapelet',
+  tail: 'Queue de renard',
+  pipe: 'Kiseru',
 };
 
 export const PALETTE_NAMES: Record<PaletteId, string> = {
@@ -123,6 +139,10 @@ const ACCESSORY_ADJECTIVES: Record<AccessoryId, Adjective> = {
   hachimaki: ['survolté', 'survoltée'],
   bell: ['tintinnabulant', 'tintinnabulante'],
   bandage: ['rafistolé', 'rafistolée'],
+  leaf: ['espiègle', 'espiègle'],
+  beads: ['pieux', 'pieuse'],
+  tail: ['rusé', 'rusée'],
+  pipe: ['fumeur', 'fumeuse'],
 };
 
 const STAT_NAMES: Record<StatId, string> = {

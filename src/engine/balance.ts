@@ -47,7 +47,7 @@ export const BALANCE = {
   upgrades: {
     costGrowth: 1.12,
     /** Each level multiplies damage (compounding: costs grow exponentially, so must damage). */
-    blade: { baseCost: 10, damageGrowth: 1.0925 },
+    blade: { baseCost: 5, damageGrowth: 1.0925 },
     foxfire: { baseCost: 500, burnPerLevel: 0.002 },
     bell: { baseCost: 150, soulsPerLevel: 0.05 },
     kekkai: { baseCost: 5000, cooldownPerLevel: 0.02, maxLevel: 25 },

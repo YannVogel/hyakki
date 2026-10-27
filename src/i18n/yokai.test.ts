@@ -11,13 +11,13 @@ describe('yōkai texts', () => {
 
   it('describe yōkai like the prototype (10 000 seeds)', () => {
     for (let seed = 0; seed < 10_000; seed++) {
-      expect(describeYokai(generate(seed))).toBe(prototype.descOf(prototype.generate(seed)));
+      expect(describeYokai(generate(seed, 1))).toBe(prototype.descOf(prototype.generate(seed)));
     }
   });
 
   it('label traits and their effects like the prototype (10 000 seeds)', () => {
     for (let seed = 0; seed < 10_000; seed++) {
-      const texts = traitsOf(generate(seed)).map((trait) => ({
+      const texts = traitsOf(generate(seed, 1)).map((trait) => ({
         label: traitLabel(trait.source),
         effect: plainSpaces(traitEffectText(trait)),
       }));
@@ -30,6 +30,28 @@ describe('yōkai texts', () => {
     [2026, 'Théière étonnée et farceuse'],
     [999_999, 'Lanterne moqueuse à trois yeux'],
   ])('describes seed %d as « %s »', (seed, description) => {
-    expect(describeYokai(generate(seed))).toBe(description);
+    expect(describeYokai(generate(seed, 1))).toBe(description);
+  });
+
+  it('describes and labels every part of version 2', () => {
+    for (let seed = 0; seed < 3_000; seed++) {
+      const spec = generate(seed, 2);
+      expect(describeYokai(spec)).not.toMatch(/undefined/);
+      for (const trait of traitsOf(spec)) {
+        expect(traitLabel(trait.source)).not.toBe('');
+        expect(traitEffectText(trait)).not.toBe('');
+      }
+    }
+  });
+
+  it('agrees the new objects in gender', () => {
+    const fan = {
+      ...generate(0, 2),
+      object: 'fan' as const,
+      mouth: 'grin' as const,
+      eyes: 'sly' as const,
+    };
+    expect(describeYokai(fan)).toBe('Éventail rieur et sournois');
+    expect(describeYokai({ ...fan, object: 'templeBell' })).toBe('Cloche rieuse et sournoise');
   });
 });

@@ -1,17 +1,43 @@
-// Part lists of generator V1. The order of every list is part of the draw contract
-// (docs/PROCEDURAL_YOKAI.md § 2): never reorder, insert or remove an entry.
+// Part lists of the generator, by version. The order of every list is part of the draw contract
+// (docs/PROCEDURAL_YOKAI.md § 2): never reorder, insert or remove an entry of a published version.
+// A new version appends its parts to copies of the previous lists.
 
 export type StatId = 'hp' | 'attack' | 'defense' | 'speed';
 export type BaseStats = Readonly<Record<StatId, number>>;
 
 export type Rarity = 'common' | 'rare' | 'epic' | 'legendary';
 
-export type ObjectId = 'lantern' | 'umbrella' | 'teapot' | 'drum' | 'geta' | 'scroll';
+export type ObjectId =
+  | 'lantern'
+  | 'umbrella'
+  | 'teapot'
+  | 'drum'
+  | 'geta'
+  | 'scroll'
+  // V2
+  | 'kettle'
+  | 'fan'
+  | 'mask'
+  | 'sandal'
+  | 'templeBell'
+  | 'mortar';
 export type EyesId = 'cyclops' | 'pair' | 'wink' | 'three' | 'sly' | 'dots' | 'slit' | 'big';
 export type MouthId = 'grin' | 'fangs' | 'tongue' | 'o' | 'wavy' | 'teeth';
 export type LimbsId = 'none' | 'leg' | 'legs' | 'arms';
 export type AccessoryId =
-  'horns' | 'horn' | 'onibi' | 'ofuda' | 'cracks' | 'hachimaki' | 'bell' | 'bandage';
+  | 'horns'
+  | 'horn'
+  | 'onibi'
+  | 'ofuda'
+  | 'cracks'
+  | 'hachimaki'
+  | 'bell'
+  | 'bandage'
+  // V2
+  | 'leaf'
+  | 'beads'
+  | 'tail'
+  | 'pipe';
 export type PaletteId =
   'paper' | 'wood' | 'lacquer' | 'celadon' | 'indigo' | 'sakura' | 'spectral' | 'gold';
 export type SuffixId = 'obake' | 'bo' | 'kozo' | 'nyudo';
@@ -25,7 +51,7 @@ export interface ObjectPart {
   readonly excludedAccessories: readonly AccessoryId[];
 }
 
-export const OBJECTS: readonly ObjectPart[] = [
+const OBJECTS_V1: readonly ObjectPart[] = [
   {
     id: 'lantern',
     japanese: 'Chōchin',
@@ -70,6 +96,54 @@ export const OBJECTS: readonly ObjectPart[] = [
   },
 ];
 
+// Same averages as V1 (HP 104, attack × speed ≈ 9 600): the parade and the shikigami keep their
+// strength on average, so the balance holds (docs/GAME_DESIGN.md § 5.2).
+const OBJECTS_V2: readonly ObjectPart[] = [
+  ...OBJECTS_V1,
+  {
+    id: 'kettle',
+    japanese: 'Yakan',
+    stats: { hp: 115, attack: 95, defense: 100, speed: 85 },
+    hasLegs: true,
+    excludedAccessories: [],
+  },
+  {
+    id: 'fan',
+    japanese: 'Uchiwa',
+    stats: { hp: 75, attack: 95, defense: 70, speed: 140 },
+    hasLegs: true,
+    excludedAccessories: ['hachimaki'],
+  },
+  {
+    id: 'mask',
+    japanese: 'Men',
+    stats: { hp: 90, attack: 120, defense: 90, speed: 95 },
+    hasLegs: true,
+    excludedAccessories: [],
+  },
+  {
+    id: 'sandal',
+    japanese: 'Waraji',
+    stats: { hp: 85, attack: 105, defense: 80, speed: 125 },
+    hasLegs: false,
+    excludedAccessories: ['hachimaki'],
+  },
+  {
+    id: 'templeBell',
+    japanese: 'Tsurigane',
+    stats: { hp: 140, attack: 90, defense: 115, speed: 55 },
+    hasLegs: true,
+    excludedAccessories: [],
+  },
+  {
+    id: 'mortar',
+    japanese: 'Usu',
+    stats: { hp: 120, attack: 105, defense: 105, speed: 65 },
+    hasLegs: true,
+    excludedAccessories: [],
+  },
+];
+
 export interface EyesPart {
   readonly id: EyesId;
   /** Name prefix given by the gaze (Hitotsume, Mitsume), which wins over the palette's. */
@@ -103,18 +177,30 @@ export const LIMBS: readonly LimbsPart[] = [
 
 export interface AccessoryPart {
   readonly id: AccessoryId;
-  readonly conflictsWith?: AccessoryId;
+  /** Accessories removed from the draw once this one is drawn (both sides list each other). */
+  readonly conflicts?: readonly AccessoryId[];
 }
 
-export const ACCESSORIES: readonly AccessoryPart[] = [
-  { id: 'horns', conflictsWith: 'horn' },
-  { id: 'horn', conflictsWith: 'horns' },
+const ACCESSORIES_V1: readonly AccessoryPart[] = [
+  { id: 'horns', conflicts: ['horn'] },
+  { id: 'horn', conflicts: ['horns'] },
   { id: 'onibi' },
   { id: 'ofuda' },
   { id: 'cracks' },
   { id: 'hachimaki' },
   { id: 'bell' },
   { id: 'bandage' },
+];
+
+// The tanuki leaf sits on top of the head, where the single horn grows.
+const ACCESSORIES_V2: readonly AccessoryPart[] = [
+  { id: 'horns', conflicts: ['horn'] },
+  { id: 'horn', conflicts: ['horns', 'leaf'] },
+  ...ACCESSORIES_V1.slice(2),
+  { id: 'leaf', conflicts: ['horn'] },
+  { id: 'beads' },
+  { id: 'tail' },
+  { id: 'pipe' },
 ];
 
 /** Accessory count draw: 0 below 0.35, 1 below 0.8, else 2. */
@@ -164,3 +250,19 @@ export const SUFFIXES: readonly { readonly id: SuffixId; readonly japanese: stri
 
 /** Suffix of every horned yōkai, whatever the draw. */
 export const ONI_SUFFIX = 'oni';
+
+export type GeneratorVersion = 1 | 2;
+
+/** Every published version: a shikigami keeps the version of its capture forever. */
+export const GENERATOR_VERSIONS: readonly GeneratorVersion[] = [1, 2];
+
+export interface PartLists {
+  readonly objects: readonly ObjectPart[];
+  readonly accessories: readonly AccessoryPart[];
+}
+
+/** The lists that change between versions; eyes, mouths, limbs and palettes are shared. */
+export const PARTS: Readonly<Record<GeneratorVersion, PartLists>> = {
+  1: { objects: OBJECTS_V1, accessories: ACCESSORIES_V1 },
+  2: { objects: OBJECTS_V2, accessories: ACCESSORIES_V2 },
+};
