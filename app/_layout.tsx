@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useStore } from 'zustand';
 
 import { strings } from '@/i18n';
 import { playHaptic } from '@/services/haptics';
@@ -20,7 +21,6 @@ import {
 import { fontAssets } from '@/ui/fonts';
 import { type HapticKind, HapticsProvider } from '@/ui/haptics';
 import { ReduceMotionProvider } from '@/ui/motion';
-import { useStore } from 'zustand';
 
 SplashScreen.preventAutoHideAsync();
 

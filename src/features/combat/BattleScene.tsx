@@ -6,6 +6,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { strings } from '@/i18n';
 import {
   BattleBackdrop,
+  type EffectLayer,
   type EffectPool,
   EffectsLayer,
   type EffectStage,
@@ -89,7 +90,7 @@ export function BattleScene({
   const heroTop = layout === null ? { x: 0, y: 0 } : toBox(layout, HERO.x, HERO.y);
   const heroHeight = layout === null ? 0 : HERO.height * layout.scale;
   const hitAt = layout === null ? null : toBox(layout, HIT_AREA.x, HIT_AREA.y);
-  const effectLayer = (layer: 'under' | 'over') =>
+  const effectLayer = (layer: EffectLayer) =>
     box === null ? null : (
       <EffectsLayer
         pool={effects}
