@@ -1,5 +1,7 @@
 # Hyakki
 
+[![CI](https://github.com/YannVogel/hyakki/actions/workflows/ci.yml/badge.svg)](https://github.com/YannVogel/hyakki/actions/workflows/ci.yml)
+
 > 百鬼夜行 — le défilé des cent démons.
 
 **Hyakki** est un idle RPG mobile (iOS + Android) dans un univers de fantasy japonaise, au style cartoon/animé très coloré. Un jeune onmyōji affronte le Hyakki Yagyō, un défilé sans fin de yōkai : il les purifie vague après vague, et chaque yōkai purifié peut rejoindre son équipe comme shikigami.

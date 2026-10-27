@@ -14,7 +14,7 @@
 | Haptique | **expo-haptics** | Frappes, critiques, Gardien vaincu |
 | Tests | **Jest** (`jest-expo`), **@testing-library/react-native**, **fast-check**, **Maestro** | Unitaires, propriétés, composants, parcours |
 | Qualité | **ESLint**, **Prettier**, règles d'imports (voir § 3) | |
-| CI | **GitHub Actions** | Lint, typecheck, tests sur chaque PR |
+| CI | **GitHub Actions** ([`ci.yml`](../.github/workflows/ci.yml)) | Lint, typecheck, tests avec seuil de couverture, sur chaque PR et chaque push sur `main` |
 
 MMKV et Skia demandent un **development build** (pas Expo Go).
 
