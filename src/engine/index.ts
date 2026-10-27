@@ -5,4 +5,5 @@ export * from './gameState';
 export * from './numbers';
 export * from './rng';
 export * from './save';
+export * from './shikigami';
 export * from './yokai';

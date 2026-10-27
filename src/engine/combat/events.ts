@@ -1,6 +1,6 @@
 import type { BigNum } from '../numbers';
 
-export type HitSource = 'hero' | 'tap';
+export type HitSource = 'hero' | 'tap' | 'shikigami';
 
 /** What happened during a step, for the UI to animate. `atMs` is the offset within the step. */
 export type CombatEvent =
@@ -22,6 +22,14 @@ export type CombatEvent =
       readonly type: 'waveStarted';
       readonly wave: number;
       readonly seed: number;
+      readonly atMs: number;
+    }
+  | {
+      readonly type: 'shikigamiCaptured';
+      readonly seed: number;
+      /** Level after the capture: 1 for a new shikigami, +1 for a duplicate. */
+      readonly level: number;
+      readonly isNew: boolean;
       readonly atMs: number;
     };
 

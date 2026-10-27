@@ -78,7 +78,11 @@ Améliorations payées en âmes, achetables par ×1, ×10 ou Max :
 - À chaque yōkai purifié, tirage de **capture** selon sa rareté : commun 2 %, rare 1 %, épique 0,4 %, légendaire 0,1 %.
 - Capturer une graine déjà possédée donne +1 niveau à ce shikigami.
 - L'**équipe active** (3 places) ajoute ses dégâts automatiques et ses **bonus d'apparence** (cornes = attaque, yeux = critique, etc. — table complète dans [`PROCEDURAL_YOKAI.md`](PROCEDURAL_YOKAI.md)).
-- Un shikigami monte de niveau contre des âmes.
+- Un shikigami monte de niveau contre des âmes : `100 × 1,18^(niveau − 1)`.
+- **Frappe d'un shikigami** = frappe du héros × 0,5 × attaque / 100 × (1 + 25 % par niveau au-delà du premier), toutes les `1 000 ms × 100 / vitesse` : l'attaque fait la force, la vitesse la cadence.
+- **Bonus d'équipe** = somme des traits offensifs des trois membres : attaque (+% de dégâts pour tous), critique (+ points de chance de critique, plafonnée à 75 %), vitesse (+% de cadence pour tous), âmes, brûlure. Les traits de PV et de défense ne jouent que lorsque le yōkai est un ennemi (sa résistance).
+- Les bonus de sources différentes se multiplient (Sanctuaire × équipe × Festival) ; ceux d'une même source s'additionnent.
+- Un nouveau membre d'équipe commence un cycle d'attaque complet (pas de frappe gratuite en changeant d'équipe).
 
 ### 4.5 Festival (prestige)
 

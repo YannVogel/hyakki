@@ -32,4 +32,15 @@ export const BALANCE = {
     kekkai: { baseCost: 5000, cooldownPerLevel: 0.02, maxLevel: 25 },
     lanterns: { baseCost: 50_000, offlineHoursPerLevel: 1, maxLevel: 16 },
   },
+  shikigami: {
+    /** Chance that a defeated yōkai joins the collection, by rarity. */
+    captureChance: { common: 0.02, rare: 0.01, epic: 0.004, legendary: 0.001 },
+    /** A shikigami hit = hero hit × damageRatio × attack / 100 × level multiplier. */
+    damageRatio: 0.5,
+    damagePerLevel: 0.25,
+    /** Attack interval = baseIntervalMs × 100 / speed. */
+    baseIntervalMs: 1000,
+    levelUpBaseCost: 100,
+    levelUpCostGrowth: 1.18,
+  },
 } as const;

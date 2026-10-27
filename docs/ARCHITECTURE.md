@@ -30,7 +30,8 @@ src/
     numbers/              BigNum (adaptateur) + formatage FR (k, M, Md, aa, ab…)
     yokai/                générateur procédural : spec, stats, nom (sans rendu)
     combat/               tick, dégâts, vagues, Gardiens, talismans
-    economy/              coûts, gains, Sanctuaire, captures
+    economy/              coûts et achats du Sanctuaire
+    shikigami/            captures, collection, équipe, montée de niveau
     prestige/             Festival
     offline/              gains hors ligne
     save/                 sérialisation versionnée, validation, migrations

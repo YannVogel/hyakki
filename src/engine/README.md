@@ -87,3 +87,13 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `waveHp`, `waveSouls`, `yokaiMaxHp`, `yokaiProfile` | Formules de `docs/GAME_DESIGN.md` § 5. |
 
 `balance.ts` regroupe toutes les constantes réglables.
+
+### `shikigami/` — collection et équipe
+
+| Élément | Rôle |
+|---|---|
+| `captureChance(seed)` | Chance de capture selon la rareté (2 %, 1 %, 0,4 %, 0,1 %). Le tirage a lieu dans `step` à chaque yōkai vaincu (événement `shikigamiCaptured`). |
+| `addCapture(collection, seed, version)` | Nouveau shikigami au niveau 1, ou +1 niveau pour une graine déjà possédée. |
+| `setTeam(state, seeds)` | Équipe active (3 au plus, distincts, possédés) ; résultat typé. |
+| `levelUpCost(level)`, `levelUpShikigami(state, seed)` | Montée de niveau contre des âmes ; résultat typé. |
+| `teamBonus(seeds)`, `shikigamiHitRatio`, `shikigamiIntervalMs`, `shikigamiStats` | Bonus d'équipe et puissance d'un shikigami (voir `docs/GAME_DESIGN.md` § 4.4). |

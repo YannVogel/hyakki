@@ -1,6 +1,7 @@
 import * as fc from 'fast-check';
 
 import { createNewGame, enemySeed, type GameState } from '../gameState';
+import { setTeam, shikigamiIntervalMs } from '../shikigami';
 import { div, eq, gt, mul, sub, toNumber, ZERO } from '../numbers';
 import { waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
 import type { CombatEvent } from './events';
@@ -137,5 +138,52 @@ describe('step', () => {
     const plain = step(base, 1).state.souls;
     const belled = step(withSanctuary(base, { bell: 10 }), 1).state.souls;
     expect(toNumber(div(belled, plain))).toBeCloseTo(1.5, 9);
+  });
+});
+
+describe('step with a team and captures', () => {
+  const withTeam = (state: GameState, seeds: number[]): GameState => {
+    const owned = {
+      ...state,
+      shikigami: seeds.map((seed) => ({ seed, level: 1, generatorVersion: 1 })),
+    };
+    const result = setTeam(owned, seeds);
+    if (!result.ok) throw new Error(result.reason);
+    return result.state;
+  };
+
+  it('lets each team member attack on its own timer', () => {
+    const state = withTeam(createNewGame(4), [10, 20]);
+    const { events } = step(state, 10_000);
+    const shikigamiHits = events.filter(
+      (event) => event.type === 'hit' && event.source === 'shikigami',
+    );
+    const expected = [10, 20].reduce(
+      (total, seed) => total + Math.floor((10_000 - 1) / shikigamiIntervalMs(seed)),
+      0,
+    );
+    expect(shikigamiHits).toHaveLength(expected);
+  });
+
+  it('stays independent of the tick size with a team', () => {
+    fc.assert(
+      fc.property(fc.integer(), fc.constantFrom(2, 5, 40), (seed, count) => {
+        const state = withTeam(withSanctuary(createNewGame(seed), { blade: 30 }), [3, 4, 5]);
+        expect(runSplit(state, 30_000, count).state).toEqual(step(state, 30_000).state);
+      }),
+      { numRuns: 20 },
+    );
+  });
+
+  it('captures yōkai reproducibly, without duplicates in the collection', () => {
+    // One-shots every yōkai below wave 100: 98 taps defeat 98 yōkai at 2 % capture chance or less.
+    const state = withSanctuary(createNewGame(2), { blade: 1e12 });
+    const taps = Array.from({ length: 98 }, () => ({ type: 'tap' as const }));
+    const first = step(state, 0, taps);
+    expect(step(state, 0, taps)).toEqual(first);
+    const captures = first.events.filter((event) => event.type === 'shikigamiCaptured');
+    expect(captures.length).toBeGreaterThan(0);
+    const seeds = first.state.shikigami.map((shikigami) => shikigami.seed);
+    expect(new Set(seeds).size).toBe(seeds.length);
   });
 });
