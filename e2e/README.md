@@ -6,6 +6,7 @@ Parcours de bout en bout joués sur un simulateur iOS ou un émulateur Android p
 |---|---|
 | `app-starts.yaml` | L'app démarre et affiche son premier écran |
 | `native-check.yaml` | Skia et MMKV tournent dans le development build ; le compteur survit à un redémarrage |
+| `yokai-lab.yaml` | La Fabrique à yōkai (écran de développement) dessine les yōkai en Skia ; une tuile se sélectionne |
 
 ## Lancer
 

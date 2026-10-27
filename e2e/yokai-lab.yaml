@@ -1,0 +1,19 @@
+# Development build : la Fabrique à yōkai dessine les yōkai générés en Skia.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: home-yokai-lab-link
+- extendedWaitUntil:
+    visible:
+      id: yokai-lab-stage
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: yokai-tile-2038
+    direction: DOWN
+- tapOn:
+    id: yokai-tile-2038
+- assertVisible:
+    id: yokai-lab-stage

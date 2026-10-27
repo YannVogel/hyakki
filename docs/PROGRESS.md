@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 2 · Fabrique à yōkai (`milestone/2-fabrique`) |
-| Dernière issue terminée | #23 Harnais de simulation d'équilibrage |
-| Prochaine issue | #26 Rendu Skia des yōkai et animations |
+| Dernière issue terminée | #26 Rendu Skia des yōkai et animations |
+| Prochaine issue | Clôture de la milestone 2, puis milestone 3 (#29 tokens) |
 
 ## Milestones
 

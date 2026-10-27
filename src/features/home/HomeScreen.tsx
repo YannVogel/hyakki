@@ -14,15 +14,22 @@ export function HomeScreen() {
       </Text>
       <Text style={styles.subtitle}>{strings.home.subtitle}</Text>
       {__DEV__ && (
-        <Link href="/dev/native-check" asChild>
-          <Pressable
-            accessibilityRole="link"
-            style={styles.devLink}
-            testID="home-native-check-link"
-          >
-            <Text style={styles.subtitle}>{strings.home.nativeCheckLink}</Text>
-          </Pressable>
-        </Link>
+        <>
+          <Link href="/dev/native-check" asChild>
+            <Pressable
+              accessibilityRole="link"
+              style={styles.devLink}
+              testID="home-native-check-link"
+            >
+              <Text style={styles.subtitle}>{strings.home.nativeCheckLink}</Text>
+            </Pressable>
+          </Link>
+          <Link href="/dev/yokai-lab" asChild>
+            <Pressable accessibilityRole="link" style={styles.devLink} testID="home-yokai-lab-link">
+              <Text style={styles.subtitle}>{strings.home.yokaiLabLink}</Text>
+            </Pressable>
+          </Link>
+        </>
       )}
     </View>
   );
