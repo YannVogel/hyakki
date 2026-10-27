@@ -8,6 +8,7 @@ import eslintConfig from '../eslint.config.js';
 // docs/ARCHITECTURE.md § 3 are enforced by `npm run lint`.
 const ROOT = path.resolve(__dirname, '..');
 const ARCHITECTURE_RULES = [
+  'no-restricted-syntax',
   'import/no-restricted-paths',
   'no-restricted-imports',
   'no-restricted-globals',
@@ -90,6 +91,24 @@ describe('layer boundaries', () => {
   it('ui never imports engine', async () => {
     const code = "import { clamp } from '@/engine/math';\nexport const c = clamp;\n";
     expect(await violations('src/ui/fixture.tsx', code)).toEqual(['import/no-restricted-paths']);
+  });
+
+  it.each(['src/features/fixture.tsx', 'src/ui/fixture.tsx'])(
+    '%s never hard-codes a color',
+    async (file) => {
+      const hex = "export const style = { color: '#FF4B3E' };\n";
+      const rgb = "export const style = { color: 'rgba(0, 0, 0, 0.5)' };\n";
+      const template = 'export const shadow = (y: number) => `0 ${y}px 0 #2B1D3F`;\n';
+      for (const code of [hex, rgb, template]) {
+        expect(await violations(file, code)).toEqual(['no-restricted-syntax']);
+      }
+    },
+  );
+
+  it('reads the tokens only through @/ui/tokens', async () => {
+    const code = "import tokens from '../../design/tokens.json';\nexport const t = tokens;\n";
+    expect(await violations('src/features/fixture.tsx', code)).toEqual(['no-restricted-imports']);
+    expect(await violations('src/ui/tokens.ts', code)).toEqual([]);
   });
 
   it('features may import ui and i18n', async () => {

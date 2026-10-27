@@ -1,0 +1,23 @@
+# Combat : la partie avance seule, une frappe touche le yōkai, un talisman se lance et se recharge.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: combat-wave
+    timeout: 60000
+- assertVisible:
+    id: enemy-hp
+- tapOn:
+    id: battle-scene
+- tapOn:
+    id: battle-scene
+- tapOn:
+    id: battle-scene
+- assertVisible:
+    id: last-hit
+- tapOn:
+    id: talisman-raijin
+- assertVisible: 'Raijin, prêt dans \d+ s'
+- assertVisible: 'Vague \d+.*'

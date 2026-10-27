@@ -1,9 +1,9 @@
-# L'app démarre et affiche l'écran d'accueil.
+# L'app démarre sur l'écran Combat.
 appId: com.parallaxworks.hyakki
 ---
 - launchApp:
     clearState: true
 - extendedWaitUntil:
     visible:
-      id: home-title
+      id: combat-wave
     timeout: 60000

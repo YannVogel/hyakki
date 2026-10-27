@@ -3,6 +3,8 @@ appId: com.parallaxworks.hyakki
 ---
 - launchApp:
     clearState: true
+- longPressOn:
+    id: dev-hub
 - tapOn:
     id: home-native-check-link
 - assertVisible:
@@ -14,6 +16,8 @@ appId: com.parallaxworks.hyakki
 - assertVisible: 'Compteur MMKV : 2'
 - stopApp
 - launchApp
+- longPressOn:
+    id: dev-hub
 - tapOn:
     id: home-native-check-link
 - assertVisible: 'Compteur MMKV : 2'

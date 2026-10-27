@@ -88,4 +88,41 @@ module.exports = defineConfig([
       ],
     },
   },
+  {
+    // docs/DESIGN_SYSTEM.md: screens and components take every color from the tokens.
+    files: ['src/ui/**/*.{ts,tsx}', 'src/features/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/]',
+          message: 'Colors come from the design tokens (@/ui/tokens).',
+        },
+        {
+          selector: 'Literal[value=/^(rgb|rgba|hsl|hsla)\\(/]',
+          message: 'Colors come from the design tokens (@/ui/tokens).',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}\\b/]',
+          message: 'Colors come from the design tokens (@/ui/tokens).',
+        },
+      ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/design/tokens.json'],
+              message: 'Read the tokens through @/ui/tokens.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/ui/tokens.ts'],
+    rules: { 'no-restricted-imports': 'off' },
+  },
 ]);

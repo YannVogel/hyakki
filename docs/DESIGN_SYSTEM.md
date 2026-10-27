@@ -6,7 +6,15 @@
 
 À éviter : interface sombre, dégradés décoratifs, textures réalistes, emojis, imitation d'un studio ou d'une licence existante.
 
-Les tokens de référence sont dans [`design/tokens.json`](../design/tokens.json). Dans l'app, ils sont exposés par `src/ui/tokens` ; aucun écran ne contient de valeur en dur.
+Les tokens de référence sont dans [`design/tokens.json`](../design/tokens.json). Dans l'app, ils sont exposés par `src/ui/tokens.ts` (import typé du fichier : le modifier change toute l'app, sans étape de génération) ; aucun écran ne contient de valeur en dur.
+
+| Module | Contenu |
+|---|---|
+| `src/ui/tokens.ts` | `colors`, `rarityColors`, `statColors`, `fontSizes`, `radii`, `strokes`, `spacing`, `shadows`, `touchTarget` |
+| `src/ui/styles.ts` | `hardShadow(token)` (ombre franche `boxShadow` sans flou, identique iOS et Android), `outline(épaisseur)`, `displayText(taille)`, `bodyText(taille, graisse)` |
+| `src/ui/OutlinedText.tsx` | Texte blanc cerné d'encre (8 copies décalées + ombre de 4 px vers le bas), lu une seule fois par les lecteurs d'écran |
+
+Règle de lint : aucune couleur littérale (`#…`, `rgb(…)`) dans `src/ui/` et `src/features/`, et `design/tokens.json` n'est lu que par `src/ui/tokens.ts`. Les couleurs d'art des yōkai générés sont des données du générateur et vivent dans `src/render/yokai/colors.ts`.
 
 ## 2. Couleurs
 
@@ -68,10 +76,12 @@ Titres sur fond coloré : texte blanc avec **contour encre** (ombre portée de 2
 | `RarityBadge` | Pastille de couleur + libellé. |
 | `Segmented` | ×1 / ×10 / Max. |
 
+Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque composant a un rôle d'accessibilité (`button`, `tab`, `radio`, `progressbar`…), un libellé, et des cibles d'au moins 44 pt. `Button`, `TabBar` et `Segmented` déclenchent un retour haptique via `useHaptics()` : `ui` ne parle pas à la plateforme, l'implémentation (`src/services/haptics.ts`) est fournie par la racine de l'app (`HapticsProvider`). En développement, l'écran « Catalogue des composants » (lien depuis l'accueil) les montre tous.
+
 ## 6. Animation et effets
 
 - Effets de combat (Skia) : étoile d'impact jaune, chiffres de dégâts qui éclatent puis montent, « Critique ! » rouge cerné de blanc, lignes de vitesse, impact frame au critique.
-- Cut-in de Gardien : fond en rayons tournants, bande blanche des yeux qui glisse depuis la gauche, bandeau jaune du nom depuis la droite.
+- Cut-in de Gardien : fond en rayons tournants, bande blanche des yeux qui glisse depuis la gauche, bandeau jaune du nom depuis la droite. Implémentation : `src/features/combat/GuardianCutIn.tsx` (glissements de 500 ms avec rebond, le nom 150 ms après les yeux ; rayons et yeux en Skia dans `src/render/scene/`).
 - Respect strict de « réduire les animations » : les effets deviennent des fondus courts, rien ne tourne ni ne clignote.
 
 ## 7. Accessibilité

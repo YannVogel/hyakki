@@ -6,10 +6,8 @@ import { Easing, useSharedValue, withRepeat, withTiming } from 'react-native-rea
 
 import { strings } from '@/i18n';
 import { storage } from '@/services/storage';
-import { fontFamily } from '@/ui/fonts';
-
-// Temporary design values until the design system tokens exist (#29).
-import tokens from '../../../design/tokens.json';
+import { bodyText, displayText, outline } from '@/ui/styles';
+import { colors, radii, spacing, touchTarget } from '@/ui/tokens';
 
 const COUNTER_KEY = 'nativeCheck.counter';
 const CANVAS_SIZE = 200;
@@ -35,12 +33,7 @@ export function NativeCheckScreen() {
       <Text style={styles.title}>{strings.nativeCheck.title}</Text>
       <Text style={styles.body}>{strings.nativeCheck.description}</Text>
       <Canvas style={styles.canvas} testID="native-check-canvas">
-        <Circle
-          cx={CANVAS_SIZE / 2}
-          cy={CANVAS_SIZE / 2}
-          r={radius}
-          color={tokens.color.red.$value}
-        />
+        <Circle cx={CANVAS_SIZE / 2} cy={CANVAS_SIZE / 2} r={radius} color={colors.red} />
       </Canvas>
       <Text style={styles.body} testID="native-check-counter">
         {strings.nativeCheck.counter(count)}
@@ -62,32 +55,22 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
-    padding: 16,
-    backgroundColor: tokens.color.cream.$value,
+    gap: spacing[4],
+    padding: spacing[4],
+    backgroundColor: colors.cream,
   },
-  title: {
-    fontFamily: fontFamily.display,
-    fontSize: 22,
-    color: tokens.color.ink.$value,
-  },
-  body: {
-    fontFamily: fontFamily.body700,
-    fontSize: 16,
-    color: tokens.color.ink.$value,
-    textAlign: 'center',
-  },
+  title: displayText('2xl'),
+  body: { ...bodyText('lg'), textAlign: 'center' },
   canvas: {
     width: CANVAS_SIZE,
     height: CANVAS_SIZE,
   },
   button: {
-    minHeight: 44,
+    minHeight: touchTarget,
     justifyContent: 'center',
-    paddingHorizontal: 16,
-    borderRadius: 14,
-    borderWidth: 2.5,
-    borderColor: tokens.color.ink.$value,
-    backgroundColor: tokens.color.yellow.$value,
+    paddingHorizontal: spacing[4],
+    borderRadius: radii.button,
+    ...outline('control'),
+    backgroundColor: colors.yellow,
   },
 });

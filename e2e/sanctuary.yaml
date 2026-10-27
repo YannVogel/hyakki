@@ -1,0 +1,21 @@
+# Sanctuaire : après quelques frappes, la Lame d'ofuda s'achète et son niveau monte aussitôt.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: combat-wave
+    timeout: 60000
+- repeat:
+    times: 40
+    commands:
+      - tapOn:
+          id: battle-scene
+- tapOn:
+    id: tab-sanctuary
+- assertVisible:
+    id: upgrade-blade
+- tapOn:
+    id: buy-blade
+- assertVisible: 'Nv 1'

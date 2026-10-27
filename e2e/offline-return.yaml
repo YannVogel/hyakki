@@ -1,0 +1,22 @@
+# Retour hors ligne, horloge simulée : après 2 h d'absence, la modale de récolte s'affiche.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: combat-wave
+    timeout: 60000
+- longPressOn:
+    id: dev-hub
+- tapOn:
+    id: dev-absence
+- extendedWaitUntil:
+    visible:
+      id: offline-report
+    timeout: 10000
+- assertVisible: '2 h'
+- tapOn:
+    id: offline-collect
+- assertNotVisible:
+    id: offline-report

@@ -14,3 +14,10 @@ jest.mock('@shopify/react-native-skia', () => {
   const DrawingNode = () => null;
   return new Proxy({ Canvas }, { get: (target, key) => target[key] ?? DrawingNode });
 });
+
+// Gesture Handler binds itself to the Worklets UI runtime, which the Jest (web) build of Worklets
+// refuses to expose: hand it an empty holder (Gesture Handler's own module mock does the rest).
+jest.mock('react-native-worklets', () => ({
+  ...jest.requireActual('react-native-worklets'),
+  getUIRuntimeHolder: () => ({}),
+}));

@@ -68,7 +68,7 @@ app ─► features ─► ui
 ```
 
 - `engine` n'importe **rien** hors de lui-même (sauf `break_infinity.js` via `engine/numbers`).
-- `render` et `state` importent `engine` (types et fonctions pures), jamais `features`.
+- `render` et `state` importent `engine` (types et fonctions pures), jamais `features`. `render` lit aussi les tokens de couleur (`src/ui/tokens`) pour le décor ; `state` utilise `services` (stockage, horloge).
 - `ui` n'importe ni `features`, ni `state`, ni `engine`.
 - `services` n'importe pas `features`.
 
@@ -82,6 +82,12 @@ Ces règles sont vérifiées par ESLint ([`eslint.config.js`](../eslint.config.j
 | Pas de `Math.random` ni de `crypto` dans `engine` | `no-restricted-properties`, `no-restricted-globals` |
 
 [`src/architecture.test.ts`](../src/architecture.test.ts) prouve chaque règle en lintant des extraits placés dans chaque couche.
+
+### Navigation
+
+- `app/index.tsx` affiche l'écran principal (`src/features/shell/MainScreen`) : les quatre onglets (Combat, Shikigami, Sanctuaire, Festival) sont gérés par un état local et notre `TabBar` (expo-router 58 ne propose que des onglets natifs, non personnalisables).
+- Les autres écrans sont des routes empilées (`app/…`). Les écrans de développement sont sous `app/dev/` ; en development build, un appui long sur l'en-tête du défilé ouvre leur hub.
+- La racine (`app/_layout.tsx`) charge les polices, crée le store, lance la boucle de jeu et fournit gestes, zones sûres, store et haptique.
 
 ## 4. Moteur
 

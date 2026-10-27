@@ -4,10 +4,8 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { generate, nameOf, type YokaiSpec } from '@/engine';
 import { describeYokai, RARITY_NAMES, strings } from '@/i18n';
 import { YokaiCanvas } from '@/render';
-import { fontFamily } from '@/ui/fonts';
-
-// Temporary design values until the design system tokens exist (#29).
-import tokens from '../../../design/tokens.json';
+import { bodyText, displayText, outline } from '@/ui/styles';
+import { colors, radii, spacing, touchTarget } from '@/ui/tokens';
 
 const SHEET_SIZE = 12;
 const STAGE_SIZE = 220;
@@ -92,40 +90,31 @@ export function YokaiLabScreen() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    gap: 8,
-    padding: 16,
-    paddingTop: 64,
-    backgroundColor: tokens.color.cream.$value,
+    gap: spacing[2],
+    padding: spacing[4],
+    paddingTop: spacing[6] * 2,
+    backgroundColor: colors.cream,
   },
-  title: { fontFamily: fontFamily.display, fontSize: 22, color: tokens.color.ink.$value },
-  name: { fontFamily: fontFamily.display, fontSize: 18, color: tokens.color.ink.$value },
-  body: { fontFamily: fontFamily.body700, fontSize: 14, color: tokens.color.ink.$value },
+  title: displayText('2xl'),
+  name: displayText('xl'),
+  body: bodyText('base'),
   input: {
-    minHeight: 44,
+    ...displayText('xl'),
+    minHeight: touchTarget,
     minWidth: 160,
-    paddingHorizontal: 12,
-    borderWidth: 2.5,
-    borderRadius: 14,
-    borderColor: tokens.color.ink.$value,
-    fontFamily: fontFamily.display,
-    fontSize: 18,
-    color: tokens.color.ink.$value,
-    backgroundColor: tokens.color.paper.$value,
+    paddingHorizontal: spacing[3],
+    borderRadius: radii.button,
+    ...outline('control'),
+    backgroundColor: colors.paper,
   },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 8 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing[2] },
   tile: {
-    width: TILE_SIZE + 8,
+    width: TILE_SIZE + spacing[2],
     alignItems: 'center',
-    padding: 4,
-    borderWidth: 2,
-    borderRadius: 14,
-    borderColor: tokens.color.ink.$value,
-    backgroundColor: tokens.color.sky.$value,
+    padding: spacing[1],
+    borderRadius: radii.button,
+    ...outline('small'),
+    backgroundColor: colors.sky,
   },
-  tileName: {
-    fontFamily: fontFamily.body700,
-    fontSize: 11,
-    color: tokens.color.ink.$value,
-    textAlign: 'center',
-  },
+  tileName: { ...bodyText('xs'), textAlign: 'center' },
 });

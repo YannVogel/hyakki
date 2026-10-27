@@ -3,6 +3,8 @@ appId: com.parallaxworks.hyakki
 ---
 - launchApp:
     clearState: true
+- longPressOn:
+    id: dev-hub
 - tapOn:
     id: home-yokai-lab-link
 - extendedWaitUntil:

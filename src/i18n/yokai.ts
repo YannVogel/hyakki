@@ -30,6 +30,16 @@ export const OBJECT_NAMES: Record<ObjectId, { readonly name: string; readonly ge
   scroll: { name: 'Rouleau', gender: 'm' },
 };
 
+/** One kanji per object, for small badges (team members). */
+export const OBJECT_KANJI: Record<ObjectId, string> = {
+  lantern: '灯',
+  umbrella: '傘',
+  teapot: '瓶',
+  drum: '鼓',
+  geta: '駄',
+  scroll: '巻',
+};
+
 export const EYES_NAMES: Record<EyesId, string> = {
   cyclops: 'Œil unique',
   pair: 'Deux yeux',

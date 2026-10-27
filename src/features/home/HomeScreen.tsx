@@ -1,11 +1,18 @@
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { strings } from '@/i18n';
-import { fontFamily } from '@/ui/fonts';
+import { useGameStore } from '@/state';
+import { bodyText, displayText } from '@/ui/styles';
 
-// Temporary welcome screen until the combat screen exists (#31).
+import { devGuardianState } from '../dev/devStates';
+import { colors, spacing, touchTarget } from '@/ui/tokens';
+
+// Development hub (route /dev): links to the development screens.
+const DEV_ABSENCE_MS = 2 * 3_600_000;
+
 export function HomeScreen() {
+  const store = useGameStore();
   return (
     <View style={styles.container}>
       <Text style={styles.kanji}>{strings.home.kanji}</Text>
@@ -29,6 +36,35 @@ export function HomeScreen() {
               <Text style={styles.subtitle}>{strings.home.yokaiLabLink}</Text>
             </Pressable>
           </Link>
+          <Pressable
+            accessibilityRole="button"
+            style={styles.devLink}
+            testID="dev-guardian"
+            onPress={() => {
+              store.setState({ game: devGuardianState(2026, 100) });
+              router.back();
+            }}
+          >
+            <Text style={styles.subtitle}>{strings.home.guardianShortcut}</Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            style={styles.devLink}
+            testID="dev-absence"
+            onPress={() => {
+              // Simulated clock: as if the last save happened two hours ago.
+              store.setState({ savedAt: store.getState().savedAt - DEV_ABSENCE_MS });
+              store.getState().resume();
+              router.back();
+            }}
+          >
+            <Text style={styles.subtitle}>{strings.home.absenceShortcut}</Text>
+          </Pressable>
+          <Link href="/dev/catalog" asChild>
+            <Pressable accessibilityRole="link" style={styles.devLink} testID="home-catalog-link">
+              <Text style={styles.subtitle}>{strings.home.catalogLink}</Text>
+            </Pressable>
+          </Link>
         </>
       )}
     </View>
@@ -40,22 +76,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: spacing[2],
+    backgroundColor: colors.cream,
   },
-  kanji: {
-    fontFamily: fontFamily.display,
-    fontSize: 22,
-  },
-  title: {
-    fontFamily: fontFamily.display,
-    fontSize: 42,
-  },
-  subtitle: {
-    fontFamily: fontFamily.body700,
-    fontSize: 16,
-  },
+  kanji: displayText('2xl'),
+  title: displayText('5xl'),
+  subtitle: bodyText('lg'),
   devLink: {
-    minHeight: 44,
+    minHeight: touchTarget,
     justifyContent: 'center',
   },
 });
