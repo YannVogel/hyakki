@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-27 — Nurarihyon coiffé d'un chapeau de cour
+
+- **Décision** : Nurarihyon porte un haut chapeau de cour noir laqué qui cache entièrement son crâne allongé.
+- **Raison** : les versions à crâne nu prêtaient à une lecture involontaire, gênante sur les stores et en partage.
+- **Conséquence** : sa silhouette haute reste reconnaissable ; source dans `design/sources/nurarihyon-v3.png`.
+
 ## 2026-10-27 — Art hybride : illustrations pour le héros et les Gardiens, génération pour le reste
 
 - **Décision** : le héros (10 poses) et les Gardiens (10 en V1) sont des illustrations ChatGPT détourées. Les yōkai ordinaires sont générés en code à partir d'une graine.
@@ -35,4 +41,3 @@ Chaque entrée : date, décision, raison, conséquence. Les plus récentes en ha
 
 - Anglais dès la V1 ou plus tard ? (Par défaut : français seul en V1, textes centralisés pour faciliter l'ajout.)
 - Sons et musique : périmètre V1 ou après ?
-- Correction définitive de Nurarihyon.

@@ -23,15 +23,16 @@ Le jeu est **hybride** :
 |---|---|
 | `design/sources/planche-bestiaire.png` | Planche de référence de style (héros en 3 poses + yōkai d'essai + premier Nurarihyon) |
 | `design/sources/planche-heros.png` | 10 poses du héros |
-| `design/sources/planche-boss.png` | 10 Gardiens |
+| `design/sources/planche-boss.png` | 10 Gardiens (le n° 10 y est remplacé par la version 3 ci-dessous) |
+| `design/sources/nurarihyon-v3.png` | Nurarihyon, version 3, générée seule |
 
 Ordre des poses du héros : 01 attente, 02 attaque, 03 sort de feu, 04 sort de foudre, 05 barrière, 06 touché, 07 K.-O., 08 victoire, 09 sommeil, 10 surpris.
 
 Ordre des Gardiens : 01 Bake-danuki, 02 Kappa, 03 Karasu-tengu, 04 Tsuchigumo, 05 Yuki-onna, 06 Gashadokuro, 07 Nue, 08 Ibaraki-dōji, 09 Kyūbi no kitsune, 10 Nurarihyon.
 
-### Point ouvert : Nurarihyon
+### Nurarihyon : version 3
 
-Malgré deux prompts, sa tête reste un long obus lisse et beige, qui peut prêter à une lecture involontaire. À corriger avant publication (issue dédiée). Pistes : tête en gourde nettement bilobée avec rides marquées et mèches, ou version coiffée d'un haut chapeau de cour.
+Les deux premières versions avaient une tête en long obus lisse et beige, qui pouvait prêter à une lecture involontaire. La version 3 le coiffe d'un haut chapeau de cour noir laqué, orné d'or et de rubans violets, qui cache entièrement le crâne tout en gardant sa silhouette haute. C'est la seule version à utiliser : `assets/images/bosses/boss-10-nurarihyon.png`.
 
 ## 3. Découper une planche
 
