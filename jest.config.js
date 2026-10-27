@@ -23,7 +23,7 @@ module.exports = {
       ],
     },
   ],
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.test.{ts,tsx}'],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.test.{ts,tsx}', '!src/**/testing/**'],
   coverageThreshold: {
     './src/engine/': { lines: 90 },
   },

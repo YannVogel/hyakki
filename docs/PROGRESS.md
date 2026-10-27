@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 1 · Moteur de jeu (`milestone/1-moteur`) |
-| Dernière issue terminée | #15 Grands nombres (BigNum) et formatage français |
-| Prochaine issue | #24 Porter le générateur de yōkai en TypeScript pur |
+| Dernière issue terminée | #24 Porter le générateur de yōkai en TypeScript pur |
+| Prochaine issue | #25 Stats, nom et description des yōkai |
 
 ## Milestones
 

@@ -45,7 +45,8 @@ module.exports = defineConfig([
   },
   {
     files: ['src/engine/**/*.ts'],
-    ignores: ['src/engine/**/*.test.ts'],
+    // Tests and their helpers (testing/ folders) may use Node and test libraries.
+    ignores: ['src/engine/**/*.test.ts', 'src/engine/**/testing/**'],
     rules: {
       'no-restricted-imports': [
         'error',

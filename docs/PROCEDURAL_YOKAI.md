@@ -25,6 +25,12 @@ Changer cet ordre, ajouter un tirage au milieu, ou modifier une liste de pièces
 
 Pour ajouter des pièces sans rupture : versionner les listes (`PARTS_V1`, `PARTS_V2`) et choisir la liste selon la version du générateur.
 
+### Dans le code
+
+- `src/engine/yokai/parts.ts` contient les listes V1 (sans géométrie), dans l'ordre du prototype ; `generate.ts` fait les tirages. `GENERATOR_VERSION = 1`.
+- Les identifiants sont en anglais (`lantern`, `cyclops`, `horns`, `gold`…) ; la correspondance avec ceux du prototype est dans `src/engine/yokai/testing/prototype.ts`.
+- `generate.test.ts` exécute le script du prototype dans Node et vérifie que les 10 000 premières graines (et des graines aléatoires) donnent exactement la même spec. Si ce test casse, c'est une rupture.
+
 ## 3. Pièces (V1)
 
 ### Objets (6)

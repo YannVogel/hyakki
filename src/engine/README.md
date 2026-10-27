@@ -53,3 +53,12 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `toNumber`, `log10`, `toMantissaExponent` | Conversions (`toNumber` vaut `Infinity` au-delà de `1e308`). |
 | `stringifyBigNum`, `parseBigNum` | Forme texte sans perte pour la sauvegarde (`<mantisse>e<exposant>`) ; `BigNumParseError` si le texte est invalide. |
 | `formatNumber(n)` | Affichage français tronqué : `1 284`, `48,2 k`, `1,28 M`, `3,4 Md`, `1 aa`… (espace fine insécable, 3 chiffres significatifs). |
+
+### `yokai/` — générateur procédural
+
+| Élément | Rôle |
+|---|---|
+| `generate(seed)` | Spec d'un yōkai (identifiants seulement, aucune géométrie). Pure, identique au prototype. |
+| `GENERATOR_VERSION` | Version des listes de pièces (1). Toute modification qui change une graine existante l'incrémente. |
+| `OBJECTS`, `EYES`, `MOUTHS`, `LIMBS`, `ACCESSORIES`, `PALETTES`, `RARITIES`, `SUFFIXES` | Listes de pièces V1 : leur ordre est un contrat. |
+| `countCombinations()` | Nombre de yōkai distincts (285 696 en V1). |
