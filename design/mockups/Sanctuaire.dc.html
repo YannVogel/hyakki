@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Hyakki — Sanctuaire</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFF4DC}
+a{color:#2B1D3F}a:hover{color:#FF4B3E}
+.hk-out{text-shadow:-2px -2px 0 #2B1D3F,2px -2px 0 #2B1D3F,-2px 2px 0 #2B1D3F,2px 2px 0 #2B1D3F,0 -2px 0 #2B1D3F,0 2px 0 #2B1D3F,-2px 0 0 #2B1D3F,2px 0 0 #2B1D3F,0 4px 0 #2B1D3F}
+.hk-buy{transition:transform .12s, box-shadow .12s}
+.hk-buy:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 5px 0 #2B1D3F}
+.hk-buy:not(:disabled):active{transform:translateY(2px);box-shadow:0 1px 0 #2B1D3F}
+.hk-buy:focus-visible,.hk-seg:focus-visible,.hk-tab:focus-visible{outline:3px solid #3FB8FF;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; background: #FFF4DC; color: #2B1D3F; font-family: 'M PLUS Rounded 1c', system-ui, sans-serif">
+<header style="position: relative; padding: 20px 96px 18px 16px; background: #FFD23F; border-bottom: 3px solid #2B1D3F; display: flex; flex-direction: column; gap: 4px">
+<h1 class="hk-out" style="margin: 0; font-family: 'Mochiy Pop One', sans-serif; font-weight: 400; font-size: 30px; line-height: 1.1; color: #FFFFFF">Sanctuaire</h1>
+<p style="margin: 0; font-size: 14px; font-weight: 800">Dépense tes âmes pour booster ton onmyōji !</p>
+<img src="/_blob/128fa38ae7cb180c9e300ceca00f02ab" alt="" aria-hidden="true" style="position: absolute; right: 16px; bottom: -4px; height: 112px; width: auto">
+</header>
+<div style="margin: 16px 16px 0; padding: 12px 16px; border-radius: 18px; background: #FFFFFF; border: 3px solid #2B1D3F; box-shadow: 0 4px 0 #2B1D3F; display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M12 2c3 5 7 8 7 13a7 7 0 0 1-14 0c0-3 2-5 3-6 0 2 1 3 2 3 0-4 1-7 2-10z" fill="#FFD23F" stroke="#2B1D3F" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+<div style="display: flex; flex-direction: column">
+<span style="font-size: 12px; font-weight: 800; color: #5A5266">Âmes</span>
+<span aria-live="polite" style="font-family: 'Mochiy Pop One', sans-serif; font-size: 26px; line-height: 1.1">{{soulsLabel}}</span>
+</div>
+</div>
+<span style="display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 14px; background: #DDF7E4; border: 2px solid #2B1D3F; font-size: 12px; font-weight: 800">+ 31,4 k / s</span>
+</div>
+<div role="group" aria-label="Quantité à acheter" style="margin: 14px 16px 0; display: flex; gap: 6px; padding: 5px; border-radius: 16px; background: #FFFFFF; border: 3px solid #2B1D3F">
+<sc-for list="{{mults}}" as="m" hint-placeholder-count="3">
+<button type="button" class="hk-seg" onClick="{{m.pick}}" aria-pressed="{{m.pressed}}" style="flex: 1 1 0; height: 40px; box-sizing: border-box; border: 2.5px solid {{m.border}}; border-radius: 11px; background: {{m.bg}}; color: #2B1D3F; font-family: 'Mochiy Pop One', sans-serif; font-size: 14px; cursor: pointer">{{m.label}}</button>
+</sc-for>
+</div>
+<ul style="list-style: none; margin: 14px 0 0; padding: 0 16px; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{upgrades}}" as="u" hint-placeholder-count="5">
+<li style="display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 10px; border-radius: 18px; background: #FFFFFF; border: 3px solid #2B1D3F; box-shadow: 0 4px 0 #2B1D3F">
+<span aria-hidden="true" class="hk-out" style="flex: 0 0 auto; width: 48px; height: 48px; box-sizing: border-box; border-radius: 14px; background: {{u.tile}}; border: 2.5px solid #2B1D3F; display: flex; align-items: center; justify-content: center; font-family: 'Mochiy Pop One', sans-serif; font-size: 22px; color: #FFFFFF">{{u.kanji}}</span>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap">
+<span style="font-size: 15px; font-weight: 800">{{u.name}}</span>
+<span style="display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 10px; background: #FFF4C2; border: 2px solid #2B1D3F; font-family: 'Mochiy Pop One', sans-serif; font-size: 10px">Nv {{u.lvl}}</span>
+</div>
+<span style="font-size: 12px; font-weight: 700; line-height: 1.35; color: #5A5266">{{u.desc}}</span>
+</div>
+<button type="button" class="hk-buy" onClick="{{u.buy}}" disabled="{{u.disabled}}" aria-label="{{u.aria}}" style="flex: 0 0 auto; width: 90px; height: 54px; box-sizing: border-box; border: 2.5px solid #2B1D3F; border-radius: 14px; background: {{u.btnBg}}; color: {{u.btnFg}}; box-shadow: 0 3px 0 #2B1D3F; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; cursor: {{u.cursor}}; font-family: 'M PLUS Rounded 1c', sans-serif">
+<span style="font-size: 11px; font-weight: 800">{{u.nLabel}}</span>
+<span style="font-family: 'Mochiy Pop One', sans-serif; font-size: 14px">{{u.costLabel}}</span>
+</button>
+</li>
+</sc-for>
+</ul>
+<nav aria-label="Navigation principale" style="margin-top: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; background: #FFFFFF; border-top: 3px solid #2B1D3F; padding: 8px 8px 20px">
+<a href="Main.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="18" rx="1"></rect><path d="M12 7v10M10 10h4"></path></svg>
+<span>Combat</span>
+</a>
+<a href="Shikigami.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l4 5h6l4-5v9c0 4-3 7-7 7s-7-3-7-7z"></path><path d="M9 13h.01M15 13h.01"></path></svg>
+<span>Shikigami</span>
+</a>
+<a href="Sanctuaire.dc.html" class="hk-tab" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; background: #FFD23F; border: 2.5px solid #2B1D3F; text-decoration: none; color: #2B1D3F; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6c6-1.5 12-1.5 18 0"></path><path d="M5 9.5h14"></path><path d="M7 7v14M17 7v14"></path></svg>
+<span>Sanctuaire</span>
+</a>
+<a href="Aube.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"></path></svg>
+<span>Festival</span>
+</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      souls: 1280000,
+      mult: 1,
+      lvls: { lame: 34, feu: 12, cloche: 21, kekkai: 7, lanternes: 3 }
+    };
+  }
+  fmt(n) {
+    if (n >= 1e9) { return (n / 1e9).toFixed(2).replace('.', ',') + ' Md'; }
+    if (n >= 1e6) { return (n / 1e6).toFixed(2).replace('.', ',') + ' M'; }
+    if (n >= 1e3) { return (n / 1e3).toFixed(1).replace('.', ',') + ' k'; }
+    return String(Math.round(n));
+  }
+  cost(base, lvl, n) {
+    var r = 1.15;
+    return base * Math.pow(r, lvl) * (Math.pow(r, n) - 1) / (r - 1);
+  }
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var defs = [
+      { id: 'lame', kanji: '刃', tile: '#FF7A45', name: 'Lame d’ofuda', desc: '+ 8 % de dégâts par niveau', base: 3570 },
+      { id: 'feu', kanji: '狐', tile: '#FF8FC7', name: 'Feu de renard', desc: 'Brûlure : 2 % des PV par seconde', base: 355000 },
+      { id: 'cloche', kanji: '鈴', tile: '#FFD23F', name: 'Clochette sacrée', desc: '+ 5 % d’âmes récoltées', base: 45700 },
+      { id: 'kekkai', kanji: '結', tile: '#3FB8FF', name: 'Kekkai', desc: 'Un bouclier toutes les 30 s', base: 1280000 },
+      { id: 'lanternes', kanji: '灯', tile: '#B06BFF', name: 'Lanternes de veille', desc: '+ 1 h de plafond hors ligne', base: 7900000 }
+    ];
+    var upgrades = defs.map(function (d) {
+      var lvl = s.lvls[d.id];
+      var n = s.mult;
+      if (s.mult === 'max') {
+        n = 0;
+        while (n < 200 && self.cost(d.base, lvl, n + 1) <= s.souls) { n++; }
+        if (n === 0) { n = 1; }
+      }
+      var c = self.cost(d.base, lvl, n);
+      var can = c <= s.souls;
+      return {
+        kanji: d.kanji, tile: d.tile, name: d.name, desc: d.desc, lvl: lvl,
+        nLabel: '+' + n + ' niv.',
+        costLabel: self.fmt(c),
+        disabled: !can,
+        btnBg: can ? '#FFD23F' : '#E6E3EC',
+        btnFg: can ? '#2B1D3F' : '#5A5266',
+        cursor: can ? 'pointer' : 'not-allowed',
+        aria: 'Améliorer ' + d.name + ' de ' + n + ' niveau' + (n > 1 ? 'x' : '') + ' pour ' + self.fmt(c) + ' âmes' + (can ? '' : ', âmes insuffisantes'),
+        buy: function () {
+          if (!can) { return; }
+          var lvls = Object.assign({}, s.lvls);
+          lvls[d.id] = lvl + n;
+          self.setState({ souls: s.souls - c, lvls: lvls });
+        }
+      };
+    });
+    var mults = [
+      { label: '×1', value: 1 },
+      { label: '×10', value: 10 },
+      { label: 'Max', value: 'max' }
+    ].map(function (m) {
+      var on = s.mult === m.value;
+      return {
+        label: m.label, pressed: on,
+        bg: on ? '#5CC8FF' : '#FFFFFF',
+        border: on ? '#2B1D3F' : 'transparent',
+        pick: function () { self.setState({ mult: m.value }); }
+      };
+    });
+    return { soulsLabel: this.fmt(s.souls), upgrades: upgrades, mults: mults };
+  }
+}
+</script>
+</body>
+</html>

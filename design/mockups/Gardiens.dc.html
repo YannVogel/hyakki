@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Hyakki — Gardiens du défilé</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFF4DC}
+a{color:#2B1D3F}a:hover{color:#FF4B3E}
+.hk-out{text-shadow:-2px -2px 0 #2B1D3F,2px -2px 0 #2B1D3F,-2px 2px 0 #2B1D3F,2px 2px 0 #2B1D3F,0 -2px 0 #2B1D3F,0 2px 0 #2B1D3F,-2px 0 0 #2B1D3F,2px 0 0 #2B1D3F,0 4px 0 #2B1D3F}
+.hk-back:focus-visible{outline:3px solid #3FB8FF;outline-offset:3px}
+</style>
+</helmet>
+<div style="width: 390px; height: 1110px; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; background: #FFF4DC; color: #2B1D3F; font-family: 'M PLUS Rounded 1c', system-ui, sans-serif">
+<header style="padding: 18px 16px 18px; background: #5CC8FF; border-bottom: 3px solid #2B1D3F; display: flex; flex-direction: column; gap: 6px">
+<a href="Shikigami.dc.html" class="hk-back" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 12px 0 8px; border-radius: 16px; background: #FFFFFF; border: 2.5px solid #2B1D3F; text-decoration: none; color: #2B1D3F; font-size: 13px; font-weight: 800">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>
+<span>Shikigami</span>
+</a>
+<h1 class="hk-out" style="margin: 4px 0 0; font-family: 'Mochiy Pop One', sans-serif; font-weight: 400; font-size: 28px; line-height: 1.15; color: #FFFFFF">Gardiens du défilé</h1>
+<p style="margin: 0; font-size: 14px; font-weight: 800">Un boss toutes les 100 vagues · {{beaten}} / 10 vaincus</p>
+</header>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px">
+<sc-for list="{{bosses}}" as="b" hint-placeholder-count="10">
+<div style="display: flex; flex-direction: column; border-radius: 18px; background: #FFFFFF; border: 3px solid #2B1D3F; box-shadow: 0 4px 0 #2B1D3F; overflow: hidden">
+<div style="height: 120px; display: flex; align-items: center; justify-content: center; background: {{b.tint}}; border-bottom: 3px solid #2B1D3F">
+<img src="{{b.img}}" alt="{{b.alt}}" style="height: 108px; width: auto; max-width: 92%; object-fit: contain; filter: {{b.filter}}; opacity: {{b.opacity}}">
+</div>
+<div style="padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 5px">
+<span style="font-family: 'Mochiy Pop One', sans-serif; font-size: 13px; line-height: 1.25">{{b.name}}</span>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 6px">
+<span style="font-size: 12px; font-weight: 800; color: #5A5266">Vague {{b.wave}}</span>
+<span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: {{b.stateBg}}; border: 2px solid #2B1D3F; font-size: 11px; font-weight: 800">{{b.state}}</span>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"revealAll":{"editor":"boolean","default":false},"beaten":{"editor":"range","default":6,"min":0,"max":10,"step":1},"$preview":{"width":390,"height":1110}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var revealAll = this.props.revealAll ?? false;
+    var beaten = Math.max(0, Math.min(10, Math.round(Number(this.props.beaten ?? 6))));
+    var list = [
+      { name: 'Bake-danuki', img: '/_blob/8ceb0e4b1bc94ae2383df4b9547fe365', tint: '#FFE3C2', alt: 'Tanuki géant au ventre rond' },
+      { name: 'Kappa', img: '/_blob/a03f169bbcd7bdeb6627cb48fa962ed0', tint: '#D9F5D0', alt: 'Kappa vert armé d’un concombre' },
+      { name: 'Karasu-tengu', img: '/_blob/e9e0aaec246d5319bd8122513bdd410f', tint: '#FFD9D2', alt: 'Tengu corbeau à l’éventail de plumes' },
+      { name: 'Tsuchigumo', img: '/_blob/07631e1b11ce6eaf62de7714771f58e1', tint: '#E8DAFF', alt: 'Araignée géante au masque d’oni' },
+      { name: 'Yuki-onna', img: '/_blob/1cda367573ddc82999214a6adb2e4b58', tint: '#DFF3FF', alt: 'Esprit des neiges en kimono blanc' },
+      { name: 'Gashadokuro', img: '/_blob/790ea8ce65665916cbf98a23623b191d', tint: '#EDE9F5', alt: 'Squelette géant aux yeux violets' },
+      { name: 'Nue', img: '/_blob/ae718705ef471a1d4da73c27dba8516f', tint: '#FFF0C2', alt: 'Chimère à tête de singe et queue de serpent' },
+      { name: 'Ibaraki-dōji', img: '/_blob/8fb010b67bb0a879ddb41ad19a18dffe', tint: '#D6E2FF', alt: 'Roi oni bleu à la massue' },
+      { name: 'Kyūbi no kitsune', img: '/_blob/40a28f3a94005ee4510ca7a93dc5fd18', tint: '#FFF6C9', alt: 'Renard doré à neuf queues' },
+      { name: 'Nurarihyon', img: '/_blob/3b4e709f2bd8eb8fc411b72b6e222e24', tint: '#EBDDFF', alt: 'Seigneur yōkai au crâne allongé' }
+    ];
+    var bosses = list.map(function (b, i) {
+      var known = revealAll || i <= beaten;
+      var state = i < beaten ? 'Vaincu' : (i === beaten ? 'Prochain' : 'À venir');
+      return {
+        name: known ? b.name : '???',
+        img: b.img,
+        alt: known ? b.alt : 'Boss inconnu',
+        tint: known ? b.tint : '#E3E3EA',
+        filter: known ? 'none' : 'brightness(0)',
+        opacity: known ? 1 : 0.78,
+        wave: (i + 1) * 100,
+        state: state,
+        stateBg: i < beaten ? '#7FDCA0' : (i === beaten ? '#FFD23F' : '#FFFFFF')
+      };
+    });
+    return { bosses: bosses, beaten: beaten };
+  }
+}
+</script>
+</body>
+</html>

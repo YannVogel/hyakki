@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Hyakki — Combat</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFF4DC}
+a{color:#2B1D3F}a:hover{color:#FF4B3E}
+.hk-out{text-shadow:-2px -2px 0 #2B1D3F,2px -2px 0 #2B1D3F,-2px 2px 0 #2B1D3F,2px 2px 0 #2B1D3F,0 -2px 0 #2B1D3F,0 2px 0 #2B1D3F,-2px 0 0 #2B1D3F,2px 0 0 #2B1D3F}
+.hk-out3{text-shadow:-3px -3px 0 #2B1D3F,3px -3px 0 #2B1D3F,-3px 3px 0 #2B1D3F,3px 3px 0 #2B1D3F,0 -3px 0 #2B1D3F,0 3px 0 #2B1D3F,-3px 0 0 #2B1D3F,3px 0 0 #2B1D3F,0 6px 0 #2B1D3F}
+.hk-outw{text-shadow:-2px -2px 0 #FFFFFF,2px -2px 0 #FFFFFF,-2px 2px 0 #FFFFFF,2px 2px 0 #FFFFFF,0 -2px 0 #FFFFFF,0 2px 0 #FFFFFF,-2px 0 0 #FFFFFF,2px 0 0 #FFFFFF}
+@keyframes hk-float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+@keyframes hk-pop{0%{transform:translateY(8px) scale(.6);opacity:0}12%{transform:translateY(0) scale(1.18);opacity:1}24%{transform:scale(1)}78%{opacity:1;transform:translateY(-10px)}100%{opacity:0;transform:translateY(-18px)}}
+@keyframes hk-pulse{0%,100%{transform:scale(1)}15%{transform:scale(1.08)}}
+@keyframes hk-petal{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-30px,40px) rotate(180deg)}}
+@keyframes hk-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.hk-float{transform-box:fill-box;transform-origin:50% 0%;animation:hk-float 3.2s ease-in-out infinite}
+.hk-pop{animation:hk-pop 2.4s ease-out infinite}
+.hk-pulse{transform-box:fill-box;transform-origin:center;animation:hk-pulse 2.4s ease-out infinite}
+.hk-petal{transform-box:fill-box;transform-origin:center;animation:hk-petal 4s ease-in-out infinite alternate}
+.hk-bob{transform-box:fill-box;animation:hk-bob 1.6s ease-in-out infinite}
+.hk-skill{transition:transform .12s, box-shadow .12s}
+.hk-skill:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 7px 0 #2B1D3F}
+.hk-skill:not(:disabled):active{transform:translateY(3px);box-shadow:0 2px 0 #2B1D3F}
+.hk-skill:focus-visible,.hk-tab:focus-visible,.hk-hit:focus-visible{outline:3px solid #3FB8FF;outline-offset:3px}
+@media (prefers-reduced-motion: reduce){.hk-float,.hk-pop,.hk-pulse,.hk-petal,.hk-bob{animation:none}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; background: #FFF4DC; color: #2B1D3F; font-family: 'M PLUS Rounded 1c', system-ui, sans-serif">
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 16px 16px 10px">
+<div style="display: flex; flex-direction: column; gap: 1px">
+<span style="font-size: 12px; font-weight: 800; color: #5A5266">Défilé 3 · 百鬼夜行</span>
+<span style="font-family: 'Mochiy Pop One', sans-serif; font-size: 21px; line-height: 1.15">Vague {{wave}} <span style="font-size: 15px; color: #5A5266">/ 100</span></span>
+</div>
+<div style="display: flex; gap: 8px">
+<div style="display: flex; align-items: center; gap: 5px; height: 34px; box-sizing: border-box; padding: 0 12px 0 7px; border-radius: 17px; background: #FFFFFF; border: 2.5px solid #2B1D3F; box-shadow: 0 3px 0 #2B1D3F; font-family: 'Mochiy Pop One', sans-serif; font-size: 13px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2c3 5 7 8 7 13a7 7 0 0 1-14 0c0-3 2-5 3-6 0 2 1 3 2 3 0-4 1-7 2-10z" fill="#FFD23F" stroke="#2B1D3F" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+<span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Âmes : </span>1,28 M</span>
+</div>
+<div style="display: flex; align-items: center; gap: 5px; height: 34px; box-sizing: border-box; padding: 0 12px 0 7px; border-radius: 17px; background: #FFFFFF; border: 2.5px solid #2B1D3F; box-shadow: 0 3px 0 #2B1D3F; font-family: 'Mochiy Pop One', sans-serif; font-size: 13px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="1.5" fill="#FFFFFF" stroke="#2B1D3F" stroke-width="1.8"></rect><rect x="10.8" y="6" width="2.4" height="12" fill="{{accent}}"></rect></svg>
+<span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Ofuda : </span>340</span>
+</div>
+</div>
+</header>
+<div style="display: flex; align-items: center; gap: 8px; padding: 0 16px 12px">
+<div role="img" aria-label="Le défilé avance : vague {{wave}} sur 100" style="flex: 1 1 auto; height: 16px; box-sizing: border-box; border-radius: 9px; background: #FFFFFF; border: 2.5px solid #2B1D3F; overflow: hidden">
+<div style="width: {{wave}}%; height: 100%; background: #FFD23F; box-shadow: inset -2.5px 0 0 #2B1D3F"></div>
+</div>
+<span style="font-size: 12px; font-weight: 800">Festival</span>
+</div>
+<div style="position: relative; flex: 0 0 auto; width: 360px; height: 394px; margin: 0 12px; border: 3px solid #2B1D3F; border-radius: 22px; overflow: hidden; box-shadow: 0 5px 0 #2B1D3F">
+<svg aria-hidden="true" width="360" height="394" viewBox="0 0 366 400" preserveAspectRatio="xMidYMid slice" style="position: absolute; left: 0; top: 0; display: block">
+<defs>
+<linearGradient id="hk-sky-main" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#4FC3FF"></stop>
+<stop offset="1" stop-color="#A8E9FF"></stop>
+</linearGradient>
+</defs>
+<rect width="366" height="400" fill="url(#hk-sky-main)"></rect>
+<circle cx="306" cy="62" r="50" fill="#FFF2A6" opacity="0.7"></circle>
+<g stroke="#FFB800" stroke-width="5" stroke-linecap="round">
+<path d="M306 6 L 306 18 M306 106 L 306 118 M250 62 L 262 62 M350 62 L 362 62 M266 22 L 274 30 M338 94 L 346 102 M266 102 L 274 94 M338 30 L 346 22"></path>
+</g>
+<circle cx="306" cy="62" r="32" fill="#FFE45C" stroke="#2B1D3F" stroke-width="3"></circle>
+<path d="M30 112 a18 18 0 0 1 30 -16 a22 22 0 0 1 40 4 a16 16 0 0 1 24 18 z" fill="#FFFFFF" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+<path d="M170 70 a14 14 0 0 1 24 -12 a20 20 0 0 1 36 2 a14 14 0 0 1 20 14 z" fill="#FFFFFF" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+<path d="M0 250 Q 60 200 130 236 Q 200 190 270 230 Q 320 205 366 222 L 366 400 L 0 400 Z" fill="#7FDCA0" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+<rect x="24" y="214" width="10" height="34" fill="#9B6A4A" stroke="#2B1D3F" stroke-width="2.5"></rect>
+<path d="M2 222 a24 24 0 0 1 22 -34 a22 22 0 0 1 38 4 a20 20 0 0 1 2 34 z" fill="#FF9BCB" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+<g stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round">
+<rect x="124" y="150" width="16" height="150" fill="{{accent}}"></rect>
+<rect x="226" y="150" width="16" height="150" fill="{{accent}}"></rect>
+<rect x="110" y="186" width="146" height="12" fill="{{accent}}"></rect>
+<rect x="176" y="162" width="14" height="24" fill="{{accent}}"></rect>
+<rect x="96" y="150" width="174" height="12" fill="{{accent}}"></rect>
+<path d="M86 150 Q 183 136 280 150 L 284 136 Q 183 118 82 136 Z" fill="#2B1D3F"></path>
+</g>
+<path d="M0 290 Q 90 262 180 282 Q 270 262 366 278 L 366 400 L 0 400 Z" fill="#5CC88A" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+<path d="M150 400 L 166 300 L 200 300 L 216 400 Z" fill="#F7DDB0" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+<ellipse cx="80" cy="304" rx="40" ry="7" fill="#2B1D3F" opacity="0.2"></ellipse>
+<ellipse cx="270" cy="330" rx="34" ry="6" fill="#2B1D3F" opacity="0.18"></ellipse>
+<g opacity="{{fxOpacity}}">
+<polygon class="hk-pulse" points="366,222 337.6,240.1 353.1,270 319.5,271.5 318,305.1 288.1,289.6 270,318 251.9,289.6 222,305.1 220.5,271.5 186.9,270 202.4,240.1 174,222 202.4,203.9 186.9,174 220.5,172.5 222,138.9 251.9,154.4 270,126 288.1,154.4 318,138.9 319.5,172.5 353.1,174 337.6,203.9" fill="#FFE45C" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></polygon>
+</g>
+<g class="hk-float">
+<rect x="262" y="150" width="16" height="12" fill="#2B1D3F"></rect>
+<ellipse cx="270" cy="222" rx="44" ry="54" fill="#FFF8E1" stroke="#2B1D3F" stroke-width="3"></ellipse>
+<path d="M237 186 Q 270 194 303 186" fill="none" stroke="#F3C98B" stroke-width="2.5"></path>
+<path d="M237 258 Q 270 266 303 258" fill="none" stroke="#F3C98B" stroke-width="2.5"></path>
+<rect x="246" y="160" width="48" height="14" rx="5" fill="{{accent}}" stroke="#2B1D3F" stroke-width="3"></rect>
+<rect x="246" y="270" width="48" height="14" rx="5" fill="{{accent}}" stroke="#2B1D3F" stroke-width="3"></rect>
+<ellipse cx="282" cy="210" rx="15" ry="17" fill="#FFFFFF" stroke="#2B1D3F" stroke-width="3"></ellipse>
+<circle cx="278" cy="213" r="8" fill="#2B1D3F"></circle>
+<circle cx="275" cy="209" r="3" fill="#FFFFFF"></circle>
+<path d="M242 210 Q 250 201 258 210" fill="none" stroke="#2B1D3F" stroke-width="3.5" stroke-linecap="round"></path>
+<ellipse cx="248" cy="226" rx="7" ry="4" fill="#FF8FC7"></ellipse>
+<path d="M240 236 Q 270 266 300 234 Q 270 250 240 236 Z" fill="#2B1D3F" stroke="#2B1D3F" stroke-width="2" stroke-linejoin="round"></path>
+<path d="M262 246 C 258 272, 272 292, 286 284 C 278 276, 278 262, 278 248 Z" fill="#FF8FC7" stroke="#2B1D3F" stroke-width="2.5" stroke-linejoin="round"></path>
+</g>
+<g fill="#FF9BCB" stroke="#2B1D3F" stroke-width="1.5">
+<ellipse class="hk-petal" cx="140" cy="100" rx="5" ry="3.5"></ellipse>
+<ellipse class="hk-petal" cx="44" cy="150" rx="4.5" ry="3"></ellipse>
+<ellipse class="hk-petal" cx="330" cy="150" rx="5" ry="3.5"></ellipse>
+<ellipse class="hk-petal" cx="200" cy="230" rx="4" ry="3"></ellipse>
+</g>
+</svg>
+<img src="/_blob/7ca14f2d97e21ea3bfa9bfc2967160f0" alt="L’onmyōji lance un ofuda" class="hk-bob" style="position: absolute; left: 0px; top: 108px; height: 194px; width: auto; pointer-events: none">
+<button type="button" class="hk-hit" onClick="{{onTap}}" aria-label="Frapper le yōkai" style="position: absolute; left: 0; top: 0; width: 360px; height: 394px; padding: 0; border: 0; background: transparent; cursor: pointer"></button>
+<div style="position: absolute; right: 10px; top: 10px; width: 176px; box-sizing: border-box; padding: 7px 10px 9px; border-radius: 14px; background: #FFFFFF; border: 2.5px solid #2B1D3F; box-shadow: 0 3px 0 #2B1D3F; display: flex; flex-direction: column; gap: 5px; pointer-events: none">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-family: 'Mochiy Pop One', sans-serif; font-size: 13px">Chōchin-obake</span>
+<span style="font-size: 11px; font-weight: 800; color: #5A5266">Nv {{wave}}</span>
+</div>
+<div style="height: 12px; box-sizing: border-box; border-radius: 7px; background: #FFE3E0; border: 2px solid #2B1D3F; overflow: hidden">
+<div style="height: 100%; width: {{hpPct}}%; background: {{accent}}; transition: width .3s ease"></div>
+</div>
+</div>
+<sc-if value="{{showFx}}" hint-placeholder-val="{{ true }}">
+<div class="hk-pop" style="position: absolute; left: 132px; top: 82px; display: flex; flex-direction: column; align-items: flex-start; pointer-events: none">
+<span class="hk-outw" style="font-family: 'Mochiy Pop One', sans-serif; font-size: 16px; color: {{accent}}">{{dmgLabel}}</span>
+<span class="hk-out3" style="font-family: 'Mochiy Pop One', sans-serif; font-size: 42px; line-height: 1; color: #FFE45C">{{dmg}}</span>
+</div>
+</sc-if>
+<p style="position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); margin: 0; padding: 5px 12px; border-radius: 14px; background: #FFFFFF; border: 2px solid #2B1D3F; white-space: nowrap; font-size: 12px; font-weight: 800; pointer-events: none">Touche pour frapper !</p>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 16px 0">
+<div style="display: flex; flex-direction: column; gap: 0">
+<span style="font-size: 12px; font-weight: 800; color: #5A5266">Puissance</span>
+<span style="font-family: 'Mochiy Pop One', sans-serif; font-size: 22px">48,2 k <span style="font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 14px; font-weight: 800; color: #5A5266">/ s</span></span>
+</div>
+<div style="display: flex; align-items: center; gap: 6px">
+<span style="font-size: 12px; font-weight: 800; color: #5A5266; margin-right: 2px">Équipe</span>
+<span title="Kitsune (légendaire)" style="width: 34px; height: 34px; box-sizing: border-box; border-radius: 50%; background: #FFD23F; border: 2.5px solid #2B1D3F; display: flex; align-items: center; justify-content: center; font-family: 'Mochiy Pop One', sans-serif; font-size: 15px">狐</span>
+<span title="Chōchin-obake (rare)" style="width: 34px; height: 34px; box-sizing: border-box; border-radius: 50%; background: #3FB8FF; border: 2.5px solid #2B1D3F; display: flex; align-items: center; justify-content: center; font-family: 'Mochiy Pop One', sans-serif; font-size: 15px">灯</span>
+<span title="Oni (épique)" style="width: 34px; height: 34px; box-sizing: border-box; border-radius: 50%; background: #B06BFF; border: 2.5px solid #2B1D3F; display: flex; align-items: center; justify-content: center; font-family: 'Mochiy Pop One', sans-serif; font-size: 15px">鬼</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 14px 16px 0">
+<button type="button" class="hk-skill" onClick="{{onSkill1}}" style="position: relative; height: 92px; padding: 0; border: 3px solid #2B1D3F; border-radius: 16px; background: #FF7A45; color: #2B1D3F; box-shadow: 0 5px 0 #2B1D3F; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; overflow: hidden; cursor: pointer; font-family: 'M PLUS Rounded 1c', sans-serif">
+<span aria-hidden="true" class="hk-out" style="font-family: 'Mochiy Pop One', sans-serif; font-size: 34px; line-height: 1; color: #FFFFFF">火</span>
+<span style="font-size: 13px; font-weight: 800">Kitsune-bi</span>
+</button>
+<button type="button" class="hk-skill" onClick="{{onSkill2}}" style="position: relative; height: 92px; padding: 0; border: 3px solid #2B1D3F; border-radius: 16px; background: #FFD23F; color: #2B1D3F; box-shadow: 0 5px 0 #2B1D3F; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; overflow: hidden; cursor: pointer; font-family: 'M PLUS Rounded 1c', sans-serif">
+<span aria-hidden="true" class="hk-out" style="font-family: 'Mochiy Pop One', sans-serif; font-size: 34px; line-height: 1; color: #FFFFFF">雷</span>
+<span style="font-size: 13px; font-weight: 800">Raijin</span>
+</button>
+<button type="button" class="hk-skill" disabled aria-label="Kekkai, en recharge : 12 secondes" style="position: relative; height: 92px; padding: 0; border: 3px solid #2B1D3F; border-radius: 16px; background: #5CC8FF; color: #2B1D3F; box-shadow: 0 5px 0 #2B1D3F; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; overflow: hidden; font-family: 'M PLUS Rounded 1c', sans-serif">
+<span aria-hidden="true" class="hk-out" style="font-family: 'Mochiy Pop One', sans-serif; font-size: 34px; line-height: 1; color: #FFFFFF">結</span>
+<span style="font-size: 13px; font-weight: 800">Kekkai</span>
+<span aria-hidden="true" class="hk-out" style="position: absolute; left: 0; right: 0; top: 0; height: 58%; background: rgba(43, 29, 63, 0.62); display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-family: 'Mochiy Pop One', sans-serif; font-size: 18px">12 s</span>
+</button>
+</div>
+<nav aria-label="Navigation principale" style="margin-top: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; background: #FFFFFF; border-top: 3px solid #2B1D3F; padding: 8px 8px 20px">
+<a href="Main.dc.html" class="hk-tab" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; background: #FFD23F; border: 2.5px solid #2B1D3F; text-decoration: none; color: #2B1D3F; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="18" rx="1"></rect><path d="M12 7v10M10 10h4"></path></svg>
+<span>Combat</span>
+</a>
+<a href="Shikigami.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l4 5h6l4-5v9c0 4-3 7-7 7s-7-3-7-7z"></path><path d="M9 13h.01M15 13h.01"></path></svg>
+<span>Shikigami</span>
+</a>
+<a href="Sanctuaire.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6c6-1.5 12-1.5 18 0"></path><path d="M5 9.5h14"></path><path d="M7 7v14M17 7v14"></path></svg>
+<span>Sanctuaire</span>
+</a>
+<a href="Aube.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"></path></svg>
+<span>Festival</span>
+</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#FF4B3E","options":["#FF4B3E","#FF3D8B","#7A5CFF"]},"showFx":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { hp: 0.62, wave: 47, dmg: 12480, label: 'Critique !' };
+  }
+  hit(base, label) {
+    var dmg = Math.round(base * (0.85 + Math.random() * 0.3));
+    var hp = this.state.hp - dmg / 90000;
+    var wave = this.state.wave;
+    if (hp <= 0) { hp = 1; wave = Math.min(100, wave + 1); }
+    this.setState({ hp: hp, wave: wave, dmg: dmg, label: label });
+  }
+  renderVals() {
+    var self = this;
+    var accent = this.props.accent ?? '#FF4B3E';
+    var showFx = this.props.showFx ?? true;
+    var s = this.state;
+    return {
+      accent: accent,
+      showFx: showFx,
+      fxOpacity: showFx ? 1 : 0,
+      wave: s.wave,
+      hpPct: Math.max(0, Math.round(s.hp * 100)),
+      dmg: Math.round(s.dmg).toLocaleString('fr-FR'),
+      dmgLabel: s.label,
+      onTap: function () {
+        var crit = Math.random() < 0.3;
+        self.hit(crit ? 12000 : 4200, crit ? 'Critique !' : 'Paf !');
+      },
+      onSkill1: function () { self.hit(26000, 'Kitsune-bi !'); },
+      onSkill2: function () { self.hit(34000, 'Raijin !'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

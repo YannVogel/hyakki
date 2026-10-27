@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Hyakki — Festival</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFF4DC}
+a{color:#2B1D3F}a:hover{color:#FF4B3E}
+.hk-out{text-shadow:-2px -2px 0 #2B1D3F,2px -2px 0 #2B1D3F,-2px 2px 0 #2B1D3F,2px 2px 0 #2B1D3F,0 -2px 0 #2B1D3F,0 2px 0 #2B1D3F,-2px 0 0 #2B1D3F,2px 0 0 #2B1D3F,0 4px 0 #2B1D3F}
+@keyframes hk-burst{0%,100%{transform:scale(.85);opacity:.7}50%{transform:scale(1.1);opacity:1}}
+@keyframes hk-swing{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.hk-burst{transform-box:fill-box;transform-origin:center;animation:hk-burst 2s ease-in-out infinite}
+.hk-burst2{transform-box:fill-box;transform-origin:center;animation:hk-burst 2.6s .5s ease-in-out infinite}
+.hk-burst3{transform-box:fill-box;transform-origin:center;animation:hk-burst 1.8s .9s ease-in-out infinite}
+.hk-swing{transform-box:fill-box;transform-origin:50% 0%;animation:hk-swing 2.4s ease-in-out infinite}
+.hk-cta{transition:transform .12s, box-shadow .12s}
+.hk-cta:hover{transform:translateY(-2px);box-shadow:0 7px 0 #2B1D3F}
+.hk-cta:active{transform:translateY(3px);box-shadow:0 2px 0 #2B1D3F}
+.hk-cta:focus-visible,.hk-link:focus-visible,.hk-tab:focus-visible{outline:3px solid #3FB8FF;outline-offset:3px}
+@media (prefers-reduced-motion: reduce){.hk-burst,.hk-burst2,.hk-burst3,.hk-swing{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; background: #FFF4DC; color: #2B1D3F; font-family: 'M PLUS Rounded 1c', system-ui, sans-serif">
+<svg role="img" aria-label="Feux d’artifice et lanternes au-dessus d’un torii dressé dans l’eau, au coucher du soleil" width="390" height="360" viewBox="0 0 390 370" preserveAspectRatio="xMidYMid slice" style="display: block; flex: 0 0 auto">
+<defs>
+<linearGradient id="hk-sky-fest" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#8E6CFF"></stop>
+<stop offset="0.55" stop-color="#FF8FC7"></stop>
+<stop offset="1" stop-color="#FFD27A"></stop>
+</linearGradient>
+</defs>
+<rect width="390" height="370" fill="url(#hk-sky-fest)"></rect>
+<g class="hk-burst" stroke="#FFE45C" stroke-width="5" stroke-linecap="round">
+<path d="M106 90 L 134 90 M101.3 101.3 L 121.1 121.1 M90 106 L 90 134 M78.7 101.3 L 58.9 121.1 M74 90 L 46 90 M78.7 78.7 L 58.9 58.9 M90 74 L 90 46 M101.3 78.7 L 121.1 58.9"></path>
+<circle cx="90" cy="90" r="5" fill="#FFE45C" stroke="none"></circle>
+</g>
+<g class="hk-burst2" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round">
+<path d="M302 70 L 326 70 M298.5 78.5 L 315.5 95.5 M290 82 L 290 106 M281.5 78.5 L 264.5 95.5 M278 70 L 254 70 M281.5 61.5 L 264.5 44.5 M290 58 L 290 34 M298.5 61.5 L 315.5 44.5"></path>
+<circle cx="290" cy="70" r="4.5" fill="#FFFFFF" stroke="none"></circle>
+</g>
+<g class="hk-burst3" stroke="#5CF0FF" stroke-width="4" stroke-linecap="round">
+<path d="M215 140 L 233 140 M212.1 147.1 L 224.8 159.8 M205 150 L 205 168 M197.9 147.1 L 185.2 159.8 M195 140 L 177 140 M197.9 132.9 L 185.2 120.2 M205 130 L 205 112 M212.1 132.9 L 224.8 120.2"></path>
+<circle cx="205" cy="140" r="4" fill="#5CF0FF" stroke="none"></circle>
+</g>
+<path d="M0 24 Q 195 70 390 24" fill="none" stroke="#2B1D3F" stroke-width="2.5"></path>
+<g class="hk-swing"><rect x="55.5" y="36" width="6" height="5" fill="#2B1D3F"></rect><ellipse cx="58.5" cy="52" rx="10" ry="12" fill="{{accent}}" stroke="#2B1D3F" stroke-width="2.5"></ellipse></g>
+<g class="hk-swing"><rect x="121.8" y="44" width="6" height="5" fill="#2B1D3F"></rect><ellipse cx="124.8" cy="60" rx="10" ry="12" fill="#FFD23F" stroke="#2B1D3F" stroke-width="2.5"></ellipse></g>
+<g class="hk-swing"><rect x="192" y="47" width="6" height="5" fill="#2B1D3F"></rect><ellipse cx="195" cy="63" rx="10" ry="12" fill="{{accent}}" stroke="#2B1D3F" stroke-width="2.5"></ellipse></g>
+<g class="hk-swing"><rect x="262.2" y="44" width="6" height="5" fill="#2B1D3F"></rect><ellipse cx="265.2" cy="60" rx="10" ry="12" fill="#FFD23F" stroke="#2B1D3F" stroke-width="2.5"></ellipse></g>
+<g class="hk-swing"><rect x="328.5" y="36" width="6" height="5" fill="#2B1D3F"></rect><ellipse cx="331.5" cy="52" rx="10" ry="12" fill="{{accent}}" stroke="#2B1D3F" stroke-width="2.5"></ellipse></g>
+<circle cx="195" cy="330" r="74" fill="#FFE45C" stroke="#2B1D3F" stroke-width="3"></circle>
+<rect x="0" y="322" width="390" height="48" fill="#5CC8FF" stroke="#2B1D3F" stroke-width="3"></rect>
+<g fill="#FFFFFF">
+<rect x="150" y="332" width="90" height="4" rx="2"></rect>
+<rect x="166" y="344" width="58" height="4" rx="2"></rect>
+<rect x="40" y="340" width="40" height="4" rx="2"></rect>
+<rect x="310" y="350" width="44" height="4" rx="2"></rect>
+</g>
+<g stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round">
+<rect x="124" y="198" width="16" height="172" fill="{{accent}}"></rect>
+<rect x="250" y="198" width="16" height="172" fill="{{accent}}"></rect>
+<rect x="108" y="236" width="174" height="12" fill="{{accent}}"></rect>
+<rect x="189" y="209" width="12" height="27" fill="{{accent}}"></rect>
+<rect x="90" y="198" width="210" height="12" fill="{{accent}}"></rect>
+<path d="M78 196 Q 195 180 312 196 L 317 182 Q 195 162 73 182 Z" fill="#2B1D3F"></path>
+</g>
+</svg>
+<img src="/_blob/d95006342a06d178a419da5e71751be6" alt="L’onmyōji saute de joie" style="position: absolute; left: 10px; top: 176px; height: 150px; width: auto">
+<section aria-labelledby="hk-fest-titre" style="position: relative; margin-top: -26px; padding: 20px 16px 0; border-radius: 26px 26px 0 0; background: #FFF4DC; border-top: 3px solid #2B1D3F; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span aria-hidden="true" class="hk-out" style="flex: 0 0 auto; width: 50px; height: 50px; box-sizing: border-box; border-radius: 50%; background: {{accent}}; border: 3px solid #2B1D3F; box-shadow: 0 3px 0 #2B1D3F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: 'Mochiy Pop One', sans-serif; font-size: 24px">祭</span>
+<div style="display: flex; flex-direction: column; gap: 1px">
+<span style="font-size: 12px; font-weight: 800; color: #5A5266">Défilé 3 · vague 47 / 100 · record : 63</span>
+<h1 id="hk-fest-titre" style="margin: 0; font-family: 'Mochiy Pop One', sans-serif; font-weight: 400; font-size: 27px; line-height: 1.15">Grand Festival !</h1>
+</div>
+</div>
+<p style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.45; color: #5A5266">Le défilé s’arrête pour la fête. Relance-le plus fort : tes shikigami restent, et le festival t’offre ses étincelles.</p>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div style="padding: 10px 12px; border-radius: 16px; background: #FFFFFF; border: 3px solid #2B1D3F; box-shadow: 0 4px 0 #2B1D3F; display: flex; align-items: center; gap: 8px">
+<svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 9.2l-5 4.4 1.5 6.6L12 16.8 6.5 20.2 8 13.6 3 9.2l6.4-.8z" fill="#FFD23F" stroke="#2B1D3F" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+<div style="display: flex; flex-direction: column">
+<span style="font-family: 'Mochiy Pop One', sans-serif; font-size: 24px; line-height: 1.1">+ 38</span>
+<span style="font-size: 12px; font-weight: 800">Étincelles</span>
+</div>
+</div>
+<div style="padding: 10px 12px; border-radius: 16px; background: #FFFFFF; border: 3px solid #2B1D3F; box-shadow: 0 4px 0 #2B1D3F; display: flex; flex-direction: column; justify-content: center; gap: 2px">
+<span style="font-size: 12px; font-weight: 800; color: #5A5266">Puissance à vie</span>
+<span style="font-family: 'Mochiy Pop One', sans-serif; font-size: 17px">×2,9 → <span style="display: inline-block; padding: 0 6px; border-radius: 8px; background: #FFD23F">×4,8</span></span>
+</div>
+</div>
+<a href="Main.dc.html" class="hk-cta" style="display: flex; align-items: center; justify-content: center; height: 58px; margin-top: 4px; box-sizing: border-box; border-radius: 16px; background: #FFD23F; border: 3px solid #2B1D3F; box-shadow: 0 5px 0 #2B1D3F; color: #2B1D3F; text-decoration: none; font-family: 'Mochiy Pop One', sans-serif; font-size: 19px">Lancer le festival !</a>
+<a href="Main.dc.html" class="hk-link" style="display: flex; align-items: center; justify-content: center; height: 40px; margin-top: -2px; color: #2B1D3F; font-size: 14px; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px">Continuer le défilé</a>
+</section>
+<nav aria-label="Navigation principale" style="margin-top: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; background: #FFFFFF; border-top: 3px solid #2B1D3F; padding: 8px 8px 20px">
+<a href="Main.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="18" rx="1"></rect><path d="M12 7v10M10 10h4"></path></svg>
+<span>Combat</span>
+</a>
+<a href="Shikigami.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l4 5h6l4-5v9c0 4-3 7-7 7s-7-3-7-7z"></path><path d="M9 13h.01M15 13h.01"></path></svg>
+<span>Shikigami</span>
+</a>
+<a href="Sanctuaire.dc.html" class="hk-tab" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; border: 2.5px solid transparent; text-decoration: none; color: #5A5266; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6c6-1.5 12-1.5 18 0"></path><path d="M5 9.5h14"></path><path d="M7 7v14M17 7v14"></path></svg>
+<span>Sanctuaire</span>
+</a>
+<a href="Aube.dc.html" class="hk-tab" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 52px; border-radius: 14px; background: #FFD23F; border: 2.5px solid #2B1D3F; text-decoration: none; color: #2B1D3F; font-size: 11px; font-weight: 800">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"></path></svg>
+<span>Festival</span>
+</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#FF4B3E","options":["#FF4B3E","#FF3D8B","#7A5CFF"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#FF4B3E' };
+  }
+}
+</script>
+</body>
+</html>

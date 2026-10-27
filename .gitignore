@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Node / Expo (complété à l'initialisation du projet)
+node_modules/
+.expo/
+dist/
+web-build/
+
+# Python
+__pycache__/
+*.pyc

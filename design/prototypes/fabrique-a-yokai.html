@@ -1,0 +1,739 @@
+<title>Fabrique à yōkai</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<style>
+/* Layout: two-column lab (stage | recipe, stats, traits), then a full-width sheet of 12 specimens. Single light look = the Hyakki game DA. */
+:root {
+  --ink: #2B1D3F;
+  --cream: #FFF4DC;
+  --paper: #FFFFFF;
+  --sky: #8FDBFF;
+  --red: #FF4B3E;
+  --yellow: #FFD23F;
+  --pink: #FF8FC7;
+  --muted: #5A5266;
+  --grass: #7FDCA0;
+  --grass-deep: #5CC88A;
+  --stat-pv: #7FDCA0;
+  --stat-atq: #FF4B3E;
+  --stat-def: #3FB8FF;
+  --stat-vit: #FFD23F;
+  --stat-crit: #FF8FC7;
+  --display: 'Mochiy Pop One', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --body: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--cream); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; font-weight: 500; }
+.wrap { max-width: 1100px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 56px; display: flex; flex-direction: column; gap: 28px; }
+
+.out { text-shadow: -2px -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 2px 0 var(--ink), 2px 2px 0 var(--ink), 0 -2px 0 var(--ink), 0 2px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), 0 4px 0 var(--ink); }
+
+header.top { display: flex; flex-direction: column; gap: 8px; max-width: 68ch; }
+.kicker { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 6vw, 46px); line-height: 1.1; color: var(--paper); text-wrap: balance; }
+.intro { margin: 0; font-size: 16px; font-weight: 700; }
+
+.card { background: var(--paper); border: 3px solid var(--ink); border-radius: 22px; box-shadow: 0 5px 0 var(--ink); }
+
+.lab { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+@media (max-width: 780px) { .lab { grid-template-columns: minmax(0, 1fr); } }
+
+.stage-card { overflow: hidden; }
+.stage { position: relative; aspect-ratio: 1 / 1; max-width: 100%; background: var(--sky); border-bottom: 3px solid var(--ink); overflow: hidden; }
+.stage .burst { position: absolute; inset: -40%; animation: spin 40s linear infinite; }
+.stage .hills, .mini .hills { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stage .monster { position: absolute; left: 9%; top: 6%; width: 82%; height: 82%; }
+.stage .monster svg, .mini .monster svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.stage-info { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 6px; }
+.name { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(22px, 3.4vw, 28px); line-height: 1.2; overflow-wrap: anywhere; }
+.desc { margin: 0; font-size: 16px; font-weight: 700; color: var(--muted); }
+.pill { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px 0 8px; border: 2.5px solid var(--ink); border-radius: 15px; background: var(--paper); font-size: 13px; font-weight: 800; }
+.dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ink); flex: 0 0 auto; }
+
+.panel { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 20px; }
+.panel h2 { margin: 0 0 8px; font-family: var(--display); font-weight: 400; font-size: 15px; }
+
+.seed-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; }
+.field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 140px; min-width: 0; }
+.field label { font-size: 12px; font-weight: 800; color: var(--muted); }
+.field input { height: 46px; width: 100%; padding: 0 12px; border: 2.5px solid var(--ink); border-radius: 14px; background: var(--cream); color: var(--ink); font-family: var(--display); font-size: 18px; font-variant-numeric: tabular-nums; }
+.btn { height: 46px; min-width: 46px; padding: 0 14px; border: 2.5px solid var(--ink); border-radius: 14px; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 14px; font-weight: 800; box-shadow: 0 3px 0 var(--ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: transform .12s, box-shadow .12s; }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 0 var(--ink); }
+.btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--ink); }
+.btn-main { width: 100%; height: 58px; background: var(--yellow); font-family: var(--display); font-size: 19px; font-weight: 400; box-shadow: 0 5px 0 var(--ink); }
+.btn-main:hover { box-shadow: 0 6px 0 var(--ink); }
+.btn:focus-visible, .field input:focus-visible, .tile:focus-visible { outline: 3px solid #3FB8FF; outline-offset: 3px; }
+.copy-note { min-height: 18px; font-size: 12px; font-weight: 800; color: var(--muted); }
+
+.recipe { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; font-size: 14px; }
+.recipe dt { font-weight: 800; color: var(--muted); }
+.recipe dd { margin: 0; font-weight: 800; }
+
+.stats { display: flex; flex-direction: column; gap: 8px; }
+.stat { display: grid; grid-template-columns: 80px minmax(0, 1fr) 48px; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; }
+.track { height: 16px; border: 2.5px solid var(--ink); border-radius: 9px; background: var(--cream); overflow: hidden; }
+.fill { height: 100%; box-shadow: inset -2.5px 0 0 var(--ink); transition: width .35s ease; }
+.val { text-align: right; font-family: var(--display); font-size: 14px; font-variant-numeric: tabular-nums; }
+
+.traits { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 3px 12px; border: 2px solid var(--ink); border-radius: 15px; background: var(--cream); font-size: 13px; font-weight: 800; }
+.chip b { font-family: var(--display); font-weight: 400; }
+.none { font-size: 14px; font-weight: 700; color: var(--muted); }
+
+.sheet-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.sheet-head h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 22px; }
+.sheet-head p { margin: 2px 0 0; font-size: 14px; font-weight: 700; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+@media (max-width: 420px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+.tile { padding: 0; border: 3px solid var(--ink); border-radius: 18px; background: var(--paper); box-shadow: 0 4px 0 var(--ink); overflow: hidden; cursor: pointer; text-align: left; color: var(--ink); font-family: var(--body); display: flex; flex-direction: column; transition: transform .12s, box-shadow .12s; }
+.tile:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--ink); }
+.tile[aria-pressed="true"] { background: var(--yellow); }
+.mini { position: relative; aspect-ratio: 1 / 1; max-width: 100%; background: var(--sky); border-bottom: 3px solid var(--ink); overflow: hidden; }
+.mini .monster { position: absolute; left: 8%; top: 4%; width: 84%; height: 84%; }
+.tile-info { padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tile-name { font-size: 13px; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+.tile-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: var(--muted); }
+.tile-meta .dot { width: 11px; height: 11px; border-width: 1.5px; }
+
+footer.note { max-width: 70ch; display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: var(--muted); }
+footer.note strong { color: var(--ink); font-family: var(--display); font-weight: 400; font-variant-numeric: tabular-nums; }
+
+/* creature animations */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes m-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes m-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+@keyframes m-wag { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+@keyframes m-flick { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.12, 0.9); } }
+@keyframes m-twinkle { 0%, 100% { opacity: .25; transform: scale(.6); } 50% { opacity: 1; transform: scale(1); } }
+.m-float { animation: m-float 3.2s ease-in-out infinite; }
+.m-eye { transform-box: fill-box; transform-origin: center; animation: m-blink 4.4s linear infinite; }
+.m-tongue { transform-box: fill-box; transform-origin: 50% 0%; animation: m-wag 1.3s ease-in-out infinite; }
+.m-flame { transform-box: fill-box; transform-origin: 50% 100%; animation: m-flick .9s ease-in-out infinite; }
+.m-spark { transform-box: fill-box; transform-origin: center; animation: m-twinkle 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .m-float, .m-eye, .m-tongue, .m-flame, .m-spark, .stage .burst { animation: none; }
+  .btn, .tile, .fill { transition: none; }
+}
+</style>
+
+<main class="wrap">
+  <header class="top">
+    <span class="kicker">Hyakki · prototype de génération procédurale</span>
+    <h1 class="out">Fabrique à yōkai</h1>
+    <p class="intro">Les tsukumogami sont des objets qui prennent vie après cent ans. Ici, chacun sort d’une graine : même nombre, même créature. Et son apparence fixe ses stats.</p>
+  </header>
+
+  <section class="lab" aria-label="Yōkai sélectionné">
+    <article class="card stage-card">
+      <div class="stage">
+        <div class="burst" id="burst" hidden></div>
+        <svg class="hills" viewBox="0 0 400 400" preserveAspectRatio="none" aria-hidden="true">
+          <circle cx="336" cy="58" r="30" fill="#FFE45C" stroke="#2B1D3F" stroke-width="3"></circle>
+          <path d="M28 92 a16 16 0 0 1 27 -14 a20 20 0 0 1 36 4 a14 14 0 0 1 22 16 z" fill="#FFFFFF" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+          <path d="M0 330 Q 90 292 200 318 Q 300 290 400 312 L 400 400 L 0 400 Z" fill="#7FDCA0" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+          <path d="M0 368 Q 120 344 230 362 Q 320 346 400 356 L 400 400 L 0 400 Z" fill="#5CC88A" stroke="#2B1D3F" stroke-width="3" stroke-linejoin="round"></path>
+        </svg>
+        <div class="monster" id="stage-monster"></div>
+      </div>
+      <div class="stage-info">
+        <span class="pill" id="rarity-pill"><span class="dot" id="rarity-dot"></span><span id="rarity-label">Commun</span></span>
+        <h2 class="name" id="name">Chōchin-obake</h2>
+        <p class="desc" id="desc">Lanterne moqueuse</p>
+      </div>
+    </article>
+
+    <div class="card panel">
+      <div>
+        <div class="seed-row">
+          <div class="field">
+            <label for="seed">Graine</label>
+            <input id="seed" type="number" inputmode="numeric" min="0" max="999999999" step="1" value="2026">
+          </div>
+          <button class="btn" id="prev" type="button" aria-label="Graine précédente">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <button class="btn" id="next" type="button" aria-label="Graine suivante">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
+          <button class="btn" id="copy" type="button">Copier</button>
+        </div>
+        <div class="copy-note" id="copy-note" aria-live="polite"></div>
+        <button class="btn btn-main" id="random" type="button">Nouveau yōkai !</button>
+      </div>
+
+      <div>
+        <h2>Recette</h2>
+        <dl class="recipe" id="recipe"></dl>
+      </div>
+
+      <div>
+        <h2>Stats</h2>
+        <div class="stats" id="stats"></div>
+      </div>
+
+      <div>
+        <h2>Ce que son apparence lui donne</h2>
+        <ul class="traits" id="traits"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" aria-labelledby="sheet-title">
+    <div class="sheet-head">
+      <div>
+        <h2 id="sheet-title">Planche de 12</h2>
+        <p id="sheet-range">Graines 2027 à 2038</p>
+      </div>
+      <button class="btn" id="new-sheet" type="button">Nouvelle planche</button>
+    </div>
+    <div class="grid" id="grid" style="margin-top: 14px"></div>
+  </section>
+
+  <footer class="note">
+    <p>Avec 6 objets, 8 regards, 6 bouches, 4 types de membres, 8 accessoires et 8 palettes, la fabrique sait produire <strong id="combos">285 696</strong> yōkai différents.</p>
+    <p>Dans le jeu, la graine d’un yōkai peut valoir numéro de partie × 1 000 + numéro de vague : la sauvegarde ne stocke qu’un nombre par shikigami.</p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var INK = '#2B1D3F';
+
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function r1(n) { return Math.round(n * 10) / 10; }
+
+  var RARITY = {
+    commun: { fr: 'Commun', color: '#B7C3D0', mult: 1 },
+    rare: { fr: 'Rare', color: '#3FB8FF', mult: 1.25 },
+    epique: { fr: 'Épique', color: '#B06BFF', mult: 1.6 },
+    legendaire: { fr: 'Légendaire', color: '#FFD23F', mult: 2.2 }
+  };
+
+  var PALETTES = [
+    { id: 'papier', fr: 'Papier', jp: '', rarity: 'commun', body: '#FFF8E1', shade: '#F3C98B', accent: '#FF4B3E', op: 1 },
+    { id: 'bois', fr: 'Bois', jp: '', rarity: 'commun', body: '#E9B37A', shade: '#B9784A', accent: '#FFD23F', op: 1 },
+    { id: 'laque', fr: 'Laque rouge', jp: 'Aka', rarity: 'commun', body: '#FF6B57', shade: '#C93A2C', accent: '#FFD23F', op: 1 },
+    { id: 'celadon', fr: 'Céladon', jp: 'Ao', rarity: 'commun', body: '#9FE6C4', shade: '#4FB58A', accent: '#FF8FC7', op: 1 },
+    { id: 'indigo', fr: 'Indigo', jp: 'Kon', rarity: 'rare', body: '#8FA2FF', shade: '#4A5FD1', accent: '#FFD23F', op: 1 },
+    { id: 'sakura', fr: 'Sakura', jp: 'Sakura', rarity: 'rare', body: '#FFA6D1', shade: '#E26AA6', accent: '#FFFFFF', op: 1 },
+    { id: 'spectral', fr: 'Spectral', jp: 'Yūrei', rarity: 'epique', body: '#CFF4FF', shade: '#7FD1F0', accent: '#B06BFF', op: 0.82 },
+    { id: 'or', fr: 'Or', jp: 'Kin', rarity: 'legendaire', body: '#FFD84D', shade: '#E0A800', accent: '#FF4B3E', op: 1 }
+  ];
+
+  function rect(x, y, w, h, rx, fill, sw) {
+    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + rx + '" fill="' + fill + '" stroke="' + INK + '" stroke-width="' + sw + '"></rect>';
+  }
+
+  var BASES = [
+    {
+      id: 'lanterne', fr: 'Lanterne', jp: 'Chōchin', g: 'f',
+      stats: { pv: 100, atq: 90, def: 80, vit: 110 },
+      face: { x: 100, y: 102, w: 64 }, horn: { y: 40, spread: 22 }, bottom: { x: 100, y: 176 }, sides: { l: 48, r: 152, y: 112 },
+      legs: true, noAcc: [],
+      draw: function (p) {
+        return '<rect x="94" y="20" width="12" height="14" rx="2" fill="' + INK + '"></rect>' +
+          '<ellipse cx="100" cy="104" rx="52" ry="62" fill="' + p.body + '" fill-opacity="' + p.op + '" stroke="' + INK + '" stroke-width="3.5"></ellipse>' +
+          '<path d="M62 64 Q100 72 138 64 M62 146 Q100 154 138 146" fill="none" stroke="' + p.shade + '" stroke-width="2.5" stroke-linecap="round"></path>' +
+          rect(70, 32, 60, 14, 5, p.accent, 3) + rect(70, 162, 60, 14, 5, p.accent, 3);
+      }
+    },
+    {
+      id: 'ombrelle', fr: 'Ombrelle', jp: 'Kasa', g: 'f',
+      stats: { pv: 80, atq: 100, def: 70, vit: 130 },
+      face: { x: 100, y: 76, w: 52 }, horn: { y: 44, spread: 12 }, bottom: { x: 100, y: 166 }, sides: { l: 32, r: 168, y: 108 },
+      legs: true, noAcc: ['hachimaki'],
+      draw: function (p) {
+        return '<path d="M100 104 L100 166" stroke="' + INK + '" stroke-width="7" stroke-linecap="round"></path>' +
+          '<path d="M100 104 L100 166" stroke="' + p.shade + '" stroke-width="2.5" stroke-linecap="round"></path>' +
+          '<path d="M26 112 L100 28 L174 112 Q137 100 100 112 Q63 100 26 112 Z" fill="' + p.body + '" fill-opacity="' + p.op + '" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"></path>' +
+          '<path d="M100 32 L62 104 M100 32 L138 104" stroke="' + p.shade + '" stroke-width="2" fill="none"></path>' +
+          '<circle cx="100" cy="26" r="6" fill="' + p.accent + '" stroke="' + INK + '" stroke-width="2.5"></circle>';
+      }
+    },
+    {
+      id: 'theiere', fr: 'Théière', jp: 'Dobin', g: 'f',
+      stats: { pv: 140, atq: 80, def: 110, vit: 60 },
+      face: { x: 100, y: 124, w: 72 }, horn: { y: 74, spread: 22 }, bottom: { x: 100, y: 168 }, sides: { l: 40, r: 158, y: 140 },
+      legs: true, noAcc: [],
+      draw: function (p) {
+        return '<path d="M58 88 Q100 22 142 88" fill="none" stroke="' + INK + '" stroke-width="10" stroke-linecap="round"></path>' +
+          '<path d="M58 88 Q100 22 142 88" fill="none" stroke="' + p.shade + '" stroke-width="4.5" stroke-linecap="round"></path>' +
+          '<path d="M146 114 Q176 106 184 82 L172 76 Q166 96 144 100 Z" fill="' + p.body + '" fill-opacity="' + p.op + '" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"></path>' +
+          '<ellipse cx="100" cy="120" rx="60" ry="48" fill="' + p.body + '" fill-opacity="' + p.op + '" stroke="' + INK + '" stroke-width="3.5"></ellipse>' +
+          '<ellipse cx="100" cy="76" rx="30" ry="9" fill="' + p.accent + '" stroke="' + INK + '" stroke-width="3"></ellipse>' +
+          '<circle cx="100" cy="64" r="7" fill="' + p.accent + '" stroke="' + INK + '" stroke-width="3"></circle>';
+      }
+    },
+    {
+      id: 'tambour', fr: 'Tambour', jp: 'Taiko', g: 'm',
+      stats: { pv: 130, atq: 100, def: 100, vit: 70 },
+      face: { x: 100, y: 112, w: 78 }, horn: { y: 60, spread: 30 }, bottom: { x: 100, y: 158 }, sides: { l: 42, r: 158, y: 112 },
+      legs: true, noAcc: [],
+      draw: function (p) {
+        var studs = '';
+        for (var x = 52; x <= 148; x += 16) {
+          studs += '<circle cx="' + x + '" cy="84" r="2.4" fill="' + INK + '"></circle><circle cx="' + x + '" cy="140" r="2.4" fill="' + INK + '"></circle>';
+        }
+        return '<path d="M44 68 Q100 56 156 68 L162 146 Q100 162 38 146 Z" fill="' + p.body + '" fill-opacity="' + p.op + '" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"></path>' +
+          studs +
+          '<ellipse cx="100" cy="66" rx="56" ry="13" fill="#FFF4DC" stroke="' + INK + '" stroke-width="3"></ellipse>' +
+          '<path d="M80 66 a10 5 0 0 1 20 0 a10 5 0 0 0 20 0" fill="none" stroke="' + p.accent + '" stroke-width="3" stroke-linecap="round"></path>';
+      }
+    },
+    {
+      id: 'geta', fr: 'Geta', jp: 'Geta', g: 'f',
+      stats: { pv: 90, atq: 120, def: 90, vit: 100 },
+      face: { x: 100, y: 96, w: 66 }, horn: { y: 78, spread: 36 }, bottom: null, sides: { l: 34, r: 166, y: 104 },
+      legs: false, noAcc: ['hachimaki'],
+      draw: function (p) {
+        return rect(54, 128, 26, 38, 4, p.shade, 3) + rect(120, 128, 26, 38, 4, p.shade, 3) +
+          '<rect x="34" y="70" width="132" height="66" rx="16" fill="' + p.body + '" fill-opacity="' + p.op + '" stroke="' + INK + '" stroke-width="3.5"></rect>' +
+          '<path d="M56 74 Q100 30 144 74" fill="none" stroke="' + INK + '" stroke-width="9" stroke-linecap="round"></path>' +
+          '<path d="M56 74 Q100 30 144 74" fill="none" stroke="' + p.accent + '" stroke-width="4.5" stroke-linecap="round"></path>' +
+          '<circle cx="100" cy="52" r="6" fill="' + p.accent + '" stroke="' + INK + '" stroke-width="2.5"></circle>';
+      }
+    },
+    {
+      id: 'rouleau', fr: 'Rouleau', jp: 'Makimono', g: 'm',
+      stats: { pv: 85, atq: 90, def: 75, vit: 120 },
+      face: { x: 100, y: 96, w: 60 }, horn: { y: 34, spread: 30 }, bottom: { x: 100, y: 174 }, sides: { l: 58, r: 142, y: 104 },
+      legs: true, noAcc: [],
+      draw: function (p) {
+        return '<rect x="60" y="38" width="80" height="126" fill="' + p.body + '" fill-opacity="' + p.op + '" stroke="' + INK + '" stroke-width="3.5"></rect>' +
+          '<path d="M72 136 L72 154 M80 142 L80 152 M128 52 L128 70 M120 56 L120 64" stroke="' + p.shade + '" stroke-width="3" stroke-linecap="round"></path>' +
+          rect(48, 28, 104, 16, 8, p.accent, 3) + rect(48, 158, 104, 16, 8, p.accent, 3);
+      }
+    }
+  ];
+
+  function eyeShape(x, y, r, lx, ly, big) {
+    var pr = r * (big ? 0.64 : 0.52);
+    var px = x + lx * r * 0.22, py = y + ly * r * 0.22;
+    var s = '<g class="m-eye"><circle cx="' + r1(x) + '" cy="' + r1(y) + '" r="' + r1(r) + '" fill="#FFFFFF" stroke="' + INK + '" stroke-width="3"></circle>' +
+      '<circle cx="' + r1(px) + '" cy="' + r1(py) + '" r="' + r1(pr) + '" fill="' + INK + '"></circle>' +
+      '<circle cx="' + r1(px - pr * 0.35) + '" cy="' + r1(py - pr * 0.38) + '" r="' + r1(pr * 0.34) + '" fill="#FFFFFF"></circle>';
+    if (big) { s += '<circle cx="' + r1(px + pr * 0.38) + '" cy="' + r1(py + pr * 0.3) + '" r="' + r1(pr * 0.16) + '" fill="#FFFFFF"></circle>'; }
+    return s + '</g>';
+  }
+
+  var EYES = [
+    { id: 'cyclope', fr: 'Œil unique', count: 1, adj: ['cyclope', 'cyclope'], jp: 'Hitotsume', draw: function (f, lx, ly) { return eyeShape(f.x, f.y - 4, f.w * 0.26, lx, ly); } },
+    { id: 'deux', fr: 'Deux yeux', count: 2, adj: null, draw: function (f, lx, ly) { return eyeShape(f.x - f.w * 0.22, f.y - 6, f.w * 0.15, lx, ly) + eyeShape(f.x + f.w * 0.22, f.y - 6, f.w * 0.15, lx, ly); } },
+    { id: 'clin', fr: 'Clin d’œil', count: 2, adj: ['farceur', 'farceuse'], draw: function (f, lx, ly) {
+      var x = f.x - f.w * 0.22, y = f.y - 6;
+      return eyeShape(f.x + f.w * 0.2, f.y - 6, f.w * 0.19, lx, ly) +
+        '<path d="M' + r1(x - 8) + ' ' + r1(y) + ' Q' + r1(x) + ' ' + r1(y - 10) + ' ' + r1(x + 8) + ' ' + r1(y) + '" fill="none" stroke="' + INK + '" stroke-width="3.5" stroke-linecap="round"></path>';
+    } },
+    { id: 'trois', fr: 'Trois yeux', count: 3, adj: ['à trois yeux', 'à trois yeux'], jp: 'Mitsume', draw: function (f, lx, ly) {
+      return eyeShape(f.x - f.w * 0.22, f.y - 2, f.w * 0.14, lx, ly) + eyeShape(f.x + f.w * 0.22, f.y - 2, f.w * 0.14, lx, ly) + eyeShape(f.x, f.y - f.w * 0.3, f.w * 0.11, lx, ly);
+    } },
+    { id: 'malicieux', fr: 'Regard sournois', count: 2, adj: ['sournois', 'sournoise'], draw: function (f) {
+      var out = '';
+      [-1, 1].forEach(function (s) {
+        var x = f.x + s * f.w * 0.22, y = f.y - 6;
+        out += '<path d="M' + r1(x - 9) + ' ' + r1(y + 2) + ' Q' + r1(x) + ' ' + r1(y - 8) + ' ' + r1(x + 9) + ' ' + r1(y + 2) + ' Q' + r1(x) + ' ' + r1(y - 1) + ' ' + r1(x - 9) + ' ' + r1(y + 2) + ' Z" fill="' + INK + '" stroke="' + INK + '" stroke-width="1.5" stroke-linejoin="round"></path>' +
+          '<path d="M' + r1(x + s * 10) + ' ' + r1(y - 15) + ' L' + r1(x - s * 9) + ' ' + r1(y - 9) + '" stroke="' + INK + '" stroke-width="3.5" stroke-linecap="round"></path>';
+      });
+      return out;
+    } },
+    { id: 'points', fr: 'Yeux en points', count: 2, adj: null, draw: function (f) {
+      var out = '';
+      [-1, 1].forEach(function (s) {
+        var x = f.x + s * f.w * 0.2, y = f.y - 4;
+        out += '<g class="m-eye"><circle cx="' + r1(x) + '" cy="' + r1(y) + '" r="4.8" fill="' + INK + '"></circle><circle cx="' + r1(x - 1.4) + '" cy="' + r1(y - 1.6) + '" r="1.5" fill="#FFFFFF"></circle></g>';
+      });
+      return out;
+    } },
+    { id: 'vertical', fr: 'Œil fendu', count: 1, adj: ['à l’œil fendu', 'à l’œil fendu'], jp: 'Hitotsume', draw: function (f, lx) {
+      var x = f.x, y = f.y - 6, rx = f.w * 0.15, ry = f.w * 0.26;
+      return '<g class="m-eye"><ellipse cx="' + r1(x) + '" cy="' + r1(y) + '" rx="' + r1(rx) + '" ry="' + r1(ry) + '" fill="#FFFFFF" stroke="' + INK + '" stroke-width="3"></ellipse>' +
+        '<ellipse cx="' + r1(x + lx * 2) + '" cy="' + r1(y) + '" rx="3.2" ry="' + r1(ry * 0.78) + '" fill="' + INK + '"></ellipse>' +
+        '<circle cx="' + r1(x - rx * 0.4) + '" cy="' + r1(y - ry * 0.45) + '" r="2.2" fill="#FFFFFF"></circle></g>';
+    } },
+    { id: 'kawaii', fr: 'Grands yeux', count: 2, adj: ['adorable', 'adorable'], draw: function (f, lx, ly) { return eyeShape(f.x - f.w * 0.22, f.y - 6, f.w * 0.16, lx, ly, true) + eyeShape(f.x + f.w * 0.22, f.y - 6, f.w * 0.16, lx, ly, true); } }
+  ];
+
+  function grin(mx, my, w) {
+    return '<path d="M' + r1(mx - w) + ' ' + r1(my) + ' Q' + r1(mx) + ' ' + r1(my + w * 0.9) + ' ' + r1(mx + w) + ' ' + r1(my) + ' Q' + r1(mx) + ' ' + r1(my + w * 0.3) + ' ' + r1(mx - w) + ' ' + r1(my) + ' Z" fill="' + INK + '" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"></path>';
+  }
+  var MOUTHS = [
+    { id: 'sourire', fr: 'Sourire', adj: ['rieur', 'rieuse'], draw: function (mx, my, w) { return grin(mx, my, w); } },
+    { id: 'crocs', fr: 'Crocs', adj: ['mordant', 'mordante'], draw: function (mx, my, w) {
+      return grin(mx, my, w) +
+        '<path d="M' + r1(mx - w * 0.55) + ' ' + r1(my + w * 0.14) + ' L' + r1(mx - w * 0.42) + ' ' + r1(my + w * 0.52) + ' L' + r1(mx - w * 0.28) + ' ' + r1(my + w * 0.22) + ' Z" fill="#FFFFFF"></path>' +
+        '<path d="M' + r1(mx + w * 0.55) + ' ' + r1(my + w * 0.14) + ' L' + r1(mx + w * 0.42) + ' ' + r1(my + w * 0.52) + ' L' + r1(mx + w * 0.28) + ' ' + r1(my + w * 0.22) + ' Z" fill="#FFFFFF"></path>';
+    } },
+    { id: 'langue', fr: 'Langue pendante', adj: ['moqueur', 'moqueuse'], draw: function (mx, my, w) {
+      return grin(mx, my, w) +
+        '<g class="m-tongue"><path d="M' + r1(mx - w * 0.28) + ' ' + r1(my + w * 0.36) + ' C' + r1(mx - w * 0.38) + ' ' + r1(my + w * 1.5) + ' ' + r1(mx + w * 0.38) + ' ' + r1(my + w * 1.7) + ' ' + r1(mx + w * 0.3) + ' ' + r1(my + w * 0.36) + ' Z" fill="#FF8FC7" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"></path></g>';
+    } },
+    { id: 'o', fr: 'Bouche en O', adj: ['étonné', 'étonnée'], draw: function (mx, my) { return '<ellipse cx="' + r1(mx) + '" cy="' + r1(my + 5) + '" rx="5.5" ry="7" fill="' + INK + '"></ellipse>'; } },
+    { id: 'ondulee', fr: 'Bouche tremblante', adj: ['inquiet', 'inquiète'], draw: function (mx, my, w) {
+      return '<path d="M' + r1(mx - w) + ' ' + r1(my + 4) + ' q ' + r1(w / 4) + ' -6 ' + r1(w / 2) + ' 0 t ' + r1(w / 2) + ' 0 t ' + r1(w / 2) + ' 0 t ' + r1(w / 2) + ' 0" fill="none" stroke="' + INK + '" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>';
+    } },
+    { id: 'dents', fr: 'Grandes dents', adj: ['hilare', 'hilare'], draw: function (mx, my, w) {
+      var b = my + w * 0.85;
+      return '<path d="M' + r1(mx - w) + ' ' + r1(my) + ' L' + r1(mx + w) + ' ' + r1(my) + ' Q' + r1(mx + w) + ' ' + r1(b) + ' ' + r1(mx) + ' ' + r1(b) + ' Q' + r1(mx - w) + ' ' + r1(b) + ' ' + r1(mx - w) + ' ' + r1(my) + ' Z" fill="#FFFFFF" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"></path>' +
+        '<path d="M' + r1(mx - w * 0.36) + ' ' + r1(my) + ' L' + r1(mx - w * 0.36) + ' ' + r1(my + w * 0.6) + ' M' + r1(mx) + ' ' + r1(my) + ' L' + r1(mx) + ' ' + r1(my + w * 0.75) + ' M' + r1(mx + w * 0.36) + ' ' + r1(my) + ' L' + r1(mx + w * 0.36) + ' ' + r1(my + w * 0.6) + '" stroke="' + INK + '" stroke-width="2"></path>';
+    } }
+  ];
+
+  var LIMBS = [
+    { id: 'aucun', fr: 'Aucun' },
+    { id: 'jambe', fr: 'Jambe unique', needsLegs: true },
+    { id: 'jambes', fr: 'Deux jambes', needsLegs: true },
+    { id: 'bras', fr: 'Deux bras' }
+  ];
+
+  var ACCS = [
+    { id: 'cornes', fr: 'Cornes', adj: ['cornu', 'cornue'], conflict: 'corne' },
+    { id: 'corne', fr: 'Corne unique', adj: ['à corne', 'à corne'], conflict: 'cornes' },
+    { id: 'onibi', fr: 'Onibi', adj: ['ensorcelé', 'ensorcelée'] },
+    { id: 'ofuda', fr: 'Ofuda', adj: ['scellé', 'scellée'] },
+    { id: 'fissures', fr: 'Fissures', adj: ['fêlé', 'fêlée'] },
+    { id: 'hachimaki', fr: 'Hachimaki', adj: ['survolté', 'survoltée'] },
+    { id: 'clochette', fr: 'Clochette', adj: ['tintinnabulant', 'tintinnabulante'] },
+    { id: 'pansement', fr: 'Pansement', adj: ['rafistolé', 'rafistolée'] }
+  ];
+  function accById(id) { for (var i = 0; i < ACCS.length; i++) { if (ACCS[i].id === id) { return ACCS[i]; } } return null; }
+
+  var SUFFIXES = ['obake', 'bō', 'kozō', 'nyūdō'];
+
+  function limbOptions(base) { return LIMBS.filter(function (l) { return base.legs || !l.needsLegs; }); }
+  function allowedAccs(base) { return ACCS.filter(function (a) { return base.noAcc.indexOf(a.id) === -1; }); }
+
+  function generate(seed) {
+    var rng = mulberry32(seed);
+    function pick(arr) { return arr[Math.floor(rng() * arr.length)]; }
+    var base = pick(BASES);
+    var eyes = pick(EYES);
+    var mouth = pick(MOUTHS);
+    var limb = pick(limbOptions(base));
+    var roll = rng();
+    var n = roll < 0.35 ? 0 : (roll < 0.8 ? 1 : 2);
+    var pool = allowedAccs(base).slice();
+    var accs = [];
+    while (accs.length < n && pool.length) {
+      var idx = Math.floor(rng() * pool.length);
+      var a = pool.splice(idx, 1)[0];
+      accs.push(a);
+      if (a.conflict) { pool = pool.filter(function (x) { return x.id !== a.conflict; }); }
+    }
+    var rr = rng();
+    var tier = rr < 0.04 ? 'legendaire' : (rr < 0.15 ? 'epique' : (rr < 0.4 ? 'rare' : 'commun'));
+    var pal = pick(PALETTES.filter(function (p) { return p.rarity === tier; }));
+    var lx = (rng() * 2 - 1) * 0.9, ly = (rng() * 2 - 1) * 0.5;
+    var delay = r1(rng() * 3);
+    var suffix = pick(SUFFIXES);
+    return { seed: seed, base: base, eyes: eyes, mouth: mouth, limb: limb, accs: accs, pal: pal, rarity: RARITY[tier], tier: tier, lx: lx, ly: ly, delay: delay, suffix: suffix };
+  }
+
+  function hasAcc(spec, id) { return spec.accs.some(function (a) { return a.id === id; }); }
+
+  function nameOf(spec) {
+    var prefix = spec.eyes.jp || spec.pal.jp || '';
+    var suffix = hasAcc(spec, 'cornes') || hasAcc(spec, 'corne') ? 'oni' : spec.suffix;
+    return (prefix ? prefix + '-' : '') + spec.base.jp + '-' + suffix;
+  }
+
+  function descOf(spec) {
+    var gi = spec.base.g === 'f' ? 1 : 0;
+    var lead = spec.eyes.adj || (spec.accs.length ? spec.accs[0].adj : null);
+    var words = [];
+    var phrases = [];
+    [spec.mouth.adj, lead].forEach(function (pair) {
+      if (!pair) { return; }
+      var w = pair[gi];
+      if (w.indexOf('à ') === 0) { phrases.push(w); } else { words.push(w); }
+    });
+    var out = spec.base.fr;
+    if (words.length) { out += ' ' + words.join(' et '); }
+    if (phrases.length) { out += ' ' + phrases.join(' '); }
+    return out;
+  }
+
+  function statsOf(spec) {
+    var m = { pv: 1, atq: 1, def: 1, vit: 1 };
+    var crit = 5;
+    var traits = [];
+    function add(label, effect) { traits.push({ label: label, effect: effect }); }
+    switch (spec.eyes.id) {
+      case 'cyclope': crit += 8; add('Œil unique', '+8 % critique'); break;
+      case 'vertical': crit += 10; add('Œil fendu', '+10 % critique'); break;
+      case 'trois': crit += 15; add('Trois yeux', '+15 % critique'); break;
+      case 'malicieux': m.atq += 0.08; add('Regard sournois', '+8 % attaque'); break;
+      case 'kawaii': m.pv += 0.1; add('Grands yeux', '+10 % PV'); break;
+    }
+    switch (spec.mouth.id) {
+      case 'crocs': m.atq += 0.15; add('Crocs', '+15 % attaque'); break;
+      case 'dents': m.atq += 0.1; m.def += 0.1; add('Grandes dents', '+10 % attaque et défense'); break;
+      case 'langue': m.vit += 0.1; add('Langue pendante', '+10 % vitesse'); break;
+    }
+    switch (spec.limb.id) {
+      case 'jambe': m.vit += 0.15; add('Jambe unique', '+15 % vitesse'); break;
+      case 'jambes': m.vit += 0.25; add('Deux jambes', '+25 % vitesse'); break;
+      case 'bras': m.atq += 0.15; add('Deux bras', '+15 % attaque'); break;
+    }
+    var burn = 0, souls = 0;
+    spec.accs.forEach(function (a) {
+      switch (a.id) {
+        case 'cornes': m.atq += 0.2; add('Cornes', '+20 % attaque'); break;
+        case 'corne': m.atq += 0.1; crit += 5; add('Corne unique', '+10 % attaque, +5 % critique'); break;
+        case 'onibi': burn = 3; add('Onibi', 'brûlure 3 % PV/s'); break;
+        case 'ofuda': m.def += 0.25; add('Ofuda', '+25 % défense'); break;
+        case 'fissures': m.atq += 0.15; m.def -= 0.15; add('Fissures', '+15 % attaque, −15 % défense'); break;
+        case 'hachimaki': m.vit += 0.2; add('Hachimaki', '+20 % vitesse'); break;
+        case 'clochette': souls = 10; add('Clochette', '+10 % d’âmes'); break;
+        case 'pansement': m.pv += 0.2; add('Pansement', '+20 % PV'); break;
+      }
+    });
+    if (spec.tier !== 'commun') { add('Palette ' + spec.pal.fr.toLowerCase(), '×' + String(spec.rarity.mult).replace('.', ',') + ' toutes stats'); }
+    var b = spec.base.stats, k = spec.rarity.mult;
+    return {
+      pv: Math.round(b.pv * m.pv * k), atq: Math.round(b.atq * m.atq * k),
+      def: Math.round(b.def * m.def * k), vit: Math.round(b.vit * m.vit * k),
+      crit: crit, burn: burn, souls: souls, traits: traits
+    };
+  }
+
+  function star(x, y, s, fill) {
+    return '<path class="m-spark" d="M' + x + ' ' + (y - s) + ' L' + (x + s * 0.25) + ' ' + (y - s * 0.25) + ' L' + (x + s) + ' ' + y + ' L' + (x + s * 0.25) + ' ' + (y + s * 0.25) + ' L' + x + ' ' + (y + s) + ' L' + (x - s * 0.25) + ' ' + (y + s * 0.25) + ' L' + (x - s) + ' ' + y + ' L' + (x - s * 0.25) + ' ' + (y - s * 0.25) + ' Z" fill="' + fill + '" stroke="' + INK + '" stroke-width="1.5" stroke-linejoin="round"></path>';
+  }
+
+  function svgOf(spec, label) {
+    var b = spec.base, f = b.face, p = spec.pal;
+    var legsOn = spec.limb.id === 'jambe' || spec.limb.id === 'jambes';
+    var dy = legsOn ? -14 : 0;
+    var back = '', front = '', top = '';
+
+    if (hasAcc(spec, 'cornes')) {
+      [-1, 1].forEach(function (s) {
+        var x = 100 + s * b.horn.spread, y = b.horn.y;
+        back += '<path d="M' + (x - 8) + ' ' + (y + 8) + ' L' + (x + s * 7) + ' ' + (y - 20) + ' L' + (x + 8) + ' ' + (y + 8) + ' Z" fill="#FFE45C" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"></path>';
+      });
+    }
+    if (hasAcc(spec, 'corne')) {
+      back += '<path d="M91 ' + (b.horn.y + 8) + ' L100 ' + (b.horn.y - 26) + ' L109 ' + (b.horn.y + 8) + ' Z" fill="#FFE45C" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"></path>';
+    }
+    if (spec.limb.id === 'jambe' && b.bottom) {
+      var bx = b.bottom.x, by = b.bottom.y;
+      back += '<path d="M' + bx + ' ' + (by - 4) + ' L' + bx + ' ' + (by + 14) + '" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"></path>' +
+        rect(bx - 14, by + 14, 28, 7, 2, '#E9B37A', 2.5) +
+        '<rect x="' + (bx - 10) + '" y="' + (by + 21) + '" width="5" height="5" fill="' + INK + '"></rect><rect x="' + (bx + 5) + '" y="' + (by + 21) + '" width="5" height="5" fill="' + INK + '"></rect>';
+    }
+    if (spec.limb.id === 'jambes' && b.bottom) {
+      [-1, 1].forEach(function (s) {
+        var x = b.bottom.x + s * 16, y = b.bottom.y;
+        back += '<path d="M' + x + ' ' + (y - 6) + ' L' + x + ' ' + (y + 14) + '" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"></path>' +
+          '<ellipse cx="' + (x + s * 4) + '" cy="' + (y + 17) + '" rx="8" ry="4.5" fill="' + INK + '"></ellipse>';
+      });
+    }
+    if (spec.limb.id === 'bras') {
+      var sd = b.sides;
+      back += '<path d="M' + (sd.l + 6) + ' ' + sd.y + ' Q' + (sd.l - 16) + ' ' + (sd.y + 4) + ' ' + (sd.l - 22) + ' ' + (sd.y - 16) + '" fill="none" stroke="' + INK + '" stroke-width="4.5" stroke-linecap="round"></path>' +
+        '<circle cx="' + (sd.l - 22) + '" cy="' + (sd.y - 19) + '" r="5.5" fill="' + p.body + '" stroke="' + INK + '" stroke-width="2.5"></circle>' +
+        '<path d="M' + (sd.r - 6) + ' ' + sd.y + ' Q' + (sd.r + 16) + ' ' + (sd.y + 4) + ' ' + (sd.r + 22) + ' ' + (sd.y - 16) + '" fill="none" stroke="' + INK + '" stroke-width="4.5" stroke-linecap="round"></path>' +
+        '<circle cx="' + (sd.r + 22) + '" cy="' + (sd.y - 19) + '" r="5.5" fill="' + p.body + '" stroke="' + INK + '" stroke-width="2.5"></circle>';
+    }
+
+    if (hasAcc(spec, 'fissures')) {
+      var cx = f.x - f.w * 0.5, cy = f.y + f.w * 0.12;
+      front += '<path d="M' + r1(cx) + ' ' + r1(cy - 14) + ' l5 7 l-5 6 l6 8" fill="none" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>';
+    }
+    if (hasAcc(spec, 'hachimaki')) {
+      var hy = f.y - f.w * 0.5 - 6, hx = f.x - f.w * 0.62, hw = f.w * 1.24;
+      front += '<rect x="' + r1(hx) + '" y="' + r1(hy - 5) + '" width="' + r1(hw) + '" height="10" rx="5" fill="#FF4B3E" stroke="' + INK + '" stroke-width="2.5"></rect>' +
+        '<path d="M' + r1(hx + hw - 4) + ' ' + r1(hy) + ' l16 -9 l2 9 Z M' + r1(hx + hw - 4) + ' ' + r1(hy) + ' l14 8 l-4 5 Z" fill="#FF4B3E" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"></path>';
+    }
+    if (hasAcc(spec, 'ofuda')) {
+      var ox = r1(f.x + f.w * 0.48), oy = r1(f.y - f.w * 0.28);
+      front += '<g transform="rotate(18 ' + ox + ' ' + oy + ')">' + rect(r1(ox - 7), r1(oy - 15), 14, 30, 1.5, '#FFFFFF', 2.5) +
+        '<rect x="' + r1(ox - 2) + '" y="' + r1(oy - 10) + '" width="4" height="20" fill="#FF4B3E"></rect></g>';
+    }
+    if (hasAcc(spec, 'pansement')) {
+      var px = r1(f.x - f.w * 0.45), py = r1(f.y - f.w * 0.32);
+      front += '<g transform="rotate(45 ' + px + ' ' + py + ')">' + rect(r1(px - 12), r1(py - 4), 24, 8, 3, '#FFE7C7', 2.2) + '</g>' +
+        '<g transform="rotate(-45 ' + px + ' ' + py + ')">' + rect(r1(px - 12), r1(py - 4), 24, 8, 3, '#FFE7C7', 2.2) + '</g>';
+    }
+
+    var blush = '';
+    [-1, 1].forEach(function (s) {
+      blush += '<ellipse cx="' + r1(f.x + s * f.w * 0.4) + '" cy="' + r1(f.y + f.w * 0.12) + '" rx="' + r1(f.w * 0.08) + '" ry="' + r1(f.w * 0.045) + '" fill="#FF8FC7" opacity="0.75"></ellipse>';
+    });
+    var face = blush + spec.eyes.draw(f, spec.lx, spec.ly) + spec.mouth.draw(f.x, f.y + f.w * 0.34, f.w * 0.28);
+
+    if (hasAcc(spec, 'clochette')) {
+      var sx = b.sides.r, syy = b.sides.y;
+      top += '<path d="M' + (sx - 10) + ' ' + syy + ' Q' + (sx + 2) + ' ' + (syy + 4) + ' ' + sx + ' ' + (syy + 13) + '" fill="none" stroke="' + INK + '" stroke-width="2.5"></path>' +
+        '<circle cx="' + sx + '" cy="' + (syy + 22) + '" r="9" fill="#FFD23F" stroke="' + INK + '" stroke-width="2.5"></circle>' +
+        '<path d="M' + (sx - 5) + ' ' + (syy + 24) + ' L' + (sx + 5) + ' ' + (syy + 24) + '" stroke="' + INK + '" stroke-width="2"></path>' +
+        '<circle cx="' + sx + '" cy="' + (syy + 27) + '" r="1.6" fill="' + INK + '"></circle>';
+    }
+    if (hasAcc(spec, 'onibi')) {
+      top += '<g class="m-flame"><path d="M162 22 C168 34 176 40 174 52 C172 62 166 66 162 66 C158 66 151 62 150 54 C148 44 156 38 162 22 Z" fill="#5CC8FF" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"></path>' +
+        '<path d="M162 40 C165 46 168 49 167 54 C166 59 164 60 162 60 C160 60 157 58 157 54 C157 49 160 46 162 40 Z" fill="#E6F8FF"></path></g>';
+    }
+
+    var sparks = '';
+    if (spec.tier === 'legendaire') { sparks = star(26, 40, 9, '#FFE45C') + star(178, 96, 7, '#FFE45C') + star(22, 140, 6, '#FFFFFF') + star(150, 18, 6, '#FFFFFF'); }
+    if (spec.tier === 'epique') { sparks = star(28, 50, 7, '#D9C2FF') + star(176, 120, 6, '#D9C2FF'); }
+
+    return '<svg viewBox="0 0 200 200" role="img" aria-label="' + label + '" xmlns="http://www.w3.org/2000/svg">' +
+      '<ellipse cx="100" cy="190" rx="44" ry="6" fill="' + INK + '" opacity="0.18"></ellipse>' +
+      '<g class="m-float" style="animation-delay:-' + spec.delay + 's"><g transform="translate(0 ' + dy + ')">' +
+      back + b.draw(p) + front + face + top +
+      '</g></g>' + sparks + '</svg>';
+  }
+
+  var COMBOS = (function () {
+    var total = 0;
+    BASES.forEach(function (b) {
+      var k = allowedAccs(b).length;
+      var sets = 1 + k + (k * (k - 1) / 2 - 1);
+      total += limbOptions(b).length * sets;
+    });
+    return total * EYES.length * MOUTHS.length * PALETTES.length;
+  })();
+
+  var api = { generate: generate, nameOf: nameOf, descOf: descOf, statsOf: statsOf, svgOf: svgOf, COMBOS: COMBOS };
+  if (typeof module !== 'undefined' && module.exports) { module.exports = api; }
+  if (typeof document === 'undefined') { return; }
+
+  /* ---------- page ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var MAX = 999999999;
+  var state = { seed: 2026, sheetStart: 2027 };
+
+  function clampSeed(v) {
+    var n = Math.floor(Math.abs(Number(v)));
+    if (!isFinite(n)) { n = 0; }
+    return n % (MAX + 1);
+  }
+  function fmt(n) { return Number(n).toLocaleString('fr-FR'); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+
+  var STAT_ROWS = [
+    { key: 'pv', label: 'PV', color: 'var(--stat-pv)', max: 420 },
+    { key: 'atq', label: 'Attaque', color: 'var(--stat-atq)', max: 460 },
+    { key: 'def', label: 'Défense', color: 'var(--stat-def)', max: 360 },
+    { key: 'vit', label: 'Vitesse', color: 'var(--stat-vit)', max: 420 },
+    { key: 'crit', label: 'Critique', color: 'var(--stat-crit)', max: 30, suffix: ' %' }
+  ];
+
+  function renderMain() {
+    var spec = generate(state.seed);
+    var name = nameOf(spec), desc = descOf(spec), st = statsOf(spec);
+    $('stage-monster').innerHTML = svgOf(spec, esc(name + ', ' + desc));
+    $('name').textContent = name;
+    $('desc').textContent = desc;
+    $('rarity-label').textContent = spec.rarity.fr;
+    $('rarity-dot').style.background = spec.rarity.color;
+    var burst = $('burst');
+    if (spec.tier === 'legendaire' || spec.tier === 'epique') {
+      burst.hidden = false;
+      burst.style.background = spec.tier === 'legendaire'
+        ? 'repeating-conic-gradient(from 0deg, #FFE45C 0deg 10deg, #FFF2A6 10deg 20deg)'
+        : 'repeating-conic-gradient(from 0deg, #E3D2FF 0deg 10deg, #F3EAFF 10deg 20deg)';
+    } else { burst.hidden = true; }
+
+    var recipe = [
+      ['Objet', spec.base.fr],
+      ['Regard', spec.eyes.fr],
+      ['Bouche', spec.mouth.fr],
+      ['Membres', spec.limb.fr],
+      ['Accessoires', spec.accs.length ? spec.accs.map(function (a) { return a.fr; }).join(', ') : 'Aucun'],
+      ['Palette', spec.pal.fr + ' · ' + spec.rarity.fr.toLowerCase()]
+    ];
+    $('recipe').innerHTML = recipe.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('');
+
+    $('stats').innerHTML = STAT_ROWS.map(function (row) {
+      var v = st[row.key];
+      var pct = Math.max(4, Math.min(100, v / row.max * 100));
+      return '<div class="stat"><span>' + row.label + '</span>' +
+        '<div class="track" role="img" aria-label="' + row.label + ' : ' + v + (row.suffix || '') + '"><div class="fill" style="width:' + pct.toFixed(1) + '%; background:' + row.color + '"></div></div>' +
+        '<span class="val">' + v + (row.suffix || '') + '</span></div>';
+    }).join('');
+
+    var traits = st.traits;
+    $('traits').innerHTML = traits.length
+      ? traits.map(function (t) { return '<li class="chip">' + esc(t.label) + ' · <b>' + esc(t.effect) + '</b></li>'; }).join('')
+      : '<li class="none">Aucun bonus : un yōkai tout simple.</li>';
+
+    var input = $('seed');
+    if (String(input.value) !== String(state.seed)) { input.value = state.seed; }
+    Array.prototype.forEach.call(document.querySelectorAll('.tile'), function (t) {
+      t.setAttribute('aria-pressed', String(Number(t.dataset.seed) === state.seed));
+    });
+    try { history.replaceState(null, '', '#graine-' + state.seed); } catch (e) { /* ignore */ }
+  }
+
+  function renderSheet() {
+    var html = '';
+    for (var i = 0; i < 12; i++) {
+      var s = (state.sheetStart + i) % (MAX + 1);
+      var spec = generate(s);
+      var name = nameOf(spec);
+      html += '<button class="tile" type="button" data-seed="' + s + '" aria-pressed="' + (s === state.seed) + '">' +
+        '<div class="mini"><svg class="hills" viewBox="0 0 400 400" preserveAspectRatio="none" aria-hidden="true">' +
+        '<path d="M0 330 Q 90 292 200 318 Q 300 290 400 312 L 400 400 L 0 400 Z" fill="#7FDCA0" stroke="#2B1D3F" stroke-width="5"></path></svg>' +
+        '<div class="monster">' + svgOf(spec, esc(name)) + '</div></div>' +
+        '<div class="tile-info"><span class="tile-name">' + esc(name) + '</span>' +
+        '<span class="tile-meta"><span class="dot" style="background:' + spec.rarity.color + '"></span>' + spec.rarity.fr + ' · n° ' + s + '</span></div></button>';
+    }
+    $('grid').innerHTML = html;
+    var last = (state.sheetStart + 11) % (MAX + 1);
+    $('sheet-range').textContent = 'Graines ' + fmt(state.sheetStart) + ' à ' + fmt(last) + '. Touche une carte pour l’examiner.';
+  }
+
+  function setSeed(v) { state.seed = clampSeed(v); renderMain(); }
+  function randomSeed() { return Math.floor(Math.random() * 999999) + 1; }
+
+  $('combos').textContent = fmt(COMBOS);
+  $('random').addEventListener('click', function () { setSeed(randomSeed()); });
+  $('prev').addEventListener('click', function () { setSeed(Math.max(0, state.seed - 1)); });
+  $('next').addEventListener('click', function () { setSeed(state.seed + 1); });
+  $('seed').addEventListener('change', function (e) { setSeed(e.target.value); });
+  $('seed').addEventListener('keydown', function (e) { if (e.key === 'Enter') { setSeed(e.target.value); } });
+  $('new-sheet').addEventListener('click', function () { state.sheetStart = randomSeed(); renderSheet(); });
+  $('grid').addEventListener('click', function (e) {
+    var tile = e.target.closest('.tile');
+    if (tile) { setSeed(tile.dataset.seed); }
+  });
+  $('copy').addEventListener('click', function () {
+    var note = $('copy-note');
+    var text = String(state.seed);
+    function fallback() {
+      var input = $('seed');
+      input.focus(); input.select();
+      note.textContent = 'Graine sélectionnée : copie-la avec Ctrl+C ou Cmd+C.';
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { note.textContent = 'Graine ' + text + ' copiée.'; }, fallback);
+    } catch (err) { fallback(); }
+  });
+
+  function fromHash() {
+    var m = /^#graine-(\d+)$/.exec(location.hash || '');
+    return m ? clampSeed(m[1]) : null;
+  }
+  window.addEventListener('hashchange', function () {
+    var h = fromHash();
+    if (h !== null && h !== state.seed) { setSeed(h); }
+  });
+
+  var initial = fromHash();
+  if (initial !== null) { state.seed = initial; }
+  renderSheet();
+  renderMain();
+})();
+</script>
