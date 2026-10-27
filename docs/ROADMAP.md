@@ -8,7 +8,7 @@ Miroir des [milestones](https://github.com/YannVogel/hyakki/milestones) et des e
 | **1 · Moteur de jeu** | #2 Moteur de jeu (TypeScript pur) | Partie complète simulable en Node, équilibrage mesuré | Terminée (PR #54) ; #53 attend la validation de Yann |
 | **2 · Fabrique à yōkai** | #3 Fabrique à yōkai | Yōkai générés, dessinés et animés en Skia, capture des shikigami | Terminée (PR #24-#27 : milestones 1 et 2) ; #55 attend une mesure sur appareil |
 | **3 · Boucle jouable** | #4 Design system et composants, #5 Écrans et boucle de jeu | Une partie se joue de la première vague au premier Festival | Terminée (PR #57) |
-| **4 · Feel & finitions** | #6 Art : héros et Gardiens, #7 Feel : effets, animations, haptique (+ #28 générateur V2) | Combat fluide et expressif, illustrations définitives | À faire |
+| **4 · Feel & finitions** | #6 Art : héros et Gardiens, #7 Feel : effets, animations, haptique (+ #28 générateur V2) | Combat fluide et expressif, illustrations définitives | Terminée (PR #60) ; #58 (illustrations HD) et #59 (validation de l'icône) attendent Yann, 60 i/s à mesurer dans #55 |
 | **5 · Publication** | #8 Publication sur les stores | Disponible sur l'App Store et Google Play, étude de cas en ligne | À faire |
 
 ## Ordre conseillé
