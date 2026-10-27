@@ -7,6 +7,7 @@ export { HapticsProvider, useHaptics } from './haptics';
 export { Icon } from './Icon';
 export type { IconPart } from './Icon';
 export type { HapticKind, HapticTrigger } from './haptics';
+export { ReduceMotionProvider, useReduceMotion } from './motion';
 export { OutlinedText } from './OutlinedText';
 export { Pill } from './Pill';
 export { ProgressBar } from './ProgressBar';

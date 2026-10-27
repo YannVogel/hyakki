@@ -90,4 +90,5 @@ Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque comp
 - Cibles tactiles ≥ 44 pt.
 - Contraste texte ≥ 4,5:1 (≥ 3:1 au-delà de 24 px ou 18,7 px gras). Le texte blanc n'est autorisé sur couleur vive qu'avec le contour encre.
 - Libellé d'accessibilité sur chaque bouton-icône et chaque illustration informative.
-- Haptique désactivable dans les réglages.
+- Haptique désactivable dans les réglages : frappe légère au toucher, moyenne sur un critique du héros ou du joueur (pas sur ceux de l'équipe, trop fréquents), succès quand un Gardien tombe ; sélection sur les boutons, onglets et interrupteurs.
+- Écran Réglages (bouton en bas du Sanctuaire) : vibrations, notifications, réduire les animations. Ce dernier s'ajoute au réglage du téléphone, toujours respecté : `useReduceMotion()` (`src/ui/motion.tsx`) vaut vrai si l'un des deux le demande.

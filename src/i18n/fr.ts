@@ -136,6 +136,24 @@ export const fr = {
     back: 'Retour',
     farming: 'Le Gardien attend que tu sois prêt.',
   },
+  settings: {
+    title: 'Réglages',
+    open: 'Réglages',
+    back: 'Retour',
+    haptics: {
+      label: 'Vibrations',
+      description: 'Frappes, coups critiques et Gardiens vaincus.',
+    },
+    notifications: {
+      label: 'Notifications',
+      description: 'Te prévenir quand les gains hors ligne atteignent leur plafond.',
+    },
+    reduceMotion: {
+      label: 'Réduire les animations',
+      description:
+        'Effets en fondus courts, rien ne tourne ni ne clignote. Le réglage du téléphone est toujours respecté.',
+    },
+  },
   sanctuary: {
     title: 'Sanctuaire',
     subtitle: 'Dépense tes âmes pour booster ton onmyōji !',

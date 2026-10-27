@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { useReducedMotion } from 'react-native-reanimated';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,9 +12,10 @@ import {
   useGame,
   useGameStore,
 } from '@/state';
-import { colors, spacing } from '@/ui';
+import { colors, spacing, useHaptics, useReduceMotion } from '@/ui';
 
 import { BattleScene, type LastHit } from './BattleScene';
+import { useCombatHaptics } from './combatHaptics';
 import { CombatHeader } from './CombatHeader';
 import { GuardianCutIn } from './GuardianCutIn';
 import { FarmingBanner } from './FarmingBanner';
@@ -39,10 +39,16 @@ export function CombatScreen() {
   const game = useGame((store) => store.game);
   const events = useGame((store) => store.events);
   const actions = useGameStore().getState();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReduceMotion();
   const motion = reduceMotion ? 'reduced' : 'full';
   const effects = useCombatEffects(motion);
   const heroPose = useHeroPose();
+  const haptics = useHaptics();
+  useCombatHaptics();
+  const strike = () => {
+    haptics('light');
+    actions.tap();
+  };
   const parade = paradeView(game);
   const enemy = enemyView(game);
   const lastHit = useMemo(() => lastHitOf(events), [events]);
@@ -60,7 +66,7 @@ export function CombatScreen() {
           heroPose={heroPose}
           effects={effects}
           motion={motion}
-          onTap={actions.tap}
+          onTap={strike}
         />
       </View>
       {parade.farming ? <FarmingBanner onChallenge={actions.challengeGuardian} /> : null}

@@ -123,6 +123,7 @@ Tout tirage passe par `engine/rng`. La graine d'un yōkai dérive du défilé et
 - `deserialize(texte)` ne lève jamais d'exception : il renvoie `{ ok: true, state, savedAt }` ou `{ ok: false, error }` avec une raison typée (`invalid-json`, `unsupported-version`, `invalid-shape`). La validation vérifie chaque champ et la cohérence (équipe possédée, graines uniques…).
 - Chaque changement de schéma ajoute une migration testée (`save/migrations/vN-to-vN+1.ts`), appliquée avant la validation.
 - `savedAt` (horloge murale, fournie par `services`) sert au calcul hors ligne. Une heure système qui recule ne donne jamais de gains négatifs ni de gains bonus.
+- Les réglages du joueur (vibrations, notifications, réduire les animations) vivent à part, sous la clé MMKV `settings` : un petit store zustand (`src/state/settings.ts`) les relit au lancement (chaque valeur absente ou invalide reprend sa valeur par défaut) et les écrit à chaque changement. Ils ne touchent jamais la sauvegarde de la partie.
 
 ## 6. Build
 

@@ -1,8 +1,9 @@
 import { Canvas, Group, type Transforms3d } from '@shopify/react-native-skia';
 import { memo, useMemo } from 'react';
-import { useDerivedValue, useReducedMotion } from 'react-native-reanimated';
+import { useDerivedValue } from 'react-native-reanimated';
 
 import type { YokaiSpec } from '@/engine';
+import { useReduceMotion } from '@/ui/motion';
 
 import { useFrameClock } from '../frameClock';
 import { DrawNodeView, type Motion } from './DrawNodeView';
@@ -38,7 +39,7 @@ export interface YokaiCanvasProps {
 /** A generated yōkai drawn with Skia, with its idle animations (off when motion is reduced). */
 export function YokaiCanvas({ spec, size, accessibilityLabel, testID }: YokaiCanvasProps) {
   const drawing = useMemo(() => drawYokai(spec), [spec]);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReduceMotion();
   const motion = useMotion(spec.animationDelay, !reduceMotion);
   return (
     <Canvas
