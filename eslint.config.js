@@ -45,15 +45,16 @@ module.exports = defineConfig([
   },
   {
     files: ['src/engine/**/*.ts'],
-    ignores: ['src/engine/**/*.test.ts'],
+    // Tests and their helpers (testing/ folders) may use Node and test libraries.
+    ignores: ['src/engine/**/*.test.ts', 'src/engine/**/testing/**'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
-              regex: '^(?!\\.{1,2}/|break_infinity\\.js$)',
-              message: 'src/engine only imports itself (relative paths) and break_infinity.js.',
+              regex: '^(?!\\.{1,2}/)',
+              message: 'src/engine only imports itself (relative paths).',
             },
           ],
         },
@@ -67,6 +68,23 @@ module.exports = defineConfig([
       'no-restricted-properties': [
         'error',
         { object: 'Math', property: 'random', message: 'Use the seeded RNG of src/engine/rng.' },
+      ],
+    },
+  },
+  {
+    // The BigNum adapter is the only door to break_infinity.js.
+    files: ['src/engine/numbers/bigNum.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '^(?!\\.{1,2}/|break_infinity\\.js$)',
+              message: 'The BigNum adapter only imports break_infinity.js.',
+            },
+          ],
+        },
       ],
     },
   },

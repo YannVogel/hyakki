@@ -2,6 +2,24 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-27 — Équilibrage : niveaux qui se multiplient, brûlures plafonnées
+
+- **Décision** : la Lame d'ofuda multiplie les dégâts par 1,0925 à chaque niveau (au lieu de +8 % linéaires) ; PV et âmes croissent de ×1,13 par vague (au lieu de 1,165 et 1,14) ; les coûts du Sanctuaire de ×1,12 par niveau (au lieu de 1,15). Les niveaux de shikigami restent linéaires (+10 %). Une brûlure s'arrête quand il reste 10 % des PV de l'ennemi. Le bonus du Festival reste à +5 % par étincelle.
+- **Raison** : mesuré par le harnais (`scripts/simulate.ts`) : avec les formules de départ, tous les profils butaient vers la vague 40 ; deux croissances composées (Lame et niveaux de shikigami) faisaient au contraire s'emballer la progression ; une brûlure en % des PV donnait une vitesse de progression indépendante de la puissance (vague 512 000 en 2 jours). Les valeurs retenues tiennent les cibles de `GAME_DESIGN.md` § 5.2.
+- **Conséquence** : toutes les constantes vivent dans `src/engine/balance.ts` ; toute modification se mesure en relançant le harnais. Validation en jeu par Yann : issue `besoin-yann` « Valider l'équilibrage ».
+
+## 2026-10-27 — Hors ligne : calcul analytique et extrapolation au-delà de 2 000 yōkai
+
+- **Décision** : `simulateOffline` calcule yōkai par yōkai avec les dégâts espérés ; au-delà de 2 000 yōkai simulés, le farm est extrapolé depuis l'échantillon et les captures ne sont tirées que sur l'échantillon. Un yōkai ne tombe jamais plus vite qu'une frappe de l'attaquant le plus rapide.
+- **Raison** : rejouer 24 h de combat (jusqu'à ~86 000 yōkai) prendrait plusieurs secondes sous Hermes au démarrage de l'app.
+- **Conséquence** : calcul borné et rapide ; un retour après une très longue absence donne un peu moins de captures qu'en jeu actif (acceptable : l'efficacité hors ligne est déjà de 50 %).
+
+## 2026-10-27 — Le moteur parle en identifiants, les textes français vivent dans `src/i18n`
+
+- **Décision** : le générateur et les stats manipulent des identifiants anglais (`lantern`, `cyclops`, `horns`…). Le nom japonais d'un yōkai (`Mitsume-Taiko-obake`) est calculé par le moteur (`nameOf`) : c'est une donnée du jeu, identique dans toutes les langues. La description française accordée en genre, les noms des pièces et les libellés des traits sont dans `src/i18n/yokai.ts` (`describeYokai`, `traitLabel`, `traitEffectText`).
+- **Raison** : le moteur reste pur et sans texte joueur ; l'accord en genre est une règle de la langue française, pas du jeu. Ajouter une langue ne touche pas au moteur.
+- **Conséquence** : les tests de `src/i18n/yokai.test.ts` vérifient que les textes français sont identiques à ceux du prototype (aux espaces fines près).
+
 ## 2026-10-27 — Socle technique : Expo SDK 58, iPhone uniquement, polices chargées au démarrage
 
 - **Décision** : Expo SDK 58 (React Native 0.88, React 19.3, TypeScript 6.0), routes expo-router dans `app/` à la racine, identifiant `com.parallaxworks.hyakki` sur iOS et Android. Sur iOS, `supportsTablet: false` : l'app tourne en mode iPhone sur iPad. Les polices sont chargées par `useFonts` derrière l'écran de lancement.
@@ -42,7 +60,8 @@ Chaque entrée : date, décision, raison, conséquence. Les plus récentes en ha
 
 - **Décision** : `break_infinity.js` derrière `src/engine/numbers`.
 - **Raison** : les croissances exponentielles dépassent `1e308` vers la vague 4 000.
-- **Conséquence** : interdiction d'utiliser `number` pour les grandeurs exponentielles. À valider par un spike de performance (issue de la milestone 1).
+- **Conséquence** : interdiction d'utiliser `number` pour les grandeurs exponentielles. Seul `src/engine/numbers/bigNum.ts` importe la bibliothèque (règle de lint) ; le reste du moteur manipule un type opaque `BigNum`.
+- **Spike de performance (2026-10-27)** : 1 million de multiplications `BigNum × number` en **35 ms** (médiane de 5 passes, Node 24.16, Mac Apple Silicon), largement sous la cible de 200 ms. Script : `npx tsx scripts/bench-bignum.ts`.
 
 ## Questions ouvertes
 

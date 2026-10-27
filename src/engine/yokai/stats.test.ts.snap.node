@@ -1,0 +1,363 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`statsOf and nameOf keeps the reference seeds stable 1`] = `
+[
+  {
+    "name": "Hitotsume-Kasa-obake",
+    "seed": 0,
+    "stats": {
+      "attack": 115,
+      "burnRate": 0,
+      "critChance": 0.13,
+      "defense": 88,
+      "hp": 80,
+      "soulsBonus": 0,
+      "speed": 130,
+      "traits": [
+        {
+          "effects": [
+            {
+              "kind": "crit",
+              "value": 0.08,
+            },
+          ],
+          "source": {
+            "id": "cyclops",
+            "part": "eyes",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "attack",
+              "value": 0.15,
+            },
+          ],
+          "source": {
+            "id": "fangs",
+            "part": "mouth",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "defense",
+              "value": 0.25,
+            },
+          ],
+          "source": {
+            "id": "ofuda",
+            "part": "accessory",
+          },
+        },
+      ],
+    },
+  },
+  {
+    "name": "Hitotsume-Taiko-obake",
+    "seed": 1,
+    "stats": {
+      "attack": 115,
+      "burnRate": 0.03,
+      "critChance": 0.13,
+      "defense": 100,
+      "hp": 130,
+      "soulsBonus": 0,
+      "speed": 84,
+      "traits": [
+        {
+          "effects": [
+            {
+              "kind": "crit",
+              "value": 0.08,
+            },
+          ],
+          "source": {
+            "id": "cyclops",
+            "part": "eyes",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "attack",
+              "value": 0.15,
+            },
+          ],
+          "source": {
+            "id": "arms",
+            "part": "limbs",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "burn",
+              "value": 0.03,
+            },
+          ],
+          "source": {
+            "id": "onibi",
+            "part": "accessory",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "speed",
+              "value": 0.2,
+            },
+          ],
+          "source": {
+            "id": "hachimaki",
+            "part": "accessory",
+          },
+        },
+      ],
+    },
+  },
+  {
+    "name": "Hitotsume-Chōchin-obake",
+    "seed": 7,
+    "stats": {
+      "attack": 99,
+      "burnRate": 0,
+      "critChance": 0.13,
+      "defense": 108,
+      "hp": 100,
+      "soulsBonus": 0,
+      "speed": 138,
+      "traits": [
+        {
+          "effects": [
+            {
+              "kind": "crit",
+              "value": 0.08,
+            },
+          ],
+          "source": {
+            "id": "cyclops",
+            "part": "eyes",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "attack",
+              "value": 0.1,
+            },
+            {
+              "kind": "stat",
+              "stat": "defense",
+              "value": 0.1,
+            },
+          ],
+          "source": {
+            "id": "teeth",
+            "part": "mouth",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "speed",
+              "value": 0.25,
+            },
+          ],
+          "source": {
+            "id": "legs",
+            "part": "limbs",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "defense",
+              "value": 0.25,
+            },
+          ],
+          "source": {
+            "id": "ofuda",
+            "part": "accessory",
+          },
+        },
+      ],
+    },
+  },
+  {
+    "name": "Mitsume-Taiko-obake",
+    "seed": 42,
+    "stats": {
+      "attack": 110,
+      "burnRate": 0,
+      "critChance": 0.2,
+      "defense": 110,
+      "hp": 130,
+      "soulsBonus": 0,
+      "speed": 88,
+      "traits": [
+        {
+          "effects": [
+            {
+              "kind": "crit",
+              "value": 0.15,
+            },
+          ],
+          "source": {
+            "id": "three",
+            "part": "eyes",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "attack",
+              "value": 0.1,
+            },
+            {
+              "kind": "stat",
+              "stat": "defense",
+              "value": 0.1,
+            },
+          ],
+          "source": {
+            "id": "teeth",
+            "part": "mouth",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "speed",
+              "value": 0.25,
+            },
+          ],
+          "source": {
+            "id": "legs",
+            "part": "limbs",
+          },
+        },
+      ],
+    },
+  },
+  {
+    "name": "Sakura-Dobin-obake",
+    "seed": 2026,
+    "stats": {
+      "attack": 100,
+      "burnRate": 0,
+      "critChance": 0.05,
+      "defense": 138,
+      "hp": 175,
+      "soulsBonus": 0,
+      "speed": 94,
+      "traits": [
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "speed",
+              "value": 0.25,
+            },
+          ],
+          "source": {
+            "id": "legs",
+            "part": "limbs",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "allStats",
+              "multiplier": 1.25,
+            },
+          ],
+          "source": {
+            "id": "sakura",
+            "part": "palette",
+          },
+        },
+      ],
+    },
+  },
+  {
+    "name": "Mitsume-Chōchin-oni",
+    "seed": 999999,
+    "stats": {
+      "attack": 113,
+      "burnRate": 0,
+      "critChance": 0.25,
+      "defense": 80,
+      "hp": 100,
+      "soulsBonus": 0,
+      "speed": 121,
+      "traits": [
+        {
+          "effects": [
+            {
+              "kind": "crit",
+              "value": 0.15,
+            },
+          ],
+          "source": {
+            "id": "three",
+            "part": "eyes",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "speed",
+              "value": 0.1,
+            },
+          ],
+          "source": {
+            "id": "tongue",
+            "part": "mouth",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "attack",
+              "value": 0.15,
+            },
+          ],
+          "source": {
+            "id": "arms",
+            "part": "limbs",
+          },
+        },
+        {
+          "effects": [
+            {
+              "kind": "stat",
+              "stat": "attack",
+              "value": 0.1,
+            },
+            {
+              "kind": "crit",
+              "value": 0.05,
+            },
+          ],
+          "source": {
+            "id": "horn",
+            "part": "accessory",
+          },
+        },
+      ],
+    },
+  },
+]
+`;

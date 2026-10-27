@@ -30,10 +30,13 @@ src/
     numbers/              BigNum (adaptateur) + formatage FR (k, M, Md, aa, ab…)
     yokai/                générateur procédural : spec, stats, nom (sans rendu)
     combat/               tick, dégâts, vagues, Gardiens, talismans
-    economy/              coûts, gains, Sanctuaire, captures
+    economy/              coûts et achats du Sanctuaire
+    shikigami/            captures, collection, équipe, montée de niveau
     prestige/             Festival
     offline/              gains hors ligne
-    save/                 schéma de sauvegarde versionné + migrations
+    save/                 sérialisation versionnée, validation, migrations
+    testing/              générateurs fast-check partagés par les tests (hors couverture)
+    gameState.ts          état complet du jeu (GameState) et nouvelle partie
     index.ts              API publique du moteur
   render/                 Skia : dessine une spec de yōkai, la scène, les effets
   ui/                     design system : tokens, composants de base
@@ -74,7 +77,7 @@ Ces règles sont vérifiées par ESLint ([`eslint.config.js`](../eslint.config.j
 | Règle | Outil |
 |---|---|
 | Frontières entre couches | `import/no-restricted-paths` (alias `@/` résolus par le resolver TypeScript) |
-| `engine` n'importe que lui-même et `break_infinity.js` | `no-restricted-imports` (hors fichiers de test) |
+| `engine` n'importe que lui-même ; `break_infinity.js` seulement dans `numbers/bigNum.ts` | `no-restricted-imports` (hors fichiers de test) |
 | Pas d'horloge dans `engine` (`Date`, `performance`) | `no-restricted-globals` |
 | Pas de `Math.random` ni de `crypto` dans `engine` | `no-restricted-properties`, `no-restricted-globals` |
 
@@ -93,6 +96,8 @@ Le moteur est une **fonction de transition** : `step(state, dtMs, inputs) → { 
 
 L'UI appelle `step` à intervalle régulier (≈ 10 fois par seconde) et anime les `events`. Les animations ne modifient jamais l'état.
 
+Chaque pas couvre l'intervalle [début, fin[ et les attaques suivent des minuteurs fixes : découper une durée en plusieurs pas donne le même résultat (voir `docs/GAME_DESIGN.md` § 5.1).
+
 ### 4.2 Hors ligne
 
 Au retour, `simulateOffline(state, elapsedMs)` calcule le résultat **analytiquement par segments** (une vague entière à la fois), pas en rejouant des milliers de ticks. Il respecte le plafond et s'arrête au Gardien suivant.
@@ -103,11 +108,13 @@ Tout tirage passe par `engine/rng`. La graine d'un yōkai dérive du défilé et
 
 ## 5. Sauvegarde
 
-- Un objet JSON unique, avec `schemaVersion` et `generatorVersion`.
+- Un objet JSON unique : `{ savedAt, state }`. `state` est le `GameState` (avec `schemaVersion` et `generatorVersion`), les `BigNum` y sont écrits sous forme texte sans perte (`4.8249e4`).
+- Le moteur ne stocke que l'essentiel : l'ennemi courant est une graine et des dégâts subis, ses PV max se recalculent.
 - Écrit dans MMKV toutes les 5 s et à chaque passage en arrière-plan.
-- Les shikigami sont stockés par **graine** (quelques octets chacun), jamais par apparence.
-- Chaque changement de schéma ajoute une migration testée (`save/migrations`).
-- Horodatage de la dernière sauvegarde : sert au calcul hors ligne. Une heure système qui recule ne donne jamais de gains négatifs ni de gains bonus.
+- Les shikigami sont stockés par **graine** (quelques octets chacun) avec la version du générateur de leur capture, jamais par apparence.
+- `deserialize(texte)` ne lève jamais d'exception : il renvoie `{ ok: true, state, savedAt }` ou `{ ok: false, error }` avec une raison typée (`invalid-json`, `unsupported-version`, `invalid-shape`). La validation vérifie chaque champ et la cohérence (équipe possédée, graines uniques…).
+- Chaque changement de schéma ajoute une migration testée (`save/migrations/vN-to-vN+1.ts`), appliquée avant la validation.
+- `savedAt` (horloge murale, fournie par `services`) sert au calcul hors ligne. Une heure système qui recule ne donne jamais de gains négatifs ni de gains bonus.
 
 ## 6. Build
 

@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generate keeps the reference seeds stable (values from the prototype run in Node) 1`] = `
+[
+  {
+    "accessories": [
+      "ofuda",
+    ],
+    "animationDelay": 0.7,
+    "eyes": "cyclops",
+    "gaze": {
+      "x": -0.07918701726011933,
+      "y": 0.08121896767988801,
+    },
+    "generatorVersion": 1,
+    "limbs": "none",
+    "mouth": "fangs",
+    "object": "umbrella",
+    "palette": "lacquer",
+    "rarity": "common",
+    "seed": 0,
+    "suffix": "obake",
+  },
+  {
+    "accessories": [
+      "onibi",
+      "hachimaki",
+    ],
+    "animationDelay": 1.5,
+    "eyes": "cyclops",
+    "gaze": {
+      "x": 0.890681302221492,
+      "y": -0.04472887283191085,
+    },
+    "generatorVersion": 1,
+    "limbs": "arms",
+    "mouth": "o",
+    "object": "drum",
+    "palette": "wood",
+    "rarity": "common",
+    "seed": 1,
+    "suffix": "obake",
+  },
+  {
+    "accessories": [
+      "ofuda",
+    ],
+    "animationDelay": 0.8,
+    "eyes": "cyclops",
+    "gaze": {
+      "x": 0.09598608710803092,
+      "y": 0.22982208989560604,
+    },
+    "generatorVersion": 1,
+    "limbs": "legs",
+    "mouth": "teeth",
+    "object": "lantern",
+    "palette": "paper",
+    "rarity": "common",
+    "seed": 7,
+    "suffix": "obake",
+  },
+  {
+    "accessories": [],
+    "animationDelay": 1.4,
+    "eyes": "three",
+    "gaze": {
+      "x": 0.22454037708230318,
+      "y": 0.3654746483080089,
+    },
+    "generatorVersion": 1,
+    "limbs": "legs",
+    "mouth": "teeth",
+    "object": "drum",
+    "palette": "wood",
+    "rarity": "common",
+    "seed": 42,
+    "suffix": "obake",
+  },
+  {
+    "accessories": [],
+    "animationDelay": 0.1,
+    "eyes": "wink",
+    "gaze": {
+      "x": 0.5425356582272798,
+      "y": -0.20653122989460826,
+    },
+    "generatorVersion": 1,
+    "limbs": "legs",
+    "mouth": "o",
+    "object": "teapot",
+    "palette": "sakura",
+    "rarity": "rare",
+    "seed": 2026,
+    "suffix": "obake",
+  },
+  {
+    "accessories": [
+      "horn",
+    ],
+    "animationDelay": 0.4,
+    "eyes": "three",
+    "gaze": {
+      "x": 0.17782530658878387,
+      "y": 0.47394103836268187,
+    },
+    "generatorVersion": 1,
+    "limbs": "arms",
+    "mouth": "tongue",
+    "object": "lantern",
+    "palette": "paper",
+    "rarity": "common",
+    "seed": 999999,
+    "suffix": "bo",
+  },
+]
+`;
