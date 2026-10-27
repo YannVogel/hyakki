@@ -80,6 +80,15 @@ export const fr = {
     timeLeft: (seconds: number) => `${seconds} s`,
     timerLabel: (seconds: number) => `Temps restant : ${seconds} secondes`,
     challenge: 'Affronter le Gardien',
+    galleryTitle: 'Gardiens du défilé',
+    gallerySubtitle: (beaten: number) => `Un boss toutes les 100 vagues · ${beaten} / 10 vaincus`,
+    galleryWave: (wave: number) => `Vague ${wave}`,
+    status: { defeated: 'Vaincu', next: 'Prochain', upcoming: 'À venir' },
+    unknown: '???',
+    unknownLabel: (wave: number, status: string) => `Gardien inconnu, vague ${wave}, ${status}`,
+    knownLabel: (name: string, description: string, wave: number, status: string) =>
+      `${name}, ${description}, vague ${wave}, ${status}`,
+    back: 'Retour',
     farming: 'Le Gardien attend que tu sois prêt.',
   },
   sanctuary: {

@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 3 · Boucle jouable (`milestone/3-boucle`) |
-| Dernière issue terminée | #33 Écran Shikigami |
-| Prochaine issue | #34 Écran Gardiens (galerie) |
+| Dernière issue terminée | #34 Écran Gardiens (galerie) |
+| Prochaine issue | #35 Cut-in d'entrée des Gardiens |
 
 ## Milestones
 

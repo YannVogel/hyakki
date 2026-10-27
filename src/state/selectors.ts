@@ -186,3 +186,30 @@ export function collectionView(state: GameState): ShikigamiView[] {
         b.level - a.level,
     );
 }
+
+export type GuardianStatus = 'defeated' | 'next' | 'upcoming';
+
+export interface GuardianCard {
+  readonly index: number;
+  readonly wave: number;
+  readonly status: GuardianStatus;
+  /** Defeated once, or met in the current parade: its look is known. */
+  readonly revealed: boolean;
+}
+
+/** The ten guardians of the V1 sheet, as the gallery shows them. */
+export function guardianGallery(state: GameState): GuardianCard[] {
+  const { every, count } = BALANCE.guardian;
+  const nextWave = Math.ceil(state.parade.wave / every) * every;
+  const nextIndex = guardianAt(nextWave).index;
+  return Array.from({ length: count }, (_, index) => {
+    const wave = (index + 1) * every;
+    const defeated = state.guardiansDefeated.includes(index);
+    return {
+      index,
+      wave,
+      status: defeated ? 'defeated' : index === nextIndex ? 'next' : 'upcoming',
+      revealed: defeated || state.parade.maxWave >= wave,
+    };
+  });
+}

@@ -3,6 +3,7 @@ import { big, createNewGame, enemySeed, generate, gt, nameOf, step } from '@/eng
 import {
   collectionView,
   enemyView,
+  guardianGallery,
   paradeView,
   powerPerSecond,
   soulsPerSecond,
@@ -115,5 +116,29 @@ describe('collectionView', () => {
     for (let i = 2; i < view.length; i++) {
       expect(rank[view[i].spec.rarity]).toBeGreaterThanOrEqual(rank[view[i - 1].spec.rarity]);
     }
+  });
+});
+
+describe('guardianGallery', () => {
+  it('marks defeated, next and upcoming guardians, revealing the ones met', () => {
+    const state = {
+      ...createNewGame(1),
+      parade: { ...createNewGame(1).parade, wave: 300, maxWave: 300 },
+      guardiansDefeated: [0, 1],
+    };
+    const gallery = guardianGallery(state);
+    expect(gallery.map((card) => card.status)).toEqual([
+      'defeated',
+      'defeated',
+      'next',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+      'upcoming',
+    ]);
+    expect(gallery.map((card) => card.revealed).slice(0, 4)).toEqual([true, true, true, false]);
   });
 });
