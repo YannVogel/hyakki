@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 1 · Moteur de jeu (`milestone/1-moteur`) |
-| Dernière issue terminée | #16 État du jeu et sauvegarde versionnée |
-| Prochaine issue | #17 Boucle de combat à ticks delta |
+| Dernière issue terminée | #17 Boucle de combat à ticks delta |
+| Prochaine issue | #27 Capture des shikigami (équipe, bonus, montée de niveau) |
 
 ## Milestones
 

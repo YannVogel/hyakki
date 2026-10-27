@@ -107,6 +107,18 @@ Améliorations payées en âmes, achetables par ×1, ×10 ou Max :
 
 Ces croissances dépassent vite la limite d'un `number` JavaScript (vers la vague 4 000) : toutes ces grandeurs utilisent le type `BigNum` du moteur.
 
+Toutes ces constantes sont dans `src/engine/balance.ts` : c'est le seul endroit où on les règle.
+
+### 5.1 Modèle de combat (implémentation)
+
+- **Attaques discrètes** : le héros frappe toutes les 1 000 ms (première frappe immédiate) ; chaque frappe, automatique ou au toucher, tire sa chance de critique sur le RNG à graine de la partie.
+- **PV d'un yōkai** = `PV(v) × PV du yōkai / 100` : la stat PV (objet, traits, rareté) fait office de résistance. Un yōkai légendaire est donc plus coriace.
+- **Âmes d'un yōkai** = `âmes(v) × multiplicateur de rareté × (1 + bonus de clochette du yōkai) × (1 + 5 % × Clochette sacrée)` : un yōkai coriace rapporte plus.
+- La **défense** ne sert pas au combat en V1 (aucun ennemi ne frappe le héros).
+- **Brûlures** (Feu de renard, puis onibi et Kitsune-bi) : dégâts continus en % des PV max par seconde, qui peuvent achever un yōkai entre deux frappes.
+- Les dégâts en trop sur un yōkai vaincu sont perdus ; le yōkai suivant arrive aussitôt.
+- Un pas de simulation couvre l'intervalle semi-ouvert [début, fin[ : découper une durée en plusieurs pas donne les mêmes frappes, dans le même ordre, et le même état (à 1e-9 près sur les dégâts quand une brûlure est active).
+
 ## 6. Écrans (maquettes)
 
 Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../design/README.md)) :

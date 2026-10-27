@@ -95,6 +95,8 @@ Le moteur est une **fonction de transition** : `step(state, dtMs, inputs) → { 
 
 L'UI appelle `step` à intervalle régulier (≈ 10 fois par seconde) et anime les `events`. Les animations ne modifient jamais l'état.
 
+Chaque pas couvre l'intervalle [début, fin[ et les attaques suivent des minuteurs fixes : découper une durée en plusieurs pas donne le même résultat (voir `docs/GAME_DESIGN.md` § 5.1).
+
 ### 4.2 Hors ligne
 
 Au retour, `simulateOffline(state, elapsedMs)` calcule le résultat **analytiquement par segments** (une vague entière à la fois), pas en rejouant des milliers de ticks. Il respecte le plafond et s'arrête au Gardien suivant.
