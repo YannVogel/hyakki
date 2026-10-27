@@ -8,7 +8,7 @@ import { soulsPerSecond, upgradeViews, useGame, useGameStore } from '@/state';
 import { bodyText, Card, colors, displayText, Icon, Segmented, spacing } from '@/ui';
 
 import { SOULS_ICON } from '../shared/icons';
-import { HERO_ASPECT, HERO_POSES } from '../shared/images';
+import { HERO_POSES, heroPoseSize } from '../shared/images';
 import { UpgradeRow } from './UpgradeRow';
 
 const percent = (fraction: number) => String(Math.round(fraction * 10_000) / 100).replace('.', ',');
@@ -52,9 +52,9 @@ export function SanctuaryScreen() {
             <Text style={bodyText('base', 700)}>{strings.sanctuary.subtitle}</Text>
           </View>
           <Image
-            source={HERO_POSES.barrier}
+            source={HERO_POSES.barrier.source}
             accessibilityLabel={strings.sanctuary.heroLabel}
-            style={{ height: HERO_HEIGHT, width: HERO_HEIGHT * HERO_ASPECT }}
+            style={heroPoseSize('barrier', HERO_HEIGHT)}
           />
         </View>
         <Card style={styles.souls}>

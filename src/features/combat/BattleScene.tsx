@@ -17,8 +17,9 @@ import {
 import type { EnemyView } from '@/state';
 import { bodyText, colors, hardShadow, outline, radii, spacing, strokes } from '@/ui';
 
-import { GUARDIAN_IMAGES, HERO_ASPECT, HERO_POSES } from '../shared/images';
+import { GUARDIAN_IMAGES, type HeroPose } from '../shared/images';
 import { EnemyHud } from './EnemyHud';
+import { HeroFigure } from './HeroFigure';
 
 export interface LastHit {
   readonly damage: string;
@@ -30,6 +31,7 @@ export interface BattleSceneProps {
   readonly enemyName: string;
   readonly wave: number;
   readonly lastHit: LastHit | null;
+  readonly heroPose: HeroPose;
   readonly effects: EffectPool;
   readonly motion: MotionLevel;
   readonly onTap: () => void;
@@ -55,6 +57,7 @@ export function BattleScene({
   enemyName,
   wave,
   lastHit,
+  heroPose,
   effects,
   motion,
   onTap,
@@ -114,19 +117,16 @@ export function BattleScene({
           onAccessibilityAction={onTap}
           testID="battle-strike"
         />
-        <Image
-          source={HERO_POSES.idle}
-          accessibilityLabel={strings.combat.heroLabel}
-          style={[
-            styles.hero,
-            {
-              left: heroTop.x,
-              top: heroTop.y,
-              height: heroHeight,
-              width: heroHeight * HERO_ASPECT,
-            },
-          ]}
-        />
+        {layout === null ? null : (
+          <HeroFigure
+            pose={heroPose}
+            idleHeight={heroHeight}
+            left={heroTop.x}
+            bottom={heroTop.y + heroHeight}
+            reduceMotion={motion === 'reduced'}
+            accessibilityLabel={strings.combat.heroLabel}
+          />
+        )}
         {enemyBox === null ? null : enemy.kind === 'yokai' ? (
           <View style={[styles.absolute, { left: enemyBox.left, top: enemyBox.top }]}>
             <YokaiCanvas
@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
     ...hardShadow('card'),
   },
   absolute: { position: 'absolute' },
-  hero: { position: 'absolute' },
   hint: {
     position: 'absolute',
     alignSelf: 'center',

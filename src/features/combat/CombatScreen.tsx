@@ -22,6 +22,7 @@ import { FarmingBanner } from './FarmingBanner';
 import { PowerRow } from './PowerRow';
 import { TalismanBar } from './TalismanBar';
 import { useCombatEffects } from './useCombatEffects';
+import { useHeroPose } from './useHeroPose';
 
 function lastHitOf(events: readonly CombatEvent[]): LastHit | null {
   const hit = events.findLast((event) => event.type === 'hit');
@@ -41,6 +42,7 @@ export function CombatScreen() {
   const reduceMotion = useReducedMotion();
   const motion = reduceMotion ? 'reduced' : 'full';
   const effects = useCombatEffects(motion);
+  const heroPose = useHeroPose();
   const parade = paradeView(game);
   const enemy = enemyView(game);
   const lastHit = useMemo(() => lastHitOf(events), [events]);
@@ -55,6 +57,7 @@ export function CombatScreen() {
           enemyName={name}
           wave={parade.wave}
           lastHit={lastHit}
+          heroPose={heroPose}
           effects={effects}
           motion={motion}
           onTap={actions.tap}

@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 4 · Feel & finitions (`milestone/4-finitions`) |
-| Dernière issue terminée | #41 Effets de combat |
-| Prochaine issue | #42 Animations du héros |
+| Dernière issue terminée | #42 Animations du héros |
+| Prochaine issue | #43 Haptique et réglages |
 
 ## Milestones
 

@@ -28,6 +28,8 @@ Le jeu est **hybride** :
 
 Ordre des poses du héros : 01 attente, 02 attaque, 03 sort de feu, 04 sort de foudre, 05 barrière, 06 touché, 07 K.-O., 08 victoire, 09 sommeil, 10 surpris.
 
+Chaque pose garde sa propre taille (de 221 × 446 à 384 × 332 px), toutes à la même échelle et les pieds à 6–7 px du bord bas. Le code connaît ces tailles (`HERO_POSES` dans `src/features/shared/images.ts`, vérifiées par un test contre les en-têtes PNG) et dessine chaque pose à l'échelle de la pose d'attente, ancrée par le bas : les pieds ne bougent pas d'une pose à l'autre. Une figure régénérée doit garder cette marge sous les pieds (`scripts/check_figures.py` le vérifie) et mettre à jour sa taille dans `HERO_POSES`.
+
 Ordre des Gardiens : 01 Bake-danuki, 02 Kappa, 03 Karasu-tengu, 04 Tsuchigumo, 05 Yuki-onna, 06 Gashadokuro, 07 Nue, 08 Ibaraki-dōji, 09 Kyūbi no kitsune, 10 Nurarihyon.
 
 ### Nurarihyon : version 3

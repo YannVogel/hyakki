@@ -2,23 +2,74 @@ import type { ImageSourcePropType } from 'react-native';
 
 // Illustrations of the hero and the guardians (assets/images, docs/ART_PIPELINE.md).
 
+export interface Illustration {
+  readonly source: ImageSourcePropType;
+  /** Size of the PNG, in pixels. */
+  readonly width: number;
+  readonly height: number;
+}
+
+// The poses are cut from one sheet at one scale, each to its own size; every figure stands on
+// its bottom edge (6 to 7 px of margin under the feet, see scripts/check_figures.py).
 export const HERO_POSES = {
-  idle: require('../../../assets/images/hero/hero-01-idle.png'),
-  attack: require('../../../assets/images/hero/hero-02-attaque.png'),
-  fire: require('../../../assets/images/hero/hero-03-feu.png'),
-  thunder: require('../../../assets/images/hero/hero-04-foudre.png'),
-  barrier: require('../../../assets/images/hero/hero-05-barriere.png'),
-  hit: require('../../../assets/images/hero/hero-06-touche.png'),
-  knockedOut: require('../../../assets/images/hero/hero-07-ko.png'),
-  victory: require('../../../assets/images/hero/hero-08-victoire.png'),
-  sleep: require('../../../assets/images/hero/hero-09-sommeil.png'),
-  surprised: require('../../../assets/images/hero/hero-10-surpris.png'),
-} satisfies Record<string, ImageSourcePropType>;
+  idle: {
+    source: require('../../../assets/images/hero/hero-01-idle.png'),
+    width: 257,
+    height: 449,
+  },
+  attack: {
+    source: require('../../../assets/images/hero/hero-02-attaque.png'),
+    width: 363,
+    height: 422,
+  },
+  fire: { source: require('../../../assets/images/hero/hero-03-feu.png'), width: 319, height: 435 },
+  thunder: {
+    source: require('../../../assets/images/hero/hero-04-foudre.png'),
+    width: 283,
+    height: 461,
+  },
+  barrier: {
+    source: require('../../../assets/images/hero/hero-05-barriere.png'),
+    width: 221,
+    height: 446,
+  },
+  hit: {
+    source: require('../../../assets/images/hero/hero-06-touche.png'),
+    width: 293,
+    height: 441,
+  },
+  knockedOut: {
+    source: require('../../../assets/images/hero/hero-07-ko.png'),
+    width: 384,
+    height: 332,
+  },
+  victory: {
+    source: require('../../../assets/images/hero/hero-08-victoire.png'),
+    width: 311,
+    height: 415,
+  },
+  sleep: {
+    source: require('../../../assets/images/hero/hero-09-sommeil.png'),
+    width: 289,
+    height: 386,
+  },
+  surprised: {
+    source: require('../../../assets/images/hero/hero-10-surpris.png'),
+    width: 315,
+    height: 443,
+  },
+} satisfies Record<string, Illustration>;
 
 export type HeroPose = keyof typeof HERO_POSES;
 
-/** Width / height of the hero poses (the cut-out figures share one size). */
-export const HERO_ASPECT = 257 / 449;
+/**
+ * Size of a pose drawn at the scale that makes the idle pose `idleHeight` tall: every pose keeps
+ * its proportions, and anchoring the bottom edge keeps the feet in place.
+ */
+export function heroPoseSize(pose: HeroPose, idleHeight: number) {
+  const scale = idleHeight / HERO_POSES.idle.height;
+  return { width: HERO_POSES[pose].width * scale, height: HERO_POSES[pose].height * scale };
+}
 
 /** The ten guardians, in order of appearance. */
 export const GUARDIAN_IMAGES: readonly ImageSourcePropType[] = [

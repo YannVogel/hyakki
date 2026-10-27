@@ -4,7 +4,7 @@ import { formatNumber, generate, nameOf, type OfflineReport } from '@/engine';
 import { strings } from '@/i18n';
 import { bodyText, Button, Card, colors, displayText, ProgressBar, spacing } from '@/ui';
 
-import { HERO_ASPECT, HERO_POSES } from '../shared/images';
+import { HERO_POSES, heroPoseSize } from '../shared/images';
 
 const MINUTE_MS = 60_000;
 const HERO_HEIGHT = 130;
@@ -41,9 +41,9 @@ export function OfflineReturnModal({ report, onCollect }: OfflineReturnModalProp
         <Card large style={styles.sheet} testID="offline-report">
           <ScrollView contentContainerStyle={styles.content}>
             <Image
-              source={HERO_POSES.sleep}
+              source={HERO_POSES.sleep.source}
               accessibilityLabel={text.heroLabel}
-              style={[styles.hero, { height: HERO_HEIGHT, width: HERO_HEIGHT * HERO_ASPECT }]}
+              style={[styles.hero, heroPoseSize('sleep', HERO_HEIGHT)]}
             />
             <Text style={[bodyText('base', 800), styles.center]}>{text.title}</Text>
             <Text style={[displayText('4xl'), styles.center]} testID="offline-duration">
