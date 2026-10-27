@@ -9,8 +9,8 @@ export const fontFamily = {
 } as const;
 
 export const fontAssets: Record<string, FontSource> = {
-  [fontFamily.display]: require('@/assets/fonts/MochiyPopOne-Regular.ttf'),
-  [fontFamily.body500]: require('@/assets/fonts/MPLUSRounded1c-Medium.ttf'),
-  [fontFamily.body700]: require('@/assets/fonts/MPLUSRounded1c-Bold.ttf'),
-  [fontFamily.body800]: require('@/assets/fonts/MPLUSRounded1c-ExtraBold.ttf'),
+  [fontFamily.display]: require('../../assets/fonts/MochiyPopOne-Regular.ttf'),
+  [fontFamily.body500]: require('../../assets/fonts/MPLUSRounded1c-Medium.ttf'),
+  [fontFamily.body700]: require('../../assets/fonts/MPLUSRounded1c-Bold.ttf'),
+  [fontFamily.body800]: require('../../assets/fonts/MPLUSRounded1c-ExtraBold.ttf'),
 };

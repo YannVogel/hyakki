@@ -52,7 +52,7 @@ scripts/                  outils (découpe des planches, simulation d'équilibra
 app.config.ts             configuration Expo (lit les couleurs dans design/tokens.json)
 ```
 
-L'alias `@/` pointe vers `src/` (et `@/assets/` vers `assets/`).
+L'alias `@/` pointe vers `src/`.
 
 ## 3. Règles de dépendances
 

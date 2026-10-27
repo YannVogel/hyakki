@@ -35,6 +35,14 @@ npm run android    # build et lance sur l'émulateur Android
 npm start          # relance seulement le serveur Metro
 ```
 
+## Tester
+
+```bash
+npm test               # Jest : moteur, composants
+npm run test:coverage  # idem, avec le seuil de couverture du moteur
+npm run test:e2e       # Maestro, sur un simulateur où tourne l'app (voir e2e/README.md)
+```
+
 ## Documentation
 
 | Document | Contenu |

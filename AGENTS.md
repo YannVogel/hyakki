@@ -93,6 +93,13 @@ Une issue est terminée quand **tout** ceci est vrai :
 | `src/ui/`, `src/features/` | Jest + Testing Library | Rendu, interactions, accessibilité de base. |
 | Parcours | Maestro | Lancement, combat, achat au Sanctuaire, Festival, retour hors ligne. |
 
+Conventions :
+
+- Les tests sont à côté du code : `combat.ts` → `combat.test.ts`.
+- Jest a deux projets (`jest.config.js`) : `node` pour `src/engine/` et `scripts/` (environnement Node pur), `app` pour le reste (preset `jest-expo`).
+- `npm run test:coverage` applique un seuil de 90 % des lignes sur `src/engine/` ; la CI l'exécute.
+- Les parcours Maestro sont dans [`e2e/`](e2e/README.md) et ciblent les éléments par `testID`.
+
 ## 7. Documentation
 
 - Tout dossier de premier niveau et tout module structurant (`src/engine/`, `src/render/`, `src/ui/`, `design/`, `scripts/`) a un `README.md` qui dit ce qu'il contient et ses règles.

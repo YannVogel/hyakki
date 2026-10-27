@@ -8,7 +8,9 @@ export function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.kanji}>{strings.home.kanji}</Text>
-      <Text style={styles.title}>{strings.home.title}</Text>
+      <Text style={styles.title} testID="home-title">
+        {strings.home.title}
+      </Text>
       <Text style={styles.subtitle}>{strings.home.subtitle}</Text>
     </View>
   );
