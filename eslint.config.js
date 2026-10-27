@@ -5,17 +5,11 @@ const prettierRecommended = require('eslint-plugin-prettier/recommended');
 // Dependency rules of docs/ARCHITECTURE.md § 3. Each zone forbids `target` from importing `from`.
 const LAYER_ZONES = [
   {
+    // Packages are filtered by no-restricted-imports below (only break_infinity.js is allowed).
     target: './src/engine',
-    from: [
-      './app',
-      './src/render',
-      './src/ui',
-      './src/features',
-      './src/state',
-      './src/services',
-      './src/i18n',
-    ],
-    message: 'src/engine is pure: it never imports another layer.',
+    from: '.',
+    except: ['./src/engine', './node_modules'],
+    message: 'src/engine is pure: it only imports itself.',
   },
   {
     target: ['./src/render', './src/state'],

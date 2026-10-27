@@ -37,6 +37,11 @@ describe('engine purity', () => {
     expect(await violations('src/engine/fixture.ts', code)).toContain('no-restricted-imports');
   });
 
+  it('rejects a relative import leaving src/engine', async () => {
+    const code = "import tokens from '../../design/tokens.json';\nexport const t = tokens;\n";
+    expect(await violations('src/engine/fixture.ts', code)).toEqual(['import/no-restricted-paths']);
+  });
+
   it('rejects Math.random()', async () => {
     const code = 'export const roll = (): number => Math.random();\n';
     expect(await violations('src/engine/fixture.ts', code)).toEqual(['no-restricted-properties']);
