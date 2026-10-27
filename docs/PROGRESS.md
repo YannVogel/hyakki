@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 3 · Boucle jouable (`milestone/3-boucle`) |
-| Dernière issue terminée | #29 Tokens du design system |
-| Prochaine issue | #30 Composants de base |
+| Dernière issue terminée | #30 Composants de base |
+| Prochaine issue | #31 Écran Combat (boucle step via src/state) |
 
 ## Milestones
 

@@ -76,6 +76,8 @@ Titres sur fond coloré : texte blanc avec **contour encre** (ombre portée de 2
 | `RarityBadge` | Pastille de couleur + libellé. |
 | `Segmented` | ×1 / ×10 / Max. |
 
+Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque composant a un rôle d'accessibilité (`button`, `tab`, `radio`, `progressbar`…), un libellé, et des cibles d'au moins 44 pt. `Button`, `TabBar` et `Segmented` déclenchent un retour haptique via `useHaptics()` : `ui` ne parle pas à la plateforme, l'implémentation (`src/services/haptics.ts`) est fournie par la racine de l'app (`HapticsProvider`). En développement, l'écran « Catalogue des composants » (lien depuis l'accueil) les montre tous.
+
 ## 6. Animation et effets
 
 - Effets de combat (Skia) : étoile d'impact jaune, chiffres de dégâts qui éclatent puis montent, « Critique ! » rouge cerné de blanc, lignes de vitesse, impact frame au critique.
