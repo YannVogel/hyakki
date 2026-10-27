@@ -80,4 +80,12 @@ export const BALANCE = {
     /** The Kekkai upgrade never cuts cooldowns by more than this. */
     maxCooldownReduction: 0.5,
   },
+  offline: {
+    /** Share of the active damage dealt while away. */
+    efficiency: 0.5,
+    baseCapHours: 8,
+    maxCapHours: 24,
+    /** Yōkai simulated one by one; beyond, souls are extrapolated from them. */
+    maxSimulatedKills: 2000,
+  },
 } as const;

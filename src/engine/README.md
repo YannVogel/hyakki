@@ -108,3 +108,11 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `upgradeCost(upgrade, level, count)` | Coût de `count` niveaux en forme close. |
 | `maxAffordable(upgrade, level, souls)` | Niveaux achetables au plus (logarithme, puis vérification exacte), plafonnés au niveau maximal. |
 | `buyUpgrade(state, upgrade, mode)` | Achat ×1, ×10 ou Max ; résultat typé (`not-enough-souls`, `max-level`). Le solde n'est jamais négatif. |
+
+### `offline/` — progression hors ligne
+
+| Élément | Rôle |
+|---|---|
+| `simulateOffline(state, elapsedMs)` | Ce que l'équipe a accompli en l'absence du joueur : `{ state, report }`. Analytique, plafonné, s'arrête devant le Gardien suivant ; `elapsedMs ≤ 0` ne donne rien. |
+| `offlineCapMs(state)` | Plafond : 8 h + 1 h par niveau de Lanternes, 24 h au plus. |
+| `expectedDps(power)` | Dégâts espérés par seconde (critiques moyennés). |

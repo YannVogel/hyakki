@@ -108,6 +108,10 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,15^n ×
 - Efficacité hors ligne : 50 % du rendement actif. Les Gardiens ne sont jamais vaincus hors ligne (la progression s'arrête au Gardien suivant).
 - Plafond : 8 h au départ, +1 h par niveau de Lanternes de veille, 24 h maximum.
 - Une notification locale prévient quand le plafond est atteint (si le joueur l'a autorisée).
+- **Implémentation** (`simulateOffline`) : calcul yōkai par yōkai avec les **dégâts espérés** (critiques moyennés, brûlures comprises), sans rejouer de ticks. La progression s'arrête devant le Gardien suivant : le reste du temps, l'équipe farme la vague d'avant, et le joueur retrouve le Gardien qui l'attend (un Gardien quitté en plein combat l'attend de nouveau, chrono plein). Un joueur parti en farm continue de farmer.
+- Au-delà de **2 000 yōkai** simulés un par un, les âmes de la suite du farm sont extrapolées depuis cet échantillon (même vague, même rendement moyen) ; les captures ne sont tirées que sur l'échantillon. Cela garde le calcul sous la centaine de millisecondes sur mobile.
+- Sur 10 minutes à efficacité 100 %, le résultat reste à ±1 vague et ±15 % d'âmes du combat actif (test de cohérence).
+- Le rapport donne : durée prise en compte, plafond atteint ou non, yōkai purifiés, âmes, vagues (de → à), arrêt devant un Gardien, montées de niveau des shikigami (captures et doublons).
 
 ## 5. Formules de départ
 

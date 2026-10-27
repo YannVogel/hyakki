@@ -4,6 +4,7 @@ export * from './combat';
 export * from './economy';
 export * from './gameState';
 export * from './numbers';
+export * from './offline';
 export * from './rng';
 export * from './save';
 export * from './shikigami';
