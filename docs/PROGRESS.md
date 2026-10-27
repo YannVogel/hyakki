@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 3 · Boucle jouable (`milestone/3-boucle`) |
-| Dernière issue terminée | #35 Cut-in d'entrée des Gardiens |
-| Prochaine issue | #36 Écran Festival |
+| Dernière issue terminée | #36 Écran Festival |
+| Prochaine issue | #37 Retour hors ligne |
 
 ## Milestones
 
@@ -23,7 +23,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 ## Points en suspens
 
-- Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Onglets Shikigami, Sanctuaire et Festival provisoires jusqu'à #32, #33, #36. Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
+- Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
 

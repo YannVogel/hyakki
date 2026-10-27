@@ -1,10 +1,11 @@
 import { type ReactNode, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { strings } from '@/i18n';
-import { Card, colors, displayText, Icon, spacing, type Tab, TabBar } from '@/ui';
+import { colors, Icon, type Tab, TabBar } from '@/ui';
 
 import { CombatScreen } from '../combat/CombatScreen';
+import { FestivalScreen } from '../festival/FestivalScreen';
 import { SanctuaryScreen } from '../sanctuary/SanctuaryScreen';
 import { ShikigamiScreen } from '../shikigami/ShikigamiScreen';
 import { TAB_ICONS } from '../shared/icons';
@@ -19,30 +20,19 @@ const TABS: readonly Tab<MainTab>[] = (
   icon: (color: string) => <Icon parts={TAB_ICONS[key](color)} />,
 }));
 
-// Screens still to come in this milestone show their title until they exist.
-function Upcoming({ title }: { title: string }) {
-  return (
-    <View style={styles.upcoming}>
-      <Card style={styles.card}>
-        <Text style={displayText('2xl')}>{title}</Text>
-      </Card>
-    </View>
-  );
-}
-
-const SCREENS: Record<MainTab, () => ReactNode> = {
+const screens = (goTo: (tab: MainTab) => void): Record<MainTab, () => ReactNode> => ({
   combat: () => <CombatScreen />,
   shikigami: () => <ShikigamiScreen />,
   sanctuary: () => <SanctuaryScreen />,
-  festival: () => <Upcoming title={strings.tabs.festival} />,
-};
+  festival: () => <FestivalScreen onDone={() => goTo('combat')} />,
+});
 
 /** The four tabs of the game: Combat, Shikigami, Sanctuaire, Festival. */
 export function MainScreen({ initialTab = 'combat' }: { initialTab?: MainTab }) {
   const [tab, setTab] = useState<MainTab>(initialTab);
   return (
     <View style={styles.screen}>
-      <View style={styles.content}>{SCREENS[tab]()}</View>
+      <View style={styles.content}>{screens(setTab)[tab]()}</View>
       <TabBar
         tabs={TABS}
         active={tab}
@@ -56,6 +46,4 @@ export function MainScreen({ initialTab = 'combat' }: { initialTab?: MainTab }) 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.cream },
   content: { flex: 1 },
-  upcoming: { flex: 1, justifyContent: 'center', padding: spacing[4] },
-  card: { padding: spacing[5], alignItems: 'center' },
 });

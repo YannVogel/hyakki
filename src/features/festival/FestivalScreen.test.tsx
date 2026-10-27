@@ -1,0 +1,68 @@
+import { fireEvent, screen } from '@testing-library/react-native';
+
+import { big, createNewGame, festivalSparks, type GameState } from '@/engine';
+import { strings } from '@/i18n';
+
+import { renderScreen } from '../testing/renderScreen';
+import { FestivalScreen } from './FestivalScreen';
+
+const withRecord = (maxWave: number): GameState => {
+  const state = createNewGame(4);
+  return {
+    ...state,
+    parade: { ...state.parade, wave: maxWave, maxWave },
+    souls: big(1e12),
+    ofuda: 30,
+    shikigami: [{ seed: 5, level: 3, generatorVersion: 1 }],
+    team: [5],
+    attackTimers: { hero: 0, team: [1000] },
+    guardiansDefeated: [0, 1],
+  };
+};
+
+describe('FestivalScreen', () => {
+  it('stays locked before the first guardian', async () => {
+    await renderScreen(<FestivalScreen onDone={jest.fn()} />, withRecord(80));
+    expect(screen.getByTestId('festival-locked')).toBeOnTheScreen();
+    expect(screen.getByTestId('festival-start')).toBeDisabled();
+  });
+
+  it('shows the sparks to earn and the bonus before and after', async () => {
+    await renderScreen(<FestivalScreen onDone={jest.fn()} />, withRecord(300));
+    expect(screen.getByTestId('festival-sparks')).toHaveTextContent(
+      strings.festival.sparks(String(festivalSparks(300))),
+    );
+    expect(screen.getByLabelText(strings.festival.bonusLabel('1,0', '2,8'))).toBeOnTheScreen();
+  });
+
+  it('never starts without a confirmation', async () => {
+    const onDone = jest.fn();
+    const { store } = await renderScreen(<FestivalScreen onDone={onDone} />, withRecord(300));
+    await fireEvent.press(screen.getByTestId('festival-start'));
+    expect(screen.getByTestId('festival-confirm')).toBeOnTheScreen();
+    await fireEvent.press(screen.getByTestId('festival-confirm-no'));
+    expect(store.getState().game.parade.number).toBe(1);
+    expect(onDone).not.toHaveBeenCalled();
+  });
+
+  it('resets the parade and keeps the collection once confirmed', async () => {
+    const onDone = jest.fn();
+    const { store } = await renderScreen(<FestivalScreen onDone={onDone} />, withRecord(300));
+    await fireEvent.press(screen.getByTestId('festival-start'));
+    await fireEvent.press(screen.getByTestId('festival-confirm-yes'));
+    const game = store.getState().game;
+    expect(game.parade).toMatchObject({ number: 2, wave: 1, maxWave: 1 });
+    expect(game.sparks).toBe(festivalSparks(300));
+    expect(game.shikigami).toEqual([{ seed: 5, level: 3, generatorVersion: 1 }]);
+    expect(game.ofuda).toBe(30);
+    expect(game.guardiansDefeated).toEqual([0, 1]);
+    expect(onDone).toHaveBeenCalled();
+  });
+
+  it('goes back to the parade', async () => {
+    const onDone = jest.fn();
+    await renderScreen(<FestivalScreen onDone={onDone} />, withRecord(300));
+    await fireEvent.press(screen.getByTestId('festival-keep-going'));
+    expect(onDone).toHaveBeenCalled();
+  });
+});

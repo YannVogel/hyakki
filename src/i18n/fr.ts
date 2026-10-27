@@ -200,6 +200,29 @@ export const fr = {
     close: 'Fermer',
     guardiansLink: 'Gardiens du défilé',
   },
+  festival: {
+    kanji: '祭',
+    status: (parade: number, wave: number, record: number) =>
+      `Défilé ${parade} · vague ${wave} · record : ${record}`,
+    title: 'Grand Festival !',
+    pitch:
+      'Le défilé s’arrête pour la fête. Relance-le plus fort : tes shikigami restent, et le festival t’offre ses étincelles.',
+    sparks: (count: string) => `+ ${count}`,
+    sparksLabel: 'Étincelles',
+    bonus: 'Puissance à vie',
+    bonusChange: (now: string, after: string) => `×${now} → ×${after}`,
+    bonusLabel: (now: string, after: string) => `Puissance à vie : de ×${now} à ×${after}`,
+    start: 'Lancer le festival !',
+    keepGoing: 'Continuer le défilé',
+    locked: 'Le Festival s’ouvre une fois le premier Gardien vaincu (vague 100).',
+    confirmTitle: 'Relancer le défilé ?',
+    confirmBody:
+      'Tes vagues, tes âmes, le Sanctuaire et les talismans repartent de zéro. Tu gardes tes shikigami, ton équipe, tes ofuda et la galerie des Gardiens.',
+    confirm: 'Oui, lancer le festival',
+    cancel: 'Annuler',
+    heroLabel: 'L’onmyōji célèbre la fête',
+    sceneLabel: 'Feux d’artifice et lanternes au-dessus du torii',
+  },
   catalog: {
     title: 'Catalogue',
     buttons: 'Boutons',

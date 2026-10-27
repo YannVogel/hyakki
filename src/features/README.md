@@ -15,6 +15,7 @@ Un dossier par écran ou flux (combat, sanctuaire, shikigami, gardiens, festival
 | `combat/` | Écran Combat : en-tête, scène (frappe détectée sur le thread UI), HUD de l'ennemi, puissance et équipe, talismans, décisions face au Gardien |
 | `sanctuary/` | Écran Sanctuaire : solde et gain par seconde, ×1 / ×10 / Max, améliorations (effets tirés de `BALANCE`) |
 | `shikigami/` | Écran Shikigami : équipe active (bonus principal), collection en grille virtualisée (miniatures Skia statiques mémoïsées), fiche (stats, traits, montée de niveau, équipe) |
+| `festival/` | Écran Festival : scène de fête, étincelles à gagner, bonus avant → après, confirmation obligatoire avant de relancer le défilé |
 | `guardians/` | Galerie des Gardiens (route `/guardians`) : vague, état, silhouette tant qu'un Gardien n'a pas été croisé |
 | `shared/` | Icônes des maquettes, illustrations (héros, Gardiens) |
 | `dev/`, `home/` | Écrans de développement (hub, vérification native, Fabrique, catalogue) |
