@@ -76,8 +76,14 @@ export function startBattle(state: GameState): Battle {
   };
 }
 
+// Float rounding may leave timers a hair below zero; the save only accepts values ≥ 0.
+const nonNegative = (value: number) => Math.max(0, value);
+
 export function finishBattle(state: GameState, battle: Battle): GameState {
-  const guardian: GuardianFight | null = battle.guardian === null ? null : { ...battle.guardian };
+  const guardian: GuardianFight | null =
+    battle.guardian === null
+      ? null
+      : { ...battle.guardian, timeLeftMs: nonNegative(battle.guardian.timeLeftMs) };
   return {
     ...state,
     parade: {
@@ -92,7 +98,10 @@ export function finishBattle(state: GameState, battle: Battle): GameState {
     ofuda: battle.ofuda,
     guardiansDefeated: battle.guardiansDefeated,
     shikigami: battle.collection,
-    attackTimers: { hero: battle.timers[0], team: battle.timers.slice(1) },
+    attackTimers: {
+      hero: nonNegative(battle.timers[0]),
+      team: battle.timers.slice(1).map(nonNegative),
+    },
     cooldowns: battle.cooldowns,
     effects: battle.effects,
     rngState: battle.rng.getState(),
