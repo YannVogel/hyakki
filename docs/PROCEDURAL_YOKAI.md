@@ -115,6 +115,13 @@ Ces bonus servent deux fois : comme ennemi (sa résistance) et comme shikigami (
 - Ordre des calques : ombre, cornes, membres, objet, détails (fissures, pansement, ofuda, hachimaki), visage, clochette, onibi, scintillements.
 - Animations (désactivées si « réduire les animations ») : flottement (3,2 s), clignement des yeux (4,4 s), langue qui remue, flamme d'onibi qui vacille, scintillements des légendaires. Le décalage de départ vient de la graine, pour que deux yōkai ne bougent jamais en même temps.
 
+### Dans le code
+
+- `src/render/yokai/drawYokai.ts` décrit le dessin d'une spec sous forme d'arbre de primitives pures (formes, peintures, groupes animés) dans le repère 200 × 200 ; la géométrie (ancres, chemins) vit dans `objects.ts`, `face.ts` et `extras.ts`.
+- `drawYokai.test.ts` reconvertit cet arbre en SVG et le compare à celui du prototype (`svgOf`) sur 3 000 graines et des graines aléatoires : même ordre de calques, mêmes coordonnées, mêmes couleurs.
+- `YokaiCanvas` traduit l'arbre en Skia (remplissage puis contour) ; les animations sont des fonctions pures du temps (`motion.ts`) pilotées par une horloge Reanimated sur le thread UI, coupées quand « réduire les animations » est actif.
+- Comparaison visuelle prototype / Skia : [`docs/images/fabrique-prototype-vs-skia.png`](images/fabrique-prototype-vs-skia.png). En développement, l'écran « Fabrique à yōkai » (lien depuis l'accueil) affiche une graine et la planche des 12 suivantes.
+
 ## 7. Tests attendus
 
 - Graines de référence (0, 1, 7, 42, 2026, 999 999) : snapshot de la spec, du nom, de la description et des stats.

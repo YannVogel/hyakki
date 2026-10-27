@@ -6,9 +6,9 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 | | |
 |---|---|
-| Milestone en cours | 2 · Fabrique à yōkai (`milestone/2-fabrique`) |
-| Dernière issue terminée | #23 Harnais de simulation d'équilibrage |
-| Prochaine issue | #26 Rendu Skia des yōkai et animations |
+| Milestone en cours | 3 · Boucle jouable (`milestone/3-boucle`) |
+| Dernière issue terminée | #26 Rendu Skia des yōkai et animations |
+| Prochaine issue | #29 Tokens du design system |
 
 ## Milestones
 
@@ -16,14 +16,14 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 |---|---|---|
 | 0 · Fondations | Terminée | #52 |
 | 1 · Moteur de jeu | Terminée (#53 attend Yann) | #54 |
-| 2 · Fabrique à yōkai | En partie (#24, #25, #27 livrées en milestone 1) | — |
+| 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
 | 3 · Boucle jouable | À faire | — |
 | 4 · Feel & finitions | À faire | — |
 | 5 · Publication | À faire | — |
 
 ## Points en suspens
 
-- Milestone 2 : il ne reste que #26 (rendu Skia) ; #28 (générateur V2) est dans la milestone 4.
+- Milestone 3 : ordre #29, #30, puis #31 → #37. Les écrans temporaires (accueil, vérification native, Fabrique) restent accessibles en développement.
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
 
 - Les branches de milestone ne sont jamais réécrites une fois poussées (pas de push forcé) : un correctif de revue devient un commit `fix` qui référence l'issue.
@@ -36,3 +36,4 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 ## Issues `besoin-yann`
 
 - #53 Valider l'équilibrage (cibles et ressenti en jeu, après la milestone 3).
+- #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
