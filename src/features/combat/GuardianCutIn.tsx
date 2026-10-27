@@ -34,6 +34,8 @@ const FADE_MS = 300;
 const RAYS_TURN_MS = 60_000;
 const TILT = '-6deg';
 const OVERSHOOT = Easing.bezier(0.2, 0.9, 0.3, 1.3);
+/** The guardian's kanji in the background: a decoration far beyond the type scale (mockup). */
+const WATERMARK_SIZE = 190;
 
 export interface GuardianCutInProps {
   readonly index: number;
@@ -151,8 +153,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: -spacing[4],
     bottom: '22%',
-    fontSize: 190,
-    lineHeight: 200,
+    fontSize: WATERMARK_SIZE,
+    lineHeight: WATERMARK_SIZE + 10,
     color: colors.paper,
     opacity: 0.22,
     transform: [{ rotate: TILT }],
