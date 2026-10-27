@@ -27,4 +27,17 @@ Ces règles sont appliquées par `npm run lint` ([`eslint.config.js`](../../esli
 
 Chaque module apparaît avec l'issue qui l'implémente (milestones 1 et 2).
 
+## API
+
+### `rng/` — hasard à graine
+
+| Fonction | Rôle |
+|---|---|
+| `createRng(seed)` | Générateur mulberry32 : `next()` tire un flottant dans [0, 1[, `getState()` renvoie l'état ; `createRng(état)` reprend la séquence exactement là où elle s'était arrêtée (état sérialisable dans la sauvegarde). |
+| `mulberry32(seed)` | Raccourci : la fonction `next` seule. Port à l'identique du prototype : la séquence d'une graine est un contrat. |
+| `pick(random, items)` | Tirage uniforme, `floor(random() × longueur)` comme le prototype. |
+| `chance(random, p)` | Vrai avec la probabilité `p`. |
+| `randomInt(random, min, max)` | Entier uniforme dans [min, max]. |
+| `deriveSeed(seed, index)` | Hash 32 bits stable : graine du yōkai de la vague `index` d'un défilé de graine `seed`. Bijectif en `index` pour une graine donnée (aucune collision entre vagues). |
+
 Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).

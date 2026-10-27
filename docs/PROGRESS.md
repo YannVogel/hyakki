@@ -7,21 +7,23 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 1 · Moteur de jeu (`milestone/1-moteur`) |
-| Dernière issue terminée | #13 Development builds iOS et Android |
-| Prochaine issue | #14 RNG à graine et dérivation des graines |
+| Dernière issue terminée | #14 RNG à graine et dérivation des graines |
+| Prochaine issue | #15 Grands nombres (BigNum) et formatage français |
 
 ## Milestones
 
 | Milestone | État | PR |
 |---|---|---|
 | 0 · Fondations | Terminée | #52 |
-| 1 · Moteur de jeu | À faire | — |
+| 1 · Moteur de jeu | En cours | — |
 | 2 · Fabrique à yōkai | À faire | — |
 | 3 · Boucle jouable | À faire | — |
 | 4 · Feel & finitions | À faire | — |
 | 5 · Publication | À faire | — |
 
 ## Points en suspens
+
+- Milestone 1, ordre retenu : #14, #15, #24, #25, #16, #17, #27, #18, #19, #20, #21, #22, #23. #24, #25 et #27 (milestone 2) sont avancées car elles bloquent : les PV d'un yōkai dépendent de sa spec (#17) et le hors ligne tire des captures (#21). Notes de conception : voir `docs/GAME_DESIGN.md` au fil des issues.
 
 - Les branches de milestone ne sont jamais réécrites une fois poussées (pas de push forcé) : un correctif de revue devient un commit `fix` qui référence l'issue.
 

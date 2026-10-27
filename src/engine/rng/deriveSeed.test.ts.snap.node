@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`deriveSeed is stable across versions (regression values) 1`] = `
+[
+  3949215219,
+  963910079,
+  1448500013,
+]
+`;
