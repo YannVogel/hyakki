@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-27 — Le moteur parle en identifiants, les textes français vivent dans `src/i18n`
+
+- **Décision** : le générateur et les stats manipulent des identifiants anglais (`lantern`, `cyclops`, `horns`…). Le nom japonais d'un yōkai (`Mitsume-Taiko-obake`) est calculé par le moteur (`nameOf`) : c'est une donnée du jeu, identique dans toutes les langues. La description française accordée en genre, les noms des pièces et les libellés des traits sont dans `src/i18n/yokai.ts` (`describeYokai`, `traitLabel`, `traitEffectText`).
+- **Raison** : le moteur reste pur et sans texte joueur ; l'accord en genre est une règle de la langue française, pas du jeu. Ajouter une langue ne touche pas au moteur.
+- **Conséquence** : les tests de `src/i18n/yokai.test.ts` vérifient que les textes français sont identiques à ceux du prototype (aux espaces fines près).
+
 ## 2026-10-27 — Socle technique : Expo SDK 58, iPhone uniquement, polices chargées au démarrage
 
 - **Décision** : Expo SDK 58 (React Native 0.88, React 19.3, TypeScript 6.0), routes expo-router dans `app/` à la racine, identifiant `com.parallaxworks.hyakki` sur iOS et Android. Sur iOS, `supportsTablet: false` : l'app tourne en mode iPhone sur iPad. Les polices sont chargées par `useFonts` derrière l'écran de lancement.

@@ -62,3 +62,6 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `GENERATOR_VERSION` | Version des listes de pièces (1). Toute modification qui change une graine existante l'incrémente. |
 | `OBJECTS`, `EYES`, `MOUTHS`, `LIMBS`, `ACCESSORIES`, `PALETTES`, `RARITIES`, `SUFFIXES` | Listes de pièces V1 : leur ordre est un contrat. |
 | `countCombinations()` | Nombre de yōkai distincts (285 696 en V1). |
+| `statsOf(spec)` | PV, attaque, défense, vitesse (arrondis comme le prototype), chance de critique, brûlure, bonus d'âmes, traits. |
+| `traitsOf(spec)` | Traits visibles et leurs effets (fractions : `0.08` = +8 %), dans l'ordre des pièces. |
+| `nameOf(spec)` | Nom japonais (`Mitsume-Taiko-obake`), identique dans toutes les langues. La description française est dans `src/i18n/yokai.ts`. |
