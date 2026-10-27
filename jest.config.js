@@ -13,6 +13,8 @@ module.exports = {
     {
       displayName: 'app',
       preset: 'jest-expo',
+      setupFiles: ['<rootDir>/jest.setup.js'],
+      resolver: '<rootDir>/jest.resolver.js',
       testMatch: ['<rootDir>/{app,src}/**/*.test.{ts,tsx}'],
       testPathIgnorePatterns: [
         '/node_modules/',

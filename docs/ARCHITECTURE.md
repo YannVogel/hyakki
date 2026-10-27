@@ -8,11 +8,11 @@
 | Rendu de la scène, des yōkai et des effets | **@shopify/react-native-skia** | Dessin vectoriel performant, chemins SVG, shaders |
 | Animations, gestes | **react-native-reanimated**, **react-native-gesture-handler** | Animations et tap sur le thread UI |
 | État de l'UI | **zustand** | Store minimal qui orchestre moteur ↔ écrans |
-| Sauvegarde | **react-native-mmkv** | Lecture/écriture synchrone et rapide d'un état sérialisé |
+| Sauvegarde | **react-native-mmkv** 4 (sur Nitro Modules) | Lecture/écriture synchrone et rapide d'un état sérialisé |
 | Grands nombres | **break_infinity.js** derrière un adaptateur `BigNum` | Les grandeurs dépassent `1e308` ; l'adaptateur permet de changer de lib |
 | Notifications | **expo-notifications** (locales uniquement) | Plafond hors ligne atteint |
 | Haptique | **expo-haptics** | Frappes, critiques, Gardien vaincu |
-| Tests | **Jest** (`jest-expo`), **@testing-library/react-native**, **fast-check**, **Maestro** | Unitaires, propriétés, composants, parcours |
+| Tests | **Jest** (`jest-expo`), **@testing-library/react-native**, **fast-check**, **Maestro** | Unitaires, propriétés, composants, parcours. Sous Jest : Reanimated en implémentation JS (`jest.resolver.js`), Skia et Nitro simulés (`jest.setup.js`), MMKV en mémoire |
 | Qualité | **ESLint**, **Prettier**, règles d'imports (voir § 3) | |
 | CI | **GitHub Actions** ([`ci.yml`](../.github/workflows/ci.yml)) | Lint, typecheck, tests avec seuil de couverture, sur chaque PR et chaque push sur `main` |
 
@@ -109,7 +109,30 @@ Tout tirage passe par `engine/rng`. La graine d'un yōkai dérive du défilé et
 - Chaque changement de schéma ajoute une migration testée (`save/migrations`).
 - Horodatage de la dernière sauvegarde : sert au calcul hors ligne. Une heure système qui recule ne donne jamais de gains négatifs ni de gains bonus.
 
-## 6. Performance
+## 6. Build
+
+L'app utilise des modules natifs (Skia, MMKV via Nitro, Reanimated) : elle tourne dans un **development build**, jamais dans Expo Go. Les dossiers `ios/` et `android/` sont générés (Continuous Native Generation) et ignorés par Git : toute configuration native passe par [`app.config.ts`](../app.config.ts) et ses plugins.
+
+### En local (recommandé, gratuit)
+
+Prérequis : Node 24, Xcode et CocoaPods (iOS), Android Studio avec un SDK et un émulateur (Android, `ANDROID_HOME` défini).
+
+```bash
+npm install
+npm run ios        # prebuild + pod install + build Xcode, installe et lance sur le simulateur
+npm run android    # prebuild + build Gradle, installe et lance sur l'émulateur démarré
+npm start          # Metro seul, quand l'app est déjà installée
+```
+
+Le premier build iOS est long (~10 min) : les modules Expo sont compilés depuis les sources (voir [`DECISIONS.md`](DECISIONS.md)). Les suivants réutilisent le cache de Xcode.
+
+En développement, l'écran d'accueil propose un lien « Vérification native » (Skia animé par Reanimated, compteur MMKV) ; le parcours `e2e/native-check.yaml` le vérifie.
+
+### Dans le cloud (EAS Build)
+
+L'offre gratuite d'EAS Build demande un compte Expo et, pour iOS sur appareil, un compte Apple Developer. Elle servira aux builds de production (milestone 5).
+
+## 7. Performance
 
 - Cible : 60 i/s sur un Android d'entrée de gamme récent.
 - Les specs de yōkai sont calculées une fois puis mémoïsées par graine.

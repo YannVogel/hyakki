@@ -46,6 +46,10 @@ module.exports = defineConfig([
     },
   },
   {
+    files: ['jest.setup.js'],
+    languageOptions: { globals: { jest: 'readonly' } },
+  },
+  {
     files: ['src/engine/**/*.ts'],
     ignores: ['src/engine/**/*.test.ts'],
     rules: {

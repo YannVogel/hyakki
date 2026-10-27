@@ -5,6 +5,7 @@ Parcours de bout en bout joués sur un simulateur iOS ou un émulateur Android p
 | Parcours | Vérifie |
 |---|---|
 | `app-starts.yaml` | L'app démarre et affiche son premier écran |
+| `native-check.yaml` | Skia et MMKV tournent dans le development build ; le compteur survit à un redémarrage |
 
 ## Lancer
 

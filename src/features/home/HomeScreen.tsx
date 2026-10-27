@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Link } from 'expo-router';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { strings } from '@/i18n';
 import { fontFamily } from '@/ui/fonts';
@@ -12,6 +13,17 @@ export function HomeScreen() {
         {strings.home.title}
       </Text>
       <Text style={styles.subtitle}>{strings.home.subtitle}</Text>
+      {__DEV__ && (
+        <Link href="/dev/native-check" asChild>
+          <Pressable
+            accessibilityRole="link"
+            style={styles.devLink}
+            testID="home-native-check-link"
+          >
+            <Text style={styles.subtitle}>{strings.home.nativeCheckLink}</Text>
+          </Pressable>
+        </Link>
+      )}
     </View>
   );
 }
@@ -34,5 +46,9 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: fontFamily.body700,
     fontSize: 16,
+  },
+  devLink: {
+    minHeight: 44,
+    justifyContent: 'center',
   },
 });

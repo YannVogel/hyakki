@@ -1,0 +1,19 @@
+# Development build : Skia et MMKV fonctionnent, le compteur survit à un redémarrage.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: home-native-check-link
+- assertVisible:
+    id: native-check-canvas
+- tapOn:
+    id: native-check-increment
+- tapOn:
+    id: native-check-increment
+- assertVisible: 'Compteur MMKV : 2'
+- stopApp
+- launchApp
+- tapOn:
+    id: home-native-check-link
+- assertVisible: 'Compteur MMKV : 2'
