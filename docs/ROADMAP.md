@@ -10,7 +10,7 @@ Miroir des [milestones](https://github.com/YannVogel/hyakki/milestones) et des e
 | **3 · Boucle jouable** | #4 Design system et composants, #5 Écrans et boucle de jeu | Une partie se joue de la première vague au premier Festival | Terminée (PR #57) |
 | **4 · Feel & finitions** | #6 Art : héros et Gardiens, #7 Feel : effets, animations, haptique (+ #28 générateur V2) | Combat fluide et expressif, illustrations définitives | Terminée (PR #60) ; #58 (illustrations HD) et #59 (validation de l'icône) attendent Yann, 60 i/s à mesurer dans #55 |
 | **5 · Publication** | #8 Publication sur les stores | Disponible sur l'App Store et Google Play, étude de cas en ligne | En cours (PR #64, #66) : politique de confidentialité en ligne, app créée et fiches complètes dans les deux consoles (classifications 13+ / PEGI 7), procédure de build, étude de cas. Attendent Yann : #47 et #48 (builds, test fermé de 14 jours, soumission), #63 (vidéo, GIF, liens stores) |
-| **6 · Retours de jeu** | #72 Retours de jeu après la 1.0 | Interface de combat corrigée, confort de l'écran Shikigami, décors illustrés, cycles de difficulté après le 10e Gardien | En cours : #75, #73, #76 et #77 faits (PR #81, #82) |
+| **6 · Retours de jeu** | #72 Retours de jeu après la 1.0 | Interface de combat corrigée, confort de l'écran Shikigami, décors illustrés, cycles de difficulté après le 10e Gardien | En cours : #75, #73, #76, #77 et #74 faits (PR #81 à #83) |
 
 ## Ordre conseillé
 
