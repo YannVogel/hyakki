@@ -50,7 +50,15 @@ const config: ExpoConfig = {
     ],
     // The SDK 58 precompiled XCFrameworks are out of sync (ExpoFileSystem crashes at launch
     // on a missing ExpoModulesCore symbol): build Expo modules from source instead.
-    ['expo-build-properties', { ios: { usePrecompiledModules: false } }],
+    [
+      'expo-build-properties',
+      {
+        ios: { usePrecompiledModules: false },
+        // Real phones are ARM: skipping the x86 emulator ABIs halves the native build, which ran
+        // the EAS worker out of memory (Gradle daemon killed) with all four.
+        android: { buildArchs: ['armeabi-v7a', 'arm64-v8a'] },
+      },
+    ],
     [
       'expo-splash-screen',
       {

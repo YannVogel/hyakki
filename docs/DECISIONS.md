@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-28 — Build Android limité aux architectures ARM
+
+- **Décision** : l'app Android n'embarque que `armeabi-v7a` et `arm64-v8a` (`expo-build-properties`, `android.buildArchs`).
+- **Raison** : avec les quatre ABI par défaut, le premier build EAS de production a manqué de mémoire (« Gradle build daemon disappeared unexpectedly » sur la machine gratuite de 15,6 Go). `x86` et `x86_64` ne servent qu'aux émulateurs Intel ; les téléphones sont en ARM.
+- **Conséquence** : compilation native et fichier AAB deux fois plus légers. Un émulateur x86 ne peut plus installer le build ; l'émulateur de développement (Apple Silicon) est en ARM.
+
 ## 2026-10-28 — Public 13 ans et plus, illustrations IA signalées
 
 - **Décision** (Yann) : sur Google Play, le public cible est 13 ans et plus (13-15, 16-17, 18+). La fiche signale comme générés par IA les visuels qui montrent le héros ou un Gardien.
