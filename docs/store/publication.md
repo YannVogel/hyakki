@@ -8,11 +8,11 @@ Procédure pour publier Hyakki sur Google Play (#47) et l'App Store (#48). Les b
 - Numéros de build (`versionCode` Android, `buildNumber` iOS) : gérés par EAS ([`eas.json`](../../eas.json), `appVersionSource: remote` et `autoIncrement`), ils augmentent à chaque build de production.
 - Chiffrement : l'app ne fait aucun appel réseau, `ITSAppUsesNonExemptEncryption` vaut `false` (`ios.config.usesNonExemptEncryption`), TestFlight ne pose donc pas la question de conformité à l'exportation.
 
-## Une seule fois
+## Une seule fois (fait le 28/10/2026)
 
-1. Se connecter à Expo : `npx eas-cli@latest login`.
-2. Lier le projet : `npx eas-cli@latest init`. La configuration étant dynamique (`app.config.ts`), EAS affiche un `projectId` à ajouter à la main dans `extra.eas.projectId`.
-3. Créer l'app dans les deux consoles (identifiant `com.parallaxworks.hyakki`, langue par défaut français) et saisir les fiches : textes et images dans [`fiche.md`](fiche.md), déclarations dans [`confidentialite.md`](confidentialite.md).
+1. Projet EAS `@yannvogel/hyakki`, identifiant dans `extra.eas.projectId` d'`app.config.ts` (la configuration dynamique empêche `eas init` de l'écrire seul).
+2. Apps créées dans les deux consoles (`com.parallaxworks.hyakki`, App Store Connect : 6827876932, renseigné dans `eas.json` pour `eas submit`), fiches et déclarations saisies : [`fiche.md`](fiche.md), [`confidentialite.md`](confidentialite.md).
+3. Signature : la clé d'importation Android est générée et gardée par EAS. Le premier build iOS demande une connexion Apple interactive (mot de passe et double authentification) pour créer le certificat et le profil de distribution ; les suivants les réutilisent.
 
 ## Google Play (#47)
 
