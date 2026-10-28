@@ -6,8 +6,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 | | |
 |---|---|
-| Milestone en cours | 5 · Publication (`milestone/5-publication`) |
-| Dernière issue terminée | #49 Étude de cas (médias et liens stores : #63) |
+| Milestone en cours | 6 · Retours de jeu (5 · Publication attend Yann : #47, #48, #63) |
+| Dernière issue terminée | #75 Vignette du prochain Gardien dans l'en-tête de combat |
 | Prochaine issue | #47 : test fermé 1.0.0 en examen chez Google, il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (3) dans TestFlight, soumission à décider par Yann |
 
 ## Milestones
@@ -20,6 +20,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 3 · Boucle jouable | Terminée | #57 |
 | 4 · Feel & finitions | Terminée (#58 attend Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
+| 6 · Retours de jeu | En cours : #75 fait | |
 
 ## Points en suspens
 
@@ -35,6 +36,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
 - Audio (28/10) : bruitages choisis dans `assets/audio/sfx/`, pas encore branchés. Musique « Le défilé en fête », [version A sur Suno](https://suno.com/song/a485fdce-bdfd-457a-a1ff-32e84809ec94) : à télécharger après le 7/11 (quota Suno à 0), puis convertir en `.m4a` avec `afconvert`.
+
+- Vignette du prochain Gardien (#75, 28/10) : 44 pt à la demande de Yann, plus haute que l'ancien libellé « Gardien » ; la scène de combat descend d'environ 26 pt.
 
 - Les branches de milestone ne sont jamais réécrites une fois poussées (pas de push forcé) : un correctif de revue devient un commit `fix` qui référence l'issue.
 

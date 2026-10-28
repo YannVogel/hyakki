@@ -6,6 +6,7 @@ import { BALANCE, type CombatEvent, formatNumber, GUARDIANS, guardianMaxHp } fro
 import { strings } from '@/i18n';
 import {
   enemyView,
+  nextGuardianView,
   paradeView,
   powerPerSecond,
   talismanViews,
@@ -57,7 +58,12 @@ export function CombatScreen() {
 
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
-      <CombatHeader parade={parade} souls={formatNumber(game.souls)} ofuda={game.ofuda} />
+      <CombatHeader
+        parade={parade}
+        nextGuardian={nextGuardianView(game)}
+        souls={formatNumber(game.souls)}
+        ofuda={game.ofuda}
+      />
       <View style={styles.sceneArea}>
         <BattleScene
           enemy={enemy}
