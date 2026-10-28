@@ -48,8 +48,8 @@ scripts/store-captures.sh        # iOS puis Android ; ou : ios, android
 
 | Store | Appareil | Taille | Fichiers |
 |---|---|---|---|
-| App Store | iPhone 17 Pro Max (6,9 pouces, taille exigée) | 1320 × 2868 | `store-captures/ios/01-combat.png` … `06-gardien.png` |
-| Google Play | Émulateur Android (barre d'état retirée pour respecter le ratio 2:1 maximal) | 1080 × 2160 | `store-captures/android/…` |
+| App Store | iPhone 17 (6,3 pouces, taille de base d'App Store Connect, réutilisée pour les autres iPhone) | 1206 × 2622 | `store-captures/ios/01-combat.png` … `06-gardien.png` |
+| Google Play | Émulateur Android : barres système retirées, puis ramené au 9:16 exigé (côtés complétés avec le crème de l'app) | 1080 × 1920 | `store-captures/android/…` |
 
 Ordre conseillé : 01 Combat (effets), 02 Shikigami (collection et équipe), 03 Sanctuaire, 04 Festival, 05 Retour hors ligne, 06 Gardien. Le dossier `store-captures/` n'est pas versionné : on le régénère.
 
@@ -61,5 +61,7 @@ Aucune donnée à déclarer, aucun contenu généré par les joueurs, aucune com
 
 | Questionnaire | Réponse | Résultat attendu |
 |---|---|---|
-| App Store (âge) | Violence de dessin animé ou fantastique : **peu fréquente / légère** (on « purifie » des créatures, sans sang ni blessure). Thèmes d'horreur ou de peur : **peu fréquents / légers** (Gashadokuro, squelette géant, en style cartoon). Tout le reste : **aucun**. | 9+ (calculé par la console) |
-| Google Play (IARC) | Catégorie Jeu. Violence : oui, **fantastique / dessin animé**, sans sang, contre des créatures non humaines. Peur : non. Sexualité, langage, drogues, jeux d'argent, achats, interactions : non. | PEGI 7 environ (calculé par l'IARC) |
+| App Store (âge) | Violence de dessin animé ou fantastique : **à trancher**, peu fréquente ou fréquente (le combat est permanent, mais léger : on « purifie » des créatures, sans sang ni blessure). Thèmes d'horreur ou de peur : **peu fréquents / légers** (Gashadokuro, squelette géant, en style cartoon). Alcool, tabac ou drogues : **peu fréquent**, car l'accessoire « kiseru » du générateur V2 est une pipe. Tout le reste : **aucun**. | Calculé par la console |
+| Google Play (IARC) | Catégorie Jeu. Violence : oui, **fantastique / dessin animé**, sans sang, contre des créatures non humaines. Peur : non. Tabac : **représentation** (kiseru). Sexualité, langage, jeux d'argent, achats, interactions : non. | Calculé par l'IARC |
+
+Le kiseru peut relever l'âge minimum. Pour l'éviter, il faudrait le retirer des nouveaux défilés, ce qui demande une version 3 du générateur. Les défilés et les shikigami existants garderaient leur version. À décider par Yann.

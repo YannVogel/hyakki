@@ -11,7 +11,7 @@ TARGET="${1:-all}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/store-captures"
 FLOW="$ROOT/e2e/store/captures.yaml"
-IOS_DEVICE="iPhone 17 Pro Max" # 6,9 pouces : 1320 × 2868, la taille exigée par l'App Store
+IOS_DEVICE="iPhone 17" # 6,3 pouces : 1206 × 2622, la taille de base d'App Store Connect
 export MAESTRO_CLI_NO_ANALYTICS=1
 
 run_flow() { # device, output folder; keeps the screenshots already taken if the flow fails
@@ -28,7 +28,7 @@ capture_ios() {
   local udid app
   udid="$(xcrun simctl list devices available | grep "$IOS_DEVICE (" | head -1 | sed -E 's/.*\(([0-9A-F-]{36})\).*/\1/')"
   if [ -z "$udid" ]; then
-    udid="$(xcrun simctl create "$IOS_DEVICE" "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max")"
+    udid="$(xcrun simctl create "$IOS_DEVICE" "com.apple.CoreSimulator.SimDeviceType.iPhone-17")"
   fi
   xcrun simctl boot "$udid" 2>/dev/null || true
   xcrun simctl bootstatus "$udid" -b >/dev/null
@@ -55,19 +55,21 @@ capture_android() {
   demo notifications -e visible false
   run_flow "$serial" "$OUT/android" || status=$?
   demo exit
-  # Google Play refuse un côté plus de deux fois plus long que l'autre : on retire la barre d'état
-  # et la barre de navigation (24 dp chacune) en recadrant au centre (sips ignore --cropOffset).
-  local bar
+  # Google Play exige des captures en 9:16 : on retire la barre d'état et la barre de navigation
+  # (24 dp chacune, recadrage centré : sips ignore --cropOffset), puis on ramène l'écran à la
+  # hauteur 9:16 et on complète les côtés avec le crème de l'app.
+  local bar cream
   bar=$((24 * $(adb -s "$serial" shell wm density | awk 'END { print $NF }' | tr -d '\r') / 160))
+  cream="$(node -p "require('$ROOT/design/tokens.json').color.cream['\$value'].slice(1)")"
   for file in "$OUT"/android/*.png; do
     [ -e "$file" ] || continue
-    local width height target
+    local width height
     width="$(sips -g pixelWidth "$file" | awk '/pixelWidth/ { print $2 }')"
     height="$(sips -g pixelHeight "$file" | awk '/pixelHeight/ { print $2 }')"
-    target=$((height - 2 * bar))
-    [ "$target" -le $((width * 2)) ] || target=$((width * 2))
-    if [ "$height" -gt $((width * 2)) ]; then
-      sips -c "$target" "$width" "$file" >/dev/null
+    sips -c $((height - 2 * bar)) "$width" "$file" >/dev/null
+    if [ $(((height - 2 * bar) * 9)) -gt $((width * 16)) ]; then
+      sips --resampleHeight $((width * 16 / 9)) "$file" >/dev/null
+      sips -p $((width * 16 / 9)) "$width" --padColor "$cream" "$file" >/dev/null
     fi
   done
   return "$status"

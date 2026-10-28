@@ -26,7 +26,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
 - Maestro sur Android : l'émulateur doit avoir 4 Go de RAM (`-memory 4096`), sinon les parcours calent ; chaque frappe reste lente (plusieurs dizaines de secondes) car l'écran animé ne se stabilise jamais. Sur iOS : 8/8 avec le build de la milestone 4.
 - Captures des stores : `scripts/store-captures.sh [ios|android]` (Metro lancé), sorties non versionnées dans `store-captures/`.
-- Consoles des stores : je n'ai pas le droit d'accepter des déclarations ni de me connecter à la place de Yann. Play Console : formulaire de création prêt, deux déclarations à cocher. App Store Connect : session expirée.
+- Consoles des stores (28/10) : app créée des deux côtés, fiches, captures, catégories, prix et déclarations factuelles saisis. Restent à Yann (#62, #61) les attestations, les données personnelles (e-mail de contact, coordonnées pour l'examen Apple) et les choix : classification d'âge (kiseru, fréquence de la violence), public cible, mention IA de la fiche Google Play.
+- Formats de captures exigés en octobre 2026 : App Store, iPhone 6,3 pouces (1206 × 2622) ; Google Play, 9:16 exact (1080 × 1920).
 - CocoaPods exige une locale UTF-8 : `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 npx expo run:ios`.
 - Équilibrage : le harnais mesure une graine ; vérifier une cible « au jour près » sur plusieurs défilés (`runProfile(profil, jours, graine)`).
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
