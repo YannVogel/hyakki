@@ -24,7 +24,10 @@ export const fr = {
     festival: 'Festival',
   },
   combat: {
-    parade: (parade: number) => `Défilé ${parade} · 百鬼夜行`,
+    parade: (parade: number, level: number) =>
+      level > 1 ? `Défilé ${parade} · Éveil ${level}` : `Défilé ${parade} · 百鬼夜行`,
+    awakeningTitle: (level: number) => `Éveil ${level} !`,
+    awakeningBody: 'Le défilé repart de la première vague, plus résistant.',
     wave: (wave: number) => `Vague ${wave}`,
     ofTier: '/ 100',
     souls: (value: string) => `Âmes : ${value}`,
@@ -231,8 +234,8 @@ export const fr = {
   },
   festival: {
     kanji: '祭',
-    status: (parade: number, wave: number, record: number) =>
-      `Défilé ${parade} · vague ${wave} · record : ${record}`,
+    status: (parade: number, level: number, wave: number, record: number, recordLevel: number) =>
+      `Défilé ${parade} · ${level > 1 ? `Éveil ${level} · ` : ''}vague ${wave} · record : ${record}${recordLevel > 1 ? ` (Éveil ${recordLevel})` : ''}`,
     title: 'Grand Festival !',
     pitch:
       'Le défilé s’arrête pour la fête. Relance-le plus fort : tes shikigami restent, et le festival t’offre ses étincelles.',

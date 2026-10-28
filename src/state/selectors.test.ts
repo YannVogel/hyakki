@@ -59,6 +59,21 @@ describe('selectors', () => {
     expect(paradeView(atWave(101))).toMatchObject({ waveInTier: 1, nextGuardianWave: 200 });
   });
 
+  it('start the parade over, one awakening level up, after the tenth guardian', () => {
+    expect(paradeView(atWave(1000))).toMatchObject({
+      level: 1,
+      waveInCycle: 1000,
+      waveInTier: 100,
+    });
+    expect(paradeView(atWave(1001))).toMatchObject({
+      level: 2,
+      waveInCycle: 1,
+      waveInTier: 1,
+      nextGuardianWave: 1100,
+    });
+    expect(nextGuardianView({ ...atWave(1001), guardiansDefeated: [0] }).index).toBe(0);
+  });
+
   it('report the power and the talisman cooldowns', () => {
     const state = createNewGame(3);
     expect(powerPerSecond(state)).toBeDefined();

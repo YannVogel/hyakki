@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-28 — Après le 10e Gardien : les niveaux d'« Éveil »
+
+- **Décision** : quand Nurarihyon tombe, le défilé repart de la première vague un niveau plus haut, appelé **Éveil** (« Éveil 2 », « Éveil 3 »…). L'état garde la vague absolue ; le niveau (`floor((v − 1) / 1000) + 1`) et la vague du niveau (1 à 1000) en sont dérivés, et l'éveil des Gardiens vaut le niveau moins un. Pas de multiplicateur de résistance ajouté. Le Festival ramène au niveau 1.
+- **Raison** : « Éveil » est déjà le mot du jeu (« Kappa éveillé ») et du moteur (`awakening`), il se comprend seul et garde le ton cartoon, contrairement à Jigoku ou Yomi, plus sombres, ou à Kegare, obscur. Garder la vague absolue évite toute migration de sauvegarde. La courbe des PV rend déjà chaque niveau plus résistant ; le harnais montre l'Éveil 2 atteignable vers le jour 100 pour un joueur régulier qui enchaîne les Festivals, puis un nouveau mur au premier Gardien éveillé.
+- **Conséquence** : toutes les vagues montrées au joueur sont celles du niveau (1 à 1000) ; l'en-tête affiche « Défilé N · Éveil N » à partir de l'Éveil 2, à la place de 百鬼夜行.
+
 ## 2026-10-28 — Brûlures plafonnées par les frappes, sans plancher
 
 - **Décision** (Yann) : une brûlure n'inflige jamais plus de 9 fois les dégâts par seconde espérés des frappes (`BALANCE.burn.maxHitsMultiple`). Elle n'a plus de plancher et peut donc achever l'ennemi. Elle remplace la règle du 2026-10-27, où une brûlure s'arrêtait quand il restait 10 % des PV.

@@ -35,6 +35,17 @@ describe('CombatScreen', () => {
     expect(screen.getAllByRole('button', { name: /Lancer/ })).toHaveLength(3);
   });
 
+  it('shows the wave of the awakening level on the enemy card', async () => {
+    const game = createNewGame(2026);
+    await renderWith({
+      ...game,
+      parade: { ...game.parade, wave: 1050, maxWave: 1050 },
+      enemy: { ...game.enemy, seed: enemySeed(2026, 1050) },
+    });
+    expect(screen.getByText(strings.combat.enemyLevel(50))).toBeOnTheScreen();
+    expect(screen.getByText(strings.combat.parade(1, 2))).toBeOnTheScreen();
+  });
+
   it('turns a tap on the scene into an engine input', async () => {
     const store = await renderWith();
     await fireEvent(screen.getByTestId('battle-strike'), 'accessibilityAction', {

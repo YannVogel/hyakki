@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Image, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { festivalPreview, formatNumber } from '@/engine';
+import { awakeningLevel, festivalPreview, formatNumber, waveInCycle } from '@/engine';
 import { strings } from '@/i18n';
 import { paradeView, useGame, useGameStore } from '@/state';
 import { bodyText, Button, Card, colors, displayText, OutlinedText, spacing } from '@/ui';
@@ -60,7 +60,13 @@ export function FestivalScreen({ onDone }: FestivalScreenProps) {
           />
         </View>
         <Text style={[bodyText('sm', 800), styles.muted]}>
-          {text.status(parade.number, parade.wave, game.parade.maxWave)}
+          {text.status(
+            parade.number,
+            parade.level,
+            parade.waveInCycle,
+            waveInCycle(game.parade.maxWave),
+            awakeningLevel(game.parade.maxWave),
+          )}
         </Text>
         <OutlinedText style={displayText('4xl')}>{text.title}</OutlinedText>
         <Text style={bodyText('base', 700)}>{text.pitch}</Text>

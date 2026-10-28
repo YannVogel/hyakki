@@ -42,6 +42,7 @@ const CONTENT_EDGES = ['top', 'left', 'right'] as const;
 export interface GuardianCutInProps {
   readonly index: number;
   readonly name: string;
+  /** Guardian wave in its awakening level (100 to 1000). */
   readonly wave: number;
   readonly hp: string;
   readonly weakness: Element;

@@ -43,7 +43,7 @@ const describe = (milestone: Milestone | undefined) =>
     : `${round(milestone.realHours / 24, 1)} j (${round(milestone.activeMinutes, 0)} min actives)`;
 
 export function summaryMarkdown(results: readonly RunResult[], days: number): string {
-  const events = ['gardien-1', 'festival-1', 'gardien-5', 'record-800', 'gardien-10'];
+  const events = ['gardien-1', 'festival-1', 'gardien-5', 'record-800', 'gardien-10', 'eveil-2'];
   const lines = [
     `# Résumé de la simulation (${days} jours)`,
     '',

@@ -31,6 +31,18 @@ describe('FestivalScreen', () => {
     expect(screen.getByLabelText(strings.festival.heroLabel)).toBeOnTheScreen();
   });
 
+  it('tells the awakening level of the parade and of its record', async () => {
+    const game = withRecord(1300);
+    await renderScreen(<FestivalScreen onDone={jest.fn()} />, {
+      ...game,
+      parade: { ...game.parade, wave: 1050 },
+    });
+    expect(screen.getByText(strings.festival.status(1, 2, 50, 300, 2))).toBeOnTheScreen();
+    expect(strings.festival.status(1, 2, 50, 300, 2)).toBe(
+      'Défilé 1 · Éveil 2 · vague 50 · record : 300 (Éveil 2)',
+    );
+  });
+
   it('stays locked before the first guardian', async () => {
     await renderScreen(<FestivalScreen onDone={jest.fn()} />, withRecord(80));
     expect(screen.getByTestId('festival-locked')).toBeOnTheScreen();

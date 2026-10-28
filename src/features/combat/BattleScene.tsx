@@ -32,6 +32,7 @@ export interface BattleSceneProps {
   /** Guardian of the current hundred, whose backdrop waits for it. */
   readonly upcomingGuardian: number;
   readonly enemyName: string;
+  /** Wave shown on the enemy's card, in its awakening level. */
   readonly wave: number;
   readonly lastHit: LastHit | null;
   readonly heroPose: HeroPose;

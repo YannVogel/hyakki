@@ -1,4 +1,5 @@
 import {
+  awakeningLevel,
   BALANCE,
   type BigNum,
   combatPower,
@@ -15,6 +16,7 @@ import {
   type UpgradeId,
   upgradeMaxLevel,
   waveHp,
+  waveInCycle,
   waveSouls,
   type GameState,
   generate,
@@ -84,6 +86,10 @@ export function enemyView(state: GameState): EnemyView {
 export interface ParadeView {
   readonly number: number;
   readonly wave: number;
+  /** Awakening level (« Éveil »): 1 until Nurarihyon falls, then the parade starts over. */
+  readonly level: number;
+  /** Position in the awakening level, 1 to 1000: the wave shown to the player. */
+  readonly waveInCycle: number;
   /** Position in the current hundred, 1 to 100. */
   readonly waveInTier: number;
   /** Progress toward the next guardian, 0 to 1. */
@@ -99,6 +105,8 @@ export function paradeView(state: GameState): ParadeView {
   return {
     number,
     wave,
+    level: awakeningLevel(wave),
+    waveInCycle: waveInCycle(wave),
     waveInTier,
     tierProgress: waveInTier / every,
     nextGuardianWave: Math.ceil(wave / every) * every,

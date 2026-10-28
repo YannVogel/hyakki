@@ -1,16 +1,19 @@
 import * as fc from 'fast-check';
 
-import { div, eq, toNumber } from '../numbers';
+import { div, eq, gt, toNumber } from '../numbers';
 import { stateAtWave } from '../testing/states';
-import { waveHp } from './enemy';
+import { waveHp, yokaiMaxHp } from './enemy';
 import type { CombatEvent } from './events';
 import {
+  awakeningLevel,
+  CYCLE_WAVES,
   guardianAt,
   guardianMaxHp,
   guardianOfuda,
   GUARDIANS,
   isGuardianWave,
   tierMultiplier,
+  waveInCycle,
 } from './guardians';
 import { step } from './step';
 
@@ -53,6 +56,61 @@ describe('guardian formulas', () => {
     expect(tierMultiplier(100)).toBe(1);
     expect(tierMultiplier(101)).toBe(1.5);
     expect(tierMultiplier(250)).toBe(2);
+  });
+});
+
+describe('awakening levels', () => {
+  it('start over from wave 1 after each tenth guardian', () => {
+    const at = (wave: number) => [awakeningLevel(wave), waveInCycle(wave)];
+    expect(at(1)).toEqual([1, 1]);
+    expect(at(1000)).toEqual([1, 1000]);
+    expect(at(1001)).toEqual([2, 1]);
+    expect(at(2000)).toEqual([2, 1000]);
+    expect(at(2001)).toEqual([3, 1]);
+  });
+
+  it('give each guardian the awakening of its level', () => {
+    fc.assert(
+      fc.property(fc.integer({ min: 1, max: 1000 }), (rank) => {
+        const wave = rank * 100;
+        expect(guardianAt(wave)).toEqual({
+          index: waveInCycle(wave) / 100 - 1,
+          awakening: awakeningLevel(wave) - 1,
+        });
+      }),
+    );
+  });
+
+  it('make every enemy tougher at the same wave of the next level', () => {
+    const levelAndWave = fc.tuple(
+      fc.integer({ min: 1, max: 30 }),
+      fc.integer({ min: 1, max: CYCLE_WAVES }),
+    );
+    fc.assert(
+      fc.property(levelAndWave, fc.integer({ min: 0, max: 2 ** 31 }), ([level, wave], seed) => {
+        const at = (lvl: number) => wave + (lvl - 1) * CYCLE_WAVES;
+        expect(gt(yokaiMaxHp(at(level + 1), seed, 2), yokaiMaxHp(at(level), seed, 2))).toBe(true);
+      }),
+    );
+    fc.assert(
+      fc.property(levelAndWave, ([level, wave]) => {
+        const at = (lvl: number) => Math.ceil(wave / 100) * 100 + (lvl - 1) * CYCLE_WAVES;
+        expect(gt(guardianMaxHp(at(level + 1)), guardianMaxHp(at(level)))).toBe(true);
+      }),
+    );
+  });
+
+  it('send the parade back to its first wave, one level up, once Nurarihyon falls', () => {
+    const { state, events } = step(stateAtWave(5, 1000, { blade: 2000 }), 1, [ENGAGE]);
+    expect(events).toContainEqual(
+      expect.objectContaining({ type: 'guardianDefeated', wave: 1000, index: 9 }),
+    );
+    expect(awakeningLevel(state.parade.wave)).toBe(2);
+    expect(waveInCycle(state.parade.wave)).toBe(1);
+    expect(guardianAt(Math.ceil(state.parade.wave / 100) * 100)).toEqual({
+      index: 0,
+      awakening: 1,
+    });
   });
 });
 

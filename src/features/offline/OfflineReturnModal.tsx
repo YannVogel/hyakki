@@ -1,6 +1,6 @@
 import { Image, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { formatNumber, generate, nameOf, type OfflineReport } from '@/engine';
+import { formatNumber, generate, nameOf, type OfflineReport, waveInCycle } from '@/engine';
 import { strings } from '@/i18n';
 import { bodyText, Button, Card, colors, displayText, ProgressBar, spacing } from '@/ui';
 
@@ -56,7 +56,10 @@ export function OfflineReturnModal({ report, onCollect }: OfflineReturnModalProp
               testID="offline-yokai"
             />
             <Row label={text.souls} value={text.soulsValue(formatNumber(report.souls))} />
-            <Row label={text.waves} value={text.wavesValue(report.waveFrom, report.waveTo)} />
+            <Row
+              label={text.waves}
+              value={text.wavesValue(waveInCycle(report.waveFrom), waveInCycle(report.waveTo))}
+            />
             {report.levelUps.map((levelUp) => (
               <Text key={levelUp.seed} style={bodyText('base', 800)}>
                 {text.levelUp(

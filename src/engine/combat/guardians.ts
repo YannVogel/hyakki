@@ -27,12 +27,23 @@ export const GUARDIANS: readonly Guardian[] = [
 export const isGuardianWave = (wave: number): boolean =>
   wave > 0 && wave % BALANCE.guardian.every === 0;
 
-/** Guardian met at a guardian wave: its index (0 to 9) and awakening cycle (0 below wave 1001). */
+/** Waves of one awakening level: the ten guardians, a hundred waves apart. */
+export const CYCLE_WAVES = BALANCE.guardian.every * BALANCE.guardian.count;
+
+/**
+ * Awakening level (« Éveil ») of a wave: 1 for waves 1 to 1000, 2 once Nurarihyon has fallen and
+ * the parade starts over, and so on. The state keeps the absolute wave: the level derives from it.
+ */
+export const awakeningLevel = (wave: number): number => Math.floor((wave - 1) / CYCLE_WAVES) + 1;
+
+/** Position of a wave in its awakening level, 1 to 1000. */
+export const waveInCycle = (wave: number): number => ((wave - 1) % CYCLE_WAVES) + 1;
+
+/** Guardian met at a guardian wave: its index (0 to 9) and awakening (its level minus one). */
 export function guardianAt(wave: number): { index: number; awakening: number } {
-  const rank = wave / BALANCE.guardian.every - 1;
   return {
-    index: rank % BALANCE.guardian.count,
-    awakening: Math.floor(rank / BALANCE.guardian.count),
+    index: waveInCycle(wave) / BALANCE.guardian.every - 1,
+    awakening: awakeningLevel(wave) - 1,
   };
 }
 
