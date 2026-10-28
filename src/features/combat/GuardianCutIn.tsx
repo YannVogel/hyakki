@@ -36,6 +36,8 @@ const TILT = '-6deg';
 const OVERSHOOT = Easing.bezier(0.2, 0.9, 0.3, 1.3);
 /** The guardian's kanji in the background: a decoration far beyond the type scale (mockup). */
 const WATERMARK_SIZE = 190;
+const NAME_MIN_SCALE = 0.6;
+const CONTENT_EDGES = ['top', 'left', 'right'] as const;
 
 export interface GuardianCutInProps {
   readonly index: number;
@@ -100,7 +102,8 @@ export function GuardianCutIn({
       <Text style={[displayText('5xl'), styles.watermark]} accessible={false}>
         {text.kanji[index]}
       </Text>
-      <SafeAreaView style={styles.content}>
+      {/* The tab bar below already keeps clear of the bottom edge. */}
+      <SafeAreaView style={styles.content} edges={CONTENT_EDGES}>
         <OutlinedText style={displayText('base')}>{text.intro(wave)}</OutlinedText>
         <Animated.View
           style={[styles.band, { width: width + 70 }, bandStyle]}
@@ -111,7 +114,14 @@ export function GuardianCutIn({
           <GuardianEyes width={width} />
         </Animated.View>
         <Animated.View style={[styles.banner, { width: width + 70 }, bannerStyle]}>
-          <Text style={displayText('5xl')} testID="cut-in-name">
+          {/* The longest names (Karasu-tengu, Ibaraki-dōji) would break mid-word on narrow phones. */}
+          <Text
+            style={displayText('5xl')}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={NAME_MIN_SCALE}
+            testID="cut-in-name"
+          >
             {name}
           </Text>
           <Text style={bodyText('base', 800)}>{text.kana[index]}</Text>
@@ -178,7 +188,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderColor: colors.ink,
   },
-  guardian: { height: 178, width: 178 },
+  // Shrinks first on short screens, so that both buttons stay in view.
+  guardian: { height: 178, width: 178, flexShrink: 1 },
   card: {
     alignSelf: 'stretch',
     marginHorizontal: spacing[5],
