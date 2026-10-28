@@ -18,14 +18,22 @@ Procédure pour publier Hyakki sur Google Play (#47) et l'App Store (#48). Les b
 
 | Store | Build | Où en est-on |
 |---|---|---|
-| App Store | 1.0.0 (2), [build EAS](https://expo.dev/accounts/yannvogel/projects/hyakki/builds/8f9be8ad-e2cb-468e-828e-4374c6734b3a) | Envoyé par `eas submit` (clé API App Store Connect existante de l'équipe, gardée par EAS). Dans le groupe TestFlight interne « Interne » (distribution automatique des builds suivants), associé à la version 1.0.0. **Pas encore soumis à l'examen.** |
-| Google Play | 1.0.0, versionCode 4+ | Deux builds EAS gratuits ont échoué : le (2) par manque de mémoire, le (3) bloqué jusqu'à la limite de 45 minutes, chaque fois pendant la compilation C++ parallèle. Le build se fait donc en local (`eas build --local`, même clé et même numérotation). |
+| App Store | 1.0.0 (3), [build EAS](https://expo.dev/accounts/yannvogel/projects/hyakki/builds/ec008ba7-5f75-4379-83d1-13e153e6a96a) | Envoyé par `eas build --auto-submit` (clé API App Store Connect de l'équipe, gardée par EAS). Dans le groupe TestFlight interne « Interne » (distribution automatique des builds suivants) et associé à la version 1.0.0. **Pas encore soumis à l'examen.** Le build (2), avec l'ancienne icône, reste dans TestFlight. |
+| Google Play | 1.0.0, versionCode 4, fichier AAB construit en local (`store-captures/hyakki-1.0.0.aab`, non versionné) | Version « 4 (1.0.0) » du test fermé « Tests fermés - Alpha » (tous les pays, liste « Internal testers (moi) »), **envoyée pour examen** le 28/10 avec la fiche et les déclarations. Deux builds EAS gratuits avaient échoué pendant la compilation C++ parallèle : le (2) par manque de mémoire, le (3) bloqué jusqu'à la limite de 45 minutes. |
 
-Le build iOS (2) porte l'ancienne icône (la lanterne) ; avec l'accord de Yann, la nouvelle icône (#59, PR #69) part dans un build iOS (3) et dans le build Android.
+Les deux builds portent la nouvelle icône « Oni caché » (#59).
+
+**Builds Android en local.** La machine gratuite d'EAS ne suffit pas pour la compilation native. Le build se fait donc sur le Mac, avec la clé et la numérotation d'EAS :
+
+```bash
+ANDROID_HOME=$HOME/Library/Android/sdk npx eas-cli@latest build --platform android --profile production --local --output store-captures/hyakki-<version>.aab
+```
+
+Compter une vingtaine de minutes de compilation. Le fichier AAB (environ 70 Mo) s'importe ensuite à la main dans la Play Console.
 
 ## Google Play (#47)
 
-1. Build : `npx eas-cli@latest build --platform android --profile production` (un fichier AAB). Au premier build, laisser EAS générer la clé d'importation.
+1. Build : en local, voir plus haut (la clé d'importation, générée par EAS au premier build, reste sur ses serveurs).
 2. Play Console › Tester et publier › Tests › **Test fermé** : créer le canal, importer l'AAB à la main (Google refuse le tout premier envoi par l'API), rédiger les notes de version (« Première version de test. »).
 3. Testeurs : une liste d'au moins **12 adresses** (amis, famille, Google Group) ; ils acceptent l'invitation et gardent l'app installée **14 jours consécutifs**.
 4. Au bout des 14 jours : Tableau de bord › **Demander l'accès à la production** (questionnaire sur le déroulé du test).

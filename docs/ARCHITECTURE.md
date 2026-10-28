@@ -148,7 +148,7 @@ En développement, l'écran d'accueil propose un lien « Vérification native »
 
 ### Dans le cloud (EAS Build)
 
-Les builds de production passent par l'offre gratuite d'EAS Build (compte Expo, et compte Apple Developer pour iOS) : profil `production` dans [`eas.json`](../eas.json), numéros de build gérés par EAS, clés de signature conservées par EAS. La version affichée reste celle d'`app.config.ts`. Procédure complète : [`store/publication.md`](store/publication.md).
+Les builds de production passent par EAS Build (compte Expo, et compte Apple Developer pour iOS) : dans le cloud pour iOS, en local (`--local`) pour Android, car la compilation native dépasse la mémoire de l'offre gratuite : profil `production` dans [`eas.json`](../eas.json), numéros de build gérés par EAS, clés de signature conservées par EAS. La version affichée reste celle d'`app.config.ts`. Procédure complète : [`store/publication.md`](store/publication.md).
 
 ## 7. Performance
 

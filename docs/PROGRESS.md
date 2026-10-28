@@ -8,7 +8,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 |---|---|
 | Milestone en cours | 5 · Publication (`milestone/5-publication`) |
 | Dernière issue terminée | #49 Étude de cas (médias et liens stores : #63) |
-| Prochaine issue | #47 et #48 : builds 1.0.0 lancés sur EAS (28/10), puis test fermé Google Play et TestFlight |
+| Prochaine issue | #47 : test fermé 1.0.0 en examen chez Google, il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (3) dans TestFlight, soumission à décider par Yann |
 
 ## Milestones
 
