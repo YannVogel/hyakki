@@ -1,25 +1,18 @@
 import { useState } from 'react';
-import {
-  Image,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Image, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { festivalPreview, formatNumber } from '@/engine';
 import { strings } from '@/i18n';
-import { FestivalScene } from '@/render';
 import { paradeView, useGame, useGameStore } from '@/state';
 import { bodyText, Button, Card, colors, displayText, OutlinedText, spacing } from '@/ui';
 
-import { HERO_POSES, heroPoseSize } from '../shared/images';
+import { FESTIVAL_HEADER, HERO_POSES, heroPoseSize } from '../shared/images';
 
 const multiplier = (value: number) => (Math.round(value * 10) / 10).toFixed(1).replace('.', ',');
 const HERO_HEIGHT = 140;
+/** Frame of the Festival scene in its mockup (design/mockups/Aube.dc.html): 366 × 220. */
+const HEADER_ASPECT_RATIO = 366 / 220;
 
 export interface FestivalScreenProps {
   /** Back to the parade (after a Festival, or to keep going). */
@@ -30,7 +23,6 @@ export interface FestivalScreenProps {
 export function FestivalScreen({ onDone }: FestivalScreenProps) {
   const game = useGame((store) => store.game);
   const store = useGameStore();
-  const { width } = useWindowDimensions();
   const [confirming, setConfirming] = useState(false);
   const preview = festivalPreview(game);
   const parade = paradeView(game);
@@ -49,7 +41,18 @@ export function FestivalScreen({ onDone }: FestivalScreenProps) {
     <SafeAreaView style={styles.screen} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.scene}>
-          <FestivalScene width={width - spacing[4] * 2} accessibilityLabel={text.sceneLabel} />
+          {/* The frame sets the size: a local image would impose its own height. */}
+          <View style={styles.header}>
+            <Image
+              source={FESTIVAL_HEADER.source}
+              resizeMode="cover"
+              accessible
+              accessibilityRole="image"
+              accessibilityLabel={text.sceneLabel}
+              style={styles.headerImage}
+              testID="festival-header"
+            />
+          </View>
           <Image
             source={HERO_POSES.victory.source}
             accessibilityLabel={text.heroLabel}
@@ -129,6 +132,8 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.cream },
   content: { gap: spacing[3], padding: spacing[4] },
   scene: { alignItems: 'center' },
+  header: { width: '100%', aspectRatio: HEADER_ASPECT_RATIO },
+  headerImage: { width: '100%', height: '100%' },
   hero: { position: 'absolute', bottom: 0, left: spacing[3] },
   muted: { color: colors.muted },
   rewards: {

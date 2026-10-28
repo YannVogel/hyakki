@@ -4,6 +4,7 @@
 |---|---|
 | `images/hero/` | Les 10 poses de l'onmyōji, PNG transparents découpés depuis `design/sources/planche-heros.png` |
 | `images/bosses/` | Les 10 Gardiens, PNG transparents découpés depuis `design/sources/planche-boss.png` |
+| `images/backdrops/` | Les 11 fonds de combat (commun, puis un par Gardien) et l'en-tête du Festival, WebP compressés depuis `design/sources/decors/` (voir [`docs/ART_PIPELINE.md`](../docs/ART_PIPELINE.md) § 7) |
 | `images/app/` | Icône et écran de lancement, rendus par `scripts/render-icons.ts` (voir [`docs/ART_PIPELINE.md`](../docs/ART_PIPELINE.md) § 6) |
 | `fonts/` | Mochiy Pop One et M PLUS Rounded 1c (500, 700, 800), licence SIL OFL 1.1 (`OFL-*.txt`), issues de [google/fonts](https://github.com/google/fonts) |
 | `audio/sfx/` | Les 15 bruitages, WAV mono 16 bits à 44,1 kHz, issus des packs audio de [Kenney](https://kenney.nl) (voir ci-dessous) |

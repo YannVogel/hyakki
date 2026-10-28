@@ -7,7 +7,7 @@ Tout ce qui sert de référence visuelle au développement.
 | Maquettes | [Canvas Claude Design « Hyakki »](https://claude.ai/artifact/PSd1a15RrLsUubfoHFdG86) (privé) et sources dans [`mockups/`](mockups/) | Les 7 écrans de référence |
 | Prototype du générateur | [`prototypes/fabrique-a-yokai.html`](prototypes/fabrique-a-yokai.html) — aussi publié en [« Fabrique à yōkai »](https://claude.ai/artifact/2JqChM6ZVbQuaRhbEhMrh5) (privé) | Référence de comportement pour `src/engine/yokai` et `src/render/yokai` |
 | Tokens | [`tokens.json`](tokens.json) | Source des tokens du design system (couleurs, typo, rayons, ombres) |
-| Planches sources | [`sources/`](sources/) | Planches ChatGPT d'origine (style, héros, Gardiens) |
+| Planches sources | [`sources/`](sources/) | Planches ChatGPT d'origine (style, héros, Gardiens) et décors (`sources/decors/`) |
 
 Les figures détourées prêtes pour l'app sont dans [`../assets/images/`](../assets/images/).
 

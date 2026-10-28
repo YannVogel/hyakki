@@ -5,7 +5,6 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 import { strings } from '@/i18n';
 import {
-  BattleBackdrop,
   type EffectLayer,
   type EffectPool,
   EffectsLayer,
@@ -19,6 +18,7 @@ import type { EnemyView } from '@/state';
 import { bodyText, colors, hardShadow, outline, radii, spacing, strokes } from '@/ui';
 
 import { GUARDIAN_IMAGES, type HeroPose } from '../shared/images';
+import { BattleBackdrop } from './BattleBackdrop';
 import { EnemyHud } from './EnemyHud';
 import { HeroFigure } from './HeroFigure';
 
@@ -29,6 +29,8 @@ export interface LastHit {
 
 export interface BattleSceneProps {
   readonly enemy: EnemyView;
+  /** Guardian of the current hundred, whose backdrop waits for it. */
+  readonly upcomingGuardian: number;
   readonly enemyName: string;
   readonly wave: number;
   readonly lastHit: LastHit | null;
@@ -55,6 +57,7 @@ export const effectStage = (guardian: boolean): EffectStage => ({
 /** The battlefield: backdrop, hero, enemy and its HUD; a tap anywhere strikes. */
 export function BattleScene({
   enemy,
+  upcomingGuardian,
   enemyName,
   wave,
   lastHit,
@@ -105,7 +108,9 @@ export function BattleScene({
   return (
     <GestureDetector gesture={tap}>
       <View style={styles.scene} onLayout={onLayout} testID="battle-scene">
-        {box === null ? null : <BattleBackdrop width={box.width} height={box.height} />}
+        {layout === null ? null : (
+          <BattleBackdrop layout={layout} enemy={enemy} upcomingGuardian={upcomingGuardian} />
+        )}
         {effectLayer('under')}
         {/* Screen readers strike through this button; touches go to the gesture above. */}
         <View

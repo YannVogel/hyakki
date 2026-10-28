@@ -40,7 +40,7 @@ src/
     testing/              générateurs fast-check partagés par les tests (hors couverture)
     gameState.ts          état complet du jeu (GameState) et nouvelle partie
     index.ts              API publique du moteur
-  render/                 Skia : dessine une spec de yōkai, la scène, les effets
+  render/                 Skia : dessine une spec de yōkai, le cut-in, les effets ; cadre de la scène
   ui/                     design system : tokens, composants de base
   features/               écrans et flux (combat, sanctuaire, shikigami, gardiens, festival, retour)
   state/                  store zustand : boucle de jeu, sélecteurs, actions
@@ -50,6 +50,7 @@ assets/
   images/app/             icône et écran de lancement
   images/hero/            10 poses du héros (PNG détourés)
   images/bosses/          10 Gardiens (PNG détourés)
+  images/backdrops/       décors : fonds de combat et en-tête du Festival (WebP)
   fonts/                  Mochiy Pop One, M PLUS Rounded 1c (+ licences OFL)
 design/                   maquettes, tokens, planches sources, prototype du générateur
 docs/                     documentation du projet
@@ -72,7 +73,7 @@ app ─► features ─► ui
 ```
 
 - `engine` n'importe **rien** hors de lui-même (sauf `break_infinity.js` via `engine/numbers`).
-- `render` et `state` importent `engine` (types et fonctions pures), jamais `features`. `render` lit aussi les tokens de couleur (`src/ui/tokens`) pour le décor ; `state` utilise `services` (stockage, horloge).
+- `render` et `state` importent `engine` (types et fonctions pures), jamais `features`. `render` lit aussi les tokens de couleur (`src/ui/tokens`) pour le cut-in, les effets et l'icône ; `state` utilise `services` (stockage, horloge).
 - `ui` n'importe ni `features`, ni `state`, ni `engine`.
 - `services` n'importe pas `features`.
 

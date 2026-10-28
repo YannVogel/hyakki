@@ -3,6 +3,7 @@ import { fireEvent, screen } from '@testing-library/react-native';
 import { big, createNewGame, festivalSparks, type GameState } from '@/engine';
 import { strings } from '@/i18n';
 
+import { FESTIVAL_HEADER } from '../shared/images';
 import { renderScreen } from '../testing/renderScreen';
 import { FestivalScreen } from './FestivalScreen';
 
@@ -21,6 +22,15 @@ const withRecord = (maxWave: number): GameState => {
 };
 
 describe('FestivalScreen', () => {
+  it('shows the illustrated festival with the hero over it', async () => {
+    await renderScreen(<FestivalScreen onDone={jest.fn()} />, withRecord(300));
+    expect(screen.getByLabelText(strings.festival.sceneLabel)).toHaveProp(
+      'source',
+      FESTIVAL_HEADER.source,
+    );
+    expect(screen.getByLabelText(strings.festival.heroLabel)).toBeOnTheScreen();
+  });
+
   it('stays locked before the first guardian', async () => {
     await renderScreen(<FestivalScreen onDone={jest.fn()} />, withRecord(80));
     expect(screen.getByTestId('festival-locked')).toBeOnTheScreen();
