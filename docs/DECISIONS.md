@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-28 — Bruitages Kenney (CC0), musique Suno
+
+- **Décision** (Yann) : les 15 bruitages viennent des packs audio de Kenney (CC0), choisis à l'oreille (liste dans `assets/README.md`). La musique d'ambiance est « Hyakki - Le défilé en fête » (version A), générée sur Suno avec l'offre Pro de Yann.
+- **Raison** : le CC0 n'impose ni crédit ni restriction, ce qui convient à un jeu gratuit distribué sur les stores ; l'offre Pro de Suno donne les droits commerciaux sur les morceaux générés pendant l'abonnement.
+- **Conséquence** : bruitages en WAV mono, car iOS ne lit pas l'Ogg. Le morceau n'est pas encore dans le dépôt : le quota de téléchargements Suno est épuisé jusqu'au 7 novembre 2026. Rien n'est branché dans le jeu ; le périmètre (V1 ou après) reste une question ouverte.
+
 ## 2026-10-28 — Icône « Oni caché »
 
 - **Décision** (Yann) : l'icône de l'app montre un petit oni rouge caché derrière le kanji 百, sur le ciel du festival. Elle remplace la lanterne générée (graine 116 300). Choisie parmi plusieurs séries de maquettes Claude Design (variante 3 des « Yōkai cachés »).
