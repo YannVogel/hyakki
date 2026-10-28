@@ -29,7 +29,9 @@ export function CombatHeader({ parade, nextGuardian, souls, ofuda }: CombatHeade
           disabled={!__DEV__}
           testID="dev-hub"
         >
-          <Text style={[bodyText('sm', 800), styles.muted]}>{text.parade(parade.number)}</Text>
+          <Text style={[bodyText('sm', 800), styles.muted]}>
+            {text.parade(parade.number, parade.level)}
+          </Text>
           <Text style={displayText('2xl')} testID="combat-wave">
             {text.wave(parade.waveInTier)}{' '}
             <Text style={[displayText('lg'), styles.muted]}>{text.ofTier}</Text>

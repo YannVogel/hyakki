@@ -7,7 +7,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 6 · Retours de jeu (5 · Publication attend Yann : #47, #48, #63) |
-| Dernière issue terminée | #74 Nom complet de l'ennemi dans sa carte de combat |
+| Dernière issue terminée | #78 Niveaux d'« Éveil » après le 10e Gardien |
 | Prochaine issue | #47 : test fermé 1.0.0 en examen chez Google, il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (3) dans TestFlight, soumission à décider par Yann |
 
 ## Milestones
@@ -20,7 +20,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 3 · Boucle jouable | Terminée | #57 |
 | 4 · Feel & finitions | Terminée (#58 attend Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
-| 6 · Retours de jeu | En cours : #75, #73, #76, #77, #74 faits | #81, #82, #83 |
+| 6 · Retours de jeu | En cours : #75, #73, #76, #77, #74, #78 faits | #81 à #84 |
 
 ## Points en suspens
 

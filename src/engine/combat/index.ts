@@ -2,6 +2,8 @@ export { waveHp, waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
 export type { YokaiProfile } from './enemy';
 export type { CombatEvent, CombatInput, HitSource } from './events';
 export {
+  awakeningLevel,
+  CYCLE_WAVES,
   type Element,
   type Guardian,
   guardianAt,
@@ -10,6 +12,7 @@ export {
   GUARDIANS,
   isGuardianWave,
   tierMultiplier,
+  waveInCycle,
 } from './guardians';
 export { combatPower, expectedDps } from './power';
 export type { CombatPower } from './power';

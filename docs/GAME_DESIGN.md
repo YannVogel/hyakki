@@ -60,10 +60,11 @@ Combat automatique ──► âmes ──► Sanctuaire (améliorations) ──�
 - Échec : retour à la vague précédente (−1), où le joueur peut farmer avant de retenter.
 - Victoire : ofuda, palier franchi (les vagues suivantes donnent plus d'âmes), Gardien ajouté à la galerie.
 - Ordre V1 : Bake-danuki, Kappa, Karasu-tengu, Tsuchigumo, Yuki-onna, Gashadokuro, Nue, Ibaraki-dōji, Kyūbi no kitsune, Nurarihyon.
-- Au-delà de la vague 1000 : les Gardiens reviennent en version « éveillée » (palette et multiplicateur) en attendant de nouvelles planches.
+- Au-delà de la vague 1000 : **niveaux d'Éveil**. Chaque fois que Nurarihyon tombe, le défilé repart de la première vague un niveau d'« Éveil » plus haut (Éveil 2, Éveil 3…), et les Gardiens reviennent en version « éveillée » en attendant de nouvelles planches. Une annonce « Éveil N ! » salue le passage ; l'en-tête affiche « Défilé N · Éveil N » à partir de l'Éveil 2, et toutes les vagues montrées au joueur (en-tête, carte de l'ennemi, cut-in, retour hors ligne, Festival) sont celles du niveau, de 1 à 1000.
 - **Implémentation** :
   - À son apparition, le Gardien **attend** (cut-in) : rien ne combat et le chrono ne tourne pas tant que le joueur n'a pas choisi « Affronter » (`engageGuardian`) ou « Fuir » (`fleeGuardian`).
   - PV = 12 × PV(v) (×2 par cycle éveillé). Âmes = âmes(v) × 15. Ofuda = 5 × rang du Gardien (1 à 10) × (cycle + 1).
+  - Éveil : l'état garde la vague absolue (pas de changement de sauvegarde) ; niveau = `floor((v − 1) / 1000) + 1`, vague du niveau = `(v − 1) mod 1000 + 1` (`awakeningLevel`, `waveInCycle`). L'éveil d'un Gardien vaut le niveau moins un. Les PV continuent de suivre `1,13^(v−1)` : à vague du niveau égale, tout ennemi du niveau N + 1 est plus résistant qu'au niveau N, sans multiplicateur ajouté. Le Festival ramène au niveau 1 avec les vagues.
   - Échec ou fuite : retour à la vague précédente en **farm** ; chaque yōkai vaincu y est remplacé par un nouveau (graine dérivée de la répétition). « Affronter le Gardien » (`challengeGuardian`) le fait revenir.
   - Palier : chaque centaine de vagues franchie donne **+50 % d'âmes** aux vagues suivantes.
   - Les brûlures en % des PV max ne font que **20 %** de leur effet sur un Gardien (sinon elles le videraient en 30 s).
@@ -157,15 +158,18 @@ Mesuré par `npx tsx scripts/simulate.ts` (bot simple et déterministe : il ach�
 | Gardien 5 (vague 500) | jours 4 à 10 | jour 5,2 |
 | Record de 800 | jours 15 à 25 | jour 15,5 |
 | Gardien 10 (vague 1000) | au-delà du jour 30 (objectif de long terme) | non atteint à J30 (record 900) |
+| Éveil 2 (Nurarihyon vaincu) | ni trivial ni infranchissable | profil persévérant (Festival dès +5 % de bonus), sur 200 jours : record 1000 au jour 52,5, Nurarihyon vaincu au jour 102, Bake-danuki éveillé (vague 1100) atteint vers le jour 130 puis nouveau mur. Avec la règle à +15 %, le bot cesse ses Festivals devant Nurarihyon et y reste (120 jours) |
 
 | Cible (autres profils) | Visé | Mesuré |
 |---|---|---|
 | Joueur actif (2 h par jour) : premier Gardien | ≤ 45 min de jeu | 30 min |
 | Joueur actif : Gardien 5 | ≤ 3 jours | jour 1 |
 | Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 853 / 900 = 95 % |
-| Temps de calcul | 3 profils × 30 jours < 30 s | 21 s |
+| Temps de calcul | 30 jours de simulation en environ 30 s | 4 profils : 31 s |
 
 Mesures avec le générateur V2 (défilés neufs). Sensibilité : d'un défilé à l'autre (graine), le premier Gardien du joueur régulier tombe ou non au jour 1 selon la chance des premiers yōkai et des captures ; sur 12 défilés, il tombe au jour 1 dans 10 cas avec la Lame à 5 âmes (contre 4 avec l'ancien coût de 10). Le harnais mesure une graine fixe (2026) : une cible « au jour près » est donc indicative.
+
+L'Éveil 2 ne demande pas de multiplicateur de résistance : la courbe `1,13^(v−1)` des PV continue au-delà de la vague 1000 et le Gardien éveillé a ses PV doublés ; ce qui borne la fin de partie, c'est le rendement du Festival (bonus linéaire en étincelles, étincelles plafonnées par le record). Mesure : `runProfile` du profil `perseverant` sur 200 jours (ce que fait `npx tsx scripts/simulate.ts 200` pour chaque profil).
 
 Limites connues : le bot ne fait pas de choix fins (il ne garde pas Kekkai pour un Gardien, ne tape pas pendant le hors ligne, ne choisit pas l'équipe selon les bonus). La progression de long terme est bornée par le Festival : les trois profils convergent vers les mêmes records, le temps actif accélère surtout le début. À valider en jeu par Yann.
 ## 6. Écrans (maquettes)

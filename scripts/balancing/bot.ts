@@ -167,8 +167,10 @@ export function canBeatGuardian(state: GameState, wave: number, tapsPerSecond: n
   return gte(guardianDamageEstimate(state, tapsPerSecond), guardianMaxHp(wave));
 }
 
-/** Starts a Festival when the bot is stuck and the permanent bonus would grow by 15 % or more. */
-export function wantsFestival(state: GameState): boolean {
+/** Starts a Festival when the bot is stuck and the permanent bonus would grow by `minGrowth`. */
+export function wantsFestival(state: GameState, minGrowth: number): boolean {
   const preview = festivalPreview(state);
-  return preview.unlocked && state.parade.farming && preview.bonusAfter >= preview.bonusNow * 1.15;
+  return (
+    preview.unlocked && state.parade.farming && preview.bonusAfter >= preview.bonusNow * minGrowth
+  );
 }

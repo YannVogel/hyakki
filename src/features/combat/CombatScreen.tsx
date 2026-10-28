@@ -16,6 +16,7 @@ import {
 } from '@/state';
 import { colors, spacing, useHaptics, useReduceMotion } from '@/ui';
 
+import { AwakeningBanner } from './AwakeningBanner';
 import { BattleScene, type LastHit } from './BattleScene';
 import { useCombatHaptics } from './combatHaptics';
 import { CombatHeader } from './CombatHeader';
@@ -23,6 +24,7 @@ import { GuardianCutIn } from './GuardianCutIn';
 import { FarmingBanner } from './FarmingBanner';
 import { PowerRow } from './PowerRow';
 import { TalismanBar } from './TalismanBar';
+import { useAwakeningAnnouncement } from './useAwakeningAnnouncement';
 import { useCombatEffects } from './useCombatEffects';
 import { useHeroPose } from './useHeroPose';
 
@@ -47,6 +49,7 @@ export function CombatScreen() {
   const heroPose = useHeroPose();
   const haptics = useHaptics();
   useCombatHaptics();
+  const awakened = useAwakeningAnnouncement();
   const strike = () => {
     haptics('light');
     actions.tap();
@@ -70,13 +73,14 @@ export function CombatScreen() {
           enemy={enemy}
           upcomingGuardian={nextGuardian.index}
           enemyName={name}
-          wave={parade.wave}
+          wave={parade.waveInCycle}
           lastHit={lastHit}
           heroPose={heroPose}
           effects={effects}
           motion={motion}
           onTap={strike}
         />
+        {awakened === null ? null : <AwakeningBanner level={awakened} />}
       </View>
       {parade.farming ? <FarmingBanner onChallenge={actions.challengeGuardian} /> : null}
       <PowerRow power={formatNumber(powerPerSecond(game))} team={teamView(game)} />
@@ -86,7 +90,7 @@ export function CombatScreen() {
         <GuardianCutIn
           index={enemy.index}
           name={name}
-          wave={parade.wave}
+          wave={parade.waveInCycle}
           hp={formatNumber(guardianMaxHp(parade.wave))}
           weakness={GUARDIANS[enemy.index].weakness}
           timeLimitSeconds={BALANCE.guardian.timeLimitMs / 1000}

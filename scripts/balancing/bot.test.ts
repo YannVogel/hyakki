@@ -102,8 +102,13 @@ describe('guardian and Festival decisions', () => {
   it('starts a Festival only when stuck and worth it', () => {
     const base = createNewGame(1);
     const stuck = { ...base, parade: { ...base.parade, wave: 299, maxWave: 300, farming: true } };
-    expect(wantsFestival(stuck)).toBe(true);
-    expect(wantsFestival({ ...stuck, parade: { ...stuck.parade, farming: false } })).toBe(false);
-    expect(wantsFestival({ ...stuck, sparks: 1000 })).toBe(false);
+    expect(wantsFestival(stuck, 1.15)).toBe(true);
+    expect(wantsFestival({ ...stuck, parade: { ...stuck.parade, farming: false } }, 1.15)).toBe(
+      false,
+    );
+    expect(wantsFestival({ ...stuck, sparks: 1000 }, 1.15)).toBe(false);
+    // 300 sparks: the bonus would grow by 11 %, enough for a persevering player only.
+    expect(wantsFestival({ ...stuck, sparks: 300 }, 1.15)).toBe(false);
+    expect(wantsFestival({ ...stuck, sparks: 300 }, 1.05)).toBe(true);
   });
 });

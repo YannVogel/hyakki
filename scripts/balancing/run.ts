@@ -1,4 +1,5 @@
 import {
+  awakeningLevel,
   type CombatInput,
   createNewGame,
   type GameState,
@@ -58,10 +59,10 @@ function visit(
   state: GameState,
   clock: Clock,
   milestones: Milestone[],
-  tapsPerSecond: number,
+  profile: Profile,
 ): GameState {
   let current = state;
-  if (wantsFestival(current)) {
+  if (wantsFestival(current, profile.festivalGrowth)) {
     const festival = startFestival(current);
     if (festival.ok) {
       current = festival.state;
@@ -70,7 +71,7 @@ function visit(
   }
   current = spendSouls(pickTeam(current));
   const retry =
-    canBeatGuardian(current, current.parade.wave + 1, tapsPerSecond) ||
+    canBeatGuardian(current, current.parade.wave + 1, profile.tapsPerSecond) ||
     clock.activeMs - clock.lastGuardianTryMs >= FORCED_RETRY_MS;
   if (current.parade.farming && retry) {
     current = step(current, 0, [{ type: 'challengeGuardian' }]).state;
@@ -114,6 +115,10 @@ function recordMilestones(
       milestones.push(milestoneAt(`gardien-${index + 1}`, clock));
     }
   }
+  const level = awakeningLevel(state.parade.maxWave);
+  if (level > awakeningLevel(Math.max(1, clock.bestWave))) {
+    milestones.push(milestoneAt(`eveil-${level}`, clock));
+  }
   for (const wave of RECORD_MILESTONES) {
     if (state.parade.maxWave >= wave && clock.bestWave < wave) {
       milestones.push(milestoneAt(`record-${wave}`, clock));
@@ -137,7 +142,7 @@ function playActive(
     clock.activeMs += TICK_MS;
     recordMilestones(state, before, clock, milestones);
     if (tick % VISIT_EVERY_TICKS === VISIT_EVERY_TICKS - 1) {
-      state = visit(state, clock, milestones, profile.tapsPerSecond);
+      state = visit(state, clock, milestones, profile);
     }
   }
   return state;
@@ -177,9 +182,9 @@ export function runProfile(profile: Profile, days: number, seed = 2026): RunResu
         clock.realMs = sessionStart;
         recordMilestones(state, before, clock, milestones);
       }
-      state = visit(state, clock, milestones, profile.tapsPerSecond);
+      state = visit(state, clock, milestones, profile);
       state = playActive(state, session.activeMinutes, profile, clock, milestones);
-      state = visit(state, clock, milestones, profile.tapsPerSecond);
+      state = visit(state, clock, milestones, profile);
       snapshots.push(snapshotOf(state, day + 1, clock));
     }
   }

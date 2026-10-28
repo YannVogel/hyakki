@@ -87,6 +87,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `expectedDps(power)` | Dégâts espérés par seconde des frappes automatiques (critiques moyennés) ; plafonne aussi les brûlures (×9). |
 | `waveHp`, `waveSouls`, `yokaiMaxHp`, `yokaiProfile` | Formules de `docs/GAME_DESIGN.md` § 5. |
 | `GUARDIANS`, `isGuardianWave`, `guardianAt`, `guardianMaxHp`, `guardianOfuda`, `tierMultiplier` | Gardiens : ordre, faiblesse, cycle éveillé, PV, ofuda, bonus de palier. |
+| `awakeningLevel`, `waveInCycle`, `CYCLE_WAVES` | Niveau d'« Éveil » (1 jusqu'à la vague 1000, puis +1 tous les 1000) et vague dans ce niveau (1 à 1000), dérivés de la vague absolue de l'état. `guardianAt(…).awakening` vaut le niveau moins un. |
 | Entrées `engageGuardian`, `fleeGuardian`, `challengeGuardian` | Affronter après le cut-in, fuir, retenter depuis le farm. |
 | Entrée `castTalisman`, `talismanCooldownMs` | Talismans (événements `talismanCast` / `talismanNotReady`) et recharge réduite par l'amélioration Kekkai. |
 

@@ -98,6 +98,13 @@ describe('simulateOffline', () => {
     expect(after.guardiansDefeated).toEqual([]);
   });
 
+  it('stops in front of an awakened guardian too, beyond the first awakening level', () => {
+    const { state: after, report } = simulateOffline(stateAtWave(3, 1095, { blade: 2000 }), HOUR);
+    expect(report.stoppedAtGuardian).toBe(true);
+    expect(report.waveTo).toBe(1100);
+    expect(after.enemy.guardian).toEqual({ engaged: false, timeLeftMs: 30_000 });
+  });
+
   it('never fights a guardian left mid-fight: it waits again, with its full timer', () => {
     const engaged = step(stateAtWave(4, 200, { blade: 400 }), 0, [
       { type: 'engageGuardian' },

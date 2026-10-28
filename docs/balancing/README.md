@@ -10,8 +10,10 @@ npx tsx scripts/simulate.ts 60   # 60 jours
 | Fichier | Contenu |
 |---|---|
 | `resume.md` | Jalons clés par profil (généré) |
-| `jalons.csv` | Chaque jalon atteint : premier Gardien vaincu, Festivals, records (temps réel en heures, temps de jeu actif en minutes) |
-| `actif.csv`, `trois-sessions.csv`, `hors-ligne.csv` | Un relevé par session : vague, record du défilé et meilleur record, log10 des âmes, étincelles, ofuda, shikigami, Gardiens vaincus |
+| `jalons.csv` | Chaque jalon atteint : premier Gardien vaincu, Festivals, niveaux d'Éveil, records (temps réel en heures, temps de jeu actif en minutes) |
+| `actif.csv`, `trois-sessions.csv`, `hors-ligne.csv`, `perseverant.csv` | Un relevé par session : vague, record du défilé et meilleur record, log10 des âmes, étincelles, ofuda, shikigami, Gardiens vaincus |
+
+Le profil `perseverant` joue comme le joueur régulier mais relance le Festival dès que le bonus progresse de 5 % (les autres attendent +15 %) : il est moins rapide au début, mais c'est le seul qui franchit Nurarihyon et atteint l'Éveil 2 (jalon `eveil-2`, voir [`GAME_DESIGN.md`](../GAME_DESIGN.md) § 5.2).
 
 Les profils sont décrits dans `scripts/balancing/profiles.ts`, la stratégie du bot dans `scripts/balancing/bot.ts`. La simulation est déterministe : relancer le script sans changer les constantes redonne exactement les mêmes fichiers.
 
