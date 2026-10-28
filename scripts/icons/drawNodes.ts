@@ -85,23 +85,3 @@ export function drawNode(CK: CanvasKit, canvas: Canvas, node: DrawNode): void {
   node.children.forEach((child) => drawNode(CK, canvas, child));
   canvas.restore();
 }
-
-/** Renders a tree drawn in a `frame` × `frame` box to a `size` × `size` PNG. */
-export function renderPng(CK: CanvasKit, node: DrawNode, frame: number, size: number): Uint8Array {
-  const surface = CK.MakeSurface(size, size);
-  if (surface === null) {
-    throw new Error(`Cannot create a ${size} px surface`);
-  }
-  const canvas = surface.getCanvas();
-  canvas.clear(CK.TRANSPARENT);
-  canvas.scale(size / frame, size / frame);
-  drawNode(CK, canvas, node);
-  const image = surface.makeImageSnapshot();
-  const png = image.encodeToBytes();
-  image.delete();
-  surface.delete();
-  if (png === null) {
-    throw new Error('PNG encoding failed');
-  }
-  return png;
-}
