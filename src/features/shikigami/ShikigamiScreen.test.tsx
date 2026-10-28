@@ -1,6 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react-native';
 
-import { big, createNewGame, type GameState, generate, nameOf } from '@/engine';
+import { bestTeam, big, createNewGame, type GameState, generate, nameOf } from '@/engine';
 import { RARITY_NAMES, strings } from '@/i18n';
 
 import { renderScreen } from '../testing/renderScreen';
@@ -70,6 +70,20 @@ describe('ShikigamiScreen', () => {
     expect(screen.getByTestId('shikigami-22-badge')).toBeOnTheScreen();
     await fireEvent.press(screen.getByTestId('shikigami-team'));
     expect(screen.queryByTestId('shikigami-22-badge')).toBeNull();
+  });
+
+  it('fields the best team in one tap, then has nothing left to improve', async () => {
+    const game = owning([11, 22, 33, 44, 55], [11]);
+    const { store } = await renderScreen(<ShikigamiScreen />, game);
+    await fireEvent.press(screen.getByTestId('best-team'));
+    const fielded = store.getState().game.team;
+    expect([...fielded].sort()).toEqual([...bestTeam(game)].sort());
+    expect(screen.getByTestId('best-team')).toBeDisabled();
+  });
+
+  it('offers no best team without a collection', async () => {
+    await renderScreen(<ShikigamiScreen />, owning([]));
+    expect(screen.getByTestId('best-team')).toBeDisabled();
   });
 
   it('refuses a fourth team member', async () => {

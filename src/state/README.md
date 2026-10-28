@@ -15,4 +15,4 @@ Store zustand qui fait le lien entre le moteur et les écrans : boucle `step` (�
 | `createAppStore()` | Le store de l'app, branché sur MMKV et l'horloge (`src/services`). Une sauvegarde illisible est mise de côté, jamais écrasée. |
 | `useGameLoop(store)` | Boucle ≈ 10 Hz au premier plan ; sauvegarde toutes les 5 s et au passage en arrière-plan ; au lancement et au retour, `resume()` calcule l'absence (`simulateOffline`) et prépare le rapport (aucun sous une minute). |
 | `GameStoreProvider`, `useGame(selector)` | Accès au store depuis les écrans. |
-| `selectors.ts` | Vues pures pour les écrans : ennemi (PV restants, chrono du Gardien), défilé (vague dans la centaine), puissance, talismans, Gardiens (galerie et prochain Gardien, avec une seule règle pour savoir s'il est connu). |
+| `selectors.ts` | Vues pures pour les écrans : ennemi (PV restants, chrono du Gardien), défilé (vague dans la centaine), puissance, talismans, Gardiens (galerie et prochain Gardien, avec une seule règle pour savoir s'il est connu), meilleure équipe (`bestTeamView`, recalculée seulement quand la collection, la vague ou les améliorations changent). |

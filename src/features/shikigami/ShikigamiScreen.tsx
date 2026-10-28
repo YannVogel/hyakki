@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatNumber, gte, levelUpCost, statsOf, TEAM_SIZE } from '@/engine';
 import { RARITY_NAMES, strings } from '@/i18n';
 import { YokaiThumbnail } from '@/render';
-import { collectionView, type ShikigamiView, useGame, useGameStore } from '@/state';
+import { bestTeamView, collectionView, type ShikigamiView, useGame, useGameStore } from '@/state';
 import {
   bodyText,
   Button,
@@ -19,6 +19,7 @@ import {
   rarityColors,
   spacing,
   strokes,
+  useHaptics,
 } from '@/ui';
 
 import { mainTeamBonus, RARITY_TOKEN } from './rarity';
@@ -108,6 +109,8 @@ export function ShikigamiScreen() {
   const collection = collectionView(game);
   const team = game.team.map((seed) => collection.find((entry) => entry.seed === seed));
   const selected = collection.find((entry) => entry.seed === open);
+  const best = bestTeamView(game);
+  const haptics = useHaptics();
 
   const toggleTeam = (shikigami: ShikigamiView) => {
     const next = shikigami.inTeam
@@ -144,6 +147,17 @@ export function ShikigamiScreen() {
                   <TeamSlot key={index} shikigami={team[index]} onOpen={setOpen} />
                 ))}
               </View>
+              <Button
+                label={strings.shikigami.bestTeam}
+                accessibilityHint={strings.shikigami.bestTeamHint}
+                variant="neutral"
+                disabled={collection.length === 0 || best.fielded}
+                onPress={() => {
+                  haptics('success');
+                  store.getState().setTeam([...best.team]);
+                }}
+                testID="best-team"
+              />
             </Card>
             <Text style={displayText('base')}>
               {strings.shikigami.collection} · {strings.shikigami.count(collection.length)}

@@ -231,6 +231,9 @@ export const fr = {
     addToTeam: 'Ajouter à l’équipe',
     removeFromTeam: 'Retirer de l’équipe',
     teamFull: 'Équipe complète',
+    bestTeam: 'Meilleure équipe',
+    bestTeamHint:
+      'Équipe les trois shikigami qui frappent le plus fort ensemble, comparés au niveau 1',
     close: 'Fermer',
     guardiansLink: 'Gardiens du défilé',
   },

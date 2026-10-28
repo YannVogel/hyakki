@@ -1,6 +1,7 @@
 import { big, createNewGame, enemySeed, generate, gt, nameOf, startFestival, step } from '@/engine';
 
 import {
+  bestTeamView,
   collectionView,
   enemyView,
   guardianGallery,
@@ -184,5 +185,26 @@ describe('nextGuardianView', () => {
 
   it('shows an awakened guardian as its normal self', () => {
     expect(nextGuardianView(atWave(1050))).toEqual({ index: 0, revealed: true });
+  });
+});
+
+describe('bestTeamView', () => {
+  const owning = (seeds: number[], team: number[]) => ({
+    ...createNewGame(1),
+    shikigami: seeds.map((seed) => ({ seed, level: 1, generatorVersion: 2 as const })),
+    team,
+  });
+
+  it('tells whether the best team is already fielded, in any order', () => {
+    const state = owning([3, 5, 8, 13], []);
+    const { team, fielded } = bestTeamView(state);
+    expect(team).toHaveLength(3);
+    expect(fielded).toBe(false);
+    expect(bestTeamView({ ...state, team: [...team].reverse() }).fielded).toBe(true);
+  });
+
+  it('follows the collection as it grows', () => {
+    expect(bestTeamView(owning([], [])).team).toEqual([]);
+    expect([...bestTeamView(owning([7], [])).team]).toEqual([7]);
   });
 });

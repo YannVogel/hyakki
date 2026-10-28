@@ -6,8 +6,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 | | |
 |---|---|
-| Milestone en cours | 6 · Retours de jeu (5 · Publication attend Yann : #47, #48, #63) |
-| Dernière issue terminée | #79 Shikigami de l'équipe marqués dans la grille |
+| Milestone en cours | 5 · Publication (attend Yann : #47, #48, #63) ; 6 · Retours de jeu terminée |
+| Dernière issue terminée | #80 Bouton « Meilleure équipe » |
 | Prochaine issue | #47 : test fermé 1.0.0 en examen chez Google, il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (3) dans TestFlight, soumission à décider par Yann |
 
 ## Milestones
@@ -20,7 +20,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 3 · Boucle jouable | Terminée | #57 |
 | 4 · Feel & finitions | Terminée (#58 attend Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
-| 6 · Retours de jeu | En cours : #75, #73, #76, #77, #74, #78, #79 faits | #81 à #85 |
+| 6 · Retours de jeu | Terminée (#76 fourni par Yann) | #81 à #87 |
 
 ## Points en suspens
 
