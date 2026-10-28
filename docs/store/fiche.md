@@ -59,9 +59,11 @@ Google Play demande aussi l'icône 512 × 512 et l'image de présentation 1024 �
 
 Aucune donnée à déclarer, aucun contenu généré par les joueurs, aucune communication entre joueurs, aucun accès web, aucun achat, aucune publicité, aucun jeu d'argent.
 
-| Questionnaire | Réponse | Résultat attendu |
-|---|---|---|
-| App Store (âge) | Violence de dessin animé ou fantastique : **à trancher**, peu fréquente ou fréquente (le combat est permanent, mais léger : on « purifie » des créatures, sans sang ni blessure). Thèmes d'horreur ou de peur : **peu fréquents / légers** (Gashadokuro, squelette géant, en style cartoon). Alcool, tabac ou drogues : **peu fréquent**, car l'accessoire « kiseru » du générateur V2 est une pipe. Tout le reste : **aucun**. | Calculé par la console |
-| Google Play (IARC) | Catégorie Jeu. Violence : oui, **fantastique / dessin animé**, sans sang, contre des créatures non humaines. Peur : non. Tabac : **représentation** (kiseru). Sexualité, langage, jeux d'argent, achats, interactions : non. | Calculé par l'IARC |
+Réponses saisies le 28/10/2026, à refaire si le contenu change (nouvel accessoire, nouveau Gardien) :
 
-Le kiseru peut relever l'âge minimum. Pour l'éviter, il faudrait le retirer des nouveaux défilés, ce qui demande une version 3 du générateur. Les défilés et les shikigami existants garderaient leur version. À décider par Yann.
+| Questionnaire | Réponses | Résultat |
+|---|---|---|
+| App Store | Violence de dessin animé ou fantastique : **fréquente** (le combat est permanent, mais léger : on « purifie » des créatures, sans sang). Armes : **peu fréquentes** (le kanabō clouté d'Ibaraki-dōji). Horreur ou peur : **peu fréquentes** (Gashadokuro, regards du cut-in). Alcool, tabac ou drogues : **peu fréquent** (kiseru). Violence réaliste, vulgarité, sexualité, médical, hasard, coffres à butin : **aucun**. | **13+** (12+ au Vietnam et au Brésil ; la Corée du Sud demande un numéro de classification local) |
+| Google Play (IARC) | Catégorie Jeu. Violence fantastique et irréaliste, sans sang, style enfantin : contre des créatures (fréquente, en plan éloigné) et contre l'humain (le héros assommé après un Gardien raté, rare). Peur : éléments effrayants rares. Tabac : consommation, rare, jamais par le joueur. Sexualité, jeux d'argent, langage, humour grossier, achats, interactions, localisation : non. | **PEGI 7**, USK 6, ESRB 10+, ClassInd 10, IARC 7+ ; Corée du Sud 15+, Taïwan 15 |
+
+Le kiseru (environ 7 % des yōkai V2, dessiné à la bouche avec de la fumée) est gardé et déclaré : décision de Yann, voir [`DECISIONS.md`](../DECISIONS.md).
