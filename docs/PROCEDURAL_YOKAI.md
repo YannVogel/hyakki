@@ -29,7 +29,7 @@ Pour ajouter des pièces sans rupture : versionner les listes et choisir la list
 
 | Version | Utilisée par | Objets | Accessoires | Combinaisons |
 |---|---|---|---|---|
-| 1 | le prototype ; les défilés commencés avant la V2 et les shikigami capturés en V1 ; la mascotte de l'icône | 6 | 8 | 285 696 |
+| 1 | le prototype ; les défilés commencés avant la V2 et les shikigami capturés en V1 | 6 | 8 | 285 696 |
 | 2 | les nouveaux défilés (`GENERATOR_VERSION = 2`) | 12 | 12 | 1 245 696 |
 
 - Le défilé en cours garde sa version (`GameState.generatorVersion`) jusqu'au prochain Festival, qui en démarre un nouveau avec la version courante.

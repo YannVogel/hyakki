@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-28 — Icône « Oni caché »
+
+- **Décision** (Yann) : l'icône de l'app montre un petit oni rouge caché derrière le kanji 百, sur le ciel du festival. Elle remplace la lanterne générée (graine 116 300). Choisie parmi plusieurs séries de maquettes Claude Design (variante 3 des « Yōkai cachés »).
+- **Raison** : le 百 dit le nom du jeu (Hyakki, les cent démons) et reste lisible à 48 px ; l'oni qui dépasse donne le ton cartoon.
+- **Conséquence** : l'icône ne dépend plus du générateur. Le kanji est un glyphe de la police d'affichage, dessiné par le script de rendu. Les builds 1.0.0 déjà envoyés portent l'ancienne icône : il faut un nouveau build par store, et remplacer l'icône 512 × 512 de la fiche Google Play.
+
 ## 2026-10-28 — Build Android limité aux architectures ARM
 
 - **Décision** : l'app Android n'embarque que `armeabi-v7a` et `arm64-v8a` (`expo-build-properties`, `android.buildArchs`).

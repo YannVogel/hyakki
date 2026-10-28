@@ -1,4 +1,4 @@
-// Renders the app icon set (#40) from the vector compositions of src/render/icon to
+// Renders the app icon set (#40, #59) from the compositions of src/render/icon to
 // assets/images/app/. Usage: npx tsx scripts/render-icons.ts [preview-dir]
 // With a preview directory, also writes the icon at launcher sizes to check its legibility.
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -11,9 +11,11 @@ import {
   adaptiveForeground,
   appIcon,
   ICON_FRAME,
+  type IconComposition,
+  monochromeForeground,
   splashLogo,
 } from '../src/render/icon/appIcon';
-import { renderPng } from './icons/drawNodes';
+import { loadDisplayFont, renderComposition } from './icons/composition';
 import { toMonochrome } from './icons/monochrome';
 
 const SIZE = 1024;
@@ -50,13 +52,15 @@ function monochromePng(CK: CanvasKit, png: Uint8Array): Uint8Array {
 
 async function main(): Promise<void> {
   const CK = await CanvasKitInit();
-  const foreground = renderPng(CK, adaptiveForeground(), ICON_FRAME, SIZE);
+  const typeface = loadDisplayFont(CK);
+  const render = (composition: IconComposition, size: number) =>
+    renderComposition(CK, composition, typeface, ICON_FRAME, size);
   const files: Record<string, Uint8Array> = {
-    'icon.png': renderPng(CK, appIcon(), ICON_FRAME, SIZE),
-    'android-icon-foreground.png': foreground,
-    'android-icon-background.png': renderPng(CK, adaptiveBackground(), ICON_FRAME, SIZE),
-    'android-icon-monochrome.png': monochromePng(CK, foreground),
-    'splash-icon.png': renderPng(CK, splashLogo(), ICON_FRAME, SIZE),
+    'icon.png': render(appIcon(), SIZE),
+    'android-icon-foreground.png': render(adaptiveForeground(), SIZE),
+    'android-icon-background.png': render(adaptiveBackground(), SIZE),
+    'android-icon-monochrome.png': monochromePng(CK, render(monochromeForeground(), SIZE)),
+    'splash-icon.png': render(splashLogo(), SIZE),
   };
   for (const [name, png] of Object.entries(files)) {
     writeFileSync(path.join(outputDir, name), png);
@@ -67,10 +71,7 @@ async function main(): Promise<void> {
   if (previewDir !== undefined) {
     mkdirSync(previewDir, { recursive: true });
     for (const size of PREVIEW_SIZES) {
-      writeFileSync(
-        path.join(previewDir, `icon-${size}.png`),
-        renderPng(CK, appIcon(), ICON_FRAME, size),
-      );
+      writeFileSync(path.join(previewDir, `icon-${size}.png`), render(appIcon(), size));
     }
   }
 }

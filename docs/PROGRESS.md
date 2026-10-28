@@ -18,7 +18,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 1 · Moteur de jeu | Terminée (#53 attend Yann) | #54 |
 | 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
 | 3 · Boucle jouable | Terminée | #57 |
-| 4 · Feel & finitions | Terminée (#58 et #59 attendent Yann) | #60 |
+| 4 · Feel & finitions | Terminée (#58 attend Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 
 ## Points en suspens
@@ -27,6 +27,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Maestro sur Android : l'émulateur doit avoir 4 Go de RAM (`-memory 4096`), sinon les parcours calent ; chaque frappe reste lente (plusieurs dizaines de secondes) car l'écran animé ne se stabilise jamais. Sur iOS : 8/8 avec le build de la milestone 4.
 - Captures des stores : `scripts/store-captures.sh [ios|android]` (Metro lancé), sorties non versionnées dans `store-captures/`.
 - Consoles des stores (28/10) : tout est saisi, avec l'accord de Yann pour les attestations et ses coordonnées. Fiches, captures, catégories, prix, confidentialité (publiée chez Apple, envoyée chez Google), classifications (App Store 13+, PEGI 7), public 13 ans et plus, mention IA. Il ne manque que les builds (#47, #48), et un numéro de classification local pour la Corée du Sud si on y distribue l'app.
+- Icône « Oni caché » (#59, 28/10) : à rendre avec `npx tsx scripts/render-icons.ts`, puis `scripts/render-store-graphics.ts` pour l'icône Play. Les builds 1.0.0 envoyés avant elle portent l'ancienne lanterne : refaire un build par store.
 - Formats de captures exigés en octobre 2026 : App Store, iPhone 6,3 pouces (1206 × 2622) ; Google Play, 9:16 exact (1080 × 1920).
 - CocoaPods exige une locale UTF-8 : `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 npx expo run:ios`.
 - Équilibrage : le harnais mesure une graine ; vérifier une cible « au jour près » sur plusieurs défilés (`runProfile(profil, jours, graine)`).
@@ -45,7 +46,6 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - #53 Valider l'équilibrage (cibles et ressenti en jeu, après la milestone 3).
 - #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
 - #58 Régénérer les 20 illustrations en HD dans ChatGPT (procédure et outils prêts).
-- #59 Valider l'icône et l'écran de lancement.
 - #47 Google Play : build EAS, test fermé de 14 jours, production (`docs/store/publication.md`).
 - #48 App Store : build EAS, TestFlight, soumission (`docs/store/publication.md`).
 - #63 Vidéo de 30 s, GIF du générateur et liens stores de l'étude de cas.
