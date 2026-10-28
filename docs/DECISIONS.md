@@ -8,6 +8,12 @@ Chaque entrée : date, décision, raison, conséquence. Les plus récentes en ha
 - **Raison** : sur un gros sac à PV, la brûlure vidait 90 % de la barre en quelques secondes, puis la barre se bloquait aux 9/10ᵉ et seules les frappes entamaient le dernier dixième. La barre ne disait donc rien du temps restant. Plafonnée par les frappes, la brûlure fait descendre la barre à vitesse constante et la progression reste liée à la puissance du joueur. Le multiple 9 garde le même temps pour tuer aux deux extrêmes : brûlure nulle, et brûlure très forte face aux PV, où l'ancien plancher laissait aussi 10 % aux frappes. Entre les deux, on tue jusqu'à 1,9 fois plus vite.
 - **Conséquence** : toutes les cibles du harnais restent tenues (`GAME_DESIGN.md` § 5.2). La simulation hors ligne applique le même plafond. Une mise à mort par brûlure peut faire apparaître un Gardien au milieu d'un pas : les minuteurs d'attaque s'arrêtent à cet instant. Si le yōkai de la vague 99 meurt de sa brûlure, `attackTimers` peut garder une fraction de milliseconde, ce que la sauvegarde accepte.
 
+## 2026-10-28 — Bruitages Kenney (CC0), musique Suno
+
+- **Décision** (Yann) : les 15 bruitages viennent des packs audio de Kenney (CC0), choisis à l'oreille (liste dans `assets/README.md`). La musique d'ambiance est « Hyakki - Le défilé en fête » (version A), générée sur Suno avec l'offre Pro de Yann.
+- **Raison** : le CC0 n'impose ni crédit ni restriction, ce qui convient à un jeu gratuit distribué sur les stores ; l'offre Pro de Suno donne les droits commerciaux sur les morceaux générés pendant l'abonnement.
+- **Conséquence** : bruitages en WAV mono, car iOS ne lit pas l'Ogg. Le morceau n'est pas encore dans le dépôt : le quota de téléchargements Suno est épuisé jusqu'au 7 novembre 2026. Rien n'est branché dans le jeu ; le périmètre (V1 ou après) reste une question ouverte.
+
 ## 2026-10-28 — Icône « Oni caché »
 
 - **Décision** (Yann) : l'icône de l'app montre un petit oni rouge caché derrière le kanji 百, sur le ciel du festival. Elle remplace la lanterne générée (graine 116 300). Choisie parmi plusieurs séries de maquettes Claude Design (variante 3 des « Yōkai cachés »).

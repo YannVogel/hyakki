@@ -34,6 +34,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Brûlures (28/10) : plafonnées à 9 fois les frappes, sans plancher, pour que la barre de vie des gros sacs à PV descende à vitesse constante (`DECISIONS.md`). À ressentir en jeu par Yann avec le reste de l'équilibrage (#53).
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
+- Audio (28/10) : bruitages choisis dans `assets/audio/sfx/`, pas encore branchés. Musique « Le défilé en fête », [version A sur Suno](https://suno.com/song/a485fdce-bdfd-457a-a1ff-32e84809ec94) : à télécharger après le 7/11 (quota Suno à 0), puis convertir en `.m4a` avec `afconvert`.
 
 - Les branches de milestone ne sont jamais réécrites une fois poussées (pas de push forcé) : un correctif de revue devient un commit `fix` qui référence l'issue.
 
