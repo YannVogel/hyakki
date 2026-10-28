@@ -21,26 +21,31 @@ export interface EnemyHudProps {
   readonly timeRatio?: number;
 }
 
-/** Name, level and HP of the enemy, top right of the scene. */
+/**
+ * Name, level and HP of the enemy, top right of the scene. The name has the card's full width
+ * and up to two lines: the longest generated names fit without being cut.
+ */
 export function EnemyHud({ name, wave, hpRatio, secondsLeft, timeRatio }: EnemyHudProps) {
   return (
     <View style={styles.hud} pointerEvents="none">
-      <View style={styles.title}>
-        <Text style={[displayText('md'), styles.name]} numberOfLines={1}>
-          {name}
-        </Text>
+      <Text style={displayText('md')} numberOfLines={2} testID="enemy-name">
+        {name}
+      </Text>
+      <View style={styles.row}>
+        <View style={styles.bar}>
+          <ProgressBar
+            value={hpRatio}
+            color={colors.red}
+            trackColor={colors.hpTrack}
+            height={12}
+            accessibilityLabel={strings.combat.hpLabel(name)}
+            testID="enemy-hp"
+          />
+        </View>
         <Text style={[bodyText('xs', 800), styles.level]}>{strings.combat.enemyLevel(wave)}</Text>
       </View>
-      <ProgressBar
-        value={hpRatio}
-        color={colors.red}
-        trackColor={colors.hpTrack}
-        height={12}
-        accessibilityLabel={strings.combat.hpLabel(name)}
-        testID="enemy-hp"
-      />
       {secondsLeft === undefined ? null : (
-        <View style={styles.timer}>
+        <View style={styles.row}>
           <View style={styles.bar}>
             <ProgressBar
               value={timeRatio ?? 0}
@@ -57,29 +62,25 @@ export function EnemyHud({ name, wave, hpRatio, secondsLeft, timeRatio }: EnemyH
   );
 }
 
+// Wide enough for nine names out of ten on one line, clear of the hero on a 360 dp screen.
+const HUD_WIDTH = 200;
+
 const styles = StyleSheet.create({
   hud: {
     position: 'absolute',
     right: spacing[2] + 2,
     top: spacing[2] + 2,
-    width: 176,
-    gap: spacing[1] + 1,
+    width: HUD_WIDTH,
+    gap: spacing[1],
     paddingHorizontal: spacing[2] + 2,
     paddingTop: spacing[2] - 1,
-    paddingBottom: spacing[2] + 1,
+    paddingBottom: spacing[2] - 1,
     borderRadius: radii.button,
     backgroundColor: colors.paper,
     ...outline('control'),
     ...hardShadow('small'),
   },
-  title: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-    gap: spacing[1],
-  },
-  name: { flexShrink: 1 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing[1] },
   level: { color: colors.muted },
-  timer: { flexDirection: 'row', alignItems: 'center', gap: spacing[1] },
   bar: { flex: 1 },
 });
