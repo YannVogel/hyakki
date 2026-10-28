@@ -1,0 +1,82 @@
+# Captures des fiches stores (#46), à lancer par scripts/store-captures.sh : état vitrine, puis les
+# six écrans clés. Pas un test : il n'est pas lancé avec les parcours de e2e/.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: combat-wave
+    timeout: 60000
+- longPressOn:
+    id: dev-hub
+# Le hub peut mettre plusieurs secondes à s'ouvrir sur un émulateur lent.
+- extendedWaitUntil:
+    visible:
+      id: dev-showcase
+    timeout: 20000
+- tapOn:
+    id: dev-showcase
+- extendedWaitUntil:
+    visible: 'Défilé 3.*'
+    timeout: 10000
+- repeat:
+    times: 4
+    commands:
+      - tapOn:
+          id: battle-scene
+          waitToSettleTimeoutMs: 100
+- takeScreenshot: 01-combat
+- tapOn:
+    id: tab-shikigami
+- extendedWaitUntil:
+    visible:
+      id: guardians-link
+    timeout: 10000
+- takeScreenshot: 02-shikigami
+- tapOn:
+    id: tab-sanctuary
+- extendedWaitUntil:
+    visible:
+      id: sanctuary-souls
+    timeout: 10000
+- takeScreenshot: 03-sanctuaire
+- tapOn:
+    id: tab-festival
+- extendedWaitUntil:
+    visible:
+      id: festival-sparks
+    timeout: 10000
+- takeScreenshot: 04-festival
+- tapOn:
+    id: tab-combat
+- extendedWaitUntil:
+    visible:
+      id: combat-wave
+    timeout: 10000
+- longPressOn:
+    id: dev-hub
+# Le hub peut mettre plusieurs secondes à s'ouvrir sur un émulateur lent.
+- extendedWaitUntil:
+    visible:
+      id: dev-absence
+    timeout: 20000
+- tapOn:
+    id: dev-absence
+- extendedWaitUntil:
+    visible:
+      id: offline-report
+    timeout: 10000
+- takeScreenshot: 05-retour
+- tapOn:
+    id: offline-collect
+# La fermeture du premier bilan demande la permission de notifier.
+- tapOn:
+    text: "Refuser|Don’t Allow|Don't Allow"
+    optional: true
+# Deux heures d'absence mènent le défilé vitrine jusqu'au Gardien suivant, qui attend le joueur.
+- extendedWaitUntil:
+    visible:
+      id: cut-in-name
+    timeout: 10000
+- takeScreenshot: 06-gardien

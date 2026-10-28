@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 5 · Publication (`milestone/5-publication`) |
-| Dernière issue terminée | #45 Politique de confidentialité |
-| Prochaine issue | #46 Fiches stores |
+| Dernière issue terminée | #46 Fiches stores (saisie dans les consoles : `besoin-yann`) |
+| Prochaine issue | #47 et #48 Builds et soumission (préparation), puis #49 Étude de cas |
 
 ## Milestones
 
@@ -24,7 +24,9 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 ## Points en suspens
 
 - Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
-- Maestro sur Android : rebuild Android nécessaire (expo-system-ui, plugin expo-notifications) puis rejouer les parcours (frappes avec `waitToSettleTimeoutMs`) avant les captures de #46. Sur iOS : 8/8 avec le build de la milestone 4.
+- Maestro sur Android : l'émulateur doit avoir 4 Go de RAM (`-memory 4096`), sinon les parcours calent ; chaque frappe reste lente (plusieurs dizaines de secondes) car l'écran animé ne se stabilise jamais. Sur iOS : 8/8 avec le build de la milestone 4.
+- Captures des stores : `scripts/store-captures.sh [ios|android]` (Metro lancé), sorties non versionnées dans `store-captures/`.
+- Consoles des stores : je n'ai pas le droit d'accepter des déclarations ni de me connecter à la place de Yann. Play Console : formulaire de création prêt, deux déclarations à cocher. App Store Connect : session expirée.
 - CocoaPods exige une locale UTF-8 : `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 npx expo run:ios`.
 - Équilibrage : le harnais mesure une graine ; vérifier une cible « au jour près » sur plusieurs défilés (`runProfile(profil, jours, graine)`).
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).

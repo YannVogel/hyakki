@@ -5,5 +5,6 @@ Tout ce qu'il faut pour publier Hyakki, prêt à copier dans les consoles. Les �
 | Document | Contenu |
 |---|---|
 | [`confidentialite.md`](confidentialite.md) | Politique de confidentialité publiée et réponses aux questionnaires App Privacy (Apple) et Data safety (Google) |
+| [`fiche.md`](fiche.md) | Textes des fiches, catégories, classification d'âge, captures et images Google Play (générées) |
 
 Site public (présentation et politique de confidentialité) : <https://yannvogel.github.io/hyakki/>, source dans [`site/`](../../site), publié par [`.github/workflows/pages.yml`](../../.github/workflows/pages.yml) à chaque modification sur `main`.

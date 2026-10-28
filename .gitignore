@@ -40,3 +40,6 @@ coverage/
 # Python
 __pycache__/
 *.pyc
+
+# Captures des fiches stores, générées par scripts/store-captures.sh
+/store-captures/

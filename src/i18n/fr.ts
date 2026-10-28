@@ -8,6 +8,7 @@ export const fr = {
     catalogLink: 'Catalogue des composants',
     guardianShortcut: 'Aller au Gardien de la vague 100',
     absenceShortcut: 'Simuler une absence de 2 h',
+    showcaseShortcut: 'Charger l’état vitrine (captures des stores)',
   },
   nativeCheck: {
     title: 'Vérification native',

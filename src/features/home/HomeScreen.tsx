@@ -5,7 +5,7 @@ import { strings } from '@/i18n';
 import { useGameStore } from '@/state';
 import { bodyText, displayText } from '@/ui/styles';
 
-import { devGuardianState } from '../dev/devStates';
+import { devGuardianState, devShowcaseState } from '../dev/devStates';
 import { colors, spacing, touchTarget } from '@/ui/tokens';
 
 // Development hub (route /dev): links to the development screens.
@@ -46,6 +46,17 @@ export function HomeScreen() {
             }}
           >
             <Text style={styles.subtitle}>{strings.home.guardianShortcut}</Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            style={styles.devLink}
+            testID="dev-showcase"
+            onPress={() => {
+              store.setState({ game: devShowcaseState(2026) });
+              router.back();
+            }}
+          >
+            <Text style={styles.subtitle}>{strings.home.showcaseShortcut}</Text>
           </Pressable>
           <Pressable
             accessibilityRole="button"
