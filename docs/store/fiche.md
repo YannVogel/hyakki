@@ -67,3 +67,7 @@ Réponses saisies le 28/10/2026, à refaire si le contenu change (nouvel accesso
 | Google Play (IARC) | Catégorie Jeu. Violence fantastique et irréaliste, sans sang, style enfantin : contre des créatures (fréquente, en plan éloigné) et contre l'humain (le héros assommé après un Gardien raté, rare). Peur : éléments effrayants rares. Tabac : consommation, rare, jamais par le joueur. Sexualité, jeux d'argent, langage, humour grossier, achats, interactions, localisation : non. | **PEGI 7**, USK 6, ESRB 10+, ClassInd 10, IARC 7+ ; Corée du Sud 15+, Taïwan 15 |
 
 Le kiseru (environ 7 % des yōkai V2, dessiné à la bouche avec de la fumée) est gardé et déclaré : décision de Yann, voir [`DECISIONS.md`](../DECISIONS.md).
+
+## Éléments générés par IA (Google Play)
+
+La fiche Google Play signale comme créés avec l'IA l'image de présentation et les captures 01, 03, 04, 05 et 06, où apparaissent le héros ou un Gardien (illustrations ChatGPT, voir [`ART_PIPELINE.md`](../ART_PIPELINE.md)). L'icône et la capture 02 (Shikigami) ne montrent que des yōkai générés par le code : elles ne sont pas signalées. À refaire à chaque changement d'image.
