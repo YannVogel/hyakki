@@ -1,3 +1,4 @@
+export { bestTeam, shikigamiDps, teamDps } from './bestTeam';
 export { waveHp, waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
 export type { YokaiProfile } from './enemy';
 export type { CombatEvent, CombatInput, HitSource } from './events';

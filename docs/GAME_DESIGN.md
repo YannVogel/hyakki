@@ -95,6 +95,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 - **Bonus d'équipe** = somme des traits offensifs des trois membres : attaque (+% de dégâts pour tous), critique (+ points de chance de critique, plafonnée à 75 %), vitesse (+% de cadence pour tous), âmes, brûlure. Les traits de PV et de défense ne jouent que lorsque le yōkai est un ennemi (sa résistance).
 - Les bonus de sources différentes se multiplient (Sanctuaire × équipe × Festival) ; ceux d'une même source s'additionnent.
 - Un nouveau membre d'équipe commence un cycle d'attaque complet (pas de frappe gratuite en changeant d'équipe).
+- **Meilleure équipe** (bouton de l'écran Shikigami) : équipe les trois shikigami qui font le plus de dégâts ensemble, **chacun jugé au niveau 1** (le yōkai lui-même, pas les niveaux investis : un shikigami très monté peut sortir de l'équipe). Score = dégâts par seconde espérés du héros et de l'équipe à la vague en cours, bonus d'équipe compris (attaque, vitesse, critique, brûlure plafonnée par les frappes) ; départage par le bonus d'âmes, puis par les plus petites graines. Recherche exacte parmi les 12 meilleurs shikigami pris seuls (`bestTeam`), environ 5 ms pour 500 shikigami. Bouton désactivé si la collection est vide ou si l'équipe est déjà la meilleure.
 
 ### 4.5 Festival (prestige)
 

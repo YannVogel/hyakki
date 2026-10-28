@@ -1,6 +1,7 @@
 import {
   awakeningLevel,
   BALANCE,
+  bestTeam,
   type BigNum,
   combatPower,
   div,
@@ -242,4 +243,35 @@ export function guardianGallery(state: GameState): GuardianCard[] {
       revealed: isGuardianRevealed(state, index),
     };
   });
+}
+
+export interface BestTeamView {
+  /** The three shikigami that deal the most damage together, judged at level 1. */
+  readonly team: readonly number[];
+  /** That team is already the active one (in any order). */
+  readonly fielded: boolean;
+}
+
+// The screen redraws at every step of the game: the search only runs again when what it depends
+// on changes (the collection, the wave and the upgrades that weigh hits against burns).
+let bestTeamCache: { readonly key: string; readonly team: readonly number[] } | null = null;
+
+/** « Meilleure équipe »: the best team of the collection, and whether it is already fielded. */
+export function bestTeamView(state: GameState): BestTeamView {
+  const { parade, sanctuary, sparks, shikigami } = state;
+  const key = [
+    parade.wave,
+    sanctuary.blade,
+    sanctuary.foxfire,
+    sparks,
+    shikigami.map((entry) => `${entry.generatorVersion}:${entry.seed}`).join(','),
+  ].join('|');
+  if (bestTeamCache?.key !== key) {
+    bestTeamCache = { key, team: bestTeam(state) };
+  }
+  const { team } = bestTeamCache;
+  return {
+    team,
+    fielded: team.length === state.team.length && team.every((seed) => state.team.includes(seed)),
+  };
 }

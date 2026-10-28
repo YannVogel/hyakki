@@ -12,8 +12,7 @@ import {
   mul,
   setTeam,
   type Shikigami,
-  shikigamiHitRatio,
-  shikigamiIntervalMs,
+  shikigamiDps,
   TEAM_SIZE,
   upgradeCost,
   UPGRADE_IDS,
@@ -129,8 +128,9 @@ export function spendSouls(state: GameState): GameState {
 }
 
 /** log10 of the damage per second of a shikigami, per unit of hero damage. */
-const shikigamiStrength = (shikigami: Shikigami) =>
-  log10(shikigamiHitRatio(shikigami)) + Math.log10(1000 / shikigamiIntervalMs(shikigami));
+// The bot compares its shikigami at their real level, without team bonuses (simpler than the
+// game's « Meilleure équipe », which judges every yōkai at level 1).
+const shikigamiStrength = (shikigami: Shikigami) => log10(shikigamiDps(shikigami));
 
 /** Fields the strongest shikigami. */
 export function pickTeam(state: GameState): GameState {
