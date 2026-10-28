@@ -74,18 +74,20 @@ No text, no shadow on the ground, no scenery.
 
 ## 6. Icône et écran de lancement
 
-L'icône est dessinée en code, comme les yōkai ordinaires : la mascotte est **Hitotsume-Chōchin-obake** (graine 116 300 du générateur), une lanterne en papier cyclope qui tire la langue, sur le ciel du festival avec soleil et collines. Les compositions vectorielles vivent dans `src/render/icon/appIcon.ts` (cadre 200 × 200, couleurs des tokens) ; `scripts/render-icons.ts` les rend en PNG avec CanvasKit (le moteur de Skia, en Node) :
+L'icône « Oni caché » est dessinée en code : un petit oni rouge se cache derrière le kanji 百 (*hyaku*, la centaine du Hyakki Yagyō) et s'y agrippe, sur les rayons du ciel du festival. Le kanji est un autocollant : ombre franche, contour encré, bordure blanche, remplissage jaune. La maquette retenue vient d'un canevas Claude Design (variante 3 des « Yōkai cachés »).
+
+Les compositions vivent dans `src/render/icon/appIcon.ts` : des calques posés dans une boîte de 512 × 512 (celle des maquettes), ramenés au cadre 200 × 200 des rendus, couleurs des tokens uniquement. Le 百 n'est pas un tracé : c'est un glyphe de la police d'affichage (Mochiy Pop One), que `scripts/icons/composition.ts` dessine entre l'oni et ses mains. `scripts/render-icons.ts` rend le tout en PNG avec CanvasKit (le moteur de Skia, en Node) :
 
 | Fichier (`assets/images/app/`) | Contenu |
 |---|---|
 | `icon.png` | Icône iOS et stores, 1024 × 1024, opaque (Expo retire le canal alpha à la génération iOS) |
-| `android-icon-background.png` | Fond de l'icône adaptative : ciel, soleil, collines |
-| `android-icon-foreground.png` | Mascotte seule, dans la zone sûre de 66 dp sur 108 dp |
-| `android-icon-monochrome.png` | Silhouette blanche pour les icônes à thème (Android 13+) : les contours encrés deviennent des jours |
-| `splash-icon.png` | Mascotte seule sur transparence ; l'écran de lancement est crème (`imageWidth` 160 dans `app.config.ts`) |
+| `android-icon-background.png` | Fond de l'icône adaptative : ciel et rayons |
+| `android-icon-foreground.png` | L'oni et son kanji, dans la zone sûre de 66 dp sur 108 dp |
+| `android-icon-monochrome.png` | Silhouette blanche pour les icônes à thème (Android 13+) : les contours encrés deviennent des jours. Le kanji y perd sa bordure blanche, sinon elle se confondrait avec le jaune et effacerait ses traits |
+| `splash-icon.png` | L'oni et son kanji sur transparence ; l'écran de lancement est crème (`imageWidth` 160 dans `app.config.ts`) |
 
 ```bash
 npx tsx scripts/render-icons.ts /chemin/apercus   # le dossier d'aperçus (48, 96 et 180 px) est facultatif
 ```
 
-L'icône dépend du générateur : la graine 116 300 doit continuer à donner la même lanterne (contrat de version, voir [`PROCEDURAL_YOKAI.md`](PROCEDURAL_YOKAI.md)). Un test le vérifie.
+L'icône 512 × 512 de Google Play sort du même code : `npx tsx scripts/render-store-graphics.ts` (voir [`store/fiche.md`](store/fiche.md)). Toute nouvelle icône demande un nouveau build pour arriver sur les appareils.

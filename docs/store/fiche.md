@@ -70,4 +70,4 @@ Le kiseru (environ 7 % des yōkai V2, dessiné à la bouche avec de la fumée) e
 
 ## Éléments générés par IA (Google Play)
 
-La fiche Google Play signale comme créés avec l'IA l'image de présentation et les captures 01, 03, 04, 05 et 06, où apparaissent le héros ou un Gardien (illustrations ChatGPT, voir [`ART_PIPELINE.md`](../ART_PIPELINE.md)). L'icône et la capture 02 (Shikigami) ne montrent que des yōkai générés par le code : elles ne sont pas signalées. À refaire à chaque changement d'image.
+La fiche Google Play signale comme créés avec l'IA l'image de présentation et les captures 01, 03, 04, 05 et 06, où apparaissent le héros ou un Gardien (illustrations ChatGPT, voir [`ART_PIPELINE.md`](../ART_PIPELINE.md)). L'icône (un oni dessiné en code) et la capture 02 (Shikigami, des yōkai générés par le code) ne sont pas signalées. À refaire à chaque changement d'image.

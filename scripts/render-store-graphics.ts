@@ -10,7 +10,8 @@ import { appIcon, ICON_FRAME } from '../src/render/icon/appIcon';
 import { drawYokai, YOKAI_FRAME } from '../src/render/yokai/drawYokai';
 import { group, shape } from '../src/render/yokai/nodes';
 import { colors } from '../src/ui/tokens';
-import { drawNode, renderPng } from './icons/drawNodes';
+import { loadDisplayFont, renderComposition } from './icons/composition';
+import { drawNode } from './icons/drawNodes';
 
 const ROOT = path.resolve(__dirname, '..');
 const OUTPUT = path.join(ROOT, 'store-captures/google-play');
@@ -117,7 +118,10 @@ function featureGraphic(CK: CanvasKit): Uint8Array {
 async function main(): Promise<void> {
   const CK = await CanvasKitInit();
   mkdirSync(OUTPUT, { recursive: true });
-  writeFileSync(path.join(OUTPUT, 'icone-512.png'), renderPng(CK, appIcon(), ICON_FRAME, 512));
+  writeFileSync(
+    path.join(OUTPUT, 'icone-512.png'),
+    renderComposition(CK, appIcon(), loadDisplayFont(CK), ICON_FRAME, 512),
+  );
   writeFileSync(path.join(OUTPUT, 'presentation-1024x500.png'), featureGraphic(CK));
   console.log(`Images Google Play écrites dans ${OUTPUT}`);
 }
