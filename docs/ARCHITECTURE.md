@@ -56,6 +56,7 @@ docs/                     documentation du projet
 site/                     site public (GitHub Pages) : présentation, politique de confidentialité
 scripts/                  outils (découpe des planches, simulation d'équilibrage, rendu de l'icône)
 app.config.ts             configuration Expo (lit les couleurs dans design/tokens.json)
+eas.json                  profils de build et d'envoi EAS (production)
 ```
 
 L'alias `@/` pointe vers `src/`.
@@ -147,7 +148,7 @@ En développement, l'écran d'accueil propose un lien « Vérification native »
 
 ### Dans le cloud (EAS Build)
 
-L'offre gratuite d'EAS Build demande un compte Expo et, pour iOS sur appareil, un compte Apple Developer. Elle servira aux builds de production (milestone 5).
+Les builds de production passent par l'offre gratuite d'EAS Build (compte Expo, et compte Apple Developer pour iOS) : profil `production` dans [`eas.json`](../eas.json), numéros de build gérés par EAS, clés de signature conservées par EAS. La version affichée reste celle d'`app.config.ts`. Procédure complète : [`store/publication.md`](store/publication.md).
 
 ## 7. Performance
 

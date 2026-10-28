@@ -18,6 +18,8 @@ const config: ExpoConfig = {
   ios: {
     bundleIdentifier: APP_ID,
     supportsTablet: false,
+    // No network at all, hence no encryption to declare: skips the export compliance question.
+    config: { usesNonExemptEncryption: false },
   },
   android: {
     package: APP_ID,

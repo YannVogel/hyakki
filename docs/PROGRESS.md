@@ -8,7 +8,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 |---|---|
 | Milestone en cours | 5 · Publication (`milestone/5-publication`) |
 | Dernière issue terminée | #46 Fiches stores (saisie dans les consoles : `besoin-yann`) |
-| Prochaine issue | #47 et #48 Builds et soumission (préparation), puis #49 Étude de cas |
+| Prochaine issue | #49 Étude de cas (#47 et #48 préparées, attendent Yann) |
 
 ## Milestones
 
@@ -45,4 +45,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
 - #58 Régénérer les 20 illustrations en HD dans ChatGPT (procédure et outils prêts).
 - #59 Valider l'icône et l'écran de lancement.
+- #62 Créer Hyakki dans les deux consoles (deux déclarations Play à cocher, reconnexion Apple), puis saisir les fiches.
 - #61 Déclarer « aucune donnée collectée » dans les deux consoles (réponses prêtes dans `docs/store/confidentialite.md`).
+- #47 Google Play : build EAS, test fermé de 14 jours, production (`docs/store/publication.md`).
+- #48 App Store : build EAS, TestFlight, soumission (`docs/store/publication.md`).
