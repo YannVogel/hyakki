@@ -37,7 +37,14 @@ describe('effectsForEvents', () => {
     expect(kinds(requests)).toEqual(['ofuda', 'impact', 'damage']);
     expect(requests[0]).toMatchObject({ delayMs: 30, x: 96, y: 168, toX: 270, toY: 222 });
     expect(requests[1].delayMs).toBe(30 + DURATION_MS.ofuda);
-    expect(requests[2].text).toBe(formatNumber(big(1234)));
+    expect(requests[2].text).toBe('1\u2009234');
+  });
+
+  it('writes numbers with a space the display font has (no narrow no-break space)', () => {
+    const event = { ...hit('tap'), damage: big(4.82e40) };
+    const [, , damage] = effectsForEvents([event], stage, 'full', 1);
+    expect(formatNumber(big(4.82e40))).toContain('\u202f');
+    expect(damage.text).toBe(formatNumber(big(4.82e40)).replace('\u202f', '\u2009'));
   });
 
   it('strikes at once for shikigami and talismans, smaller for shikigami', () => {

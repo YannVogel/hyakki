@@ -109,6 +109,12 @@ const CRIT_SIZE = 1.3;
 const THROWN: readonly HitSource[] = ['hero', 'tap'];
 
 const HIDDEN: EffectFrame = { x: 0, y: 0, scale: 0, rotation: 0, opacity: 0 };
+// The display font has no narrow no-break space (U+202F), the French digit separator, and Skia
+// draws with that font alone (no fallback, unlike React Native's Text): Android showed a tofu box.
+// The thin space, which the font has, takes its place.
+const NARROW_NBSP = /\u202f/g;
+const THIN_SPACE = '\u2009';
+const drawableNumber = (text: string) => text.replace(NARROW_NBSP, THIN_SPACE);
 
 /** Every slot of the pool, idle, grouped by kind. */
 export function createPool(): EffectSlot[] {
@@ -206,7 +212,11 @@ function hitEffects(
   };
   const effects = [
     request('impact', landsAt, target, { size, variant }),
-    request('damage', landsAt, number, { size, variant, text: formatNumber(event.damage) }),
+    request('damage', landsAt, number, {
+      size,
+      variant,
+      text: drawableNumber(formatNumber(event.damage)),
+    }),
   ];
   if (thrown) {
     effects.unshift(
