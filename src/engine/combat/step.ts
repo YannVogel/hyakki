@@ -85,10 +85,14 @@ export function step(
     const guardianLeft = battle.guardian?.timeLeftMs ?? Infinity;
     const next = Math.min(...battle.timers, guardianLeft);
     const elapsed = Math.min(next, remaining);
+    const start = battle.elapsed;
     const before = battle.timers.map((timer) => timer - elapsed);
     advance(battle, elapsed);
     remaining -= elapsed;
     if (isPaused(battle)) {
+      // A burn finished the enemy mid-way and a guardian appeared: attackers wait from there.
+      const advanced = battle.elapsed - start;
+      battle.timers = battle.timers.map((timer) => timer - advanced);
       break;
     }
     battle.timers = before;

@@ -126,7 +126,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 | Coût de `k` niveaux au Sanctuaire | `base × 1,12^niv × (1,12^k − 1) / 0,12` | |
 | Coût d'un niveau de shikigami | `100 × 1,18^(niveau − 1)` | |
 | Critique | 5 % de base (75 % au plus), ×3 dégâts | + bonus d'apparence des shikigami |
-| Brûlures | % des PV max par seconde, jusqu'à 10 % des PV restants | ×0,2 contre un Gardien |
+| Brûlures | % des PV max par seconde, au plus 9 × les dégâts par seconde espérés des frappes | ×0,2 contre un Gardien |
 | Festival | `étincelles = ⌊5 × (record / 100)^1,8⌋`, bonus `× (1 + 0,05 × étincelles)` | Dégâts et âmes |
 
 **Pourquoi des niveaux qui se multiplient** : les coûts croissent de façon exponentielle (×1,12 par niveau). Avec des dégâts linéaires (« +8 % par niveau » des formules de départ), les dégâts ne croissent que comme le logarithme des âmes et le joueur bute contre un mur dès la vague 40, quel que soit son temps de jeu (mesuré par le harnais). Chaque niveau de Lame multiplie donc les dégâts par 1,0925 ; l'écart entre la croissance des PV (×1,13 par vague) et celle des dégâts achetables crée un mur progressif, que le Festival repousse.
@@ -141,7 +141,7 @@ Toutes ces constantes sont dans `src/engine/balance.ts` : c'est le seul endroit 
 - **PV d'un yōkai** = `PV(v) × PV du yōkai / 100` : la stat PV (objet, traits, rareté) fait office de résistance. Un yōkai légendaire est donc plus coriace.
 - **Âmes d'un yōkai** = `âmes(v) × multiplicateur de rareté × (1 + bonus de clochette du yōkai) × (1 + 5 % × Clochette sacrée)` : un yōkai coriace rapporte plus.
 - La **défense** ne sert pas au combat en V1 (aucun ennemi ne frappe le héros).
-- **Brûlures** (Feu de renard, onibi, Kitsune-bi) : dégâts continus en % des PV max par seconde, qui s'arrêtent quand il reste 10 % des PV : une brûlure n'achève jamais, les frappes finissent. Sans cette règle, une brûlure en % des PV tue tout yōkai en un temps fixe et la progression devient indépendante de la puissance (mesuré : vague 512 000 en 2 jours).
+- **Brûlures** (Feu de renard, onibi, Kitsune-bi) : dégâts continus en % des PV max par seconde, plafonnés à 9 fois les dégâts par seconde espérés des frappes (critiques moyennés, touchers exclus). Une brûlure peut achever l'ennemi. Sans plafond, une brûlure en % des PV tue tout yōkai en un temps fixe et la progression devient indépendante de la puissance (mesuré : vague 512 000 en 2 jours). Plafonnée par les frappes, elle fait descendre la barre de vie à vitesse constante. L'ancien plancher (arrêt à 10 % des PV) vidait 90 % de la barre d'un gros sac à PV en quelques secondes, puis la laissait ramper.
 - Les dégâts en trop sur un yōkai vaincu sont perdus ; le yōkai suivant arrive aussitôt.
 - Un pas de simulation couvre l'intervalle semi-ouvert [début, fin[ : découper une durée en plusieurs pas donne les mêmes frappes, dans le même ordre, et le même état (à 1e-9 près sur les dégâts quand une brûlure est active).
 
@@ -152,18 +152,18 @@ Mesuré par `npx tsx scripts/simulate.ts` (bot simple et déterministe : il ach�
 
 | Cible (joueur régulier : 3 sessions de 5 min par jour) | Visé | Mesuré |
 |---|---|---|
-| Premier Gardien (vague 100) | jour 1 | jour 0,5 (11 min de jeu actif) |
-| Premier Festival | jours 1 à 3 | jour 1 |
-| Gardien 5 (vague 500) | jours 4 à 10 | jour 4,2 |
-| Record de 800 | jours 15 à 25 | jour 16 |
+| Premier Gardien (vague 100) | jour 1 | jour 0,5 (10 min de jeu actif) |
+| Premier Festival | jours 1 à 3 | jour 1,2 |
+| Gardien 5 (vague 500) | jours 4 à 10 | jour 5,2 |
+| Record de 800 | jours 15 à 25 | jour 15,5 |
 | Gardien 10 (vague 1000) | au-delà du jour 30 (objectif de long terme) | non atteint à J30 (record 900) |
 
 | Cible (autres profils) | Visé | Mesuré |
 |---|---|---|
 | Joueur actif (2 h par jour) : premier Gardien | ≤ 45 min de jeu | 30 min |
-| Joueur actif : Gardien 5 | ≤ 3 jours | jour 0,6 |
-| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 800 / 900 = 89 % |
-| Temps de calcul | 3 profils × 30 jours < 30 s | 25 s |
+| Joueur actif : Gardien 5 | ≤ 3 jours | jour 1 |
+| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 853 / 900 = 95 % |
+| Temps de calcul | 3 profils × 30 jours < 30 s | 21 s |
 
 Mesures avec le générateur V2 (défilés neufs). Sensibilité : d'un défilé à l'autre (graine), le premier Gardien du joueur régulier tombe ou non au jour 1 selon la chance des premiers yōkai et des captures ; sur 12 défilés, il tombe au jour 1 dans 10 cas avec la Lame à 5 âmes (contre 4 avec l'ancien coût de 10). Le harnais mesure une graine fixe (2026) : une cible « au jour près » est donc indicative.
 

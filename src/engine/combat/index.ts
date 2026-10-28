@@ -11,7 +11,7 @@ export {
   isGuardianWave,
   tierMultiplier,
 } from './guardians';
-export { combatPower } from './power';
+export { combatPower, expectedDps } from './power';
 export type { CombatPower } from './power';
 export { step } from './step';
 export { talismanCooldownMs } from './talismans';

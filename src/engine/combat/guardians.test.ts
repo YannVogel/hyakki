@@ -142,8 +142,9 @@ describe('guardian fights', () => {
   });
 
   it('weakens percentage burns against guardians', () => {
-    // 50 levels of fox fire burn 10 %/s of a yōkai, but only 2 %/s of a guardian.
-    const state = stateAtWave(3, 100, { foxfire: 50 });
+    // 50 levels of fox fire burn 10 %/s of a yōkai, but only 2 %/s of a guardian. The Blade keeps
+    // the burn under its cap (9 times the hits).
+    const state = stateAtWave(3, 100, { foxfire: 50, blade: 150 });
     const engaged = step(state, 0, [ENGAGE]).state;
     const idle = { ...engaged, attackTimers: { hero: 1e9, team: [] } };
     const burnt = step(idle, 10_000).state;

@@ -3,8 +3,10 @@ import * as fc from 'fast-check';
 import { createNewGame, enemySeed, type GameState } from '../gameState';
 import { setTeam, shikigamiIntervalMs } from '../shikigami';
 import { div, eq, gt, mul, sub, toNumber, ZERO } from '../numbers';
+import { stateAtWave } from '../testing/states';
 import { waveSouls, yokaiMaxHp, yokaiProfile } from './enemy';
 import type { CombatEvent } from './events';
+import { combatPower, expectedDps } from './power';
 import { step } from './step';
 
 const withSanctuary = (state: GameState, levels: Partial<GameState['sanctuary']>): GameState => ({
@@ -123,16 +125,50 @@ describe('step', () => {
     expect(step(state, 0, taps)).toEqual(step(state, 0, taps));
   });
 
-  it('burns the enemy continuously with the fox fire upgrade, down to 10 % of its HP', () => {
+  it('burns the enemy continuously with the fox fire upgrade, until it falls', () => {
     const state = withSanctuary(createNewGame(13), { foxfire: 50 });
     const maxHp = yokaiMaxHp(1, state.enemy.seed, state.generatorVersion);
     const idle = { ...state, attackTimers: { hero: 1e9, team: [] } };
-    // 50 levels × 0.2 % = 10 % of max HP per second.
+    // 50 levels × 0.2 % = 10 % of max HP per second, under the cap of the hits at wave 1.
     const burnt = step(idle, 4_000).state;
     expect(toNumber(div(burnt.enemy.damage, maxHp))).toBeCloseTo(0.4, 9);
-    const floored = step(idle, 60_000);
-    expect(toNumber(div(floored.state.enemy.damage, maxHp))).toBeCloseTo(0.9, 9);
-    expect(floored.events.some((event) => event.type === 'yokaiDefeated')).toBe(false);
+    const { events } = step(idle, 10_500);
+    const defeat = events.find((event) => event.type === 'yokaiDefeated');
+    expect(defeat?.atMs).toBeCloseTo(10_000, 6);
+  });
+
+  it('never burns more than its share of max HP, nor 9 times the hits', () => {
+    fc.assert(
+      fc.property(
+        fc.integer(),
+        fc.integer({ min: 1, max: 99 }),
+        fc.integer({ min: 1, max: 200 }),
+        (seed, wave, foxfire) => {
+          const state = {
+            ...stateAtWave(seed, wave, { foxfire }),
+            attackTimers: { hero: 1e9, team: [] },
+          };
+          const maxHp = toNumber(yokaiMaxHp(wave, state.enemy.seed, state.generatorVersion));
+          const hitsDps = toNumber(expectedDps(combatPower(state)));
+          const burnt = toNumber(step(state, 100).state.enemy.damage);
+          const perSecond = Math.min(maxHp * 0.002 * foxfire, hitsDps * 9);
+          expect(burnt / (perSecond * 0.1)).toBeCloseTo(1, 9);
+        },
+      ),
+      { numRuns: 50 },
+    );
+  });
+
+  it('stops the attack timers when a burn brings a guardian mid-step', () => {
+    // Hits strong enough that the burn (10 % of max HP per second) stays under its cap.
+    const state = {
+      ...stateAtWave(13, 99, { foxfire: 50, blade: 150 }),
+      attackTimers: { hero: 20_000, team: [] },
+    };
+    const { state: next, events } = step(state, 15_000);
+    expect(events.find((event) => event.type === 'yokaiDefeated')?.atMs).toBeCloseTo(10_000, 6);
+    expect(next.enemy.guardian).toEqual({ engaged: false, timeLeftMs: 30_000 });
+    expect(next.attackTimers.hero).toBeCloseTo(10_000, 6);
   });
 
   it('pays more souls with the sacred bell', () => {

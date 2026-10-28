@@ -1,10 +1,10 @@
 import { BALANCE } from '../balance';
-import { burnFloor } from '../combat/battle';
+import { burnDps } from '../combat/battle';
 import { waveHp, waveSouls, yokaiProfile } from '../combat/enemy';
 import { isGuardianWave, tierMultiplier } from '../combat/guardians';
-import { type CombatPower, combatPower } from '../combat/power';
+import { combatPower, expectedDps } from '../combat/power';
 import { enemySeed, type GameState, type Shikigami, TALISMAN_IDS } from '../gameState';
-import { add, type BigNum, div, lt, mul, sub, toNumber, ZERO } from '../numbers';
+import { add, type BigNum, div, mul, sub, toNumber, ZERO } from '../numbers';
 import { createRng } from '../rng';
 import { addCapture, captureChance } from '../shikigami';
 import type { GeneratorVersion } from '../yokai';
@@ -42,38 +42,15 @@ export function offlineCapMs(state: GameState): number {
   return Math.min(maxCapHours, hours) * HOUR_MS;
 }
 
-/** Expected damage per second (critical hits averaged), before the offline efficiency. */
-export function expectedDps(power: CombatPower): BigNum {
-  const critFactor = 1 + power.critChance * (BALANCE.crit.multiplier - 1);
-  const attackers = [
-    { hitDamage: power.heroHitDamage, intervalMs: power.heroIntervalMs },
-    ...power.team,
-  ];
-  return attackers.reduce(
-    (total, attacker) =>
-      add(total, mul(attacker.hitDamage, (critFactor * 1000) / attacker.intervalMs)),
-    ZERO,
-  );
-}
-
 /**
- * Time to finish an enemy with steady hits and a burn, the burn stopping at 10 % of the max HP
- * like in active play, and the damage dealt after any shorter time.
+ * Time to finish an enemy with steady hits and a burn capped like in active play, and the damage
+ * dealt after any shorter time.
  */
 function fightTimeline(maxHp: BigNum, damage: BigNum, dps: BigNum, burnRate: number) {
-  const hitsPerMs = div(dps, 1000);
-  const floor = burnFloor(maxHp);
-  const burning = burnRate > 0 && lt(damage, floor);
-  const bothPerMs = add(hitsPerMs, mul(maxHp, burnRate / 1000));
-  const msToFloor = burning ? toNumber(div(sub(floor, damage), bothPerMs)) : 0;
-  const fromFloor = burning ? floor : damage;
-  const msToKill = msToFloor + toNumber(div(sub(maxHp, fromFloor), hitsPerMs));
+  const perMs = div(add(dps, burnDps(maxHp, burnRate, dps)), 1000);
   return {
-    msToKill,
-    damageAfter: (ms: number): BigNum =>
-      ms <= msToFloor
-        ? add(damage, mul(bothPerMs, ms))
-        : add(fromFloor, mul(hitsPerMs, ms - msToFloor)),
+    msToKill: toNumber(div(sub(maxHp, damage), perMs)),
+    damageAfter: (ms: number): BigNum => add(damage, mul(perMs, ms)),
   };
 }
 

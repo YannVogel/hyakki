@@ -1,7 +1,8 @@
 import { type GameState, TALISMAN_IDS, type TalismanId } from '../gameState';
-import { div, eq, toNumber } from '../numbers';
+import { div, eq, mul, toNumber } from '../numbers';
 import { stateAtWave } from '../testing/states';
 import { guardianMaxHp } from './guardians';
+import { combatPower } from './power';
 import { step } from './step';
 import { talismanCooldownMs } from './talismans';
 
@@ -25,15 +26,17 @@ describe('talismans', () => {
   });
 
   it('Kitsune-bi deals 20 hero hits, then burns 1 % of max HP per second for 5 s', () => {
-    const state = idle(stateAtWave(2, 200));
+    // The Blade keeps the burn under its cap (9 times the hits), without one-shotting the guardian.
+    const state = idle(stateAtWave(2, 200, { blade: 260 }));
     const engaged = step(state, 0, [ENGAGE, cast('kitsunebi')]);
     const fire = hits(engaged)[0];
+    const fireDamage = mul(combatPower(state).heroHitDamage, 20);
     // Guardian of wave 200 (Kappa) is weak to thunder: no bonus for fire.
-    expect(fire.type === 'hit' && toNumber(fire.damage)).toBe(20);
+    expect(fire.type === 'hit' && eq(fire.damage, fireDamage)).toBe(true);
     const after = step(engaged.state, 10_000).state;
     const burnt = toNumber(div(after.enemy.damage, guardianMaxHp(200)));
     // 5 s × 1 %/s, at 20 % efficiency against a guardian, on top of the 20 hits.
-    const hitsShare = toNumber(div(20, guardianMaxHp(200)));
+    const hitsShare = toNumber(div(fireDamage, guardianMaxHp(200)));
     expect(burnt - hitsShare).toBeCloseTo(0.05 * 0.2, 9);
     expect(after.effects.burnMs).toBe(0);
   });
