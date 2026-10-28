@@ -8,7 +8,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 |---|---|
 | Milestone en cours | 5 · Publication (`milestone/5-publication`) |
 | Dernière issue terminée | #49 Étude de cas (médias et liens stores : #63) |
-| Prochaine issue | PR de la milestone 5 (#47 et #48 préparées, attendent Yann) |
+| Prochaine issue | Aucune sans Yann : bilan de l'autonomie ouvert après la fusion de #64 |
 
 ## Milestones
 
@@ -19,7 +19,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
 | 3 · Boucle jouable | Terminée | #57 |
 | 4 · Feel & finitions | Terminée (#58 et #59 attendent Yann) | #60 |
-| 5 · Publication | En cours | — |
+| 5 · Publication | Préparée : le reste attend Yann (#47, #48, #61, #62, #63) | #64 |
 
 ## Points en suspens
 
