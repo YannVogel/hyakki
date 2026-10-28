@@ -18,7 +18,7 @@ import { displayFontFile } from '@/ui/fonts';
 import { colors } from '@/ui/tokens';
 
 import { useFrameClock } from '../frameClock';
-import { SCENE_HEIGHT, SCENE_WIDTH, sceneLayout } from '../scene/backdrop';
+import { SCENE_HEIGHT, SCENE_WIDTH, sceneLayout } from '../scene/layout';
 import {
   createPool,
   type EffectKind,

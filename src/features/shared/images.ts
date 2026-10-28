@@ -84,3 +84,38 @@ export const GUARDIAN_IMAGES: readonly ImageSourcePropType[] = [
   require('../../../assets/images/bosses/boss-09-kyubi.png'),
   require('../../../assets/images/bosses/boss-10-nurarihyon.png'),
 ];
+
+const BACKDROP_SIZE = { width: 1254, height: 1254 };
+
+/**
+ * Battle backdrops (docs/ART_PIPELINE.md, « Décors »): the parade's for the ordinary waves, then
+ * one per guardian, in order of appearance. Square, they cover the scene frame.
+ */
+export const BATTLE_BACKDROPS: {
+  readonly parade: Illustration;
+  readonly guardians: readonly Illustration[];
+} = {
+  parade: {
+    source: require('../../../assets/images/backdrops/combat-00-parade.webp'),
+    ...BACKDROP_SIZE,
+  },
+  guardians: [
+    require('../../../assets/images/backdrops/combat-01-bake-danuki.webp'),
+    require('../../../assets/images/backdrops/combat-02-kappa.webp'),
+    require('../../../assets/images/backdrops/combat-03-karasu-tengu.webp'),
+    require('../../../assets/images/backdrops/combat-04-tsuchigumo.webp'),
+    require('../../../assets/images/backdrops/combat-05-yuki-onna.webp'),
+    require('../../../assets/images/backdrops/combat-06-gashadokuro.webp'),
+    require('../../../assets/images/backdrops/combat-07-nue.webp'),
+    require('../../../assets/images/backdrops/combat-08-ibaraki-doji.webp'),
+    require('../../../assets/images/backdrops/combat-09-kyubi.webp'),
+    require('../../../assets/images/backdrops/combat-10-nurarihyon.webp'),
+  ].map((source: ImageSourcePropType) => ({ source, ...BACKDROP_SIZE })),
+};
+
+/** Header of the Festival screen; the hero is drawn over its bottom left. */
+export const FESTIVAL_HEADER: Illustration = {
+  source: require('../../../assets/images/backdrops/festival-header.webp'),
+  width: 1200,
+  height: 800,
+};

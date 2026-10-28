@@ -52,6 +52,7 @@ export function CombatScreen() {
     actions.tap();
   };
   const parade = paradeView(game);
+  const nextGuardian = nextGuardianView(game);
   const enemy = enemyView(game);
   const lastHit = useMemo(() => lastHitOf(events), [events]);
   const name = enemy.kind === 'yokai' ? enemy.name : guardianName(enemy.index, enemy.awakening);
@@ -60,13 +61,14 @@ export function CombatScreen() {
     <SafeAreaView style={styles.screen} edges={['top']}>
       <CombatHeader
         parade={parade}
-        nextGuardian={nextGuardianView(game)}
+        nextGuardian={nextGuardian}
         souls={formatNumber(game.souls)}
         ofuda={game.ofuda}
       />
       <View style={styles.sceneArea}>
         <BattleScene
           enemy={enemy}
+          upcomingGuardian={nextGuardian.index}
           enemyName={name}
           wave={parade.wave}
           lastHit={lastHit}

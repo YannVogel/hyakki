@@ -250,7 +250,7 @@ export const fr = {
     confirm: 'Oui, lancer le festival',
     cancel: 'Annuler',
     heroLabel: 'L’onmyōji célèbre la fête',
-    sceneLabel: 'Feux d’artifice et lanternes au-dessus du torii',
+    sceneLabel: 'Fête de nuit : feux d’artifice, lanternes, stands et tour du grand tambour',
   },
   offline: {
     title: 'Pendant ton absence',
