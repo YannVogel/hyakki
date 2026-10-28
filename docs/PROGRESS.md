@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 5 · Publication (`milestone/5-publication`) |
-| Dernière issue terminée | #46 Fiches stores (saisie dans les consoles : `besoin-yann`) |
-| Prochaine issue | #49 Étude de cas (#47 et #48 préparées, attendent Yann) |
+| Dernière issue terminée | #49 Étude de cas (médias et liens stores : #63) |
+| Prochaine issue | PR de la milestone 5 (#47 et #48 préparées, attendent Yann) |
 
 ## Milestones
 
@@ -49,3 +49,4 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - #61 Déclarer « aucune donnée collectée » dans les deux consoles (réponses prêtes dans `docs/store/confidentialite.md`).
 - #47 Google Play : build EAS, test fermé de 14 jours, production (`docs/store/publication.md`).
 - #48 App Store : build EAS, TestFlight, soumission (`docs/store/publication.md`).
+- #63 Vidéo de 30 s, GIF du générateur et liens stores de l'étude de cas.
