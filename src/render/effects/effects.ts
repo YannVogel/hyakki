@@ -49,11 +49,14 @@ export interface EffectFrame {
   readonly opacity: number;
 }
 
-/** Slots per kind, allocated once: at 10 hits per second, the oldest effects are recycled. */
+/**
+ * Slots per kind, allocated once: at 10 hits per second, the oldest effects are recycled. Six damage
+ * numbers at most stay readable when the whole team strikes.
+ */
 export const POOL_SIZES: Readonly<Record<EffectKind, number>> = {
   impact: 3,
   ofuda: 4,
-  damage: 8,
+  damage: 6,
   critLabel: 2,
   speedLines: 1,
   flash: 1,
@@ -63,8 +66,8 @@ export const POOL_SIZES: Readonly<Record<EffectKind, number>> = {
 export const DURATION_MS: Readonly<Record<EffectKind, number>> = {
   impact: 260,
   ofuda: 140,
-  damage: 900,
-  critLabel: 900,
+  damage: 750,
+  critLabel: 750,
   speedLines: 300,
   flash: 120,
   petal: 1100,
@@ -90,12 +93,15 @@ const DAMAGE_RISE = 24;
 const DAMAGE_FADE_RISE = 40;
 const PETAL_SPREAD = 70;
 const PETAL_FALL = 60;
+const NUMBER_SPREAD_X = 150;
+const NUMBER_SPREAD_Y = 90;
 const IDLE_START_MS = -1e9;
 
+// The player's own strikes stand out; the team's frequent hits stay discreet.
 const SOURCE_SIZE: Readonly<Record<HitSource, number>> = {
-  hero: 1,
+  hero: 0.85,
   tap: 1,
-  shikigami: 0.7,
+  shikigami: 0.6,
   kitsunebi: 1.3,
   raijin: 1.3,
 };
@@ -103,6 +109,12 @@ const CRIT_SIZE = 1.3;
 const THROWN: readonly HitSource[] = ['hero', 'tap'];
 
 const HIDDEN: EffectFrame = { x: 0, y: 0, scale: 0, rotation: 0, opacity: 0 };
+// The display font has no narrow no-break space (U+202F), the French digit separator, and Skia
+// draws with that font alone (no fallback, unlike React Native's Text): Android showed a tofu box.
+// The thin space, which the font has, takes its place.
+const NARROW_NBSP = /\u202f/g;
+const THIN_SPACE = '\u2009';
+const drawableNumber = (text: string) => text.replace(NARROW_NBSP, THIN_SPACE);
 
 /** Every slot of the pool, idle, grouped by kind. */
 export function createPool(): EffectSlot[] {
@@ -184,6 +196,7 @@ function hitEffects(
   stage: EffectStage,
   motion: MotionLevel,
   variant: number,
+  spread: number,
 ): SpawnRequest[] {
   const full = motion === 'full';
   const thrown = full && THROWN.includes(event.source);
@@ -191,14 +204,19 @@ function hitEffects(
   const landsAt = event.atMs + (thrown ? DURATION_MS.ofuda : 0);
   const size = SOURCE_SIZE[event.source] * (event.crit ? CRIT_SIZE : 1);
   const { target } = stage;
-  // Above and left of the enemy, clear of its HUD in the top right corner.
+  // Above and left of the enemy, clear of its HUD in the top right corner. Two independent draws
+  // scatter the numbers of quick hits instead of lining them up.
   const number = {
-    x: target.x - 90 + (variant - 0.5) * 60,
-    y: target.y - 85 + (variant - 0.5) * 30,
+    x: target.x - 90 + (variant - 0.5) * NUMBER_SPREAD_X,
+    y: target.y - 85 + (spread - 0.5) * NUMBER_SPREAD_Y,
   };
   const effects = [
     request('impact', landsAt, target, { size, variant }),
-    request('damage', landsAt, number, { size, variant, text: formatNumber(event.damage) }),
+    request('damage', landsAt, number, {
+      size,
+      variant,
+      text: drawableNumber(formatNumber(event.damage)),
+    }),
   ];
   if (thrown) {
     effects.unshift(
@@ -231,7 +249,7 @@ export function effectsForEvents(
     const variant = variantOf(salt, index);
     switch (event.type) {
       case 'hit':
-        return hitEffects(event, stage, motion, variant);
+        return hitEffects(event, stage, motion, variant, variantOf(salt + 0.5, index));
       case 'yokaiDefeated':
         return motion === 'full'
           ? Array.from({ length: PETALS_PER_DEFEAT }, (_, petal) =>

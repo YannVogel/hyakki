@@ -69,7 +69,7 @@ const LAYER_KINDS = {
 export type EffectLayer = keyof typeof LAYER_KINDS;
 
 const TEXT_KINDS: readonly EffectKind[] = ['damage', 'critLabel'];
-const DAMAGE_FONT_SIZE = 34;
+const DAMAGE_FONT_SIZE = 30;
 const LABEL_FONT_SIZE = 18;
 const STAR = starPath(12, 80, 58);
 const SPEED_LINES = speedLinesPath(28, 95, 260);

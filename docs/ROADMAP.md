@@ -9,7 +9,7 @@ Miroir des [milestones](https://github.com/YannVogel/hyakki/milestones) et des e
 | **2 · Fabrique à yōkai** | #3 Fabrique à yōkai | Yōkai générés, dessinés et animés en Skia, capture des shikigami | Terminée (PR #24-#27 : milestones 1 et 2) ; #55 attend une mesure sur appareil |
 | **3 · Boucle jouable** | #4 Design system et composants, #5 Écrans et boucle de jeu | Une partie se joue de la première vague au premier Festival | Terminée (PR #57) |
 | **4 · Feel & finitions** | #6 Art : héros et Gardiens, #7 Feel : effets, animations, haptique (+ #28 générateur V2) | Combat fluide et expressif, illustrations définitives | Terminée (PR #60) ; #58 (illustrations HD) et #59 (validation de l'icône) attendent Yann, 60 i/s à mesurer dans #55 |
-| **5 · Publication** | #8 Publication sur les stores | Disponible sur l'App Store et Google Play, étude de cas en ligne | À faire |
+| **5 · Publication** | #8 Publication sur les stores | Disponible sur l'App Store et Google Play, étude de cas en ligne | Préparée (PR #64) : politique de confidentialité en ligne, fiches, captures, procédure de build, étude de cas. Attendent Yann : #62 (créer l'app dans les consoles), #61 (déclarations), #47 et #48 (builds, test fermé de 14 jours, soumission), #63 (vidéo, GIF, liens stores) |
 
 ## Ordre conseillé
 

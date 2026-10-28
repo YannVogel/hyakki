@@ -7,6 +7,9 @@
 | [`check_figures.py`](check_figures.py) | Vérifie les figures : hauteur minimale, absence de frange crème, ligne des pieds des poses du héros |
 | [`bench-bignum.ts`](bench-bignum.ts) | Spike de performance de `BigNum` (1 million de multiplications) |
 | [`simulate.ts`](simulate.ts) | Harnais d'équilibrage : 3 profils de joueurs sur N jours, courbes dans `docs/balancing/` (logique dans `balancing/`) |
+| [`render-icons.ts`](render-icons.ts) | Rend l'icône et l'écran de lancement en PNG (CanvasKit, en Node) |
+| [`render-store-graphics.ts`](render-store-graphics.ts) | Icône 512 px et image de présentation 1024 × 500 de Google Play, dans `store-captures/google-play/` |
+| [`store-captures.sh`](store-captures.sh) | Captures des fiches stores sur simulateur iOS et émulateur Android (parcours Maestro `e2e/store/captures.yaml`), dans `store-captures/` |
 
 Les scripts TypeScript se lancent avec `npx tsx scripts/<script>.ts` : ils importent le moteur directement.
 

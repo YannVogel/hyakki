@@ -8,9 +8,11 @@
 
 Le jeu est **100 % gratuit** : ni publicité, ni achat intégré, ni compte, ni serveur, ni collecte de données. C'est un projet vitrine (CV et portfolio) du studio **Parallax Works**.
 
+L'histoire du projet, ses choix techniques et ses décisions : **[étude de cas](docs/case-study.md)**.
+
 ## Ce qui rend le projet intéressant
 
-- **Génération procédurale à graine** : les yōkai ordinaires sont des *tsukumogami* (objets qui prennent vie après cent ans) assemblés en code à partir de pièces vectorielles. Une graine donne toujours la même créature, et son apparence fixe ses stats. Près de 286 000 combinaisons dès la V1.
+- **Génération procédurale à graine** : les yōkai ordinaires sont des *tsukumogami* (objets qui prennent vie après cent ans) assemblés en code à partir de pièces vectorielles. Une graine donne toujours la même créature, et son apparence fixe ses stats. Près de 286 000 combinaisons en V1, plus de 1,2 million depuis la V2.
 - **Moteur de jeu en TypeScript pur** : boucle à ticks delta, grands nombres, progression hors ligne, prestige. Isolé de React, entièrement testé.
 - **Rendu Skia** : créatures, effets d'impact et animations dessinés en temps réel, sans planche de sprites.
 - **Art hybride** : le héros et les dix Gardiens (boss) sont illustrés ; tout le reste est généré.
@@ -58,8 +60,12 @@ npm run test:e2e       # Maestro, sur un simulateur où tourne l'app (voir e2e/R
 | [`docs/ART_PIPELINE.md`](docs/ART_PIPELINE.md) | Production des illustrations (prompts, découpe, nommage) |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | Journal des décisions |
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Milestones et epics |
+| [`docs/case-study.md`](docs/case-study.md) | Étude de cas : le défi, le générateur, le moteur, les décisions clés |
+| [`docs/store/`](docs/store/README.md) | Publication : politique de confidentialité, déclarations et fiches des stores |
 | [`design/`](design/README.md) | Maquettes, tokens, planches sources, prototype du générateur |
 
 ## État
 
-Pré-production : la direction artistique, les maquettes, le prototype du générateur et les illustrations du héros et des Gardiens sont prêts. Le code de l'application démarre avec la milestone **0 · Fondations** (voir les issues).
+Le jeu est jouable de bout en bout (milestones 0 à 4 : moteur, générateur, écrans, effets, icône). La milestone **5 · Publication** prépare les stores ; avancement dans [`docs/PROGRESS.md`](docs/PROGRESS.md).
+
+Site public et politique de confidentialité : <https://yannvogel.github.io/hyakki/>.

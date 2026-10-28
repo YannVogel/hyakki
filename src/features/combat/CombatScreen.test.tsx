@@ -53,6 +53,9 @@ describe('CombatScreen', () => {
     const store = await renderWith(atGuardian(false));
     expect(screen.getByTestId('guardian-cut-in')).toBeOnTheScreen();
     expect(screen.getByTestId('cut-in-name')).toHaveTextContent('Bake-danuki');
+    // One line, shrunk if needed: a long name never breaks mid-word.
+    expect(screen.getByTestId('cut-in-name')).toHaveProp('numberOfLines', 1);
+    expect(screen.getByTestId('cut-in-name')).toHaveProp('adjustsFontSizeToFit', true);
     await fireEvent.press(screen.getByTestId('guardian-engage'));
     await fireEvent.press(screen.getByTestId('guardian-flee'));
     expect(store.getState().pendingInputs.map((input) => input.type)).toEqual([

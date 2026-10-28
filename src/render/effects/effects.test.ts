@@ -37,7 +37,14 @@ describe('effectsForEvents', () => {
     expect(kinds(requests)).toEqual(['ofuda', 'impact', 'damage']);
     expect(requests[0]).toMatchObject({ delayMs: 30, x: 96, y: 168, toX: 270, toY: 222 });
     expect(requests[1].delayMs).toBe(30 + DURATION_MS.ofuda);
-    expect(requests[2].text).toBe(formatNumber(big(1234)));
+    expect(requests[2].text).toBe('1\u2009234');
+  });
+
+  it('writes numbers with a space the display font has (no narrow no-break space)', () => {
+    const event = { ...hit('tap'), damage: big(4.82e40) };
+    const [, , damage] = effectsForEvents([event], stage, 'full', 1);
+    expect(formatNumber(big(4.82e40))).toContain('\u202f');
+    expect(damage.text).toBe(formatNumber(big(4.82e40)).replace('\u202f', '\u2009'));
   });
 
   it('strikes at once for shikigami and talismans, smaller for shikigami', () => {
@@ -190,5 +197,22 @@ describe('starPath', () => {
     const path = starPath(4, 10, 5);
     expect(path.startsWith('M0.0 -10.0 L')).toBe(true);
     expect(path.split(' L')).toHaveLength(8);
+  });
+});
+
+describe('damage numbers', () => {
+  it('scatter over an area instead of a line', () => {
+    const hits = Array.from({ length: 8 }, (_, index) => hit('shikigami', false, index * 10));
+    const numbers = effectsForEvents(hits, stage, 'full', 3).filter(
+      (effect) => effect.kind === 'damage',
+    );
+    const xs = numbers.map((number) => number.x);
+    const ys = numbers.map((number) => number.y);
+    const range = (values: number[]) => Math.max(...values) - Math.min(...values);
+    expect(range(xs)).toBeGreaterThan(40);
+    expect(range(ys)).toBeGreaterThan(20);
+    // Not on one line: the y offset does not follow the x offset.
+    const slopes = numbers.slice(1).map((n, i) => (n.y - ys[i]) / (n.x - xs[i]));
+    expect(new Set(slopes.map((slope) => slope.toFixed(2))).size).toBeGreaterThan(1);
   });
 });
