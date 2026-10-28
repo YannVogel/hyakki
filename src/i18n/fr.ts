@@ -221,6 +221,8 @@ export const fr = {
     noBonus: 'Aucun bonus d’équipe',
     tileLabel: (name: string, level: number, rarity: string) =>
       `${name}, niveau ${level}, ${rarity}`,
+    inTeamBadge: 'Équipe',
+    inTeamLabel: (tile: string) => `${tile}, dans l’équipe`,
     stats: { hp: 'PV', attack: 'Attaque', defense: 'Défense', speed: 'Vitesse', crit: 'Critique' },
     statValue: (label: string, value: string) => `${label} : ${value}`,
     traits: 'Ce que son apparence lui donne',
