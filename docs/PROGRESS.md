@@ -7,7 +7,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 6 · Retours de jeu (5 · Publication attend Yann : #47, #48, #63) |
-| Dernière issue terminée | #75 Vignette du prochain Gardien dans l'en-tête de combat |
+| Dernière issue terminée | #73 Voile de recharge des talismans, du bas vers le haut |
 | Prochaine issue | #47 : test fermé 1.0.0 en examen chez Google, il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (3) dans TestFlight, soumission à décider par Yann |
 
 ## Milestones
@@ -20,7 +20,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 3 · Boucle jouable | Terminée | #57 |
 | 4 · Feel & finitions | Terminée (#58 attend Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
-| 6 · Retours de jeu | En cours : #75 fait | |
+| 6 · Retours de jeu | En cours : #75, #73 faits | #81 |
 
 ## Points en suspens
 
