@@ -19,14 +19,14 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
 | 3 · Boucle jouable | Terminée | #57 |
 | 4 · Feel & finitions | Terminée (#58 et #59 attendent Yann) | #60 |
-| 5 · Publication | Préparée : le reste attend Yann (#47, #48, #61, #62, #63) | #64 |
+| 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 
 ## Points en suspens
 
 - Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
 - Maestro sur Android : l'émulateur doit avoir 4 Go de RAM (`-memory 4096`), sinon les parcours calent ; chaque frappe reste lente (plusieurs dizaines de secondes) car l'écran animé ne se stabilise jamais. Sur iOS : 8/8 avec le build de la milestone 4.
 - Captures des stores : `scripts/store-captures.sh [ios|android]` (Metro lancé), sorties non versionnées dans `store-captures/`.
-- Consoles des stores (28/10) : app créée des deux côtés, fiches, captures, catégories, prix et déclarations factuelles saisis. Restent à Yann (#62, #61) les attestations, les données personnelles (e-mail de contact, coordonnées pour l'examen Apple) et les choix : public cible, mention IA de la fiche Google Play. Classifications d'âge faites (App Store 13+, PEGI 7).
+- Consoles des stores (28/10) : tout est saisi, avec l'accord de Yann pour les attestations et ses coordonnées. Fiches, captures, catégories, prix, confidentialité (publiée chez Apple, envoyée chez Google), classifications (App Store 13+, PEGI 7), public 13 ans et plus, mention IA. Il ne manque que les builds (#47, #48), et un numéro de classification local pour la Corée du Sud si on y distribue l'app.
 - Formats de captures exigés en octobre 2026 : App Store, iPhone 6,3 pouces (1206 × 2622) ; Google Play, 9:16 exact (1080 × 1920).
 - CocoaPods exige une locale UTF-8 : `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 npx expo run:ios`.
 - Équilibrage : le harnais mesure une graine ; vérifier une cible « au jour près » sur plusieurs défilés (`runProfile(profil, jours, graine)`).
@@ -46,8 +46,6 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
 - #58 Régénérer les 20 illustrations en HD dans ChatGPT (procédure et outils prêts).
 - #59 Valider l'icône et l'écran de lancement.
-- #62 Créer Hyakki dans les deux consoles (deux déclarations Play à cocher, reconnexion Apple), puis saisir les fiches.
-- #61 Déclarer « aucune donnée collectée » dans les deux consoles (réponses prêtes dans `docs/store/confidentialite.md`).
 - #47 Google Play : build EAS, test fermé de 14 jours, production (`docs/store/publication.md`).
 - #48 App Store : build EAS, TestFlight, soumission (`docs/store/publication.md`).
 - #63 Vidéo de 30 s, GIF du générateur et liens stores de l'étude de cas.

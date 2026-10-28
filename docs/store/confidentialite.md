@@ -29,11 +29,11 @@ Pas de manifeste de confidentialité spécifique à ajouter : les modules Expo e
 | Sécurité des données › Votre application collecte-t-elle ou partage-t-elle des données utilisateur des types requis ? | **Non** |
 | Sécurité des données › Suppression de compte | L'application ne permet pas de créer de compte |
 | Applis gouvernementales, financières, santé, actualités | Non |
-| Public cible et contenu | **13 ans et plus** recommandé (voir ci-dessous) |
+| Public cible et contenu | **13 ans et plus** : tranches 13-15, 16-17 et 18+ (voir ci-dessous) |
 
 ### Public cible : pourquoi 13 ans et plus
 
-Le style cartoon plaît aux enfants, mais cibler les moins de 13 ans fait entrer l'app dans le programme « Familles » de Google (exigences et revue supplémentaires). Comme Hyakki ne collecte rien et n'a ni pub ni achat, ce programme ne poserait pas de problème de fond, mais il ajoute une revue pour un bénéfice limité. À la question « l'app pourrait-elle attirer involontairement les enfants ? », répondre honnêtement selon la fiche finale. Décision à confirmer par Yann.
+Le style cartoon plaît aux enfants, mais cibler les moins de 13 ans fait entrer l'app dans le programme « Familles » de Google (exigences et revue supplémentaires). Comme Hyakki ne collecte rien et n'a ni pub ni achat, ce programme ne poserait pas de problème de fond, mais il ajoute une revue pour un bénéfice limité. Décision de Yann (28/10/2026) : 13 ans et plus, en cohérence avec le 13+ de l'App Store.
 
 ### Permissions Android déclarées
 

@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-28 — Public 13 ans et plus, illustrations IA signalées
+
+- **Décision** (Yann) : sur Google Play, le public cible est 13 ans et plus (13-15, 16-17, 18+). La fiche signale comme générés par IA les visuels qui montrent le héros ou un Gardien.
+- **Raison** : cohérent avec le 13+ de l'App Store ; éviter le programme « Familles » de Google et sa revue supplémentaire. Les illustrations viennent de ChatGPT : le dire est conforme aux règles du store et à l'honnêteté du projet.
+- **Conséquence** : refaire la déclaration IA à chaque nouvelle capture ou image ; viser les moins de 13 ans plus tard demanderait d'entrer dans le programme Familles.
+
 ## 2026-10-28 — Le kiseru reste, déclaré comme référence au tabac
 
 - **Décision** (Yann) : l'accessoire « kiseru » du générateur V2 reste dans le jeu. Les deux questionnaires de classification le déclarent comme référence au tabac peu fréquente.
