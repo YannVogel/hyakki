@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-28 — Brûlures plafonnées par les frappes, sans plancher
+
+- **Décision** (Yann) : une brûlure n'inflige jamais plus de 9 fois les dégâts par seconde espérés des frappes (`BALANCE.burn.maxHitsMultiple`). Elle n'a plus de plancher et peut donc achever l'ennemi. Elle remplace la règle du 2026-10-27, où une brûlure s'arrêtait quand il restait 10 % des PV.
+- **Raison** : sur un gros sac à PV, la brûlure vidait 90 % de la barre en quelques secondes, puis la barre se bloquait aux 9/10ᵉ et seules les frappes entamaient le dernier dixième. La barre ne disait donc rien du temps restant. Plafonnée par les frappes, la brûlure fait descendre la barre à vitesse constante et la progression reste liée à la puissance du joueur. Le multiple 9 garde le même temps pour tuer aux deux extrêmes : brûlure nulle, et brûlure très forte face aux PV, où l'ancien plancher laissait aussi 10 % aux frappes. Entre les deux, on tue jusqu'à 1,9 fois plus vite.
+- **Conséquence** : toutes les cibles du harnais restent tenues (`GAME_DESIGN.md` § 5.2). La simulation hors ligne applique le même plafond. Une mise à mort par brûlure peut faire apparaître un Gardien au milieu d'un pas : les minuteurs d'attaque s'arrêtent à cet instant. Si le yōkai de la vague 99 meurt de sa brûlure, `attackTimers` peut garder une fraction de milliseconde, ce que la sauvegarde accepte.
+
 ## 2026-10-28 — Bruitages Kenney (CC0), musique Suno
 
 - **Décision** (Yann) : les 15 bruitages viennent des packs audio de Kenney (CC0), choisis à l'oreille (liste dans `assets/README.md`). La musique d'ambiance est « Hyakki - Le défilé en fête » (version A), générée sur Suno avec l'offre Pro de Yann.

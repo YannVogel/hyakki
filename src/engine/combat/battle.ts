@@ -6,7 +6,7 @@ import {
   type Shikigami,
   type TalismanId,
 } from '../gameState';
-import { add, type BigNum, div, gte, lt, mul, sub, toNumber, ZERO } from '../numbers';
+import { add, type BigNum, div, gt, gte, min, mul, sub, toNumber, ZERO } from '../numbers';
 import { createRng, type Rng } from '../rng';
 import { addCapture, captureChance } from '../shikigami';
 import type { GeneratorVersion } from '../yokai';
@@ -19,7 +19,7 @@ import {
   isGuardianWave,
   tierMultiplier,
 } from './guardians';
-import { type CombatPower, combatPower } from './power';
+import { type CombatPower, combatPower, expectedDps } from './power';
 
 /** Mutable working copy of the fight during one step. */
 export interface Battle {
@@ -239,15 +239,20 @@ export function strike(battle: Battle, attacker: number): void {
   }
 }
 
-/** Burns stop when this share of the max HP is left: hits must finish the enemy. */
-export const burnFloor = (maxHp: BigNum): BigNum => mul(maxHp, 1 - BALANCE.burn.floorFraction);
+/**
+ * Burn damage per second: `burnRate` of the max HP, but never more than `maxHitsMultiple` times
+ * the hits' expected damage, so that percentage burns cannot make progress independent of the
+ * player's power.
+ */
+export const burnDps = (maxHp: BigNum, burnRate: number, hitsDps: BigNum): BigNum =>
+  min(mul(maxHp, burnRate), mul(hitsDps, BALANCE.burn.maxHitsMultiple));
 
 /**
- * Lets `durationMs` pass with the continuous effects: burn and the guardian timer. A burn never
- * finishes an enemy: it stops at 10 % of its max HP, so that percentage burns cannot make
- * progress independent of the player's power.
+ * Lets `durationMs` pass with the continuous effects: burn and the guardian timer. Capped by the
+ * hits, a burn lowers the HP at a steady pace and may finish the enemy.
  */
 export function advance(battle: Battle, durationMs: number): void {
+  const hitsDps = expectedDps(battle.power);
   let left = durationMs;
   while (left > 0 && !isPaused(battle)) {
     const { effects } = battle;
@@ -255,13 +260,14 @@ export function advance(battle: Battle, durationMs: number): void {
     const burnRate =
       (battle.power.burnRate + talismanBurn) *
       (battle.guardian === null ? 1 : BALANCE.guardian.burnFactor);
-    const floor = burnFloor(battle.maxHp);
-    const burning = burnRate > 0 && lt(battle.damage, floor);
-    const burnPerMs = mul(battle.maxHp, burnRate / 1000);
-    const msToFloor = burning ? toNumber(div(sub(floor, battle.damage), burnPerMs)) : Infinity;
+    const burnPerMs = div(burnDps(battle.maxHp, burnRate, hitsDps), 1000);
+    const burning = gt(burnPerMs, ZERO);
+    const msToKill = burning
+      ? toNumber(div(sub(battle.maxHp, battle.damage), burnPerMs))
+      : Infinity;
     // The talisman burn stops at its exact end: the burn rate changes there.
     const burnEnd = effects.burnMs > 0 ? effects.burnMs : Infinity;
-    const piece = Math.min(left, msToFloor, burnEnd);
+    const piece = Math.min(left, msToKill, burnEnd);
     if (battle.guardian !== null) {
       battle.guardian.timeLeftMs -= piece;
     }
@@ -269,8 +275,8 @@ export function advance(battle: Battle, durationMs: number): void {
     effects.soulsBoostMs = Math.max(0, effects.soulsBoostMs - piece);
     battle.elapsed += piece;
     left -= piece;
-    if (piece === msToFloor) {
-      battle.damage = floor;
+    if (piece === msToKill) {
+      defeatEnemy(battle);
     } else if (burning) {
       battle.damage = add(battle.damage, mul(burnPerMs, piece));
     }

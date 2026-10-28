@@ -35,8 +35,8 @@ export const BALANCE = {
     tapMultiplier: 1,
   },
   burn: {
-    /** Burns stop when this share of the enemy's max HP is left (they never finish it). */
-    floorFraction: 0.1,
+    /** A burn deals at most this multiple of the hits' expected damage per second. */
+    maxHitsMultiple: 9,
   },
   crit: {
     baseChance: 0.05,

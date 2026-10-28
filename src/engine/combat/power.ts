@@ -1,6 +1,6 @@
 import { BALANCE } from '../balance';
 import type { GameState } from '../gameState';
-import { type BigNum, mul, pow } from '../numbers';
+import { add, type BigNum, mul, pow, ZERO } from '../numbers';
 import { festivalBonus } from '../prestige';
 import { shikigamiHitRatio, shikigamiIntervalMs, teamBonus, teamMembers } from '../shikigami';
 
@@ -52,4 +52,18 @@ export function combatPower(state: GameState): CombatPower {
     burnRate: upgrades.foxfire.burnPerLevel * foxfire + bonus.burn,
     soulsMultiplier: (1 + upgrades.bell.soulsPerLevel * bell) * (1 + bonus.souls) * festival,
   };
+}
+
+/** Expected damage per second of the automatic hits (critical hits averaged, taps excluded). */
+export function expectedDps(power: CombatPower): BigNum {
+  const critFactor = 1 + power.critChance * (BALANCE.crit.multiplier - 1);
+  const attackers = [
+    { hitDamage: power.heroHitDamage, intervalMs: power.heroIntervalMs },
+    ...power.team,
+  ];
+  return attackers.reduce(
+    (total, attacker) =>
+      add(total, mul(attacker.hitDamage, (critFactor * 1000) / attacker.intervalMs)),
+    ZERO,
+  );
 }

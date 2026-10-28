@@ -65,15 +65,19 @@ describe('simulateOffline', () => {
     );
   });
 
-  it('stays close to active play over 10 minutes (±1 wave, ±15 % souls) at full efficiency', () => {
-    for (const seed of [1, 2, 3, 4, 5]) {
-      const state = stateAtWave(seed, 20, { blade: 60 });
-      const active = step(state, 600_000).state;
-      const offline = simulateOffline(state, 600_000, 1).state;
-      expect(Math.abs(offline.parade.wave - active.parade.wave)).toBeLessThanOrEqual(1);
-      expect(Math.abs(toNumber(div(offline.souls, active.souls)) - 1)).toBeLessThan(0.15);
-    }
-  });
+  // With a strong fox fire and a weak Blade, the burn soon runs at its cap (9 times the hits).
+  it.each([{ blade: 60 }, { blade: 20, foxfire: 200 }])(
+    'stays close to active play over 10 minutes (±1 wave, ±15 % souls) at full efficiency: %o',
+    (sanctuary) => {
+      for (const seed of [1, 2, 3, 4, 5]) {
+        const state = stateAtWave(seed, 20, sanctuary);
+        const active = step(state, 600_000).state;
+        const offline = simulateOffline(state, 600_000, 1).state;
+        expect(Math.abs(offline.parade.wave - active.parade.wave)).toBeLessThanOrEqual(1);
+        expect(Math.abs(toNumber(div(offline.souls, active.souls)) - 1)).toBeLessThan(0.15);
+      }
+    },
+  );
 
   it('earns half as much damage as active play by default', () => {
     const state = stateAtWave(7, 60, { blade: 5 });

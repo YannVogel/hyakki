@@ -84,6 +84,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `CombatInput` | Actions du joueur depuis le pas précédent (`tap`…), appliquées au début du pas. |
 | `CombatEvent` | Ce que l'UI anime : `hit` (source, dégâts, critique), `yokaiDefeated` (âmes), `waveStarted`… avec `atMs`, le décalage dans le pas. |
 | `combatPower(state)` | Dégâts, chance de critique, brûlure et multiplicateur d'âmes dérivés de l'état. |
+| `expectedDps(power)` | Dégâts espérés par seconde des frappes automatiques (critiques moyennés) ; plafonne aussi les brûlures (×9). |
 | `waveHp`, `waveSouls`, `yokaiMaxHp`, `yokaiProfile` | Formules de `docs/GAME_DESIGN.md` § 5. |
 | `GUARDIANS`, `isGuardianWave`, `guardianAt`, `guardianMaxHp`, `guardianOfuda`, `tierMultiplier` | Gardiens : ordre, faiblesse, cycle éveillé, PV, ofuda, bonus de palier. |
 | Entrées `engageGuardian`, `fleeGuardian`, `challengeGuardian` | Affronter après le cut-in, fuir, retenter depuis le farm. |
@@ -116,7 +117,6 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 |---|---|
 | `simulateOffline(state, elapsedMs)` | Ce que l'équipe a accompli en l'absence du joueur : `{ state, report }`. Analytique, plafonné, s'arrête devant le Gardien suivant ; `elapsedMs ≤ 0` ne donne rien. |
 | `offlineCapMs(state)` | Plafond : 8 h + 1 h par niveau de Lanternes, 24 h au plus. |
-| `expectedDps(power)` | Dégâts espérés par seconde (critiques moyennés). |
 
 ### `prestige/` — Festival
 
