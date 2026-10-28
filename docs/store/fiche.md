@@ -48,8 +48,8 @@ scripts/store-captures.sh        # iOS puis Android ; ou : ios, android
 
 | Store | Appareil | Taille | Fichiers |
 |---|---|---|---|
-| App Store | iPhone 17 Pro Max (6,9 pouces, taille exigée) | 1320 × 2868 | `store-captures/ios/01-combat.png` … `06-gardien.png` |
-| Google Play | Émulateur Android (barre d'état retirée pour respecter le ratio 2:1 maximal) | 1080 × 2160 | `store-captures/android/…` |
+| App Store | iPhone 17 (6,3 pouces, taille de base d'App Store Connect, réutilisée pour les autres iPhone) | 1206 × 2622 | `store-captures/ios/01-combat.png` … `06-gardien.png` |
+| Google Play | Émulateur Android : barres système retirées, puis ramené au 9:16 exigé (côtés complétés avec le crème de l'app) | 1080 × 1920 | `store-captures/android/…` |
 
 Ordre conseillé : 01 Combat (effets), 02 Shikigami (collection et équipe), 03 Sanctuaire, 04 Festival, 05 Retour hors ligne, 06 Gardien. Le dossier `store-captures/` n'est pas versionné : on le régénère.
 
@@ -59,7 +59,11 @@ Google Play demande aussi l'icône 512 × 512 et l'image de présentation 1024 �
 
 Aucune donnée à déclarer, aucun contenu généré par les joueurs, aucune communication entre joueurs, aucun accès web, aucun achat, aucune publicité, aucun jeu d'argent.
 
-| Questionnaire | Réponse | Résultat attendu |
+Réponses saisies le 28/10/2026, à refaire si le contenu change (nouvel accessoire, nouveau Gardien) :
+
+| Questionnaire | Réponses | Résultat |
 |---|---|---|
-| App Store (âge) | Violence de dessin animé ou fantastique : **peu fréquente / légère** (on « purifie » des créatures, sans sang ni blessure). Thèmes d'horreur ou de peur : **peu fréquents / légers** (Gashadokuro, squelette géant, en style cartoon). Tout le reste : **aucun**. | 9+ (calculé par la console) |
-| Google Play (IARC) | Catégorie Jeu. Violence : oui, **fantastique / dessin animé**, sans sang, contre des créatures non humaines. Peur : non. Sexualité, langage, drogues, jeux d'argent, achats, interactions : non. | PEGI 7 environ (calculé par l'IARC) |
+| App Store | Violence de dessin animé ou fantastique : **fréquente** (le combat est permanent, mais léger : on « purifie » des créatures, sans sang). Armes : **peu fréquentes** (le kanabō clouté d'Ibaraki-dōji). Horreur ou peur : **peu fréquentes** (Gashadokuro, regards du cut-in). Alcool, tabac ou drogues : **peu fréquent** (kiseru). Violence réaliste, vulgarité, sexualité, médical, hasard, coffres à butin : **aucun**. | **13+** (12+ au Vietnam et au Brésil ; la Corée du Sud demande un numéro de classification local) |
+| Google Play (IARC) | Catégorie Jeu. Violence fantastique et irréaliste, sans sang, style enfantin : contre des créatures (fréquente, en plan éloigné) et contre l'humain (le héros assommé après un Gardien raté, rare). Peur : éléments effrayants rares. Tabac : consommation, rare, jamais par le joueur. Sexualité, jeux d'argent, langage, humour grossier, achats, interactions, localisation : non. | **PEGI 7**, USK 6, ESRB 10+, ClassInd 10, IARC 7+ ; Corée du Sud 15+, Taïwan 15 |
+
+Le kiseru (environ 7 % des yōkai V2, dessiné à la bouche avec de la fumée) est gardé et déclaré : décision de Yann, voir [`DECISIONS.md`](../DECISIONS.md).

@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-28 — Le kiseru reste, déclaré comme référence au tabac
+
+- **Décision** (Yann) : l'accessoire « kiseru » du générateur V2 reste dans le jeu. Les deux questionnaires de classification le déclarent comme référence au tabac peu fréquente.
+- **Raison** : le retirer demanderait un générateur V3 pour un gain limité ; le déclarer honnêtement évite un refus ou une reclassification en examen.
+- **Conséquence** : App Store 13+, PEGI 7 (ESRB 10+). Les réponses complètes sont dans `docs/store/fiche.md` ; tout nouvel élément sensible (accessoire, Gardien) impose de refaire les questionnaires.
+
 ## 2026-10-28 — Builds de production avec EAS, version confirmée à chaque build
 
 - **Décision** : les builds de production (AAB Android, IPA iOS) et leur envoi aux stores passent par l'offre gratuite d'EAS (`eas.json`, profil `production`). Les numéros de build sont gérés par EAS (`appVersionSource: remote`, `autoIncrement`) ; la version affichée reste celle d'`app.config.ts` (1.0.0) et se confirme avant chaque build. `ITSAppUsesNonExemptEncryption` vaut `false` : l'app ne fait aucun appel réseau.

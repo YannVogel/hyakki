@@ -42,5 +42,9 @@ Le style cartoon plaît aux enfants, mais cibler les moins de 13 ans fait entrer
 | `INTERNET`, `ACCESS_NETWORK_STATE` | Ajoutées par React Native et Expo (serveur de développement) ; l'app publiée ne fait aucune requête |
 | `VIBRATE` | Retours haptiques (désactivables) |
 | `POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED`, `WAKE_LOCK` | Notification locale « plafond hors ligne atteint » (expo-notifications) |
+| `com.google.android.c2dm.permission.RECEIVE` | Ajoutée par Firebase Messaging, une dépendance d'expo-notifications. Inutilisée : sans `google-services.json`, Firebase ne s'initialise pas et l'app ne reçoit aucune notification push |
+| `BIND_GET_INSTALL_REFERRER_SERVICE` | Ajoutée par la bibliothèque Install Referrer, une dépendance d'expo-application. Inutilisée : le jeu ne lit jamais le référent d'installation |
 
 Bloquées dans `app.config.ts` (ajoutées par le modèle Expo, inutiles) : stockage externe et affichage par-dessus les autres apps.
+
+À envisager : bloquer aussi les deux permissions inutilisées ci-dessus, pour que le manifeste corresponde exactement à « aucune donnée ». Il faut alors vérifier sur un build de production que la notification locale fonctionne toujours.
