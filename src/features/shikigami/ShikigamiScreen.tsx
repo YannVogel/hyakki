@@ -18,6 +18,7 @@ import {
   radii,
   rarityColors,
   spacing,
+  strokes,
 } from '@/ui';
 
 import { mainTeamBonus, RARITY_TOKEN } from './rarity';
@@ -27,13 +28,18 @@ const COLUMNS = 3;
 const THUMB = 84;
 
 function Tile({ shikigami, onOpen }: { shikigami: ShikigamiView; onOpen: (seed: number) => void }) {
-  const rarity = RARITY_NAMES[shikigami.spec.rarity];
+  const text = strings.shikigami;
+  const label = text.tileLabel(
+    shikigami.name,
+    shikigami.level,
+    RARITY_NAMES[shikigami.spec.rarity],
+  );
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={strings.shikigami.tileLabel(shikigami.name, shikigami.level, rarity)}
+      accessibilityLabel={shikigami.inTeam ? text.inTeamLabel(label) : label}
       onPress={() => onOpen(shikigami.seed)}
-      style={styles.tile}
+      style={[styles.tile, shikigami.inTeam && styles.inTeam]}
       testID={`shikigami-${shikigami.seed}`}
     >
       <View
@@ -47,9 +53,15 @@ function Tile({ shikigami, onOpen }: { shikigami: ShikigamiView; onOpen: (seed: 
       <Text style={bodyText('xs', 800)} numberOfLines={1}>
         {shikigami.name}
       </Text>
-      <Text style={[bodyText('xs', 700), styles.muted]}>
-        {strings.shikigami.level(shikigami.level)}
-      </Text>
+      <Text style={[bodyText('xs', 700), styles.muted]}>{text.level(shikigami.level)}</Text>
+      {shikigami.inTeam ? (
+        <Text
+          style={[bodyText('xs', 800), styles.badge]}
+          testID={`shikigami-${shikigami.seed}-badge`}
+        >
+          {text.inTeamBadge}
+        </Text>
+      ) : null}
     </Pressable>
   );
 }
@@ -186,6 +198,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.paper,
     ...outline('control'),
     ...hardShadow('small'),
+  },
+  // A team member stands out in the grid: yellow tile, thicker outline, « Équipe » badge.
+  inTeam: { backgroundColor: colors.yellow, borderWidth: strokes.card },
+  badge: {
+    position: 'absolute',
+    top: spacing[1],
+    right: spacing[1],
+    paddingHorizontal: spacing[1] + 2,
+    overflow: 'hidden',
+    borderRadius: radii.chip,
+    color: colors.paper,
+    backgroundColor: colors.ink,
   },
   thumb: { borderRadius: radii.chip, ...outline('small') },
 });

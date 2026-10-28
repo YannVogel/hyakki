@@ -1,7 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react-native';
 
 import { big, createNewGame, type GameState, generate, nameOf } from '@/engine';
-import { strings } from '@/i18n';
+import { RARITY_NAMES, strings } from '@/i18n';
 
 import { renderScreen } from '../testing/renderScreen';
 import { ShikigamiScreen } from './ShikigamiScreen';
@@ -42,6 +42,34 @@ describe('ShikigamiScreen', () => {
     expect(store.getState().game.team).toEqual([22]);
     await fireEvent.press(screen.getByTestId('shikigami-team'));
     expect(store.getState().game.team).toEqual([]);
+  });
+
+  it('marks the team members in the grid, for the eye and for screen readers', async () => {
+    await renderScreen(<ShikigamiScreen />, owning([11, 22], [22]));
+    const label = (seed: number) =>
+      strings.shikigami.tileLabel(
+        nameOf(generate(seed, 1)),
+        1,
+        RARITY_NAMES[generate(seed, 1).rarity],
+      );
+    expect(screen.getByTestId('shikigami-22')).toHaveProp(
+      'accessibilityLabel',
+      strings.shikigami.inTeamLabel(label(22)),
+    );
+    expect(screen.getByTestId('shikigami-22-badge')).toHaveTextContent(
+      strings.shikigami.inTeamBadge,
+    );
+    expect(screen.getByTestId('shikigami-11')).toHaveProp('accessibilityLabel', label(11));
+    expect(screen.queryByTestId('shikigami-11-badge')).toBeNull();
+  });
+
+  it('follows the team changes without leaving the screen', async () => {
+    await renderScreen(<ShikigamiScreen />, owning([11, 22]));
+    await fireEvent.press(screen.getByTestId('shikigami-22'));
+    await fireEvent.press(screen.getByTestId('shikigami-team'));
+    expect(screen.getByTestId('shikigami-22-badge')).toBeOnTheScreen();
+    await fireEvent.press(screen.getByTestId('shikigami-team'));
+    expect(screen.queryByTestId('shikigami-22-badge')).toBeNull();
   });
 
   it('refuses a fourth team member', async () => {
