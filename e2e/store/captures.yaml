@@ -54,6 +54,11 @@ appId: com.parallaxworks.hyakki
     visible:
       id: combat-wave
     timeout: 10000
+# Sur un émulateur lent, le défilé vitrine atteint parfois le Gardien suivant pendant les captures :
+# son cut-in cacherait l'en-tête.
+- tapOn:
+    id: guardian-flee
+    optional: true
 - longPressOn:
     id: dev-hub
 # Le hub peut mettre plusieurs secondes à s'ouvrir sur un émulateur lent.

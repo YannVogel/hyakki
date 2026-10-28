@@ -36,12 +36,14 @@ capture_ios() {
   xcrun simctl install "$udid" "$app"
   xcrun simctl status_bar "$udid" override --time 9:41 --dataNetwork wifi --wifiBars 3 \
     --cellularMode active --cellularBars 4 --batteryState charged --batteryLevel 100
-  run_flow "$udid" "$OUT/ios"
+  local status=0
+  run_flow "$udid" "$OUT/ios" || status=$?
   xcrun simctl status_bar "$udid" clear
+  return "$status"
 }
 
 capture_android() {
-  local serial
+  local serial status=0
   serial="$(adb devices | awk 'NR > 1 && $2 == "device" { print $1; exit }')"
   adb -s "$serial" reverse tcp:8081 tcp:8081 >/dev/null
   demo() { adb -s "$serial" shell am broadcast -a com.android.systemui.demo -e command "$@" >/dev/null; }
@@ -51,18 +53,24 @@ capture_android() {
   demo battery -e level 100 -e plugged false
   demo network -e wifi show -e level 4 -e mobile show -e level 4
   demo notifications -e visible false
-  run_flow "$serial" "$OUT/android"
+  run_flow "$serial" "$OUT/android" || status=$?
   demo exit
-  # Google Play refuse un côté plus de deux fois plus long que l'autre : on retire le haut de
-  # l'écran (barre d'état) pour revenir à 2:1.
+  # Google Play refuse un côté plus de deux fois plus long que l'autre : on retire la barre d'état
+  # et la barre de navigation (24 dp chacune) en recadrant au centre (sips ignore --cropOffset).
+  local bar
+  bar=$((24 * $(adb -s "$serial" shell wm density | awk 'END { print $NF }' | tr -d '\r') / 160))
   for file in "$OUT"/android/*.png; do
-    local width height
+    [ -e "$file" ] || continue
+    local width height target
     width="$(sips -g pixelWidth "$file" | awk '/pixelWidth/ { print $2 }')"
     height="$(sips -g pixelHeight "$file" | awk '/pixelHeight/ { print $2 }')"
+    target=$((height - 2 * bar))
+    [ "$target" -le $((width * 2)) ] || target=$((width * 2))
     if [ "$height" -gt $((width * 2)) ]; then
-      sips --cropOffset $((height - width * 2)) 0 -c $((width * 2)) "$width" "$file" >/dev/null
+      sips -c "$target" "$width" "$file" >/dev/null
     fi
   done
+  return "$status"
 }
 
 case "$TARGET" in
