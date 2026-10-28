@@ -63,6 +63,10 @@ const config: ExpoConfig = {
   experiments: {
     reactCompiler: true,
   },
+  // EAS Build project (production builds, see docs/store/publication.md).
+  extra: {
+    eas: { projectId: 'f9510b10-006b-4a87-b93b-402ac1badcd0' },
+  },
 };
 
 export default config;
