@@ -28,12 +28,12 @@ export interface TalismanBarProps {
   readonly onCast: (talisman: TalismanId) => void;
 }
 
-/** The three talismans; a recharging one shows its seconds left. */
+/** The three talismans; a recharging one is veiled from the bottom up and shows its seconds left. */
 export function TalismanBar({ talismans, onCast }: TalismanBarProps) {
   const haptics = useHaptics();
   return (
     <View style={styles.bar}>
-      {talismans.map(({ id, cooldownMs }) => {
+      {talismans.map(({ id, cooldownMs, cooldownRatio }) => {
         const { name, kanji } = strings.talismans[id];
         const seconds = Math.ceil(cooldownMs / 1000);
         const ready = cooldownMs <= 0;
@@ -62,12 +62,18 @@ export function TalismanBar({ talismans, onCast }: TalismanBarProps) {
             <OutlinedText style={displayText('4xl')}>{kanji}</OutlinedText>
             <Text style={bodyText('md', 800)}>{name}</Text>
             {ready ? null : (
-              <View style={styles.cooldown} pointerEvents="none">
-                <View style={styles.shade} />
-                <OutlinedText style={displayText('xl')}>
-                  {strings.combat.seconds(seconds)}
-                </OutlinedText>
-              </View>
+              <>
+                <View
+                  style={[styles.shade, { height: `${cooldownRatio * 100}%` }]}
+                  pointerEvents="none"
+                  testID={`talisman-${id}-shade`}
+                />
+                <View style={styles.countdown} pointerEvents="none">
+                  <OutlinedText style={displayText('xl')}>
+                    {strings.combat.seconds(seconds)}
+                  </OutlinedText>
+                </View>
+              </>
             )}
           </Pressable>
         );
@@ -95,14 +101,13 @@ const styles = StyleSheet.create({
     borderColor: colors.ink,
   },
   pressed: { transform: [{ translateY: 3 }] },
-  cooldown: {
+  shade: {
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 0,
-    height: '58%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    bottom: 0,
+    backgroundColor: colors.ink,
+    opacity: 0.62,
   },
-  shade: { ...StyleSheet.absoluteFill, backgroundColor: colors.ink, opacity: 0.62 },
+  countdown: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center' },
 });
