@@ -1,6 +1,6 @@
 # `src/services` — les effets de bord
 
-Accès à la plateforme : persistance (MMKV), notifications locales, haptique, horloge.
+Accès à la plateforme : persistance (MMKV), notifications locales, haptique, son (`audio.ts` : bruitages préchargés, anti-rafale, deux musiques en boucle), horloge.
 
 ## Règles
 

@@ -1,6 +1,6 @@
 # `src/ui` — le design system
 
-Tokens (`tokens.ts`, lus depuis [`design/tokens.json`](../../design/tokens.json)), aides de style (`styles.ts`), polices (`fonts.ts`), texte cerné (`OutlinedText`) et composants de base (`Button`, `Card`, `Pill`…).
+Tokens (`tokens.ts`, lus depuis [`design/tokens.json`](../../design/tokens.json)), aides de style (`styles.ts`), polices (`fonts.ts`), texte cerné (`OutlinedText`) et composants de base (`Button`, `Card`, `Pill`, `Slider`…). Les retours haptiques et sonores passent par des contextes (`useHaptics`, `useSound`) que la racine de l'app remplit.
 
 ## Règles
 

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useHaptics } from './haptics';
+import { useSound } from './sound';
 import { bodyText, outline } from './styles';
 import { colors, radii, spacing, strokes } from './tokens';
 
@@ -28,6 +29,7 @@ export function TabBar<K extends string>({
   accessibilityLabel,
 }: TabBarProps<K>) {
   const haptics = useHaptics();
+  const play = useSound();
   return (
     <View accessibilityRole="tablist" accessibilityLabel={accessibilityLabel} style={styles.bar}>
       {tabs.map((tab) => {
@@ -42,6 +44,7 @@ export function TabBar<K extends string>({
             onPress={() => {
               if (!selected) {
                 haptics('selection');
+                play('ui');
                 onSelect(tab.key);
               }
             }}

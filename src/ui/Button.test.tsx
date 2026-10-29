@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import { Button } from './Button';
 import { HapticsProvider } from './haptics';
+import { SoundProvider } from './sound';
 import { colors } from './tokens';
 
 describe('Button', () => {
@@ -16,6 +17,19 @@ describe('Button', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Affronter !' }));
     expect(onPress).toHaveBeenCalledTimes(1);
     expect(haptics).toHaveBeenCalledWith('selection');
+  });
+
+  it('clicks on press, or plays the sound it is given', async () => {
+    const sound = jest.fn();
+    await render(
+      <SoundProvider trigger={sound}>
+        <Button label="Retour" onPress={jest.fn()} />
+        <Button label="Acheter" onPress={jest.fn()} sound="purchase" />
+      </SoundProvider>,
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Retour' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Acheter' }));
+    expect(sound.mock.calls).toEqual([['ui'], ['purchase']]);
   });
 
   it('uses the variant color', async () => {

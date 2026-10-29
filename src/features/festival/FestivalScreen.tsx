@@ -119,6 +119,7 @@ export function FestivalScreen({ onDone }: FestivalScreenProps) {
               label={text.confirm}
               variant="danger"
               onPress={launch}
+              sound="festival"
               testID="festival-confirm-yes"
             />
             <Button

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useHaptics } from './haptics';
+import { type SoundId, useSound } from './sound';
 import { bodyText, displayText, hardShadow, outline } from './styles';
 import { colors, radii, spacing, touchTarget } from './tokens';
 
@@ -18,6 +19,8 @@ export interface ButtonProps {
   /** Spoken instead of the label when it needs more context (« Acheter ×10 pour 1,2 M âmes »). */
   readonly accessibilityLabel?: string;
   readonly accessibilityHint?: string;
+  /** Played on press: a click by default, a purchase or the Festival jingle where it fits. */
+  readonly sound?: SoundId;
   readonly testID?: string;
 }
 
@@ -37,9 +40,11 @@ export function Button({
   icon,
   accessibilityLabel,
   accessibilityHint,
+  sound = 'ui',
   testID,
 }: ButtonProps) {
   const haptics = useHaptics();
+  const play = useSound();
   const large = size === 'large';
   return (
     <Pressable
@@ -50,6 +55,7 @@ export function Button({
       disabled={disabled}
       onPress={() => {
         haptics('selection');
+        play(sound);
         onPress();
       }}
       testID={testID}

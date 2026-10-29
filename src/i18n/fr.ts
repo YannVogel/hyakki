@@ -152,6 +152,16 @@ export const fr = {
     title: 'Réglages',
     open: 'Réglages',
     back: 'Retour',
+    sound: {
+      label: 'Sons',
+      description: 'Frappes, captures, Gardiens et boutons. Rien en mode silencieux.',
+    },
+    music: {
+      label: 'Musique',
+      description:
+        'Le thème du défilé, et celui des Gardiens pendant leur combat. Rien en mode silencieux.',
+    },
+    volume: (setting: string) => `Volume : ${setting}`,
     haptics: {
       label: 'Vibrations',
       description: 'Frappes, coups critiques et Gardiens vaincus.',

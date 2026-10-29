@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useStore } from 'zustand';
 
 import { strings } from '@/i18n';
+import { configureAudio, createMusicPlayer, createSoundPlayer } from '@/services/audio';
 import { playHaptic } from '@/services/haptics';
 import { createCapReminder } from '@/services/notifications';
 import {
@@ -17,10 +18,12 @@ import {
   SettingsStoreProvider,
   useCapReminder,
   useGameLoop,
+  useMusic,
 } from '@/state';
 import { fontAssets } from '@/ui/fonts';
 import { type HapticKind, HapticsProvider } from '@/ui/haptics';
 import { ReduceMotionProvider } from '@/ui/motion';
+import { type SoundId, SoundProvider } from '@/ui/sound';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,6 +32,8 @@ export default function RootLayout() {
   const [store] = useState(createAppStore);
   const [settings] = useState(createAppSettingsStore);
   const [reminder] = useState(() => createCapReminder(strings.notifications.cap));
+  const [sounds] = useState(createSoundPlayer);
+  const [music] = useState(createMusicPlayer);
   const reduceMotion = useStore(settings, (state) => state.settings.reduceMotion);
   const haptic = useCallback(
     (kind: HapticKind) => {
@@ -38,9 +43,20 @@ export default function RootLayout() {
     },
     [settings],
   );
+  const sound = useCallback(
+    (id: SoundId) => {
+      const { sound: on, soundVolume } = settings.getState().settings;
+      if (on) {
+        sounds.play(id, soundVolume);
+      }
+    },
+    [settings, sounds],
+  );
   const ready = fontsLoaded || fontError !== null;
   useGameLoop(store);
   useCapReminder(store, settings, reminder);
+  useMusic(settings, store, music);
+  useEffect(configureAudio, []);
 
   useEffect(() => {
     if (ready) {
@@ -58,9 +74,11 @@ export default function RootLayout() {
         <GameStoreProvider store={store}>
           <SettingsStoreProvider store={settings}>
             <HapticsProvider trigger={haptic}>
-              <ReduceMotionProvider reduce={reduceMotion}>
-                <Stack screenOptions={{ headerShown: false }} />
-              </ReduceMotionProvider>
+              <SoundProvider trigger={sound}>
+                <ReduceMotionProvider reduce={reduceMotion}>
+                  <Stack screenOptions={{ headerShown: false }} />
+                </ReduceMotionProvider>
+              </SoundProvider>
             </HapticsProvider>
           </SettingsStoreProvider>
         </GameStoreProvider>

@@ -2,6 +2,12 @@ import { createStore, type StoreApi } from 'zustand/vanilla';
 
 /** The player's preferences, kept apart from the game save. */
 export interface Settings {
+  /** Sound effects, and their volume from 0 to 1. */
+  readonly sound: boolean;
+  readonly soundVolume: number;
+  /** Background music, and its volume from 0 to 1. */
+  readonly music: boolean;
+  readonly musicVolume: number;
   readonly haptics: boolean;
   /** Notify when the offline gains reach their cap. */
   readonly notifications: boolean;
@@ -10,8 +16,16 @@ export interface Settings {
 }
 
 export type SettingKey = keyof Settings;
+export type ToggleSetting = {
+  [K in SettingKey]: Settings[K] extends boolean ? K : never;
+}[SettingKey];
+export type VolumeSetting = Exclude<SettingKey, ToggleSetting>;
 
 export const DEFAULT_SETTINGS: Settings = {
+  sound: true,
+  soundVolume: 0.8,
+  music: true,
+  musicVolume: 0.5,
   haptics: true,
   notifications: true,
   reduceMotion: false,
@@ -26,11 +40,20 @@ export function parseSettings(text: string | undefined): Settings {
     // A malformed entry is replaced on the next change: the defaults apply meanwhile.
   }
   const record = typeof saved === 'object' && saved !== null ? saved : {};
-  const pick = (key: SettingKey): boolean => {
-    const value: unknown = (record as Record<string, unknown>)[key];
+  const valueOf = (key: SettingKey): unknown => (record as Record<string, unknown>)[key];
+  const pick = (key: ToggleSetting): boolean => {
+    const value = valueOf(key);
     return typeof value === 'boolean' ? value : DEFAULT_SETTINGS[key];
   };
+  const volume = (key: VolumeSetting): number => {
+    const value = valueOf(key);
+    return typeof value === 'number' && value >= 0 && value <= 1 ? value : DEFAULT_SETTINGS[key];
+  };
   return {
+    sound: pick('sound'),
+    soundVolume: volume('soundVolume'),
+    music: pick('music'),
+    musicVolume: volume('musicVolume'),
     haptics: pick('haptics'),
     notifications: pick('notifications'),
     reduceMotion: pick('reduceMotion'),
@@ -39,7 +62,7 @@ export function parseSettings(text: string | undefined): Settings {
 
 export interface SettingsStoreState {
   readonly settings: Settings;
-  readonly change: (key: SettingKey, value: boolean) => void;
+  readonly change: <K extends SettingKey>(key: K, value: Settings[K]) => void;
 }
 
 export type SettingsStore = StoreApi<SettingsStoreState>;

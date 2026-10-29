@@ -35,7 +35,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Brûlures (28/10) : plafonnées à 9 fois les frappes, sans plancher, pour que la barre de vie des gros sacs à PV descende à vitesse constante (`DECISIONS.md`). À ressentir en jeu par Yann avec le reste de l'équilibrage (#53).
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
-- Audio (28/10) : bruitages choisis dans `assets/audio/sfx/`, pas encore branchés. Musique « Le défilé en fête », [version A sur Suno](https://suno.com/song/a485fdce-bdfd-457a-a1ff-32e84809ec94) : à télécharger après le 7/11 (quota Suno à 0), puis convertir en `.m4a` avec `afconvert`.
+- Audio (29/10) : bruitages et musiques branchés (#89, #90), réglages de volume séparés. Musiques Suno de Yann ([défilé](https://suno.com/song/a485fdce-bdfd-457a-a1ff-32e84809ec94), « Le Gardien approche » : [version 1](https://suno.com/song/6ce5284f-9943-4d50-9d27-913817a2d325), [version 2](https://suno.com/song/b841c6aa-3127-4e29-b4c2-43df358c5995)) enregistrées avec OBS faute de quota, silences coupés. Module natif : les builds 1.0.0 (4) iOS et (5) Android n'ont pas de son, il en faut de nouveaux.
 
 - Vignette du prochain Gardien (#75, 28/10) : 44 pt à la demande de Yann, plus haute que l'ancien libellé « Gardien » ; la scène de combat descend d'environ 26 pt.
 
