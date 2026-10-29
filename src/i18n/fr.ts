@@ -22,6 +22,7 @@ export const fr = {
     shikigami: 'Shikigami',
     sanctuary: 'Sanctuaire',
     festival: 'Festival',
+    options: 'Options',
   },
   combat: {
     parade: (parade: number, level: number) =>
@@ -150,8 +151,6 @@ export const fr = {
   },
   settings: {
     title: 'Réglages',
-    open: 'Réglages',
-    back: 'Retour',
     sound: {
       label: 'Sons',
       description: 'Frappes, captures, Gardiens et boutons. Rien en mode silencieux.',

@@ -71,7 +71,7 @@ Titres sur fond coloré : texte blanc avec **contour encre** (ombre portée de 2
 | `Card` | Fond `paper`, contour 3 px, rayon 18–22, ombre franche. |
 | `Pill` | Monnaie ou info courte : fond blanc, contour, icône + valeur en display. |
 | `ProgressBar` | PV, progression du défilé, plafond hors ligne. |
-| `TabBar` | 4 onglets (Combat, Shikigami, Sanctuaire, Festival) ; onglet actif = pastille jaune encrée. |
+| `TabBar` | 5 onglets (Combat, Shikigami, Sanctuaire, Festival, Options) ; onglet actif = pastille jaune encrée ; un libellé trop long rétrécit (jusqu'à 80 %) au lieu d'être coupé. |
 | `Chip` | Traits d'un yōkai (« Cornes · +20 % attaque »). |
 | `RarityBadge` | Pastille de couleur + libellé. |
 | `Segmented` | ×1 / ×10 / Max. |
@@ -93,4 +93,4 @@ Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque comp
 - Libellé d'accessibilité sur chaque bouton-icône et chaque illustration informative.
 - Haptique désactivable dans les réglages : frappe légère au toucher, moyenne sur un critique du héros ou du joueur (pas sur ceux de l'équipe, trop fréquents), succès quand un Gardien tombe ; sélection sur les boutons, onglets et interrupteurs.
 - Sons (#89, #90) : bruitages Kenney sur les frappes (5 variantes en rotation), critiques, yōkai purifiés, captures, Gardiens (apparition, victoire, échec ou fuite), talismans, achats, Festival et boutons ; deux par pas de jeu au plus, les plus marquants d'abord, et un écart minimal entre deux lectures du même son. Musique « Le défilé en fête » en boucle, remplacée par « Le Gardien approche » du cut-in d'un Gardien à la fin de son combat. Rien en mode silencieux, la musique déjà jouée par le téléphone continue, tout s'arrête en arrière-plan.
-- Écran Réglages (bouton en bas du Sanctuaire) : sons et musique, chacun avec son interrupteur et son volume (grisé quand il est coupé), vibrations, notifications, réduire les animations. Ce dernier s'ajoute au réglage du téléphone, toujours respecté : `useReduceMotion()` (`src/ui/motion.tsx`) vaut vrai si l'un des deux le demande.
+- Réglages, dans l'onglet **Options** (cinquième onglet, icône à trois curseurs ; les libellés de la barre rétrécissent un peu plutôt que d'être coupés sur un écran de 375 pt) : sons et musique, chacun avec son interrupteur et son volume (grisé quand il est coupé), vibrations, notifications, réduire les animations. Ce dernier s'ajoute au réglage du téléphone, toujours respecté : `useReduceMotion()` (`src/ui/motion.tsx`) vaut vrai si l'un des deux le demande.

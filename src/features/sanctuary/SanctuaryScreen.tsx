@@ -1,10 +1,9 @@
-import { router } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { strings } from '@/i18n';
-import { bodyText, Button, colors, displayText, Segmented, spacing } from '@/ui';
+import { bodyText, colors, displayText, Segmented, spacing } from '@/ui';
 
 import { HERO_POSES, heroPoseSize } from '../shared/images';
 import { KamidanaShop } from './KamidanaShop';
@@ -45,12 +44,6 @@ export function SanctuaryScreen() {
           onChange={setShop}
         />
         {shop === 'souls' ? <SoulsShop /> : <KamidanaShop />}
-        <Button
-          label={strings.settings.open}
-          variant="neutral"
-          onPress={() => router.push('/settings')}
-          testID="open-settings"
-        />
       </ScrollView>
     </SafeAreaView>
   );

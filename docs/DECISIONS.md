@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-29 — Un cinquième onglet « Options » pour les réglages et les règles
+
+- **Décision** (#106, demande de Yann) : les Réglages quittent la page ouverte depuis le bas du Sanctuaire pour un cinquième onglet, **Options**, qui accueillera aussi les règles du jeu (#107). Icône : trois curseurs.
+- **Raison** : « Options » est court, couvre réglages et règles, et tient dans une barre à cinq onglets. « Réglages » ne dit pas qu'on y trouve les règles ; « Carnet » est moins évident pour qui cherche le son.
+- **Conséquence** : la route `/settings` et le bouton du Sanctuaire disparaissent. Les libellés de la barre peuvent rétrécir (jusqu'à 80 %) plutôt qu'être coupés : vérifié sur un iPhone SE (375 pt).
+
 ## 2026-10-29 — Kamidana calibré : coûts ×3, Gardiens sautés payés
 
 - **Décision** (#102) : les coûts de base du Kamidana sont triplés (15 à 45 ofuda). Le Départ avancé purifie d'office les vagues qu'il saute, comme si on les jouait : âmes de chaque yōkai, tirages de capture, âmes et ofuda des Gardiens.

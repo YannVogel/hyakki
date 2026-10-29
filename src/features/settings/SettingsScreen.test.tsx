@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import { router } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { strings } from '@/i18n';
@@ -7,8 +6,6 @@ import { createSettingsStore, parseSettings, SettingsStoreProvider } from '@/sta
 import { HapticsProvider, SoundProvider } from '@/ui';
 
 import { SettingsScreen } from './SettingsScreen';
-
-jest.mock('expo-router', () => ({ router: { back: jest.fn() } }));
 
 const METRICS = {
   frame: { x: 0, y: 0, width: 390, height: 844 },
@@ -96,11 +93,5 @@ describe('SettingsScreen', () => {
     expect(parseSettings(write.mock.calls.at(-1)?.[0]).reduceMotion).toBe(true);
     expect(haptics).toHaveBeenCalledWith('selection');
     expect(sound).toHaveBeenCalledWith('ui');
-  });
-
-  it('goes back', async () => {
-    await renderSettings();
-    await fireEvent.press(screen.getByTestId('settings-back'));
-    expect(router.back).toHaveBeenCalled();
   });
 });

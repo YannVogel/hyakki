@@ -1,20 +1,9 @@
-import { router } from 'expo-router';
 import { ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { strings } from '@/i18n';
 import { type ToggleSetting, useSettings, type VolumeSetting } from '@/state';
-import {
-  bodyText,
-  Button,
-  Card,
-  colors,
-  displayText,
-  Slider,
-  spacing,
-  useHaptics,
-  useSound,
-} from '@/ui';
+import { bodyText, Card, colors, displayText, Slider, spacing, useHaptics, useSound } from '@/ui';
 
 /** Each audio switch comes with its own volume. */
 const VOLUMES: Partial<Record<ToggleSetting, VolumeSetting>> = {
@@ -90,14 +79,8 @@ function SettingRow({ setting }: { setting: ToggleSetting }) {
 /** The player's preferences: sounds, music, vibrations, notifications, reduced motion. */
 export function SettingsScreen() {
   return (
-    <SafeAreaView style={styles.screen}>
+    <SafeAreaView style={styles.screen} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Button
-          label={strings.settings.back}
-          variant="neutral"
-          onPress={() => router.back()}
-          testID="settings-back"
-        />
         <Text style={displayText('3xl')}>{strings.settings.title}</Text>
         {ROWS.map((setting) => (
           <SettingRow key={setting} setting={setting} />

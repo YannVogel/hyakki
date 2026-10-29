@@ -220,6 +220,7 @@ Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../d
 5. **Sanctuaire** — améliorations, ×1 / ×10 / Max ; second onglet **Kamidana** (bénédictions en ofuda, remboursement).
 6. **Festival** — prestige.
 7. **Gardiens** — galerie des boss, silhouettes pour ceux pas encore croisés.
+8. **Options** — cinquième onglet : les réglages (et les règles du jeu, #107).
 
 ## 7. Hors V1
 

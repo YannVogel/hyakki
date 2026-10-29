@@ -91,7 +91,7 @@ Ces règles sont vérifiées par ESLint ([`eslint.config.js`](../eslint.config.j
 
 ### Navigation
 
-- `app/index.tsx` affiche l'écran principal (`src/features/shell/MainScreen`) : les quatre onglets (Combat, Shikigami, Sanctuaire, Festival) sont gérés par un état local et notre `TabBar` (expo-router 58 ne propose que des onglets natifs, non personnalisables).
+- `app/index.tsx` affiche l'écran principal (`src/features/shell/MainScreen`) : les cinq onglets (Combat, Shikigami, Sanctuaire, Festival, Options) sont gérés par un état local et notre `TabBar` (expo-router 58 ne propose que des onglets natifs, non personnalisables).
 - Les autres écrans sont des routes empilées (`app/…`). Les écrans de développement sont sous `app/dev/` ; en development build, un appui long sur l'en-tête du défilé ouvre leur hub.
 - La racine (`app/_layout.tsx`) charge les polices, crée le store, lance la boucle de jeu et fournit gestes, zones sûres, store, haptique et son (bruitages selon le réglage, musique selon l'état de la partie).
 
