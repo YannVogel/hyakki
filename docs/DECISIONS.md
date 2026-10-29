@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-29 — Son et musique dès la V1, avec expo-audio
+
+- **Décision** (Yann) : le jeu a du son dès la V1 : les 15 bruitages Kenney et deux musiques Suno, « Le défilé en fête » et « Le Gardien approche » (pendant le cut-in et le combat d'un Gardien). Les réglages ont un interrupteur et un volume pour les sons, et un autre pour la musique, indépendants. Lecture par **expo-audio**, dont le plugin est configuré sans micro (`RECORD_AUDIO` bloquée) ni lecture en arrière-plan.
+- **Raison** : Yann a remarqué l'absence de son en installant la 1.0.0 (5). Le mode audio retenu (rien en mode silencieux, mélange avec la musique déjà jouée par le téléphone, silence en arrière-plan) est celui qu'on attend d'un jeu idle qu'on lance en écoutant autre chose. Sans micro ni arrière-plan, rien ne change dans les déclarations des stores ; seule `MODIFY_AUDIO_SETTINGS`, permission ordinaire, s'ajoute sur Android.
+- **Conséquence** : module natif, donc nouveaux builds. Le curseur de volume est un composant maison (`src/ui/Slider.tsx`) plutôt qu'une dépendance native de plus. La question ouverte « Sons et musique : V1 ou après ? » est close.
+
 ## 2026-10-28 — Après le 10e Gardien : les niveaux d'« Éveil »
 
 - **Décision** : quand Nurarihyon tombe, le défilé repart de la première vague un niveau plus haut, appelé **Éveil** (« Éveil 2 », « Éveil 3 »…). L'état garde la vague absolue ; le niveau (`floor((v − 1) / 1000) + 1`) et la vague du niveau (1 à 1000) en sont dérivés, et l'éveil des Gardiens vaut le niveau moins un. Pas de multiplicateur de résistance ajouté. Le Festival ramène au niveau 1.
@@ -126,4 +132,3 @@ Chaque entrée : date, décision, raison, conséquence. Les plus récentes en ha
 ## Questions ouvertes
 
 - Anglais dès la V1 ou plus tard ? (Par défaut : français seul en V1, textes centralisés pour faciliter l'ajout.)
-- Sons et musique : périmètre V1 ou après ?

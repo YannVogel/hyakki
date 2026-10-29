@@ -12,9 +12,10 @@
 | Grands nombres | **break_infinity.js** derrière un adaptateur `BigNum` | Les grandeurs dépassent `1e308` ; l'adaptateur permet de changer de lib |
 | Notifications | **expo-notifications** (locales uniquement) | Plafond hors ligne atteint |
 | Haptique | **expo-haptics** | Frappes, critiques, Gardien vaincu |
+| Son | **expo-audio** (lecture seule, au premier plan) | Bruitages et musiques ; plugin configuré sans micro ni lecture en arrière-plan (`app.config.ts`) |
 | Fond de l'app | **expo-system-ui** | Couleur crème de la vue racine et thème clair forcé sur Android (pas de flash blanc après l'écran de lancement) |
 | Icône | **canvaskit-wasm** (dev, même version que celle embarquée par Skia) | `scripts/render-icons.ts` rend l'icône vectorielle en PNG, en Node |
-| Tests | **Jest** (`jest-expo`), **@testing-library/react-native**, **fast-check**, **Maestro** | Unitaires, propriétés, composants, parcours. Sous Jest : Reanimated en implémentation JS (`jest.resolver.js`), Skia et Nitro simulés (`jest.setup.js`), MMKV en mémoire |
+| Tests | **Jest** (`jest-expo`), **@testing-library/react-native**, **fast-check**, **Maestro** | Unitaires, propriétés, composants, parcours. Sous Jest : Reanimated en implémentation JS (`jest.resolver.js`), Skia, Nitro et expo-audio simulés (`jest.setup.js`), MMKV en mémoire |
 | Qualité | **ESLint**, **Prettier**, règles d'imports (voir § 3) | |
 | CI | **GitHub Actions** ([`ci.yml`](../.github/workflows/ci.yml)) | Lint, typecheck, tests avec seuil de couverture, sur chaque PR et chaque push sur `main` |
 
@@ -44,7 +45,7 @@ src/
   ui/                     design system : tokens, composants de base
   features/               écrans et flux (combat, sanctuaire, shikigami, gardiens, festival, retour)
   state/                  store zustand : boucle de jeu, sélecteurs, actions
-  services/               persistance MMKV, notifications, haptique, horloge
+  services/               persistance MMKV, notifications, haptique, son, horloge
   i18n/                   textes du jeu (FR en V1)
 assets/
   images/app/             icône et écran de lancement
@@ -92,7 +93,7 @@ Ces règles sont vérifiées par ESLint ([`eslint.config.js`](../eslint.config.j
 
 - `app/index.tsx` affiche l'écran principal (`src/features/shell/MainScreen`) : les quatre onglets (Combat, Shikigami, Sanctuaire, Festival) sont gérés par un état local et notre `TabBar` (expo-router 58 ne propose que des onglets natifs, non personnalisables).
 - Les autres écrans sont des routes empilées (`app/…`). Les écrans de développement sont sous `app/dev/` ; en development build, un appui long sur l'en-tête du défilé ouvre leur hub.
-- La racine (`app/_layout.tsx`) charge les polices, crée le store, lance la boucle de jeu et fournit gestes, zones sûres, store et haptique.
+- La racine (`app/_layout.tsx`) charge les polices, crée le store, lance la boucle de jeu et fournit gestes, zones sûres, store, haptique et son (bruitages selon le réglage, musique selon l'état de la partie).
 
 ## 4. Moteur
 
@@ -126,7 +127,7 @@ Tout tirage passe par `engine/rng`. La graine d'un yōkai dérive du défilé et
 - `deserialize(texte)` ne lève jamais d'exception : il renvoie `{ ok: true, state, savedAt }` ou `{ ok: false, error }` avec une raison typée (`invalid-json`, `unsupported-version`, `invalid-shape`). La validation vérifie chaque champ et la cohérence (équipe possédée, graines uniques…).
 - Chaque changement de schéma ajoute une migration testée (`save/migrations/vN-to-vN+1.ts`), appliquée avant la validation.
 - `savedAt` (horloge murale, fournie par `services`) sert au calcul hors ligne. Une heure système qui recule ne donne jamais de gains négatifs ni de gains bonus.
-- Les réglages du joueur (vibrations, notifications, réduire les animations) vivent à part, sous la clé MMKV `settings` : un petit store zustand (`src/state/settings.ts`) les relit au lancement (chaque valeur absente ou invalide reprend sa valeur par défaut) et les écrit à chaque changement. Ils ne touchent jamais la sauvegarde de la partie.
+- Les réglages du joueur (sons et musique avec leur volume, vibrations, notifications, réduire les animations) vivent à part, sous la clé MMKV `settings` : un petit store zustand (`src/state/settings.ts`) les relit au lancement (chaque valeur absente ou invalide reprend sa valeur par défaut) et les écrit à chaque changement. Ils ne touchent jamais la sauvegarde de la partie.
 
 ## 6. Build
 

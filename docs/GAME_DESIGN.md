@@ -187,4 +187,4 @@ Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../d
 
 ## 7. Hors V1
 
-Sons et musique, langue anglaise, nouvelles planches de Gardiens, arbre de talents du Festival, événements saisonniers. À décider après la V1.
+Langue anglaise, nouvelles planches de Gardiens, arbre de talents du Festival, événements saisonniers. À décider après la V1.

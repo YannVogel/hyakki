@@ -129,6 +129,7 @@ export function ShikigamiSheet({
               accessibilityLabel={text.levelUpLabel(levelUpCost)}
               disabled={!canLevelUp}
               onPress={onLevelUp}
+              sound="purchase"
               testID="shikigami-level-up"
             />
             <Button

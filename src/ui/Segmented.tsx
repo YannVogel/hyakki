@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useHaptics } from './haptics';
+import { useSound } from './sound';
 import { bodyText, outline } from './styles';
 import { colors, radii, spacing, strokes, touchTarget } from './tokens';
 
@@ -24,6 +25,7 @@ export function Segmented<V extends string | number>({
   accessibilityLabel,
 }: SegmentedProps<V>) {
   const haptics = useHaptics();
+  const play = useSound();
   return (
     <View
       accessibilityRole="radiogroup"
@@ -40,6 +42,7 @@ export function Segmented<V extends string | number>({
             accessibilityState={{ checked: selected }}
             onPress={() => {
               haptics('selection');
+              play('ui');
               onChange(option.value);
             }}
             style={[styles.option, selected && styles.selected]}

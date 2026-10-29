@@ -35,10 +35,17 @@ const config: ExpoConfig = {
       'android.permission.READ_EXTERNAL_STORAGE',
       'android.permission.WRITE_EXTERNAL_STORAGE',
       'android.permission.SYSTEM_ALERT_WINDOW',
+      // expo-audio only plays the game's own sounds: never the microphone.
+      'android.permission.RECORD_AUDIO',
     ],
   },
   plugins: [
     'expo-router',
+    [
+      // Playback only, in the foreground: no microphone, no background audio or media controls.
+      'expo-audio',
+      { microphonePermission: false, recordAudioAndroid: false, enableBackgroundPlayback: false },
+    ],
     [
       // Local reminders only: no push, hence no APNs entitlement.
       'expo-notifications',

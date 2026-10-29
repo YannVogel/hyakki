@@ -60,6 +60,7 @@ export function UpgradeRow({ view, effect, onBuy }: UpgradeRowProps) {
           accessibilityLabel={label}
           disabled={view.maxed || !view.affordable}
           onPress={() => onBuy(view.id)}
+          sound="purchase"
           testID={`buy-${view.id}`}
         />
         {view.maxed ? null : <Text style={[bodyText('xs', 800), styles.cost]}>{cost}</Text>}

@@ -76,7 +76,7 @@ Titres sur fond coloré : texte blanc avec **contour encre** (ombre portée de 2
 | `RarityBadge` | Pastille de couleur + libellé. |
 | `Segmented` | ×1 / ×10 / Max. |
 
-Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque composant a un rôle d'accessibilité (`button`, `tab`, `radio`, `progressbar`…), un libellé, et des cibles d'au moins 44 pt. `Button`, `TabBar` et `Segmented` déclenchent un retour haptique via `useHaptics()` : `ui` ne parle pas à la plateforme, l'implémentation (`src/services/haptics.ts`) est fournie par la racine de l'app (`HapticsProvider`). En développement, l'écran « Catalogue des composants » (lien depuis l'accueil) les montre tous.
+Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque composant a un rôle d'accessibilité (`button`, `tab`, `radio`, `progressbar`…), un libellé, et des cibles d'au moins 44 pt. `Button`, `TabBar` et `Segmented` déclenchent un retour haptique via `useHaptics()` et un son via `useSound()` (un clic, ou le son donné au bouton : achat, Festival) : `ui` ne parle pas à la plateforme, les implémentations (`src/services/haptics.ts`, `src/services/audio.ts`) sont fournies par la racine de l'app (`HapticsProvider`, `SoundProvider`). `Slider` règle une valeur de 0 à 1 (volumes) au doigt, ou par dixièmes au lecteur d'écran. En développement, l'écran « Catalogue des composants » (lien depuis l'accueil) les montre tous.
 
 ## 6. Animation et effets
 
@@ -91,4 +91,5 @@ Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque comp
 - Contraste texte ≥ 4,5:1 (≥ 3:1 au-delà de 24 px ou 18,7 px gras). Le texte blanc n'est autorisé sur couleur vive qu'avec le contour encre.
 - Libellé d'accessibilité sur chaque bouton-icône et chaque illustration informative.
 - Haptique désactivable dans les réglages : frappe légère au toucher, moyenne sur un critique du héros ou du joueur (pas sur ceux de l'équipe, trop fréquents), succès quand un Gardien tombe ; sélection sur les boutons, onglets et interrupteurs.
-- Écran Réglages (bouton en bas du Sanctuaire) : vibrations, notifications, réduire les animations. Ce dernier s'ajoute au réglage du téléphone, toujours respecté : `useReduceMotion()` (`src/ui/motion.tsx`) vaut vrai si l'un des deux le demande.
+- Sons (#89, #90) : bruitages Kenney sur les frappes (5 variantes en rotation), critiques, yōkai purifiés, captures, Gardiens (apparition, victoire, échec ou fuite), talismans, achats, Festival et boutons ; deux par pas de jeu au plus, les plus marquants d'abord, et un écart minimal entre deux lectures du même son. Musique « Le défilé en fête » en boucle, remplacée par « Le Gardien approche » du cut-in d'un Gardien à la fin de son combat. Rien en mode silencieux, la musique déjà jouée par le téléphone continue, tout s'arrête en arrière-plan.
+- Écran Réglages (bouton en bas du Sanctuaire) : sons et musique, chacun avec son interrupteur et son volume (grisé quand il est coupé), vibrations, notifications, réduire les animations. Ce dernier s'ajoute au réglage du téléphone, toujours respecté : `useReduceMotion()` (`src/ui/motion.tsx`) vaut vrai si l'un des deux le demande.

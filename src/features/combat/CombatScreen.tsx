@@ -14,11 +14,12 @@ import {
   useGame,
   useGameStore,
 } from '@/state';
-import { colors, spacing, useHaptics, useReduceMotion } from '@/ui';
+import { colors, spacing, useHaptics, useReduceMotion, useSound } from '@/ui';
 
 import { AwakeningBanner } from './AwakeningBanner';
 import { BattleScene, type LastHit } from './BattleScene';
 import { useCombatHaptics } from './combatHaptics';
+import { useCombatSounds } from './combatSounds';
 import { CombatHeader } from './CombatHeader';
 import { GuardianCutIn } from './GuardianCutIn';
 import { FarmingBanner } from './FarmingBanner';
@@ -48,10 +49,13 @@ export function CombatScreen() {
   const effects = useCombatEffects(motion);
   const heroPose = useHeroPose();
   const haptics = useHaptics();
+  const play = useSound();
   useCombatHaptics();
+  useCombatSounds();
   const awakened = useAwakeningAnnouncement();
   const strike = () => {
     haptics('light');
+    play('tap');
     actions.tap();
   };
   const parade = paradeView(game);

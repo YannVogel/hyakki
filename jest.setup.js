@@ -21,3 +21,21 @@ jest.mock('react-native-worklets', () => ({
   ...jest.requireActual('react-native-worklets'),
   getUIRuntimeHolder: () => ({}),
 }));
+
+// expo-audio plays through a native module: a player that only records what it was told.
+jest.mock('expo-audio', () => ({
+  createAudioPlayer: jest.fn(() => ({
+    playing: false,
+    loop: false,
+    volume: 1,
+    play: jest.fn(function play() {
+      this.playing = true;
+    }),
+    pause: jest.fn(function pause() {
+      this.playing = false;
+    }),
+    seekTo: jest.fn(() => Promise.resolve()),
+    remove: jest.fn(),
+  })),
+  setAudioModeAsync: jest.fn(() => Promise.resolve()),
+}));
