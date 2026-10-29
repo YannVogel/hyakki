@@ -185,7 +185,9 @@ function defeatYokai(battle: Battle): void {
   );
   battle.souls = add(battle.souls, souls);
   battle.events.push({ type: 'yokaiDefeated', wave, seed, souls, atMs: battle.elapsed });
-  if (battle.rng.next() < captureChance(seed, battle.generatorVersion)) {
+  if (
+    battle.rng.next() < captureChance(seed, battle.generatorVersion, battle.power.captureMultiplier)
+  ) {
     const capture = addCapture(battle.collection, seed, battle.generatorVersion);
     battle.collection = capture.collection;
     battle.events.push({

@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 7 · Progression permanente et confort (#96), une PR par issue à la demande de Yann ; 5 · Publication attend Yann (#47, #48, #63) |
-| Dernière issue terminée | #99 Effets Gardiens et talismans du Kamidana (Sablier, Œil de la faille, Talismans majeurs, Départ avancé) |
-| Prochaine issue | #100 (effets d'économie du Kamidana), puis #101 à #107. Publication, #47 : 1.0.0 (7) publiée en test interne et en examen dans le test fermé depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
+| Dernière issue terminée | #100 Effets d'économie du Kamidana (Bourse sacrée, Flamme du Festival, Veille, Appel des yōkai) |
+| Prochaine issue | #101 (écran du Kamidana), puis #102 à #107. Publication, #47 : 1.0.0 (7) publiée en test interne et en examen dans le test fermé depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
 
 ## Milestones
 
@@ -21,7 +21,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 4 · Feel & finitions | Terminée (#58 faite le 29/10, validation visuelle par Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 | 6 · Retours de jeu | Terminée (#76 fourni par Yann) | #81 à #87 |
-| 7 · Progression permanente et confort | En cours : #97 à #99 faits | une PR par issue |
+| 7 · Progression permanente et confort | En cours : #97 à #100 faits | une PR par issue |
 
 ## Points en suspens
 

@@ -101,7 +101,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 ### 4.5 Festival (prestige)
 
 - Débloqué après le premier Gardien (vague 100).
-- Étincelles gagnées : `E = floor(5 × (vague_max / 100) ^ 1.8)`.
+- Étincelles gagnées : `E = floor(5 × (vague_max / 100) ^ 1.8 × (1 + 25 % × niv_flamme))`.
 - Effet : remise à zéro des vagues, des âmes et des niveaux du Sanctuaire ; **conservation** des shikigami, des ofuda, du Kamidana et de la galerie des Gardiens.
 - Bonus permanent : `× (1 + 0,05 × étincelles_totales)` sur les dégâts et les âmes.
 - **Départ avancé** (Kamidana, § 4.7) : le nouveau défilé démarre à la vague `1 + 25 × niveau`, jamais au-delà de la centaine du record (record 350 → vague 301 au plus), donc jamais sur un Gardien. Le joueur reçoit les âmes des vagues sautées (un yōkai ordinaire par vague, rareté ×1, palier et multiplicateurs du nouveau défilé compris, sans capture) ; les Gardiens sautés ne donnent ni ofuda ni âmes de Gardien (`headStartWave`, `headStartSouls`).
@@ -110,7 +110,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 ### 4.6 Hors ligne
 
 - Au retour, le jeu calcule ce que l'équipe a accompli pendant l'absence : yōkai purifiés, âmes, vagues franchies, captures.
-- Efficacité hors ligne : 50 % du rendement actif. Les Gardiens ne sont jamais vaincus hors ligne (la progression s'arrête au Gardien suivant).
+- Efficacité hors ligne : 50 % du rendement actif, +10 points par niveau de Veille de l'onmyōji (Kamidana), 100 % au plus. Les Gardiens ne sont jamais vaincus hors ligne (la progression s'arrête au Gardien suivant).
 - Plafond : 8 h au départ, +1 h par niveau de Lanternes de veille, 24 h maximum.
 - Une notification locale prévient quand le plafond est atteint (si le joueur l'a autorisée) : « Les lanternes sont pleines ! ». Elle est planifiée quand l'app passe en arrière-plan, à l'heure où le plafond sera atteint, et annulée au retour. La permission n'est jamais demandée au premier lancement : seulement après la fermeture du premier bilan d'absence (le joueur sait alors à quoi elle sert) ou quand il active « Notifications » dans les Réglages. Refusée, ou réglage coupé : aucune notification. Aucun push, aucun serveur (`src/services/notifications.ts`, `src/state/useCapReminder.ts`).
 - **Implémentation** (`simulateOffline`) : calcul yōkai par yōkai avec les **dégâts espérés** (critiques moyennés, brûlures comprises), sans rejouer de ticks. La progression s'arrête devant le Gardien suivant : le reste du temps, l'équipe farme la vague d'avant, et le joueur retrouve le Gardien qui l'attend (un Gardien quitté en plein combat l'attend de nouveau, chrono plein). Un joueur parti en farm continue de farmer.
@@ -140,7 +140,7 @@ Le **kamidana** (神棚) est l'autel domestique où l'on dépose ses ofuda. Chaq
 - **Coût** du niveau `n → n + 1` : `arrondi(base × 2^n)` ofuda, achat un niveau à la fois. Valeurs de départ, à calibrer avec le harnais (§ 5.2).
 - **Remboursement** : un seul geste rend tout, au prix actuel des niveaux possédés (somme des coûts). Il vaut donc toujours exactement le prix de rachat, même après un rééquilibrage ; rien d'autre n'est sauvegardé. Un niveau au-dessus d'un maximum abaissé reste chargé et remboursé.
 - Un effet lié à un minuteur déjà lancé (chrono d'un Gardien engagé) s'applique au prochain lancement.
-- **Implémentation** : `src/engine/economy/kamidana.ts` (achat, remboursement), niveaux dans `GameState.kamidana` (schéma de sauvegarde 2). Les effets se branchent dans le moteur au fil de la milestone 7 et se multiplient avec les autres sources. Combat (#98) : Bénédiction et Pacte multiplient les frappes dans `combatPower`, la Paume ne multiplie que le toucher (sans effet hors ligne), l'Œil du tengu s'ajoute au multiplicateur de critique, partout où un critique est tiré ou moyenné (combat, hors ligne, « Meilleure équipe »). Gardiens et talismans (#99) : le chrono d'un Gardien (`guardianTimeLimitMs`) vaut 30 s plus le Sablier, posé à son apparition puis de nouveau quand le joueur l'affronte (un Sablier acheté pendant le cut-in compte, un chrono déjà lancé ne change pas) ; l'Œil de la faille s'ajoute au ×2 de faiblesse ; les Talismans majeurs multiplient les dégâts de Kitsune-bi et Raijin et la brûlure de Kitsune-bi (toujours sous le plafond des brûlures), et allongent le bonus d'âmes de Kekkai, pas le temps qu'il ajoute à un Gardien.
+- **Implémentation** : `src/engine/economy/kamidana.ts` (achat, remboursement), niveaux dans `GameState.kamidana` (schéma de sauvegarde 2). Les effets se branchent dans le moteur au fil de la milestone 7 et se multiplient avec les autres sources. Combat (#98) : Bénédiction et Pacte multiplient les frappes dans `combatPower`, la Paume ne multiplie que le toucher (sans effet hors ligne), l'Œil du tengu s'ajoute au multiplicateur de critique, partout où un critique est tiré ou moyenné (combat, hors ligne, « Meilleure équipe »). Gardiens et talismans (#99) : le chrono d'un Gardien (`guardianTimeLimitMs`) vaut 30 s plus le Sablier, posé à son apparition puis de nouveau quand le joueur l'affronte (un Sablier acheté pendant le cut-in compte, un chrono déjà lancé ne change pas) ; l'Œil de la faille s'ajoute au ×2 de faiblesse ; les Talismans majeurs multiplient les dégâts de Kitsune-bi et Raijin et la brûlure de Kitsune-bi (toujours sous le plafond des brûlures), et allongent le bonus d'âmes de Kekkai, pas le temps qu'il ajoute à un Gardien. Économie (#100) : la Bourse sacrée multiplie `soulsMultiplier` (yōkai, Gardiens, hors ligne, extrapolation, âmes du Départ avancé) ; la Flamme du Festival multiplie les étincelles avant l'arrondi (`festivalSparks(record, niveau)`) ; la Veille donne l'efficacité hors ligne (`offlineEfficiency` : 50 % + 10 points par niveau, 100 % au plus), sans changer le plafond de durée ; l'Appel des yōkai multiplie les chances de capture (`captureChance(graine, version, multiplicateur)`, 100 % au plus) avec le même nombre de tirages du RNG, donc mêmes graines et mêmes niveaux = mêmes captures.
 
 ## 5. Formules
 
@@ -148,7 +148,7 @@ Le **kamidana** (神棚) est l'autel domestique où l'on dépose ses ofuda. Chaq
 |---|---|---|
 | PV d'un yōkai à la vague `v` | `12 × 1,13^(v−1) × PV du yōkai / 100` | La stat PV (objet, traits, rareté) fait la résistance |
 | PV d'un Gardien | `12 × 12 × 1,13^(v−1)` | ×2 par cycle éveillé au-delà de 1000 |
-| Âmes par yōkai | `2 × 1,13^(v−1)` | × rareté × clochette ; Gardien ×15 ; +50 % par palier de 100 vagues |
+| Âmes par yōkai | `2 × 1,13^(v−1)` | × rareté × clochette × 2^niv_bourse ; Gardien ×15 ; +50 % par palier de 100 vagues |
 | Frappe du héros | `1 × 1,0925^niv_lame × 1,5^niv_bénédiction` | × (1 + attaque d'équipe) × Festival ; critique ×(3 + niv_œil_du_tengu) |
 | Toucher | `frappe du héros × 2^niv_paume` | jamais hors ligne |
 | Frappe d'un shikigami | `frappe du héros × 0,5 × attaque / 100 × (1 + 10 % × (niveau − 1)) × 1,5^niv_pacte` | toutes les `1 000 ms × 100 / vitesse` |
@@ -156,7 +156,7 @@ Le **kamidana** (神棚) est l'autel domestique où l'on dépose ses ofuda. Chaq
 | Coût d'un niveau de shikigami | `100 × 1,18^(niveau − 1)` | |
 | Critique | 5 % de base (75 % au plus), ×3 dégâts | + bonus d'apparence des shikigami ; +1 au multiplicateur par niveau d'Œil du tengu |
 | Brûlures | % des PV max par seconde, au plus 9 × les dégâts par seconde espérés des frappes | ×0,2 contre un Gardien |
-| Festival | `étincelles = ⌊5 × (record / 100)^1,8⌋`, bonus `× (1 + 0,05 × étincelles)` | Dégâts et âmes |
+| Festival | `étincelles = ⌊5 × (record / 100)^1,8 × (1 + 0,25 × niv_flamme)⌋`, bonus `× (1 + 0,05 × étincelles)` | Dégâts et âmes |
 
 **Pourquoi des niveaux qui se multiplient** : les coûts croissent de façon exponentielle (×1,12 par niveau). Avec des dégâts linéaires (« +8 % par niveau » des formules de départ), les dégâts ne croissent que comme le logarithme des âmes et le joueur bute contre un mur dès la vague 40, quel que soit son temps de jeu (mesuré par le harnais). Chaque niveau de Lame multiplie donc les dégâts par 1,0925 ; l'écart entre la croissance des PV (×1,13 par vague) et celle des dégâts achetables crée un mur progressif, que le Festival repousse.
 

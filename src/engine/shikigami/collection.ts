@@ -4,8 +4,9 @@ import { type BigNum, div, gte, mul, pow, sub } from '../numbers';
 import { generate, type GeneratorVersion } from '../yokai';
 import { shikigamiIntervalMs } from './profile';
 
-export function captureChance(seed: number, version: GeneratorVersion): number {
-  return BALANCE.shikigami.captureChance[generate(seed, version).rarity];
+/** Chance that a defeated yōkai joins the collection, by rarity, × `multiplier` (100 % at most). */
+export function captureChance(seed: number, version: GeneratorVersion, multiplier = 1): number {
+  return Math.min(1, BALANCE.shikigami.captureChance[generate(seed, version).rarity] * multiplier);
 }
 
 /** The active team's shikigami, in team order. */

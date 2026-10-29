@@ -1,2 +1,2 @@
-export { offlineCapMs, simulateOffline } from './simulateOffline';
+export { offlineCapMs, offlineEfficiency, simulateOffline } from './simulateOffline';
 export type { LevelUp, OfflineReport } from './simulateOffline';

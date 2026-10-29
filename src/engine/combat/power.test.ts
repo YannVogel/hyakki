@@ -4,6 +4,7 @@ import { BALANCE } from '../balance';
 import { type GameState, type KamidanaId } from '../gameState';
 import { div, gte, toNumber } from '../numbers';
 import { simulateOffline } from '../offline';
+import { captureChance } from '../shikigami';
 import { arbitraryGameState } from '../testing/arbitraries';
 import { stateAtWave } from '../testing/states';
 import { GENERATOR_VERSION } from '../yokai';
@@ -157,5 +158,58 @@ describe('offline play with the Kamidana', () => {
       expect(Math.abs(offline.parade.wave - active.parade.wave)).toBeLessThanOrEqual(1);
       expect(Math.abs(ratio(offline.souls, active.souls) - 1)).toBeLessThan(0.15);
     }
+  });
+});
+
+describe('economy with the Kamidana', () => {
+  it('doubles every soul per Sacred Purse level, in combat and offline', () => {
+    const state = teamState(12);
+    const purse = withKamidana(state, { sacredPurse: 3 });
+    expect(combatPower(purse).soulsMultiplier / combatPower(state).soulsMultiplier).toBeCloseTo(
+      8,
+      9,
+    );
+    const active = (s: GameState) => step(s, 20_000).state.souls;
+    expect(ratio(active(purse), active(state))).toBeCloseTo(8, 9);
+    const away = (s: GameState) => simulateOffline(s, 3_600_000).state.souls;
+    expect(ratio(away(purse), away(state))).toBeCloseTo(8, 6);
+  });
+
+  it('raises the capture chances by 1.5 per Call level, up to 100 %', () => {
+    expect(combatPower(withKamidana(teamState(1), { yokaiCall: 2 })).captureMultiplier).toBe(2.25);
+    fc.assert(
+      fc.property(fc.integer(), fc.nat(40), (seed, level) => {
+        const chance = captureChance(seed, GENERATOR_VERSION, 1.5 ** level);
+        expect(chance).toBeLessThanOrEqual(1);
+        expect(chance).toBeGreaterThanOrEqual(captureChance(seed, GENERATOR_VERSION));
+      }),
+    );
+  });
+
+  it('draws the RNG as often whatever the Call level: only the threshold changes', () => {
+    fc.assert(
+      fc.property(fc.integer(), fc.integer({ min: 0, max: 6 }), (seed, yokaiCall) => {
+        const state = stateAtWave(seed, 10, { blade: 40 });
+        const called = withKamidana(state, { yokaiCall });
+        const [plain, boosted] = [step(state, 30_000), step(called, 30_000)];
+        expect(boosted.state.rngState).toBe(plain.state.rngState);
+        expect(boosted.state.parade.wave).toBe(plain.state.parade.wave);
+        expect(boosted.state.shikigami.length).toBeGreaterThanOrEqual(plain.state.shikigami.length);
+        expect(step(called, 30_000)).toEqual(boosted);
+      }),
+      { numRuns: 30 },
+    );
+  });
+
+  it('captures much more often with the Call at its maximum', () => {
+    const count = (yokaiCall: number) =>
+      [1, 2, 3, 4, 5].reduce(
+        (total, seed) =>
+          total +
+          step(withKamidana(stateAtWave(seed, 10, { blade: 40 }), { yokaiCall }), 120_000).state
+            .shikigami.length,
+        0,
+      );
+    expect(count(6)).toBeGreaterThan(count(0));
   });
 });
