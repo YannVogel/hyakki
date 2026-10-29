@@ -19,7 +19,7 @@ Procédure pour publier Hyakki sur Google Play (#47) et l'App Store (#48). Les b
 | Store | Build | Où en est-on |
 |---|---|---|
 | App Store | 1.0.0 (6), [build EAS](https://expo.dev/accounts/yannvogel/projects/hyakki/builds/9abe1af4-6bec-407e-a701-647ef93b3d54), commit `f827c94` | Construit et envoyé vers TestFlight le 29/10 par `eas build --auto-submit` ([envoi](https://expo.dev/accounts/yannvogel/projects/hyakki/submissions/ae90104e-81ba-4208-8c5b-41c258a0a02f), clé API App Store Connect gardée par EAS), pour le groupe interne « Interne ». **Pas encore soumis à l'examen.** Les builds précédents restent dans TestFlight : (4) du 28/10, sans son, et (5) du 29/10 au matin (commit `4add1b4`, avec le son, sans les illustrations HD). |
-| Google Play | 1.0.0, versionCode 7, AAB construit en local (`store-captures/hyakki-1.0.0-7.aab`, 98 Mo, non versionné), commit `f827c94` | Version « 7 (1.0.0) » du test fermé « Tests fermés - Alpha », avec notes de version, **envoyée pour examen** le 29/10 : l'examen de la version 5, en cours depuis le 28/10, a été annulé et relancé avec elle. Taille d'une nouvelle installation : 55,7 Mo (+22,3 Mo, son et illustrations HD), signalée par un avertissement non bloquant de la Play Console. Le versionCode 6, construit le 29/10 au matin (commit `4add1b4`), n'a jamais été importé. Les deux builds EAS gratuits du 28/10 avaient échoué pendant la compilation C++ parallèle : le (2) par manque de mémoire, le (3) bloqué jusqu'à la limite de 45 minutes. |
+| Google Play | 1.0.0, versionCode 7, AAB construit en local (`store-captures/hyakki-1.0.0-7.aab`, 98 Mo, non versionné), commit `f827c94` | Version « 7 (1.0.0) » **publiée en test interne** le 29/10 à 13 h (disponible tout de suite pour les testeurs internes), et **envoyée pour examen** le même jour dans le test fermé « Tests fermés - Alpha », avec les mêmes notes de version : l'examen de la version 5, en cours depuis le 28/10, a été annulé et relancé avec elle. Taille d'une nouvelle installation : 55,7 Mo (+22,3 Mo, son et illustrations HD), signalée par un avertissement non bloquant de la Play Console. Le versionCode 6, construit le 29/10 au matin (commit `4add1b4`, avec le son, sans les illustrations HD), a été publié en test interne à 10 h 58, puis remplacé par la 7. Les deux builds EAS gratuits du 28/10 avaient échoué pendant la compilation C++ parallèle : le (2) par manque de mémoire, le (3) bloqué jusqu'à la limite de 45 minutes. |
 
 Les deux builds contiennent les retours de jeu de la milestone 6 (décors illustrés, niveaux d'Éveil, meilleure équipe…), l'icône « Oni caché » (#59), le son (#89, #90) et les illustrations en haute définition (#58). Parcours Maestro et captures des stores pas encore refaits pour ces changements d'interface.
 
@@ -34,10 +34,11 @@ Compter une vingtaine de minutes de compilation. Le fichier AAB (environ 100 Mo 
 ## Google Play (#47)
 
 1. Build : en local, voir plus haut (la clé d'importation, générée par EAS au premier build, reste sur ses serveurs).
-2. Play Console › Tester et publier › Tests › **Test fermé** : créer le canal, importer l'AAB à la main (Google refuse le tout premier envoi par l'API), rédiger les notes de version (« Première version de test. »).
-3. Testeurs : une liste d'au moins **12 adresses** (amis, famille, Google Group) ; ils acceptent l'invitation et gardent l'app installée **14 jours consécutifs**.
-4. Au bout des 14 jours : Tableau de bord › **Demander l'accès à la production** (questionnaire sur le déroulé du test).
-5. Production : `npx eas-cli@latest submit --platform android --profile production` ou import manuel, pays : tous, puis envoi en examen.
+2. Pour tester tout de suite : Tests › **Tests internes** › Créer une version, puis « Ajouter à partir de la bibliothèque » si l'AAB est déjà importé (un versionCode ne s'importe qu'une fois). La version est publiée sans examen, en général dans l'heure.
+3. Play Console › Tester et publier › Tests › **Test fermé** : créer le canal, importer l'AAB à la main (Google refuse le tout premier envoi par l'API), rédiger les notes de version (« Première version de test. »).
+4. Testeurs : une liste d'au moins **12 adresses** (amis, famille, Google Group) ; ils acceptent l'invitation et gardent l'app installée **14 jours consécutifs**.
+5. Au bout des 14 jours : Tableau de bord › **Demander l'accès à la production** (questionnaire sur le déroulé du test).
+6. Production : `npx eas-cli@latest submit --platform android --profile production` ou import manuel, pays : tous, puis envoi en examen.
 
 ## App Store (#48)
 
