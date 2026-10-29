@@ -126,7 +126,7 @@ export function spawnEnemy(battle: Battle, wave: number, repeat: number): void {
   battle.maxHp = enemyMaxHp(wave, battle.seed, battle.generatorVersion);
   battle.events.push({ type: 'waveStarted', wave, seed: battle.seed, atMs: battle.elapsed });
   if (isGuardianWave(wave)) {
-    battle.guardian = { engaged: false, timeLeftMs: BALANCE.guardian.timeLimitMs };
+    battle.guardian = { engaged: false, timeLeftMs: battle.power.guardianTimeMs };
     battle.events.push({
       type: 'guardianAppeared',
       wave,
@@ -256,7 +256,10 @@ export function advance(battle: Battle, durationMs: number): void {
   let left = durationMs;
   while (left > 0 && !isPaused(battle)) {
     const { effects } = battle;
-    const talismanBurn = effects.burnMs > 0 ? BALANCE.talismans.kitsunebi.burnRate : 0;
+    const talismanBurn =
+      effects.burnMs > 0
+        ? BALANCE.talismans.kitsunebi.burnRate * battle.power.talismanMultiplier
+        : 0;
     const burnRate =
       (battle.power.burnRate + talismanBurn) *
       (battle.guardian === null ? 1 : BALANCE.guardian.burnFactor);

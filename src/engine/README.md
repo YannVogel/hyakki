@@ -83,10 +83,10 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `step(state, dtMs, inputs)` | Fonction de transition pure : renvoie `{ state, events }`. Temps injecté ; découpage en pas sans effet sur le résultat. |
 | `CombatInput` | Actions du joueur depuis le pas précédent (`tap`…), appliquées au début du pas. |
 | `CombatEvent` | Ce que l'UI anime : `hit` (source, dégâts, critique), `yokaiDefeated` (âmes), `waveStarted`… avec `atMs`, le décalage dans le pas. |
-| `combatPower(state)` | Dégâts (héros, toucher, équipe), chance et multiplicateur de critique, brûlure et multiplicateur d'âmes dérivés de l'état (Sanctuaire, équipe, Festival, Kamidana). |
+| `combatPower(state)` | Dégâts (héros, toucher, équipe), chance et multiplicateur de critique, brûlure, multiplicateur d'âmes, talismans (dégâts, faiblesse, bonus d'âmes) et chrono d'un Gardien, dérivés de l'état (Sanctuaire, équipe, Festival, Kamidana). |
 | `expectedDps(power)` | Dégâts espérés par seconde des frappes automatiques (critiques moyennés) ; plafonne aussi les brûlures (×9). |
 | `waveHp`, `waveSouls`, `yokaiMaxHp`, `yokaiProfile` | Formules de `docs/GAME_DESIGN.md` § 5. |
-| `GUARDIANS`, `isGuardianWave`, `guardianAt`, `guardianMaxHp`, `guardianOfuda`, `tierMultiplier` | Gardiens : ordre, faiblesse, cycle éveillé, PV, ofuda, bonus de palier. |
+| `GUARDIANS`, `isGuardianWave`, `guardianAt`, `guardianMaxHp`, `guardianOfuda`, `guardianTimeLimitMs`, `tierMultiplier` | Gardiens : ordre, faiblesse, cycle éveillé, PV, ofuda, chrono (Sablier compris), bonus de palier. |
 | `bestTeam(state)`, `teamDps(state, team)`, `shikigamiDps(shikigami)` | « Meilleure équipe » : les trois shikigami qui font le plus de dégâts ensemble, chacun jugé au niveau 1 (dégâts par seconde espérés à la vague en cours, bonus d'équipe et brûlure plafonnée compris ; départage par le bonus d'âmes puis la graine). Recherche exacte parmi les 12 meilleurs pris seuls. `shikigamiDps` sert aussi au bot du harnais. |
 | `awakeningLevel`, `waveInCycle`, `CYCLE_WAVES` | Niveau d'« Éveil » (1 jusqu'à la vague 1000, puis +1 tous les 1000) et vague dans ce niveau (1 à 1000), dérivés de la vague absolue de l'état. `guardianAt(…).awakening` vaut le niveau moins un. |
 | Entrées `engageGuardian`, `fleeGuardian`, `challengeGuardian` | Affronter après le cut-in, fuir, retenter depuis le farm. |
@@ -132,6 +132,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 
 | Élément | Rôle |
 |---|---|
-| `festivalPreview(state)` | Débloqué ou non, étincelles à gagner, bonus avant et après (pour l'écran Festival). |
+| `festivalPreview(state)` | Débloqué ou non, étincelles à gagner, bonus avant et après, vague de départ du prochain défilé (pour l'écran Festival). |
+| `headStartWave(record, level)`, `headStartSouls(state, wave)` | Départ avancé du Kamidana : vague de départ (plafonnée par la centaine du record) et âmes des vagues sautées. |
 | `startFestival(state)` | Relance le défilé : remise à zéro des vagues, âmes, Sanctuaire ; conservation des shikigami, de l'équipe, des ofuda, du Kamidana et de la galerie ; résultat typé (`locked`). |
 | `festivalSparks(record)`, `festivalBonus(sparks)` | Formules de `docs/GAME_DESIGN.md` § 4.5. |

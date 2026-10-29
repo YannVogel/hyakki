@@ -28,6 +28,8 @@ function applyInput(battle: Battle, state: GameState, input: CombatInput): void 
     case 'engageGuardian':
       if (guardian !== null && !guardian.engaged) {
         guardian.engaged = true;
+        // The Hourglass bought during the cut-in counts: a waiting guardian always has a full timer.
+        guardian.timeLeftMs = battle.power.guardianTimeMs;
         battle.events.push({ type: 'guardianEngaged', wave: battle.wave, atMs: battle.elapsed });
       }
       break;

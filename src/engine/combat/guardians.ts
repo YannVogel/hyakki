@@ -1,4 +1,5 @@
 import { BALANCE } from '../balance';
+import type { GameState } from '../gameState';
 import { type BigNum, mul, pow } from '../numbers';
 import { waveHp } from './enemy';
 
@@ -63,4 +64,12 @@ export function guardianOfuda(wave: number): number {
 /** Souls multiplier of the tier: +50 % for each guardian wave already behind. */
 export function tierMultiplier(wave: number): number {
   return 1 + BALANCE.souls.tierBonus * Math.floor((wave - 1) / BALANCE.guardian.every);
+}
+
+/** A guardian's timer: 30 s, plus 5 s per level of the Kamidana's Hourglass (50 s at most). */
+export function guardianTimeLimitMs(state: GameState): number {
+  const { extraMsPerLevel, maxLevel } = BALANCE.kamidana.hourglass;
+  return (
+    BALANCE.guardian.timeLimitMs + extraMsPerLevel * Math.min(state.kamidana.hourglass, maxLevel)
+  );
 }
