@@ -9,54 +9,58 @@ export interface Illustration {
   readonly height: number;
 }
 
-// The poses are cut from one sheet at one scale, each to its own size; every figure stands on
-// its bottom edge (6 to 7 px of margin under the feet, see scripts/check_figures.py).
+// The poses share one scale (scripts/scale_poses.py), each cut to its own size; every figure stands
+// on its bottom edge (5 to 7 px of margin under the feet, see scripts/check_figures.py).
 export const HERO_POSES = {
   idle: {
     source: require('../../../assets/images/hero/hero-01-idle.png'),
-    width: 257,
-    height: 449,
+    width: 707,
+    height: 1310,
   },
   attack: {
     source: require('../../../assets/images/hero/hero-02-attaque.png'),
-    width: 363,
-    height: 422,
+    width: 937,
+    height: 1231,
   },
-  fire: { source: require('../../../assets/images/hero/hero-03-feu.png'), width: 319, height: 435 },
+  fire: {
+    source: require('../../../assets/images/hero/hero-03-feu.png'),
+    width: 931,
+    height: 1269,
+  },
   thunder: {
     source: require('../../../assets/images/hero/hero-04-foudre.png'),
-    width: 283,
-    height: 461,
+    width: 845,
+    height: 1345,
   },
   barrier: {
     source: require('../../../assets/images/hero/hero-05-barriere.png'),
-    width: 221,
-    height: 446,
+    width: 636,
+    height: 1301,
   },
   hit: {
     source: require('../../../assets/images/hero/hero-06-touche.png'),
-    width: 293,
-    height: 441,
+    width: 869,
+    height: 1287,
   },
   knockedOut: {
     source: require('../../../assets/images/hero/hero-07-ko.png'),
-    width: 384,
-    height: 332,
+    width: 1366,
+    height: 969,
   },
   victory: {
     source: require('../../../assets/images/hero/hero-08-victoire.png'),
-    width: 311,
-    height: 415,
+    width: 789,
+    height: 1211,
   },
   sleep: {
     source: require('../../../assets/images/hero/hero-09-sommeil.png'),
-    width: 289,
-    height: 386,
+    width: 800,
+    height: 1126,
   },
   surprised: {
     source: require('../../../assets/images/hero/hero-10-surpris.png'),
-    width: 315,
-    height: 443,
+    width: 895,
+    height: 1292,
   },
 } satisfies Record<string, Illustration>;
 

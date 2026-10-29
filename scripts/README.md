@@ -5,6 +5,7 @@
 | [`cut_sheet.py`](cut_sheet.py) | Découpe une planche ChatGPT (fond uni) en figures PNG transparentes |
 | [`defringe.py`](defringe.py) | Retire le liseré crème laissé autour des figures découpées (réécrit les PNG) |
 | [`check_figures.py`](check_figures.py) | Vérifie les figures : hauteur minimale, absence de frange crème, ligne des pieds des poses du héros |
+| [`scale_poses.py`](scale_poses.py) | Ramène des poses du héros dessinées séparément à l'échelle commune des poses (réécrit les PNG) |
 | [`bench-bignum.ts`](bench-bignum.ts) | Spike de performance de `BigNum` (1 million de multiplications) |
 | [`simulate.ts`](simulate.ts) | Harnais d'équilibrage : 4 profils de joueurs sur N jours, courbes dans `docs/balancing/` (logique dans `balancing/`) |
 | [`render-icons.ts`](render-icons.ts) | Rend l'icône et l'écran de lancement en PNG (CanvasKit, en Node) |
@@ -15,7 +16,7 @@ Les scripts TypeScript se lancent avec `npx tsx scripts/<script>.ts` : ils impor
 
 ## `cut_sheet.py`
 
-Dépendances : Python 3, Pillow, numpy, scipy (`pip install pillow numpy scipy`). `defringe.py` et `check_figures.py` n'utilisent que Pillow et numpy.
+Dépendances : Python 3, Pillow, numpy, scipy (`pip install pillow numpy scipy`). `defringe.py` et `check_figures.py` n'utilisent que Pillow et numpy, `scale_poses.py` que Pillow.
 
 ```bash
 # Poses du héros

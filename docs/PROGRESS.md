@@ -7,7 +7,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 5 · Publication (attend Yann : #47, #48, #63) ; 6 · Retours de jeu terminée |
-| Dernière issue terminée | #80 Bouton « Meilleure équipe » |
+| Dernière issue terminée | #58 Illustrations HD (20 figures ; reste la validation visuelle de Yann) |
 | Prochaine issue | #47 : test fermé 1.0.0 (5) en examen chez Google, il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (4) envoyé vers TestFlight, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
 
 ## Milestones
@@ -18,7 +18,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 1 · Moteur de jeu | Terminée (#53 attend Yann) | #54 |
 | 2 · Fabrique à yōkai | Terminée (#55 attend une mesure sur appareil) | #56 |
 | 3 · Boucle jouable | Terminée | #57 |
-| 4 · Feel & finitions | Terminée (#58 attend Yann ; icône #59 refaite en milestone 5) | #60 |
+| 4 · Feel & finitions | Terminée (#58 faite le 29/10, validation visuelle par Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 | 6 · Retours de jeu | Terminée (#76 fourni par Yann) | #81 à #87 |
 
@@ -37,6 +37,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
 - Audio (29/10) : bruitages et musiques branchés (#89, #90), réglages de volume séparés. Musiques Suno de Yann ([défilé](https://suno.com/song/a485fdce-bdfd-457a-a1ff-32e84809ec94), « Le Gardien approche » : [version 1](https://suno.com/song/6ce5284f-9943-4d50-9d27-913817a2d325), [version 2](https://suno.com/song/b841c6aa-3127-4e29-b4c2-43df358c5995)) enregistrées avec OBS faute de quota, silences coupés. Module natif : les builds 1.0.0 (4) iOS et (5) Android n'ont pas de son, il en faut de nouveaux.
 
+- Illustrations HD (#58, 29/10) : 19 figures régénérées par Yann, toutes ≥ 900 px (`docs/art/hd-regeneration.md`). Les PNG des figures passent de 5,9 à 25,9 Mo (+20 Mo dans l'app) ; une palette 256 couleurs les diviserait par 7, avec un tramage visible en gros plan : à décider. Les builds 1.0.0 ont les anciennes figures.
+
 - Vignette du prochain Gardien (#75, 28/10) : 44 pt à la demande de Yann, plus haute que l'ancien libellé « Gardien » ; la scène de combat descend d'environ 26 pt.
 
 - Les branches de milestone ne sont jamais réécrites une fois poussées (pas de push forcé) : un correctif de revue devient un commit `fix` qui référence l'issue.
@@ -50,7 +52,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 - #53 Valider l'équilibrage (cibles et ressenti en jeu, après la milestone 3).
 - #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
-- #58 Régénérer les 20 illustrations en HD dans ChatGPT (procédure et outils prêts).
+- #58 Valider dans l'app les illustrations HD (combat, cut-in d'un Gardien, galerie), notamment la taille du héros K.-O.
 - #47 Google Play : build EAS, test fermé de 14 jours, production (`docs/store/publication.md`).
 - #48 App Store : build EAS, TestFlight, soumission (`docs/store/publication.md`).
 - #63 Vidéo de 30 s, GIF du générateur et liens stores de l'étude de cas.
