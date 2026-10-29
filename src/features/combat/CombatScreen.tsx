@@ -33,6 +33,7 @@ import { PowerRow } from './PowerRow';
 import { TalismanBar } from './TalismanBar';
 import { useAwakeningAnnouncement } from './useAwakeningAnnouncement';
 import { useCombatEffects } from './useCombatEffects';
+import { useHitReaction } from './useHitReaction';
 import { useHeroPose } from './useHeroPose';
 
 function lastHitOf(events: readonly CombatEvent[]): LastHit | null {
@@ -53,6 +54,7 @@ export function CombatScreen() {
   const reduceMotion = useReduceMotion();
   const motion = reduceMotion ? 'reduced' : 'full';
   const effects = useCombatEffects(motion);
+  const reaction = useHitReaction(motion);
   const heroPose = useHeroPose();
   const haptics = useHaptics();
   const play = useSound();
@@ -87,6 +89,7 @@ export function CombatScreen() {
           lastHit={lastHit}
           heroPose={heroPose}
           effects={effects}
+          reaction={reaction}
           motion={motion}
           onTap={strike}
         />

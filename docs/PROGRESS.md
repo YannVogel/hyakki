@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 7 · Progression permanente et confort (#96), une PR par issue à la demande de Yann ; 5 · Publication attend Yann (#47, #48, #63) |
-| Dernière issue terminée | #104 Icône d'ofuda intégrée (en-tête de combat, Kamidana) |
-| Prochaine issue | #105 (réactions aux coups), puis #106 et #107. Publication, #47 : 1.0.0 (7) publiée en test interne et en examen dans le test fermé depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
+| Dernière issue terminée | #105 Réactions des yōkai et des Gardiens aux coups |
+| Prochaine issue | #106 (onglet Options), puis #107 (règles du jeu). Publication, #47 : 1.0.0 (7) publiée en test interne et en examen dans le test fermé depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
 
 ## Milestones
 
@@ -21,7 +21,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 4 · Feel & finitions | Terminée (#58 faite le 29/10, validation visuelle par Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 | 6 · Retours de jeu | Terminée (#76 fourni par Yann) | #81 à #87 |
-| 7 · Progression permanente et confort | En cours : #97 à #104 faits | une PR par issue |
+| 7 · Progression permanente et confort | En cours : #97 à #105 faits | une PR par issue |
 
 ## Points en suspens
 
@@ -53,7 +53,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 ## Issues `besoin-yann`
 
 - #53 Valider l'équilibrage (cibles et ressenti en jeu, après la milestone 3).
-- #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami).
+- #55 Vérifier les performances sur un Android d'entrée de gamme (Fabrique, puis Combat et Shikigami), réactions aux coups (#105) comprises.
 - #58 Valider dans l'app les illustrations HD (combat, cut-in d'un Gardien, galerie), notamment la taille du héros K.-O.
 - #47 Google Play : build EAS, test fermé de 14 jours, production (`docs/store/publication.md`).
 - #48 App Store : build EAS, TestFlight, soumission (`docs/store/publication.md`).
