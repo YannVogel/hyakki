@@ -82,6 +82,27 @@ describe('game store', () => {
     expect(eq(store.getState().game.souls, 95)).toBe(true);
   });
 
+  it('buys a Kamidana upgrade with ofuda, then refunds it all', () => {
+    const { store } = createFakeStore({ game: { ...createNewGame(1), ofuda: 30 } });
+    expect(store.getState().buyKamidana('blessing').ok).toBe(true);
+    expect(store.getState().game.ofuda).toBe(20);
+    expect(store.getState().game.kamidana.blessing).toBe(1);
+    expect(store.getState().refundKamidana()).toMatchObject({ ok: true, ofuda: 10 });
+    expect(store.getState().game.ofuda).toBe(30);
+    expect(store.getState().game.kamidana.blessing).toBe(0);
+  });
+
+  it('refuses a Kamidana purchase without ofuda, without touching the game', () => {
+    const { store } = createFakeStore();
+    const before = store.getState().game;
+    expect(store.getState().buyKamidana('vigil')).toEqual({
+      ok: false,
+      reason: 'not-enough-ofuda',
+    });
+    expect(store.getState().refundKamidana().ok).toBe(false);
+    expect(store.getState().game).toBe(before);
+  });
+
   it('saves with the wall-clock time', () => {
     const { store, saves, clock } = createFakeStore();
     clock.now = 5_000_000;

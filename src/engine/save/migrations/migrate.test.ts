@@ -26,7 +26,7 @@ describe('migrate', () => {
     );
   });
 
-  it('has no migration yet: schema 1 is the first published version', () => {
-    expect(Object.keys(MIGRATIONS)).toEqual([]);
+  it('has one migration per published schema before the current one', () => {
+    expect(Object.keys(MIGRATIONS)).toEqual(['1']);
   });
 });

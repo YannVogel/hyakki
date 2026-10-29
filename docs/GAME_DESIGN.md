@@ -25,9 +25,10 @@ Ton : léger, malicieux, coloré. Inspiré du folklore japonais, sans référenc
 | **Gardien** | Boss illustré, toutes les 100 vagues. 10 Gardiens en V1. |
 | **Shikigami** | Yōkai capturé, membre de la collection. Trois forment l'équipe active. |
 | **Âmes** | Monnaie principale, gagnée en purifiant. |
-| **Ofuda** | Monnaie rare, gagnée sur les Gardiens et les paliers. |
+| **Ofuda** | Monnaie rare, gagnée uniquement sur les Gardiens, dépensée au Kamidana et conservée au Festival. |
 | **Étincelles** | Monnaie de prestige, gagnée au Festival. |
 | **Sanctuaire** | Écran des améliorations de l'onmyōji (payées en âmes). |
+| **Kamidana** | L'autel des ofuda : améliorations permanentes, conservées au Festival et remboursables à 100 %. |
 | **Talismans** | Les trois compétences actives de l'onmyōji. |
 | **Festival** | Le prestige : relancer le défilé plus fort. |
 
@@ -101,7 +102,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 
 - Débloqué après le premier Gardien (vague 100).
 - Étincelles gagnées : `E = floor(5 × (vague_max / 100) ^ 1.8)`.
-- Effet : remise à zéro des vagues, des âmes et des niveaux du Sanctuaire ; **conservation** des shikigami, des ofuda et de la galerie des Gardiens.
+- Effet : remise à zéro des vagues, des âmes et des niveaux du Sanctuaire ; **conservation** des shikigami, des ofuda, du Kamidana et de la galerie des Gardiens.
 - Bonus permanent : `× (1 + 0,05 × étincelles_totales)` sur les dégâts et les âmes.
 - **Implémentation** : débloqué dès que le record du défilé dépasse la vague 100. Le nouveau défilé a sa propre graine (dérivée de la précédente) ; l'équipe active est conservée avec la collection ; les recharges des talismans et les effets repartent de zéro. Le bonus s'applique partout où le moteur calcule dégâts et âmes (combat actif et hors ligne).
 
@@ -115,6 +116,30 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 - Au-delà de **2 000 yōkai** simulés un par un, les âmes de la suite du farm sont extrapolées depuis cet échantillon (même vague, même rendement moyen) ; les captures ne sont tirées que sur l'échantillon. Cela garde le calcul sous la centaine de millisecondes sur mobile.
 - Sur 10 minutes à efficacité 100 %, le résultat reste à ±1 vague et ±15 % d'âmes du combat actif (test de cohérence).
 - Le rapport donne : durée prise en compte, plafond atteint ou non, yōkai purifiés, âmes, vagues (de → à), arrêt devant un Gardien, montées de niveau des shikigami (captures et doublons).
+
+### 4.7 Kamidana (améliorations permanentes)
+
+Le **kamidana** (神棚) est l'autel domestique où l'on dépose ses ofuda. Chaque ofuda qu'on y place achète un niveau d'une amélioration très puissante, **conservée d'un Festival à l'autre** ; on peut les reprendre tous à tout moment, gratuitement, pour les placer ailleurs.
+
+| Amélioration | Effet par niveau | Coût de base | Niveau max |
+|---|---|---|---|
+| Bénédiction de la lame | ×1,5 sur tous les dégâts (héros, toucher, shikigami, talismans) | 10 | 10 |
+| Œil du tengu | +1 au multiplicateur de critique (×3 → ×4…), plafond de chance inchangé | 10 | 5 |
+| Paume d'Inari | ×2 sur les dégâts du toucher | 5 | 8 |
+| Pacte des shikigami | ×1,5 sur les dégâts de l'équipe | 10 | 10 |
+| Sablier du kami | +5 s au chrono des Gardiens (50 s au plus) | 10 | 4 |
+| Œil de la faille | +1 au multiplicateur de faiblesse (×2 → ×3…) | 10 | 5 |
+| Talismans majeurs | ×2 sur Kitsune-bi et Raijin ; +5 s au bonus d'âmes de Kekkai | 10 | 8 |
+| Départ avancé | chaque nouveau défilé démarre 25 vagues plus loin | 15 | 8 |
+| Bourse sacrée | ×2 sur les âmes, combat et hors ligne | 10 | 10 |
+| Flamme du Festival | +25 % d'étincelles gagnées au Festival | 15 | 8 |
+| Veille de l'onmyōji | +10 points d'efficacité hors ligne (100 % au plus) | 10 | 5 |
+| Appel des yōkai | ×1,5 sur les chances de capture (100 % au plus) | 5 | 6 |
+
+- **Coût** du niveau `n → n + 1` : `arrondi(base × 2^n)` ofuda, achat un niveau à la fois. Valeurs de départ, à calibrer avec le harnais (§ 5.2).
+- **Remboursement** : un seul geste rend tout, au prix actuel des niveaux possédés (somme des coûts). Il vaut donc toujours exactement le prix de rachat, même après un rééquilibrage ; rien d'autre n'est sauvegardé. Un niveau au-dessus d'un maximum abaissé reste chargé et remboursé.
+- Un effet lié à un minuteur déjà lancé (chrono d'un Gardien engagé) s'applique au prochain lancement.
+- **Implémentation** : `src/engine/economy/kamidana.ts` (achat, remboursement), niveaux dans `GameState.kamidana` (schéma de sauvegarde 2). Les effets se branchent dans le moteur au fil de la milestone 7 et se multiplient avec les autres sources.
 
 ## 5. Formules
 
@@ -187,4 +212,4 @@ Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../d
 
 ## 7. Hors V1
 
-Langue anglaise, nouvelles planches de Gardiens, arbre de talents du Festival, événements saisonniers. À décider après la V1.
+Langue anglaise, nouvelles planches de Gardiens, événements saisonniers. À décider après la V1. L'« arbre de talents du Festival » envisagé ici est devenu le Kamidana (§ 4.7).

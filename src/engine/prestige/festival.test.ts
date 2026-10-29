@@ -55,7 +55,7 @@ describe('startFestival', () => {
     );
   });
 
-  it('resets waves, souls and the Sanctuary, keeps shikigami, ofuda and the gallery', () => {
+  it('resets waves, souls and the Sanctuary, keeps shikigami, ofuda, Kamidana and gallery', () => {
     fc.assert(
       fc.property(arbitraryGameState, fc.integer({ min: 101, max: 5000 }), (base, record) => {
         const state = withRecord(base, record);
@@ -76,6 +76,7 @@ describe('startFestival', () => {
         expect(next.shikigami).toEqual(state.shikigami);
         expect(next.team).toEqual(state.team);
         expect(next.ofuda).toBe(state.ofuda);
+        expect(next.kamidana).toEqual(state.kamidana);
         expect(next.guardiansDefeated).toEqual(state.guardiansDefeated);
         expect(next.sparks).toBe(state.sparks + festivalSparks(record));
         expect(result.sparks).toBe(festivalSparks(record));

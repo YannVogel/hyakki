@@ -2,10 +2,27 @@ import { type BigNum, ZERO } from './numbers';
 import { deriveSeed } from './rng';
 import { GENERATOR_VERSION, type GeneratorVersion } from './yokai';
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export const UPGRADE_IDS = ['blade', 'foxfire', 'bell', 'kekkai', 'lanterns'] as const;
 export type UpgradeId = (typeof UPGRADE_IDS)[number];
+
+/** Permanent upgrades of the Kamidana, paid in ofuda and kept across Festivals. */
+export const KAMIDANA_IDS = [
+  'blessing',
+  'tenguEye',
+  'inariPalm',
+  'shikigamiPact',
+  'hourglass',
+  'riftEye',
+  'greaterTalismans',
+  'headStart',
+  'sacredPurse',
+  'festivalFlame',
+  'vigil',
+  'yokaiCall',
+] as const;
+export type KamidanaId = (typeof KAMIDANA_IDS)[number];
 
 export const TALISMAN_IDS = ['kitsunebi', 'raijin', 'kekkai'] as const;
 export type TalismanId = (typeof TALISMAN_IDS)[number];
@@ -56,6 +73,8 @@ export interface GameState {
   /** Festival sparks earned over all parades (permanent bonus). */
   readonly sparks: number;
   readonly sanctuary: Readonly<Record<UpgradeId, number>>;
+  /** Levels of the Kamidana's upgrades: unlike the Sanctuary, kept across Festivals. */
+  readonly kamidana: Readonly<Record<KamidanaId, number>>;
   readonly shikigami: readonly Shikigami[];
   /** Seeds of the active team, at most TEAM_SIZE, all present in `shikigami`. */
   readonly team: readonly number[];
@@ -89,6 +108,7 @@ export function createNewGame(seed: number): GameState {
     ofuda: 0,
     sparks: 0,
     sanctuary: zeroBy(UPGRADE_IDS),
+    kamidana: zeroBy(KAMIDANA_IDS),
     shikigami: [],
     team: [],
     cooldowns: zeroBy(TALISMAN_IDS),

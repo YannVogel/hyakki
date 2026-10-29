@@ -1,4 +1,11 @@
-import { type GameState, SCHEMA_VERSION, TALISMAN_IDS, TEAM_SIZE, UPGRADE_IDS } from '../gameState';
+import {
+  type GameState,
+  KAMIDANA_IDS,
+  SCHEMA_VERSION,
+  TALISMAN_IDS,
+  TEAM_SIZE,
+  UPGRADE_IDS,
+} from '../gameState';
 import { stringifyBigNum } from '../numbers';
 import { GENERATOR_VERSION, type GeneratorVersion } from '../yokai';
 import {
@@ -53,6 +60,8 @@ const gameStateCheck: Check<GameState> = object<GameState>({
   ofuda: count,
   sparks: count,
   sanctuary: keyed(UPGRADE_IDS, count),
+  // Levels above today's maximum stay valid: a rebalancing must never make a save unreadable.
+  kamidana: keyed(KAMIDANA_IDS, count),
   shikigami: array(object({ seed, level: positive, generatorVersion })),
   team: array(seed, TEAM_SIZE),
   cooldowns: keyed(TALISMAN_IDS, nonNegative),

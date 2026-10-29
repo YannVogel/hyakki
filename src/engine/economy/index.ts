@@ -1,4 +1,12 @@
 export {
+  buyKamidana,
+  kamidanaCost,
+  kamidanaMaxLevel,
+  kamidanaRefund,
+  refundKamidana,
+} from './kamidana';
+export type { KamidanaPurchaseResult, KamidanaRefundResult } from './kamidana';
+export {
   buyUpgrade,
   buyUpgradeLevels,
   maxAffordable,

@@ -37,7 +37,8 @@ export function festivalPreview(state: GameState): FestivalPreview {
 
 /**
  * Restarts the parade stronger: waves, souls, Sanctuary and talismans start over; shikigami,
- * team, ofuda, sparks and the guardian gallery stay. The new parade's seed derives from the old.
+ * team, ofuda, Kamidana, sparks and the guardian gallery stay. The new parade's seed derives from
+ * the old.
  */
 export function startFestival(state: GameState): FestivalResult {
   const { unlocked, sparksToEarn } = festivalPreview(state);
@@ -53,6 +54,7 @@ export function startFestival(state: GameState): FestivalResult {
       ...fresh,
       parade: { ...fresh.parade, number },
       ofuda: state.ofuda,
+      kamidana: state.kamidana,
       sparks: state.sparks + sparksToEarn,
       shikigami: state.shikigami,
       team: state.team,

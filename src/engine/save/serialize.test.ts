@@ -61,6 +61,12 @@ describe('serialize / deserialize', () => {
       },
     ],
     ['an unknown upgrade', (raw: { state: Record<string, unknown> }) => (raw.state.sanctuary = {})],
+    ['a missing Kamidana', (raw: { state: Record<string, unknown> }) => delete raw.state.kamidana],
+    [
+      'a negative Kamidana level',
+      (raw: { state: Record<string, unknown> }) =>
+        (raw.state.kamidana = { ...(raw.state.kamidana as object), vigil: -1 }),
+    ],
     ['a missing state', (raw: { state: unknown }) => (raw.state = null)],
     ['a state that is a list', (raw: { state: unknown }) => (raw.state = [])],
     ['a negative save time', (raw: { savedAt: unknown }) => (raw.savedAt = -1)],
