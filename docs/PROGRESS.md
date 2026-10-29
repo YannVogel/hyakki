@@ -8,7 +8,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 |---|---|
 | Milestone en cours | Aucune : 7 · Progression permanente et confort terminée le 29/10 (#96, PR #108 à #119) ; 5 · Publication attend Yann (#47, #48, #63) |
 | Dernière issue terminée | #107 Règles du jeu dans l'onglet Options |
-| Prochaine issue | Milestone 7 terminée ; reprendre la publication : #47, #48 (nouveaux builds avec la milestone 7 : version à décider par Yann), #63. Publication, #47 : 1.0.0 (7) publiée en test interne et en examen dans le test fermé depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
+| Prochaine issue | Publication avec la milestone 7, version 1.0.0 confirmée par Yann le 29/10. #47 : 1.0.0 (8) publiée en test interne le 29/10 à 20 h 46 ; la 1.0.0 (7) est en examen dans le test fermé, et il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (7) envoyé vers TestFlight le 29/10 au soir, soumission à décider par Yann. #63. Avant soumission : parcours Maestro Android et captures des stores à refaire (interface des milestones 6 et 7) |
 
 ## Milestones
 
@@ -30,7 +30,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Maestro sur Android : l'émulateur doit avoir 4 Go de RAM (`-memory 4096`), sinon les parcours calent ; chaque frappe reste lente (plusieurs dizaines de secondes) car l'écran animé ne se stabilise jamais. Sur iOS : 8/8 avec le build de la milestone 4.
 - Captures des stores : `scripts/store-captures.sh [ios|android]` (Metro lancé), sorties non versionnées dans `store-captures/`.
 - Consoles des stores (28/10) : tout est saisi, avec l'accord de Yann pour les attestations et ses coordonnées. Fiches, captures, catégories, prix, confidentialité (publiée chez Apple, envoyée chez Google), classifications (App Store 13+, PEGI 7), public 13 ans et plus, mention IA. Il ne manque que les builds (#47, #48), et un numéro de classification local pour la Corée du Sud si on y distribue l'app.
-- Icône « Oni caché » (#59, 28/10) : à rendre avec `npx tsx scripts/render-icons.ts`, puis `scripts/render-store-graphics.ts` pour l'icône Play. Les builds iOS 1.0.0 (5) et (6) et Android (6) et (7) la portent.
+- Icône « Oni caché » (#59, 28/10) : à rendre avec `npx tsx scripts/render-icons.ts`, puis `scripts/render-store-graphics.ts` pour l'icône Play. Les builds iOS 1.0.0 (5) à (7) et Android (6) à (8) la portent.
 - Formats de captures exigés en octobre 2026 : App Store, iPhone 6,3 pouces (1206 × 2622) ; Google Play, 9:16 exact (1080 × 1920).
 - CocoaPods exige une locale UTF-8 : `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 npx expo run:ios`.
 - Équilibrage : le harnais mesure une graine ; vérifier une cible « au jour près » sur plusieurs défilés (`runProfile(profil, jours, graine)`).
@@ -39,7 +39,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`. Kamidana calibré le 29/10 (#102) : la progression est volontairement plus rapide (10e Gardien au jour 18,5 pour le joueur régulier), à ressentir en jeu par Yann (#53).
 - Audio (29/10) : bruitages et musiques branchés (#89, #90), réglages de volume séparés. Musiques Suno de Yann ([défilé](https://suno.com/song/a485fdce-bdfd-457a-a1ff-32e84809ec94), « Le Gardien approche » : [version 1](https://suno.com/song/6ce5284f-9943-4d50-9d27-913817a2d325), [version 2](https://suno.com/song/b841c6aa-3127-4e29-b4c2-43df358c5995)) enregistrées avec OBS faute de quota, silences coupés. Module natif : le son est dans les builds iOS 1.0.0 (5) et (6) et Android (6) et (7).
 
-- Illustrations HD (#58, 29/10) : 19 figures régénérées par Yann, toutes ≥ 900 px (`docs/art/hd-regeneration.md`). Les PNG des figures passent de 5,9 à 25,9 Mo (+20 Mo dans l'app) ; une palette 256 couleurs les diviserait par 7, avec un tramage visible en gros plan : à décider. Elles sont dans les builds iOS 1.0.0 (6) et Android (7).
+- Illustrations HD (#58, 29/10) : 19 figures régénérées par Yann, toutes ≥ 900 px (`docs/art/hd-regeneration.md`). Les PNG des figures passent de 5,9 à 25,9 Mo (+20 Mo dans l'app) ; une palette 256 couleurs les diviserait par 7, avec un tramage visible en gros plan : à décider. Elles sont dans les builds iOS 1.0.0 (6) et (7) et Android (7) et (8).
 
 - Vignette du prochain Gardien (#75, 28/10) : 44 pt à la demande de Yann, plus haute que l'ancien libellé « Gardien » ; la scène de combat descend d'environ 26 pt.
 
