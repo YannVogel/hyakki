@@ -1,5 +1,4 @@
-import { ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Switch, Text, View } from 'react-native';
 
 import { strings } from '@/i18n';
 import { type ToggleSetting, useSettings, type VolumeSetting } from '@/state';
@@ -77,22 +76,17 @@ function SettingRow({ setting }: { setting: ToggleSetting }) {
 }
 
 /** The player's preferences: sounds, music, vibrations, notifications, reduced motion. */
-export function SettingsScreen() {
+export function SettingsList() {
   return (
-    <SafeAreaView style={styles.screen} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={displayText('3xl')}>{strings.settings.title}</Text>
-        {ROWS.map((setting) => (
-          <SettingRow key={setting} setting={setting} />
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+    <>
+      {ROWS.map((setting) => (
+        <SettingRow key={setting} setting={setting} />
+      ))}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.cream },
-  content: { gap: spacing[3], padding: spacing[4] },
   card: { gap: spacing[1], padding: spacing[3] },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing[3] },
   rowText: { flex: 1, gap: spacing[1] },

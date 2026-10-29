@@ -1,0 +1,21 @@
+# Règles du jeu : l'onglet Options montre les règles, carte par carte, jusqu'au hors ligne.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: combat-wave
+    timeout: 60000
+- tapOn:
+    id: tab-options
+- tapOn:
+    id: segment-rules
+- assertVisible:
+    id: rule-parade
+- scrollUntilVisible:
+    element:
+      id: rule-kamidana
+- scrollUntilVisible:
+    element:
+      id: rule-offline
