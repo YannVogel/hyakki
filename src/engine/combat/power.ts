@@ -25,6 +25,8 @@ export interface CombatPower {
   /** Permanent burn on the current enemy, as a fraction of its max HP per second. */
   readonly burnRate: number;
   readonly soulsMultiplier: number;
+  /** Multiplier of the capture chances (the chance itself never exceeds 100 %). */
+  readonly captureMultiplier: number;
   /** Talismans: damage multiplier of Kitsune-bi and Raijin, and the guardian weakness bonus. */
   readonly talismanMultiplier: number;
   readonly weaknessMultiplier: number;
@@ -40,8 +42,16 @@ export interface CombatPower {
  */
 export function combatPower(state: GameState): CombatPower {
   const { blade, foxfire, bell } = state.sanctuary;
-  const { blessing, tenguEye, inariPalm, shikigamiPact, riftEye, greaterTalismans } =
-    state.kamidana;
+  const {
+    blessing,
+    tenguEye,
+    inariPalm,
+    shikigamiPact,
+    riftEye,
+    greaterTalismans,
+    sacredPurse,
+    yokaiCall,
+  } = state.kamidana;
   const { upgrades, hero, crit, kamidana, talismans } = BALANCE;
   const members = teamMembers(state);
   const bonus = teamBonus(members);
@@ -68,7 +78,12 @@ export function combatPower(state: GameState): CombatPower {
     critChance: Math.min(crit.maxChance, crit.baseChance + bonus.crit),
     critMultiplier: crit.multiplier + kamidana.tenguEye.critMultiplierPerLevel * tenguEye,
     burnRate: upgrades.foxfire.burnPerLevel * foxfire + bonus.burn,
-    soulsMultiplier: (1 + upgrades.bell.soulsPerLevel * bell) * (1 + bonus.souls) * festival,
+    soulsMultiplier:
+      (1 + upgrades.bell.soulsPerLevel * bell) *
+      (1 + bonus.souls) *
+      festival *
+      kamidana.sacredPurse.soulsGrowth ** sacredPurse,
+    captureMultiplier: kamidana.yokaiCall.captureGrowth ** yokaiCall,
     talismanMultiplier: kamidana.greaterTalismans.damageGrowth ** greaterTalismans,
     weaknessMultiplier: talismans.weaknessMultiplier + kamidana.riftEye.weaknessPerLevel * riftEye,
     soulsBoostMs:

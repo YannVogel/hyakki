@@ -42,6 +42,13 @@ export function offlineCapMs(state: GameState): number {
   return Math.min(maxCapHours, hours) * HOUR_MS;
 }
 
+/** Share of the active damage dealt while away: 50 %, +10 points per Vigil level, 100 % at most. */
+export function offlineEfficiency(state: GameState): number {
+  const { efficiencyPerLevel, maxLevel } = BALANCE.kamidana.vigil;
+  const level = Math.min(state.kamidana.vigil, maxLevel);
+  return Math.min(1, BALANCE.offline.efficiency + efficiencyPerLevel * level);
+}
+
 /**
  * Time to finish an enemy with steady hits and a burn capped like in active play, and the damage
  * dealt after any shorter time.
@@ -75,7 +82,7 @@ interface Simulation {
 export function simulateOffline(
   state: GameState,
   elapsedMs: number,
-  efficiency: number = BALANCE.offline.efficiency,
+  efficiency: number = offlineEfficiency(state),
 ): { state: GameState; report: OfflineReport } {
   const capMs = offlineCapMs(state);
   const durationMs = Number.isFinite(elapsedMs) ? Math.min(Math.max(0, elapsedMs), capMs) : 0;
@@ -130,7 +137,7 @@ export function simulateOffline(
       farmedSouls = add(farmedSouls, souls);
       farmedKills += 1;
     }
-    if (rng.next() < captureChance(sim.seed, state.generatorVersion)) {
+    if (rng.next() < captureChance(sim.seed, state.generatorVersion, power.captureMultiplier)) {
       const capture = addCapture(sim.collection, sim.seed, state.generatorVersion);
       sim.collection = capture.collection;
       const previous = levelUps.get(sim.seed);

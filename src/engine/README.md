@@ -83,7 +83,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `step(state, dtMs, inputs)` | Fonction de transition pure : renvoie `{ state, events }`. Temps injecté ; découpage en pas sans effet sur le résultat. |
 | `CombatInput` | Actions du joueur depuis le pas précédent (`tap`…), appliquées au début du pas. |
 | `CombatEvent` | Ce que l'UI anime : `hit` (source, dégâts, critique), `yokaiDefeated` (âmes), `waveStarted`… avec `atMs`, le décalage dans le pas. |
-| `combatPower(state)` | Dégâts (héros, toucher, équipe), chance et multiplicateur de critique, brûlure, multiplicateur d'âmes, talismans (dégâts, faiblesse, bonus d'âmes) et chrono d'un Gardien, dérivés de l'état (Sanctuaire, équipe, Festival, Kamidana). |
+| `combatPower(state)` | Dégâts (héros, toucher, équipe), chance et multiplicateur de critique, brûlure, multiplicateurs d'âmes et de capture, talismans (dégâts, faiblesse, bonus d'âmes) et chrono d'un Gardien, dérivés de l'état (Sanctuaire, équipe, Festival, Kamidana). |
 | `expectedDps(power)` | Dégâts espérés par seconde des frappes automatiques (critiques moyennés) ; plafonne aussi les brûlures (×9). |
 | `waveHp`, `waveSouls`, `yokaiMaxHp`, `yokaiProfile` | Formules de `docs/GAME_DESIGN.md` § 5. |
 | `GUARDIANS`, `isGuardianWave`, `guardianAt`, `guardianMaxHp`, `guardianOfuda`, `guardianTimeLimitMs`, `tierMultiplier` | Gardiens : ordre, faiblesse, cycle éveillé, PV, ofuda, chrono (Sablier compris), bonus de palier. |
@@ -98,7 +98,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 
 | Élément | Rôle |
 |---|---|
-| `captureChance(seed, version)` | Chance de capture selon la rareté (2 %, 1 %, 0,4 %, 0,1 %). Le tirage a lieu dans `step` à chaque yōkai vaincu (événement `shikigamiCaptured`). |
+| `captureChance(seed, version, multiplier)` | Chance de capture selon la rareté (2 %, 1 %, 0,4 %, 0,1 %), × l'Appel des yōkai, 100 % au plus. Le tirage a lieu dans `step` à chaque yōkai vaincu (événement `shikigamiCaptured`). |
 | `addCapture(collection, seed, version)` | Nouveau shikigami au niveau 1, ou +1 niveau pour une graine déjà possédée. |
 | `setTeam(state, seeds)` | Équipe active (3 au plus, distincts, possédés) ; résultat typé. |
 | `levelUpCost(level, count)`, `levelUpShikigami(state, seed, count)` | Montée d'un ou plusieurs niveaux contre des âmes ; résultat typé. |
@@ -127,6 +127,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 |---|---|
 | `simulateOffline(state, elapsedMs)` | Ce que l'équipe a accompli en l'absence du joueur : `{ state, report }`. Analytique, plafonné, s'arrête devant le Gardien suivant ; `elapsedMs ≤ 0` ne donne rien. |
 | `offlineCapMs(state)` | Plafond : 8 h + 1 h par niveau de Lanternes, 24 h au plus. |
+| `offlineEfficiency(state)` | Efficacité hors ligne : 50 % + 10 points par niveau de Veille (Kamidana), 100 % au plus ; valeur par défaut de `simulateOffline`. |
 
 ### `prestige/` — Festival
 
@@ -135,4 +136,4 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `festivalPreview(state)` | Débloqué ou non, étincelles à gagner, bonus avant et après, vague de départ du prochain défilé (pour l'écran Festival). |
 | `headStartWave(record, level)`, `headStartSouls(state, wave)` | Départ avancé du Kamidana : vague de départ (plafonnée par la centaine du record) et âmes des vagues sautées. |
 | `startFestival(state)` | Relance le défilé : remise à zéro des vagues, âmes, Sanctuaire ; conservation des shikigami, de l'équipe, des ofuda, du Kamidana et de la galerie ; résultat typé (`locked`). |
-| `festivalSparks(record)`, `festivalBonus(sparks)` | Formules de `docs/GAME_DESIGN.md` § 4.5. |
+| `festivalSparks(record, flameLevel)`, `festivalBonus(sparks)` | Formules de `docs/GAME_DESIGN.md` § 4.5. |

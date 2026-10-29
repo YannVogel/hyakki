@@ -2,9 +2,9 @@ import * as fc from 'fast-check';
 
 import { step } from '../combat';
 import { createNewGame, type GameState } from '../gameState';
-import { div, eq, gt, toMantissaExponent, toNumber } from '../numbers';
+import { div, eq, gt, gte, toMantissaExponent, toNumber } from '../numbers';
 import { stateAtWave } from '../testing/states';
-import { offlineCapMs, simulateOffline } from './simulateOffline';
+import { offlineCapMs, offlineEfficiency, simulateOffline } from './simulateOffline';
 
 const HOUR = 3_600_000;
 
@@ -166,5 +166,39 @@ describe('simulateOffline', () => {
     const after = simulateOffline(busy, 60_000).state;
     expect(after.cooldowns).toEqual({ kitsunebi: 0, raijin: 30_000, kekkai: 0 });
     expect(after.effects).toEqual({ burnMs: 0, soulsBoostMs: 0 });
+  });
+});
+
+describe('offline play with the Vigil', () => {
+  const withVigil = (state: GameState, vigil: number): GameState => ({
+    ...state,
+    kamidana: { ...state.kamidana, vigil },
+  });
+
+  it('adds 10 points of efficiency per level, up to 100 %', () => {
+    const state = createNewGame(1);
+    expect(offlineEfficiency(state)).toBe(0.5);
+    expect(offlineEfficiency(withVigil(state, 3))).toBeCloseTo(0.8, 12);
+    expect(offlineEfficiency(withVigil(state, 5))).toBe(1);
+    expect(offlineEfficiency(withVigil(state, 9))).toBe(1);
+  });
+
+  it('deals more damage while away, but never stays away longer', () => {
+    const state = stateAtWave(7, 60, { blade: 5 });
+    const vigil = withVigil(state, 5);
+    expect(offlineCapMs(vigil)).toBe(offlineCapMs(state));
+    const damage = (s: GameState) => simulateOffline(s, 60_000).state.enemy.damage;
+    expect(toNumber(div(damage(vigil), damage(state)))).toBeCloseTo(2, 9);
+  });
+
+  it('never earns less with more Vigil levels', () => {
+    fc.assert(
+      fc.property(fc.integer(), fc.integer({ min: 0, max: 4 }), (seed, level) => {
+        const state = stateAtWave(seed, 30, { blade: 25 });
+        const souls = (vigil: number) => simulateOffline(withVigil(state, vigil), HOUR).state.souls;
+        expect(gte(souls(level + 1), souls(level))).toBe(true);
+      }),
+      { numRuns: 20 },
+    );
   });
 });

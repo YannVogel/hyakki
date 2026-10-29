@@ -21,9 +21,11 @@ export type FestivalResult =
   | { readonly ok: true; readonly state: GameState; readonly sparks: number }
   | { readonly ok: false; readonly reason: 'locked' };
 
-export function festivalSparks(recordWave: number): number {
+/** Sparks of a Festival: +25 % per level of the Kamidana's Festival Flame, rounded down once. */
+export function festivalSparks(recordWave: number, flameLevel = 0): number {
   const { sparksBase, sparksExponent } = BALANCE.festival;
-  return Math.floor(sparksBase * (recordWave / 100) ** sparksExponent);
+  const flame = 1 + BALANCE.kamidana.festivalFlame.sparksPerLevel * flameLevel;
+  return Math.floor(sparksBase * (recordWave / 100) ** sparksExponent * flame);
 }
 
 /**
@@ -48,7 +50,9 @@ export function headStartSouls(state: GameState, startWave: number): BigNum {
 
 export function festivalPreview(state: GameState): FestivalPreview {
   const unlocked = state.parade.maxWave > BALANCE.festival.unlockWave;
-  const sparksToEarn = unlocked ? festivalSparks(state.parade.maxWave) : 0;
+  const sparksToEarn = unlocked
+    ? festivalSparks(state.parade.maxWave, state.kamidana.festivalFlame)
+    : 0;
   return {
     unlocked,
     sparksToEarn,

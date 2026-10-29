@@ -86,8 +86,10 @@ describe('startFestival', () => {
         expect(next.ofuda).toBe(state.ofuda);
         expect(next.kamidana).toEqual(state.kamidana);
         expect(next.guardiansDefeated).toEqual(state.guardiansDefeated);
-        expect(next.sparks).toBe(state.sparks + festivalSparks(record));
-        expect(result.sparks).toBe(festivalSparks(record));
+        expect(next.sparks).toBe(
+          state.sparks + festivalSparks(record, state.kamidana.festivalFlame),
+        );
+        expect(result.sparks).toBe(festivalSparks(record, state.kamidana.festivalFlame));
       }),
     );
   });
@@ -161,6 +163,26 @@ describe('Head Start', () => {
         expect(eq(next.souls, headStartSouls({ ...next, souls: big(0) }, start))).toBe(true);
         expect(next.ofuda).toBe(state.ofuda);
         expect(next.guardiansDefeated).toEqual(state.guardiansDefeated);
+      }),
+    );
+  });
+});
+
+describe('Festival Flame', () => {
+  it('adds 25 % of sparks per level, rounded down once', () => {
+    expect(festivalSparks(1000)).toBe(315);
+    expect(festivalSparks(1000, 2)).toBe(473);
+  });
+
+  it('never gives fewer sparks with more levels, and shows them in the preview', () => {
+    fc.assert(
+      fc.property(arbitraryGameState, fc.integer({ min: 101, max: 5000 }), (base, record) => {
+        const state = withRecord(base, record);
+        const level = state.kamidana.festivalFlame;
+        expect(festivalSparks(record, level + 1)).toBeGreaterThanOrEqual(
+          festivalSparks(record, level),
+        );
+        expect(festivalPreview(state).sparksToEarn).toBe(festivalSparks(record, level));
       }),
     );
   });
