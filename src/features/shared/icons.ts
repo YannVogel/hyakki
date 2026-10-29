@@ -24,4 +24,6 @@ export const TAB_ICONS = {
   festival: line(
     'M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8',
   ),
+  // Three sliders: settings, and soon the rules of the game.
+  options: line('M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1M15 5v4M9 10v4M17 15v4'),
 } as const;

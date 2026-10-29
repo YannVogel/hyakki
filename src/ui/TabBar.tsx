@@ -52,7 +52,15 @@ export function TabBar<K extends string>({
             testID={`tab-${tab.key}`}
           >
             {tab.icon?.(color)}
-            <Text style={[bodyText('xs', 800), { color }]}>{tab.label}</Text>
+            {/* Five tabs on a 375 pt screen: a long label shrinks a little rather than being cut. */}
+            <Text
+              style={[bodyText('xs', 800), { color }]}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.8}
+            >
+              {tab.label}
+            </Text>
           </Pressable>
         );
       })}

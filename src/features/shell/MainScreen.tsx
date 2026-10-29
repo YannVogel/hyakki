@@ -9,13 +9,14 @@ import { CombatScreen } from '../combat/CombatScreen';
 import { FestivalScreen } from '../festival/FestivalScreen';
 import { OfflineReturnModal } from '../offline/OfflineReturnModal';
 import { SanctuaryScreen } from '../sanctuary/SanctuaryScreen';
+import { SettingsScreen } from '../settings/SettingsScreen';
 import { ShikigamiScreen } from '../shikigami/ShikigamiScreen';
 import { TAB_ICONS } from '../shared/icons';
 
-export type MainTab = 'combat' | 'shikigami' | 'sanctuary' | 'festival';
+export type MainTab = 'combat' | 'shikigami' | 'sanctuary' | 'festival' | 'options';
 
 const TABS: readonly Tab<MainTab>[] = (
-  ['combat', 'shikigami', 'sanctuary', 'festival'] as const
+  ['combat', 'shikigami', 'sanctuary', 'festival', 'options'] as const
 ).map((key) => ({
   key,
   label: strings.tabs[key],
@@ -27,9 +28,10 @@ const screens = (goTo: (tab: MainTab) => void): Record<MainTab, () => ReactNode>
   shikigami: () => <ShikigamiScreen />,
   sanctuary: () => <SanctuaryScreen />,
   festival: () => <FestivalScreen onDone={() => goTo('combat')} />,
+  options: () => <SettingsScreen />,
 });
 
-/** The four tabs of the game: Combat, Shikigami, Sanctuaire, Festival. */
+/** The five tabs of the game: Combat, Shikigami, Sanctuaire, Festival, Options. */
 export function MainScreen({ initialTab = 'combat' }: { initialTab?: MainTab }) {
   const [tab, setTab] = useState<MainTab>(initialTab);
   const report = useGame((store) => store.offlineReport);
