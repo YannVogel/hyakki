@@ -218,7 +218,7 @@ export function hit(battle: Battle, baseDamage: BigNum, source: HitSource): void
   }
   const canCrit = source === 'hero' || source === 'tap' || source === 'shikigami';
   const crit = canCrit && battle.rng.next() < battle.power.critChance;
-  const damage = crit ? mul(baseDamage, BALANCE.crit.multiplier) : baseDamage;
+  const damage = crit ? mul(baseDamage, battle.power.critMultiplier) : baseDamage;
   battle.events.push({ type: 'hit', source, damage, crit, atMs: battle.elapsed });
   battle.damage = add(battle.damage, damage);
   if (gte(battle.damage, battle.maxHp)) {

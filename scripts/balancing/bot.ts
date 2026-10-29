@@ -154,12 +154,15 @@ export function pickTeam(state: GameState): GameState {
 export function guardianDamageEstimate(state: GameState, tapsPerSecond: number): BigNum {
   const power = combatPower(state);
   const seconds = BALANCE.guardian.timeLimitMs / 1000;
-  const critFactor = 1 + power.critChance * (BALANCE.crit.multiplier - 1);
+  const critFactor = 1 + power.critChance * (power.critMultiplier - 1);
   const { kitsunebi, raijin } = BALANCE.talismans;
   const talismanHits = kitsunebi.damageMultiplier + raijin.damageMultiplier;
   return add(
-    mul(expectedDps(power), seconds),
-    mul(power.heroHitDamage, tapsPerSecond * seconds * critFactor + talismanHits),
+    add(
+      mul(expectedDps(power), seconds),
+      mul(power.tapDamage, tapsPerSecond * seconds * critFactor),
+    ),
+    mul(power.heroHitDamage, talismanHits),
   );
 }
 
