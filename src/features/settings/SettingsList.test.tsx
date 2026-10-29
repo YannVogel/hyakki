@@ -5,7 +5,7 @@ import { strings } from '@/i18n';
 import { createSettingsStore, parseSettings, SettingsStoreProvider } from '@/state';
 import { HapticsProvider, SoundProvider } from '@/ui';
 
-import { SettingsScreen } from './SettingsScreen';
+import { SettingsList } from './SettingsList';
 
 const METRICS = {
   frame: { x: 0, y: 0, width: 390, height: 844 },
@@ -22,7 +22,7 @@ async function renderSettings(saved?: string) {
       <SettingsStoreProvider store={store}>
         <HapticsProvider trigger={haptics}>
           <SoundProvider trigger={sound}>
-            <SettingsScreen />
+            <SettingsList />
           </SoundProvider>
         </HapticsProvider>
       </SettingsStoreProvider>
@@ -31,7 +31,7 @@ async function renderSettings(saved?: string) {
   return { store, write, haptics, sound };
 }
 
-describe('SettingsScreen', () => {
+describe('SettingsList', () => {
   it('gives the sounds and the music a switch and a volume each', async () => {
     await renderSettings('{"music":false,"soundVolume":0.3}');
     const { sound, music, volume } = strings.settings;

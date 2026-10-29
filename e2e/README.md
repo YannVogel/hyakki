@@ -9,6 +9,7 @@ Parcours de bout en bout joués sur un simulateur iOS ou un émulateur Android p
 | `guardian.yaml` | Le cut-in du Gardien s'affiche ; « Affronter ! » lance le combat et son chrono |
 | `offline-return.yaml` | Retour hors ligne avec horloge simulée (2 h) : la modale de récolte s'affiche puis se ferme, et l'app demande alors la permission de notifier (refusée) |
 | `settings.yaml` | « Réduire les animations » s'active depuis l'onglet Options et reste actif après un redémarrage |
+| `rules.yaml` | Les règles du jeu s'affichent dans l'onglet Options, du défilé au hors ligne |
 | `sanctuary.yaml` | Après quelques frappes, une amélioration s'achète et son niveau monte aussitôt |
 | `kamidana.yaml` | Au Kamidana (état vitrine, 85 ofuda), une bénédiction s'achète, puis « Tout récupérer » rend les ofuda |
 | `native-check.yaml` | Skia et MMKV tournent dans le development build ; le compteur survit à un redémarrage |

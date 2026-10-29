@@ -44,7 +44,7 @@ describe('MainScreen', () => {
   it('opens the settings in the Options tab, and a setting changes there', async () => {
     const { write } = await renderMain();
     await fireEvent.press(screen.getByTestId('tab-options'));
-    expect(screen.getByText(strings.settings.title)).toBeOnTheScreen();
+    expect(screen.getByTestId('options-title')).toHaveTextContent(strings.settings.title);
     await fireEvent(screen.getByTestId('setting-reduceMotion'), 'valueChange', true);
     expect(write).toHaveBeenCalledWith(expect.stringContaining('"reduceMotion":true'));
   });

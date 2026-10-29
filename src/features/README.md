@@ -11,7 +11,8 @@ Un dossier par écran ou flux (combat, sanctuaire, shikigami, gardiens, festival
 
 | Dossier | Contenu |
 |---|---|
-| `settings/` | Réglages du joueur (sons et musique avec leur volume, vibrations, notifications, réduire les animations), dans l'onglet Options |
+| `options/` | Onglet Options : sélecteur « Réglages / Règles » ; les règles du jeu en une carte par thème, chiffres tirés de `BALANCE` (`rulesText.ts`) |
+| `settings/` | Liste des réglages du joueur (sons et musique avec leur volume, vibrations, notifications, réduire les animations), affichée par l'onglet Options |
 | `shell/` | Écran principal à cinq onglets : Combat, Shikigami, Sanctuaire, Festival, Options |
 | `combat/` | Écran Combat : en-tête, scène (frappe détectée sur le thread UI), HUD de l'ennemi, puissance et équipe, talismans, décisions face au Gardien |
 | `sanctuary/` | Onglet Sanctuaire, deux boutiques au choix (`Segmented`) : le Sanctuaire (âmes : solde et gain par seconde, ×1 / ×10 / Max, `SoulsShop`) et le Kamidana (ofuda : 12 bénédictions en trois cartes, valeur actuelle → suivante, « Tout récupérer » avec confirmation, `KamidanaShop`). Effets et valeurs tirés de `BALANCE` et de `kamidanaEffect` |

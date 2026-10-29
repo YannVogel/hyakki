@@ -8,8 +8,8 @@ import { colors, Icon, type Tab, TabBar } from '@/ui';
 import { CombatScreen } from '../combat/CombatScreen';
 import { FestivalScreen } from '../festival/FestivalScreen';
 import { OfflineReturnModal } from '../offline/OfflineReturnModal';
+import { OptionsScreen } from '../options/OptionsScreen';
 import { SanctuaryScreen } from '../sanctuary/SanctuaryScreen';
-import { SettingsScreen } from '../settings/SettingsScreen';
 import { ShikigamiScreen } from '../shikigami/ShikigamiScreen';
 import { TAB_ICONS } from '../shared/icons';
 
@@ -28,7 +28,7 @@ const screens = (goTo: (tab: MainTab) => void): Record<MainTab, () => ReactNode>
   shikigami: () => <ShikigamiScreen />,
   sanctuary: () => <SanctuaryScreen />,
   festival: () => <FestivalScreen onDone={() => goTo('combat')} />,
-  options: () => <SettingsScreen />,
+  options: () => <OptionsScreen />,
 });
 
 /** The five tabs of the game: Combat, Shikigami, Sanctuaire, Festival, Options. */

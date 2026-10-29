@@ -218,6 +218,67 @@ export const fr = {
       },
     },
   },
+  options: {
+    label: 'Afficher',
+    settings: 'Réglages',
+    rules: 'Règles',
+  },
+  rules: {
+    title: 'Règles du jeu',
+    sections: {
+      parade: {
+        title: 'Le défilé',
+        body: (critChance: string, critMultiplier: string) =>
+          `Chaque soir, le défilé des cent démons traverse la ville. Ton onmyōji et ses shikigami frappent tout seuls le yōkai d’en face ; touche l’écran pour frapper en plus. Chaque yōkai purifié rapporte des âmes, puis le suivant arrive : c’est une vague. Une frappe a ${critChance}\u00a0% de chances d’être un coup critique, qui fait ×${critMultiplier} dégâts.`,
+      },
+      talismans: {
+        title: 'Les talismans',
+        body: (
+          fireHits: string,
+          burnSeconds: string,
+          thunderHits: string,
+          boostSeconds: string,
+          extraSeconds: string,
+          cooldowns: string,
+        ) =>
+          `Trois talismans se rechargent tout seuls. Kitsune-bi (火) frappe comme ${fireHits} coups de feu puis brûle l’ennemi ${burnSeconds}\u00a0s. Raijin (雷) frappe comme ${thunderHits} coups de foudre d’un seul éclair. Kekkai (結) double tes âmes pendant ${boostSeconds}\u00a0s, ou ajoute ${extraSeconds}\u00a0s au chrono d’un Gardien. Recharges : ${cooldowns}.`,
+      },
+      guardians: {
+        title: 'Les Gardiens',
+        body: (every: string, seconds: string, weakness: string, tierBonus: string) =>
+          `Toutes les ${every} vagues, un Gardien barre la route : tu as ${seconds}\u00a0s pour le vaincre. Chacun craint le feu ou la foudre, et le talisman de son point faible fait ×${weakness}. Si le chrono tombe à zéro, ou si tu fuis, tu reviens à la vague d’avant pour te renforcer, puis tu le défies quand tu veux. Vaincu, il te donne des ofuda, et les vagues suivantes rapportent ${tierBonus}\u00a0% d’âmes en plus.`,
+      },
+      awakening: {
+        title: 'L’Éveil',
+        body: (count: string) =>
+          `Après le ${count}e Gardien, Nurarihyon, le défilé repart de la première vague un niveau d’Éveil plus haut : les yōkai y sont plus résistants, et les Gardiens reviennent éveillés.`,
+      },
+      sanctuary: {
+        title: 'Le Sanctuaire',
+        body: 'Dépense tes âmes pour renforcer ton onmyōji : dégâts, brûlure, âmes, recharge des talismans, temps hors ligne. Achète un niveau, dix, ou autant que tes âmes le permettent. Tout repart de zéro au Festival.',
+      },
+      kamidana: {
+        title: 'Le Kamidana',
+        body: (count: string) =>
+          `Second onglet du Sanctuaire, l’autel des ofuda. Dépose tes ofuda sur ${count} bénédictions très puissantes : elles restent d’un Festival à l’autre. Tu peux tout récupérer à 100\u00a0%, gratuitement, pour les placer ailleurs.`,
+      },
+      shikigami: {
+        title: 'Les shikigami',
+        body: (common: string, rare: string, epic: string, legendary: string, team: string) =>
+          `Un yōkai purifié peut rejoindre ta collection : ${common}\u00a0% de chances pour un commun, ${rare}\u00a0% pour un rare, ${epic}\u00a0% pour un épique, ${legendary}\u00a0% pour un légendaire. Un doublon fait monter le tien de niveau. ${team} shikigami forment ton équipe : ils frappent avec toi, et leur apparence te donne des bonus (attaque, vitesse, critiques, âmes, brûlure). « Meilleure équipe » choisit pour toi.`,
+      },
+      festival: {
+        title: 'Le Festival',
+        body: (perSpark: string) =>
+          `Une fois le premier Gardien vaincu, le Festival relance le défilé plus fort. Il t’offre des étincelles, et chacune ajoute ${perSpark}\u00a0% de dégâts et d’âmes, pour toujours. Tes vagues, tes âmes, le Sanctuaire et les talismans repartent de zéro ; tu gardes tes shikigami, tes ofuda, le Kamidana et la galerie des Gardiens.`,
+      },
+      offline: {
+        title: 'Hors ligne',
+        body: (efficiency: string, hours: string, maxHours: string) =>
+          `Quand tu fermes le jeu, ton équipe continue à ${efficiency}\u00a0% de son efficacité, pendant ${hours}\u00a0h au plus (jusqu’à ${maxHours}\u00a0h avec les Lanternes de veille). Elle s’arrête devant le Gardien suivant, qui t’attend. Si tu l’autorises, une notification te prévient quand le plafond est atteint.`,
+      },
+    },
+  },
   shops: {
     label: 'Boutique',
     souls: 'Sanctuaire',
