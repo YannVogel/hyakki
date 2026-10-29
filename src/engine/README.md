@@ -134,6 +134,6 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | Élément | Rôle |
 |---|---|
 | `festivalPreview(state)` | Débloqué ou non, étincelles à gagner, bonus avant et après, vague de départ du prochain défilé (pour l'écran Festival). |
-| `headStartWave(record, level)`, `headStartSouls(state, wave)` | Départ avancé du Kamidana : vague de départ (plafonnée par la centaine du record) et âmes des vagues sautées. |
+| `headStartWave(record, level)`, `clearSkippedWaves(state, wave)` | Départ avancé du Kamidana : vague de départ (plafonnée par la centaine du record), puis purification d'office des vagues sautées (âmes, captures, âmes et ofuda des Gardiens). |
 | `startFestival(state)` | Relance le défilé : remise à zéro des vagues, âmes, Sanctuaire ; conservation des shikigami, de l'équipe, des ofuda, du Kamidana et de la galerie ; résultat typé (`locked`). |
 | `festivalSparks(record, flameLevel)`, `festivalBonus(sparks)` | Formules de `docs/GAME_DESIGN.md` § 4.5. |

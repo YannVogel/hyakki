@@ -3,6 +3,8 @@ import {
   type CombatInput,
   createNewGame,
   type GameState,
+  KAMIDANA_IDS,
+  kamidanaMaxLevel,
   log10,
   simulateOffline,
   startFestival,
@@ -10,7 +12,7 @@ import {
   TALISMAN_IDS,
   type TalismanId,
 } from '../../src/engine';
-import { canBeatGuardian, pickTeam, spendSouls, wantsFestival } from './bot';
+import { canBeatGuardian, pickTeam, spendOfuda, spendSouls, wantsFestival } from './bot';
 import type { Profile } from './profiles';
 
 const HOUR_MS = 3_600_000;
@@ -69,7 +71,8 @@ function visit(
       milestones.push(milestoneAt(`festival-${current.parade.number - 1}`, clock));
     }
   }
-  current = spendSouls(pickTeam(current));
+  current = spendSouls(pickTeam(spendOfuda(current)));
+  recordKamidana(current, clock, milestones);
   const retry =
     canBeatGuardian(current, current.parade.wave + 1, profile.tapsPerSecond) ||
     clock.activeMs - clock.lastGuardianTryMs >= FORCED_RETRY_MS;
@@ -77,6 +80,21 @@ function visit(
     current = step(current, 0, [{ type: 'challengeGuardian' }]).state;
   }
   return current;
+}
+
+/** Kamidana milestones: first blessing, every blessing at level 1, every blessing at its max. */
+function recordKamidana(state: GameState, clock: Clock, milestones: Milestone[]) {
+  const levels = KAMIDANA_IDS.map((id) => state.kamidana[id]);
+  const reached = [
+    ['kamidana-1', levels.some((level) => level > 0)],
+    ['kamidana-tous', levels.every((level) => level > 0)],
+    ['kamidana-max', KAMIDANA_IDS.every((id) => state.kamidana[id] >= kamidanaMaxLevel(id))],
+  ] as const;
+  for (const [event, done] of reached) {
+    if (done && !milestones.some((milestone) => milestone.event === event)) {
+      milestones.push(milestoneAt(event, clock));
+    }
+  }
 }
 
 function milestoneAt(event: string, clock: Clock): Milestone {

@@ -1,4 +1,5 @@
 import {
+  buyKamidana,
   buyUpgradeLevels,
   type GameState,
   guardianMaxHp,
@@ -23,6 +24,9 @@ import {
   combatPower,
   expectedDps,
   festivalPreview,
+  KAMIDANA_IDS,
+  kamidanaCost,
+  kamidanaMaxLevel,
 } from '../../src/engine';
 
 // A simple, deterministic player used to measure the balance. It is not smart: it buys the
@@ -127,17 +131,50 @@ export function spendSouls(state: GameState): GameState {
   return current;
 }
 
+/**
+ * Spends the ofuda on the Kamidana: always the cheapest level left, ties in the engine's order.
+ * The bot never refunds: it measures the blessings bought one after the other.
+ */
+export function spendOfuda(state: GameState): GameState {
+  let current = state;
+  for (;;) {
+    const [cheapest] = KAMIDANA_IDS.filter((id) => current.kamidana[id] < kamidanaMaxLevel(id))
+      .map((id) => ({ id, cost: kamidanaCost(id, current.kamidana[id]) }))
+      .sort((a, b) => a.cost - b.cost);
+    if (cheapest === undefined || cheapest.cost > current.ofuda) {
+      return current;
+    }
+    const result = buyKamidana(current, cheapest.id);
+    if (!result.ok) {
+      return current;
+    }
+    current = result.state;
+  }
+}
+
 /** log10 of the damage per second of a shikigami, per unit of hero damage. */
 // The bot compares its shikigami at their real level, without team bonuses (simpler than the
 // game's « Meilleure équipe », which judges every yōkai at level 1).
-const shikigamiStrength = (shikigami: Shikigami) => log10(shikigamiDps(shikigami));
+// Memoized: the bot looks at its whole collection at every visit, and drawing a yōkai is costly.
+const strengths = new Map<string, number>();
+function shikigamiStrength(shikigami: Shikigami): number {
+  const key = `${shikigami.seed}:${shikigami.generatorVersion}:${shikigami.level}`;
+  let strength = strengths.get(key);
+  if (strength === undefined) {
+    strength = log10(shikigamiDps(shikigami));
+    strengths.set(key, strength);
+  }
+  return strength;
+}
 
 /** Fields the strongest shikigami. */
 export function pickTeam(state: GameState): GameState {
-  const best = [...state.shikigami]
-    .sort((a, b) => shikigamiStrength(b) - shikigamiStrength(a))
+  // Each strength is computed once per visit: the Call of the yōkai makes collections of thousands.
+  const best = state.shikigami
+    .map((shikigami) => ({ seed: shikigami.seed, strength: shikigamiStrength(shikigami) }))
+    .sort((a, b) => b.strength - a.strength)
     .slice(0, TEAM_SIZE)
-    .map((shikigami) => shikigami.seed);
+    .map((entry) => entry.seed);
   const unchanged =
     best.length === state.team.length && best.every((seed) => state.team.includes(seed));
   if (unchanged) {

@@ -104,7 +104,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 - Étincelles gagnées : `E = floor(5 × (vague_max / 100) ^ 1.8 × (1 + 25 % × niv_flamme))`.
 - Effet : remise à zéro des vagues, des âmes et des niveaux du Sanctuaire ; **conservation** des shikigami, des ofuda, du Kamidana et de la galerie des Gardiens.
 - Bonus permanent : `× (1 + 0,05 × étincelles_totales)` sur les dégâts et les âmes.
-- **Départ avancé** (Kamidana, § 4.7) : le nouveau défilé démarre à la vague `1 + 25 × niveau`, jamais au-delà de la centaine du record (record 350 → vague 301 au plus), donc jamais sur un Gardien. Le joueur reçoit les âmes des vagues sautées (un yōkai ordinaire par vague, rareté ×1, palier et multiplicateurs du nouveau défilé compris, sans capture) ; les Gardiens sautés ne donnent ni ofuda ni âmes de Gardien (`headStartWave`, `headStartSouls`).
+- **Départ avancé** (Kamidana, § 4.7) : le nouveau défilé démarre à la vague `1 + 25 × niveau`, jamais au-delà de la centaine du record (record 350 → vague 301 au plus), donc jamais sur un Gardien. Les vagues sautées sont purifiées d'office, comme si on les jouait (`clearSkippedWaves`) : chaque yōkai donne ses âmes et son tirage de capture, chaque Gardien (tous battus dans le défilé précédent) ses âmes et ses ofuda, multiplicateurs du nouveau défilé compris, sans bonus de Kekkai. Une première version ne donnait qu'un yōkai ordinaire par vague, sans capture ni ofuda : le harnais la montrait plus lente que pas de départ avancé du tout (#102).
 - **Implémentation** : débloqué dès que le record du défilé dépasse la vague 100. Le nouveau défilé a sa propre graine (dérivée de la précédente) ; l'équipe active est conservée avec la collection ; les recharges des talismans et les effets repartent de zéro. Le bonus s'applique partout où le moteur calcule dégâts et âmes (combat actif et hors ligne).
 
 ### 4.6 Hors ligne
@@ -124,20 +124,20 @@ Le **kamidana** (神棚) est l'autel domestique où l'on dépose ses ofuda. Chaq
 
 | Amélioration | Effet par niveau | Coût de base | Niveau max |
 |---|---|---|---|
-| Bénédiction de la lame | ×1,5 sur tous les dégâts (héros, toucher, shikigami, talismans) | 10 | 10 |
-| Œil du tengu | +1 au multiplicateur de critique (×3 → ×4…), plafond de chance inchangé | 10 | 5 |
-| Paume d'Inari | ×2 sur les dégâts du toucher | 5 | 8 |
-| Pacte des shikigami | ×1,5 sur les dégâts de l'équipe | 10 | 10 |
-| Sablier du kami | +5 s au chrono des Gardiens (50 s au plus) | 10 | 4 |
-| Œil de la faille | +1 au multiplicateur de faiblesse (×2 → ×3…) | 10 | 5 |
-| Talismans majeurs | ×2 sur Kitsune-bi et Raijin ; +5 s au bonus d'âmes de Kekkai | 10 | 8 |
-| Départ avancé | chaque nouveau défilé démarre 25 vagues plus loin | 15 | 8 |
-| Bourse sacrée | ×2 sur les âmes, combat et hors ligne | 10 | 10 |
-| Flamme du Festival | +25 % d'étincelles gagnées au Festival | 15 | 8 |
-| Veille de l'onmyōji | +10 points d'efficacité hors ligne (100 % au plus) | 10 | 5 |
-| Appel des yōkai | ×1,5 sur les chances de capture (100 % au plus) | 5 | 6 |
+| Bénédiction de la lame | ×1,5 sur tous les dégâts (héros, toucher, shikigami, talismans) | 30 | 10 |
+| Œil du tengu | +1 au multiplicateur de critique (×3 → ×4…), plafond de chance inchangé | 30 | 5 |
+| Paume d'Inari | ×2 sur les dégâts du toucher | 15 | 8 |
+| Pacte des shikigami | ×1,5 sur les dégâts de l'équipe | 30 | 10 |
+| Sablier du kami | +5 s au chrono des Gardiens (50 s au plus) | 30 | 4 |
+| Œil de la faille | +1 au multiplicateur de faiblesse (×2 → ×3…) | 30 | 5 |
+| Talismans majeurs | ×2 sur Kitsune-bi et Raijin ; +5 s au bonus d'âmes de Kekkai | 30 | 8 |
+| Départ avancé | chaque nouveau défilé démarre 25 vagues plus loin | 45 | 8 |
+| Bourse sacrée | ×2 sur les âmes, combat et hors ligne | 30 | 10 |
+| Flamme du Festival | +25 % d'étincelles gagnées au Festival | 45 | 8 |
+| Veille de l'onmyōji | +10 points d'efficacité hors ligne (100 % au plus) | 30 | 5 |
+| Appel des yōkai | ×1,5 sur les chances de capture (100 % au plus) | 15 | 6 |
 
-- **Coût** du niveau `n → n + 1` : `arrondi(base × 2^n)` ofuda, achat un niveau à la fois. Valeurs de départ, à calibrer avec le harnais (§ 5.2).
+- **Coût** du niveau `n → n + 1` : `arrondi(base × 2^n)` ofuda, achat un niveau à la fois. Coûts calibrés avec le harnais (§ 5.2, #102) : trois fois les hypothèses de départ, qui rendaient le Kamidana trop rapide (10e Gardien au jour 13,5 pour le joueur régulier).
 - **Remboursement** : un seul geste rend tout, au prix actuel des niveaux possédés (somme des coûts). Il vaut donc toujours exactement le prix de rachat, même après un rééquilibrage ; rien d'autre n'est sauvegardé. Un niveau au-dessus d'un maximum abaissé reste chargé et remboursé.
 - Un effet lié à un minuteur déjà lancé (chrono d'un Gardien engagé) s'applique au prochain lancement.
 - **Écran** : dans l'onglet Sanctuaire, un sélecteur passe du Sanctuaire au Kamidana : stock d'ofuda, trois cartes (Combat ; Gardiens et talismans ; Économie), pour chaque bénédiction son niveau, son effet par niveau et sa valeur actuelle → suivante (`kamidanaEffect`), puis « Tout récupérer » après confirmation. L'écran Festival annonce la vague de départ quand le Départ avancé joue.
@@ -178,23 +178,31 @@ Toutes ces constantes sont dans `src/engine/balance.ts` : c'est le seul endroit 
 
 ### 5.2 Équilibrage : cibles et mesures
 
-Mesuré par `npx tsx scripts/simulate.ts` (bot simple et déterministe : il achète toujours le moins cher, aligne ses trois shikigami les plus forts, garde ses talismans d'attaque pour les Gardiens, affronte chaque Gardien et lance un Festival quand il bloque et que le bonus progresse d'au moins 15 %). Trois profils sur 30 jours ; courbes et jalons dans [`docs/balancing/`](balancing/README.md).
+Mesuré par `npx tsx scripts/simulate.ts` (bot simple et déterministe : il achète toujours le moins cher, au Sanctuaire comme au Kamidana où il ne rembourse jamais, aligne ses trois shikigami les plus forts, garde ses talismans d'attaque pour les Gardiens, affronte chaque Gardien et lance un Festival quand il bloque et que le bonus progresse d'au moins 15 %). Trois profils sur 30 jours ; courbes et jalons dans [`docs/balancing/`](balancing/README.md).
+
+Le Kamidana (milestone 7) accélère volontairement la progression : les cibles marquées « Kamidana » sont celles de #102, à valider par Yann en jeu (#53). Les mesures d'avant le Kamidana sont entre parenthèses.
 
 | Cible (joueur régulier : 3 sessions de 5 min par jour) | Visé | Mesuré |
 |---|---|---|
 | Premier Gardien (vague 100) | jour 1 | jour 0,5 (10 min de jeu actif) |
 | Premier Festival | jours 1 à 3 | jour 1,2 |
-| Gardien 5 (vague 500) | jours 4 à 10 | jour 5,2 |
-| Record de 800 | jours 15 à 25 | jour 15,5 |
-| Gardien 10 (vague 1000) | au-delà du jour 30 (objectif de long terme) | non atteint à J30 (record 900) |
-| Éveil 2 (Nurarihyon vaincu) | ni trivial ni infranchissable | profil persévérant (Festival dès +5 % de bonus), sur 200 jours : record 1000 au jour 52,5, Nurarihyon vaincu au jour 102, Bake-danuki éveillé (vague 1100) atteint vers le jour 130 puis nouveau mur. Avec la règle à +15 %, le bot cesse ses Festivals devant Nurarihyon et y reste (120 jours) |
+| Premier ofuda déposé au Kamidana | après le 1er ou le 2e Gardien | jour 1 (2e Gardien) |
+| Toutes les bénédictions au niveau 1 | environ une semaine (Kamidana) | jour 6,2 |
+| Gardien 5 (vague 500) | jours 4 à 10 | jour 4 (5,2) |
+| Record de 800 | jours 7 à 15 (Kamidana ; 15 à 25 avant) | jour 8 (15,5) |
+| Gardien 10 (vague 1000) | avant J30 (Kamidana) | jour 18,5 (non atteint à J30, record 900) |
+| Éveil 2 (Nurarihyon vaincu) | ni trivial ni infranchissable | joueur régulier : jour 18,5 ; persévérant (Festival dès +5 %) : jour 23 (102), puis mur vers la vague 1500 (Gashadokuro éveillé), atteinte au jour 117 sur 200 |
+| Toutes les bénédictions au maximum | pas avant l'Éveil 2 | non atteint en 200 jours (persévérant) |
+| Départ avancé jamais plus lent que sans | — | régulier : 10e Gardien au jour 18,5 avec ou sans ; actif : jour 6 avec, 6,6 sans ; persévérant : jour 23 avec, 23,5 sans |
 
 | Cible (autres profils) | Visé | Mesuré |
 |---|---|---|
 | Joueur actif (2 h par jour) : premier Gardien | ≤ 45 min de jeu | 30 min |
-| Joueur actif : Gardien 5 | ≤ 3 jours | jour 1 |
-| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 853 / 900 = 95 % |
-| Temps de calcul | 30 jours de simulation en environ 30 s | 4 profils : 31 s |
+| Joueur actif : Gardien 5 | ≤ 3 jours | jour 0,6 (1) |
+| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 900 / 1100 = 82 % (95 %) |
+| Temps de calcul | 30 jours de simulation en environ 30 s | 4 profils : 12 s (31 s) |
+
+Réglage du Kamidana (#102) : avec les coûts de départ, le joueur régulier avait toutes les bénédictions au niveau 1 au jour 3 et battait Nurarihyon au jour 13,5 ; coûts ×2 : jour 16,5 ; ×4 : jour 24,5 ; retenu ×3 (jour 18,5). Les effets par niveau, choisis par Yann, ne changent pas. Le bot mémorise la force de ses shikigami : l'Appel des yōkai lui fait des collections de milliers de shikigami, que la version précédente re-dessinait à chaque tri (10 fois plus lent).
 
 Mesures avec le générateur V2 (défilés neufs). Sensibilité : d'un défilé à l'autre (graine), le premier Gardien du joueur régulier tombe ou non au jour 1 selon la chance des premiers yōkai et des captures ; sur 12 défilés, il tombe au jour 1 dans 10 cas avec la Lame à 5 âmes (contre 4 avec l'ancien coût de 10). Le harnais mesure une graine fixe (2026) : une cible « au jour près » est donc indicative.
 

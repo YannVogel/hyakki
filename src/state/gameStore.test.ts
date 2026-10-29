@@ -83,12 +83,12 @@ describe('game store', () => {
   });
 
   it('buys a Kamidana upgrade with ofuda, then refunds it all', () => {
-    const { store } = createFakeStore({ game: { ...createNewGame(1), ofuda: 30 } });
+    const { store } = createFakeStore({ game: { ...createNewGame(1), ofuda: 40 } });
     expect(store.getState().buyKamidana('blessing').ok).toBe(true);
-    expect(store.getState().game.ofuda).toBe(20);
+    expect(store.getState().game.ofuda).toBe(10);
     expect(store.getState().game.kamidana.blessing).toBe(1);
-    expect(store.getState().refundKamidana()).toMatchObject({ ok: true, ofuda: 10 });
-    expect(store.getState().game.ofuda).toBe(30);
+    expect(store.getState().refundKamidana()).toMatchObject({ ok: true, ofuda: 30 });
+    expect(store.getState().game.ofuda).toBe(40);
     expect(store.getState().game.kamidana.blessing).toBe(0);
   });
 

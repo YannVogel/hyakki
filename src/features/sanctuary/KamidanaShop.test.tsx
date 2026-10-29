@@ -42,7 +42,7 @@ describe('Kamidana', () => {
   });
 
   it('places an ofuda: the cost leaves the stock and the level rises', async () => {
-    const { store } = await openKamidana(withOfuda(25));
+    const { store } = await openKamidana(withOfuda(45));
     expect(screen.getByTestId('kamidana-blessing-value')).toHaveTextContent('×1 → ×1,5');
     await fireEvent.press(screen.getByTestId('buy-kamidana-blessing'));
     expect(store.getState().game.kamidana.blessing).toBe(1);
@@ -52,7 +52,7 @@ describe('Kamidana', () => {
   });
 
   it('disables a blessing the ofuda cannot pay, or at its maximum', async () => {
-    await openKamidana(withOfuda(12, { hourglass: 4 }));
+    await openKamidana(withOfuda(35, { hourglass: 4 }));
     expect(screen.getByTestId('buy-kamidana-blessing')).not.toBeDisabled();
     expect(screen.getByTestId('buy-kamidana-headStart')).toBeDisabled();
     expect(screen.getByLabelText(text.maxedLabel(text.upgrades.hourglass.name))).toBeDisabled();
@@ -62,9 +62,9 @@ describe('Kamidana', () => {
   it('takes every ofuda back after a confirmation', async () => {
     const { store } = await openKamidana(withOfuda(5, { blessing: 2, vigil: 1 }));
     await fireEvent.press(screen.getByTestId('kamidana-refund'));
-    expect(screen.getByText(text.refundBody('40'))).toBeOnTheScreen();
+    expect(screen.getByText(text.refundBody('120'))).toBeOnTheScreen();
     await fireEvent.press(screen.getByTestId('kamidana-refund-yes'));
-    expect(store.getState().game.ofuda).toBe(45);
+    expect(store.getState().game.ofuda).toBe(125);
     expect(store.getState().game.kamidana.blessing).toBe(0);
     expect(store.getState().game.kamidana.vigil).toBe(0);
   });
@@ -80,7 +80,7 @@ describe('Kamidana', () => {
   it('reads each blessing out: name, level, effect and price', async () => {
     await openKamidana(withOfuda(3));
     expect(
-      screen.getByLabelText(text.notEnough(text.upgrades.blessing.name, '10')),
+      screen.getByLabelText(text.notEnough(text.upgrades.blessing.name, '30')),
     ).toBeOnTheScreen();
   });
 });
