@@ -8,6 +8,7 @@ Le jeu est **hybride** :
 | Gardiens (boss), 10 en V1 | Illustrations ChatGPT, détourées | `assets/images/bosses/` |
 | Yōkai ordinaires | Générés en code (Skia) | `src/engine/yokai/`, `src/render/yokai/` |
 | Décors (fonds de combat, en-tête du Festival) | Illustrations ChatGPT | `assets/images/backdrops/` |
+| Icône de la monnaie ofuda | Illustration ChatGPT, détourée | `assets/images/icons/` |
 | Interface, effets, cut-in | Dessinés en code (Skia, composants) | `src/render/`, `src/ui/` |
 
 ## 1. Règles de cohérence
@@ -156,3 +157,31 @@ Same style and rules as before. Wide 3:2 landscape header image for the Festival
 Scene: a Japanese summer night festival. A wooden yagura tower with a big taiko drum in the center-right, strings of red and white paper lanterns crossing the image, food stalls with colorful noren curtains, big colorful fireworks blooming in a purple-to-blue night sky. No people.
 Keep the bottom-left third of the image an empty open festival ground with nothing tall: a character will be added there later.
 ```
+
+## 8. Icônes de monnaie
+
+L'ofuda, monnaie des Gardiens dépensée au Kamidana, a une icône illustrée (#103, #104) ; les âmes gardent leur icône vectorielle (`SOULS_ICON`).
+
+| Où | Quoi |
+|---|---|
+| `design/sources/icons/ofuda.png` | Source : 1254 × 1254, fond crème |
+| `assets/images/icons/ofuda.png` | Version de l'app : détourée, défrangée, centrée dans un carré transparent de 144 px (3 × sa plus grande taille d'affichage, 48 pt) |
+| `src/features/shared/OfudaIcon.tsx` | Composant décoratif (`OFUDA_IMAGE`, taille vérifiée par un test) : 20 pt dans l'en-tête de combat, 40 pt au Kamidana |
+
+```bash
+python3 scripts/cut_sheet.py design/sources/icons/ofuda.png /tmp/ofuda --names ofuda --dilate 3
+python3 scripts/defringe.py /tmp/ofuda/ofuda.png
+```
+
+Puis centrer la figure dans un carré transparent et la ramener à 144 px (Pillow, `LANCZOS`). Vérifier à 20 pt sur fond crème, blanc et sombre.
+
+Prompt, envoyé dans la conversation de référence après les décors :
+
+```text
+New request, different from the backgrounds: a currency icon for the game interface, in the exact style of the model sheet from the beginning of this conversation (chibi cartoon-anime, thick uniform dark ink outline #2B1D3F, flat cel shading with a single shadow tone, light from the top left, saturated palette).
+Square 1:1 image. One single ofuda (Japanese paper talisman), centered, slightly tilted about 10 degrees to the right, filling about 80% of the height, with an even empty margin all around.
+The ofuda: a tall rectangular strip of thick cream-white paper with slightly rounded corners, a bold vermilion-red vertical band down the middle, a small round red seal near the bottom, a thin gold trim along the top edge, and two or three bold abstract dark brush swirls on the red band (decorative strokes only, not readable characters).
+It will be displayed very small (20 to 48 pixels): bold simple shapes, strong readable silhouette, no fine details, no thin lines.
+Plain flat cream background (#FFF4DC). No text, no letters, no kanji, no ground shadow, no glow, no sparkles, no frame, no other object.
+```
+

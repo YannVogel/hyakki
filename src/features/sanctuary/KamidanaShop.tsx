@@ -4,9 +4,9 @@ import { Modal, StyleSheet, Text, View } from 'react-native';
 import { formatNumber, kamidanaRefund } from '@/engine';
 import { strings } from '@/i18n';
 import { kamidanaViews, useGame, useGameStore } from '@/state';
-import { bodyText, Button, Card, colors, displayText, Icon, spacing } from '@/ui';
+import { bodyText, Button, Card, colors, displayText, spacing } from '@/ui';
 
-import { OFUDA_ICON } from '../shared/icons';
+import { OfudaIcon } from '../shared/OfudaIcon';
 import { KAMIDANA_SECTIONS } from './kamidanaCatalog';
 import { KamidanaRow } from './KamidanaRow';
 
@@ -28,7 +28,7 @@ export function KamidanaShop() {
   return (
     <>
       <Card style={styles.stock}>
-        <Icon parts={OFUDA_ICON} size={28} />
+        <OfudaIcon size={40} />
         <View style={styles.stockText}>
           <Text style={[bodyText('sm', 800), styles.muted]}>{text.ofuda}</Text>
           <Text style={displayText('2xl')} testID="kamidana-ofuda">

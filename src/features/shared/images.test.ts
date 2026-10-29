@@ -1,10 +1,11 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { BATTLE_BACKDROPS, FESTIVAL_HEADER, HERO_POSES, heroPoseSize } from './images';
+import { BATTLE_BACKDROPS, FESTIVAL_HEADER, HERO_POSES, heroPoseSize, OFUDA_IMAGE } from './images';
 
 const HERO_DIR = path.resolve(__dirname, '../../../assets/images/hero');
 const BACKDROP_DIR = path.resolve(__dirname, '../../../assets/images/backdrops');
+const ICON_DIR = path.resolve(__dirname, '../../../assets/images/icons');
 
 /** Width and height from the PNG header (IHDR chunk). */
 function pngSize(file: string): { width: number; height: number } {
@@ -51,5 +52,12 @@ describe('backdrops', () => {
 
   it('give each of the ten guardians its own backdrop', () => {
     expect(new Set(BATTLE_BACKDROPS.guardians.map(({ source }) => source)).size).toBe(10);
+  });
+});
+
+describe('ofuda icon', () => {
+  it('knows the real size of its PNG, a square', () => {
+    expect(sizeOf(OFUDA_IMAGE)).toEqual(pngSize(path.join(ICON_DIR, 'ofuda.png')));
+    expect(OFUDA_IMAGE.width).toBe(OFUDA_IMAGE.height);
   });
 });
