@@ -33,8 +33,8 @@ describe('hero poses', () => {
   it('draws every pose at the scale of the idle pose', () => {
     const idle = heroPoseSize('idle', 200);
     expect(idle.height).toBe(200);
-    expect(idle.width).toBeCloseTo((257 * 200) / 449);
-    expect(heroPoseSize('knockedOut', 449)).toEqual({ width: 384, height: 332 });
+    expect(idle.width).toBeCloseTo((707 * 200) / 1310);
+    expect(heroPoseSize('knockedOut', 1310)).toEqual({ width: 1366, height: 969 });
   });
 });
 

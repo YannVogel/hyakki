@@ -26,10 +26,11 @@ Le jeu est **hybride** :
 | `design/sources/planche-heros.png` | 10 poses du héros |
 | `design/sources/planche-boss.png` | 10 Gardiens (le n° 10 y est remplacé par la version 3 ci-dessous) |
 | `design/sources/nurarihyon-v3.png` | Nurarihyon, version 3, générée seule |
+| `design/sources/hd/` | Les 19 autres figures, générées seules en haute définition (§ 5) |
 
 Ordre des poses du héros : 01 attente, 02 attaque, 03 sort de feu, 04 sort de foudre, 05 barrière, 06 touché, 07 K.-O., 08 victoire, 09 sommeil, 10 surpris.
 
-Chaque pose garde sa propre taille (de 221 × 446 à 384 × 332 px), toutes à la même échelle et les pieds à 6–7 px du bord bas. Le code connaît ces tailles (`HERO_POSES` dans `src/features/shared/images.ts`, vérifiées par un test contre les en-têtes PNG) et dessine chaque pose à l'échelle de la pose d'attente, ancrée par le bas : les pieds ne bougent pas d'une pose à l'autre. Une figure régénérée doit garder cette marge sous les pieds (`scripts/check_figures.py` le vérifie) et mettre à jour sa taille dans `HERO_POSES`.
+Chaque pose garde sa propre taille (de 636 × 1301 à 1366 × 969 px, pose d'attente en 707 × 1310), toutes à la même échelle et les pieds à 5–7 px du bord bas. Le code connaît ces tailles (`HERO_POSES` dans `src/features/shared/images.ts`, vérifiées par un test contre les en-têtes PNG) et dessine chaque pose à l'échelle de la pose d'attente, ancrée par le bas : les pieds ne bougent pas d'une pose à l'autre. Une figure régénérée doit être remise à l'échelle commune (`scripts/scale_poses.py`), garder cette marge sous les pieds (`scripts/check_figures.py` le vérifie) et mettre à jour sa taille dans `HERO_POSES`.
 
 Ordre des Gardiens : 01 Bake-danuki, 02 Kappa, 03 Karasu-tengu, 04 Tsuchigumo, 05 Yuki-onna, 06 Gashadokuro, 07 Nue, 08 Ibaraki-dōji, 09 Kyūbi no kitsune, 10 Nurarihyon.
 
@@ -64,14 +65,7 @@ Toujours vérifier le résultat sur un fond coloré avant de committer.
 
 ## 5. Haute définition
 
-Les figures découpées depuis les planches font ~300 × 450 px : suffisant pour les maquettes, un peu juste sur tablette. Avant publication, régénérer chaque figure seule en grand (prompt ci-dessous, planche jointe), puis découper, défranger, vérifier et remplacer. Procédure pas à pas et liste des 20 figures : [`art/hd-regeneration.md`](art/hd-regeneration.md).
-
-```text
-Using the attached model sheet as the exact style reference, redraw ONLY figure [NUMBER] ([NAME]) as a single large standalone illustration.
-Keep exactly the same design, proportions, colors, outline thickness and flat cel shading as on the sheet.
-Square format, figure centered with empty space around it, transparent background (or plain flat #FFF4DC if transparency is not possible).
-No text, no shadow on the ground, no scenery.
-```
+Les figures découpées depuis les planches faisaient ~300 × 450 px, un peu juste sur tablette. Depuis le 29/10/2026, chacune est régénérée seule en grand (planche jointe, fond crème uni, format adapté à la silhouette), puis découpée, défrangée, vérifiée et remplacée : toutes font au moins 900 px de haut. Une pose du héros dessinée seule arrive à sa propre échelle : `scripts/scale_poses.py` la ramène à l'échelle commune des poses. Prompt, procédure pas à pas et liste des figures : [`art/hd-regeneration.md`](art/hd-regeneration.md).
 
 ## 6. Icône et écran de lancement
 
