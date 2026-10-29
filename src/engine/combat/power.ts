@@ -18,37 +18,45 @@ export interface CombatPower {
   /** Active team members, in team order. */
   readonly team: readonly TeamAttacker[];
   readonly critChance: number;
+  /** Damage of a critical hit, in normal hits. */
+  readonly critMultiplier: number;
   /** Permanent burn on the current enemy, as a fraction of its max HP per second. */
   readonly burnRate: number;
   readonly soulsMultiplier: number;
 }
 
 /**
- * Bonuses of different sources multiply (Sanctuary × team × Festival); bonuses of one source add up.
- * Intervals stay whole milliseconds so that attack timings do not drift.
+ * Bonuses of different sources multiply (Sanctuary × team × Festival × Kamidana); bonuses of one
+ * source add up. Intervals stay whole milliseconds so that attack timings do not drift.
  */
 export function combatPower(state: GameState): CombatPower {
   const { blade, foxfire, bell } = state.sanctuary;
-  const { upgrades, hero, crit } = BALANCE;
+  const { blessing, tenguEye, inariPalm, shikigamiPact } = state.kamidana;
+  const { upgrades, hero, crit, kamidana } = BALANCE;
   const members = teamMembers(state);
   const bonus = teamBonus(members);
   const speed = 1 + bonus.speed;
   const festival = festivalBonus(state.sparks);
   const heroHitDamage = mul(
-    pow(upgrades.blade.damageGrowth, blade),
+    mul(pow(upgrades.blade.damageGrowth, blade), pow(kamidana.blessing.damageGrowth, blessing)),
     hero.baseDamage * (1 + bonus.attack) * festival,
   );
+  const pact = pow(kamidana.shikigamiPact.teamDamageGrowth, shikigamiPact);
   const team = members.map((member) => ({
     seed: member.seed,
-    hitDamage: mul(heroHitDamage, shikigamiHitRatio(member)),
+    hitDamage: mul(mul(heroHitDamage, shikigamiHitRatio(member)), pact),
     intervalMs: Math.max(1, Math.round(shikigamiIntervalMs(member) / speed)),
   }));
   return {
     heroHitDamage,
-    tapDamage: mul(heroHitDamage, hero.tapMultiplier),
+    tapDamage: mul(
+      mul(heroHitDamage, hero.tapMultiplier),
+      pow(kamidana.inariPalm.tapGrowth, inariPalm),
+    ),
     heroIntervalMs: Math.max(1, Math.round(hero.attackIntervalMs / speed)),
     team,
     critChance: Math.min(crit.maxChance, crit.baseChance + bonus.crit),
+    critMultiplier: crit.multiplier + kamidana.tenguEye.critMultiplierPerLevel * tenguEye,
     burnRate: upgrades.foxfire.burnPerLevel * foxfire + bonus.burn,
     soulsMultiplier: (1 + upgrades.bell.soulsPerLevel * bell) * (1 + bonus.souls) * festival,
   };
@@ -56,7 +64,7 @@ export function combatPower(state: GameState): CombatPower {
 
 /** Expected damage per second of the automatic hits (critical hits averaged, taps excluded). */
 export function expectedDps(power: CombatPower): BigNum {
-  const critFactor = 1 + power.critChance * (BALANCE.crit.multiplier - 1);
+  const critFactor = 1 + power.critChance * (power.critMultiplier - 1);
   const attackers = [
     { hitDamage: power.heroHitDamage, intervalMs: power.heroIntervalMs },
     ...power.team,

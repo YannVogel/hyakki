@@ -83,7 +83,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `step(state, dtMs, inputs)` | Fonction de transition pure : renvoie `{ state, events }`. Temps injecté ; découpage en pas sans effet sur le résultat. |
 | `CombatInput` | Actions du joueur depuis le pas précédent (`tap`…), appliquées au début du pas. |
 | `CombatEvent` | Ce que l'UI anime : `hit` (source, dégâts, critique), `yokaiDefeated` (âmes), `waveStarted`… avec `atMs`, le décalage dans le pas. |
-| `combatPower(state)` | Dégâts, chance de critique, brûlure et multiplicateur d'âmes dérivés de l'état. |
+| `combatPower(state)` | Dégâts (héros, toucher, équipe), chance et multiplicateur de critique, brûlure et multiplicateur d'âmes dérivés de l'état (Sanctuaire, équipe, Festival, Kamidana). |
 | `expectedDps(power)` | Dégâts espérés par seconde des frappes automatiques (critiques moyennés) ; plafonne aussi les brûlures (×9). |
 | `waveHp`, `waveSouls`, `yokaiMaxHp`, `yokaiProfile` | Formules de `docs/GAME_DESIGN.md` § 5. |
 | `GUARDIANS`, `isGuardianWave`, `guardianAt`, `guardianMaxHp`, `guardianOfuda`, `tierMultiplier` | Gardiens : ordre, faiblesse, cycle éveillé, PV, ofuda, bonus de palier. |

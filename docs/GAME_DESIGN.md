@@ -94,7 +94,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 - Un shikigami monte de niveau contre des âmes : `100 × 1,18^(niveau − 1)`.
 - **Frappe d'un shikigami** = frappe du héros × 0,5 × attaque / 100 × (1 + 10 % par niveau au-delà du premier), toutes les `1 000 ms × 100 / vitesse` : l'attaque fait la force, la vitesse la cadence. La progression par niveau est linéaire : la frappe du héros, dont elle dépend, se multiplie déjà avec la Lame.
 - **Bonus d'équipe** = somme des traits offensifs des trois membres : attaque (+% de dégâts pour tous), critique (+ points de chance de critique, plafonnée à 75 %), vitesse (+% de cadence pour tous), âmes, brûlure. Les traits de PV et de défense ne jouent que lorsque le yōkai est un ennemi (sa résistance).
-- Les bonus de sources différentes se multiplient (Sanctuaire × équipe × Festival) ; ceux d'une même source s'additionnent.
+- Les bonus de sources différentes se multiplient (Sanctuaire × équipe × Festival × Kamidana) ; ceux d'une même source s'additionnent.
 - Un nouveau membre d'équipe commence un cycle d'attaque complet (pas de frappe gratuite en changeant d'équipe).
 - **Meilleure équipe** (bouton de l'écran Shikigami) : équipe les trois shikigami qui font le plus de dégâts ensemble, **chacun jugé au niveau 1** (le yōkai lui-même, pas les niveaux investis : un shikigami très monté peut sortir de l'équipe). Score = dégâts par seconde espérés du héros et de l'équipe à la vague en cours, bonus d'équipe compris (attaque, vitesse, critique, brûlure plafonnée par les frappes) ; départage par le bonus d'âmes, puis par les plus petites graines. Recherche exacte parmi les 12 meilleurs shikigami pris seuls (`bestTeam`), environ 5 ms pour 500 shikigami. Bouton désactivé si la collection est vide ou si l'équipe est déjà la meilleure.
 
@@ -139,7 +139,7 @@ Le **kamidana** (神棚) est l'autel domestique où l'on dépose ses ofuda. Chaq
 - **Coût** du niveau `n → n + 1` : `arrondi(base × 2^n)` ofuda, achat un niveau à la fois. Valeurs de départ, à calibrer avec le harnais (§ 5.2).
 - **Remboursement** : un seul geste rend tout, au prix actuel des niveaux possédés (somme des coûts). Il vaut donc toujours exactement le prix de rachat, même après un rééquilibrage ; rien d'autre n'est sauvegardé. Un niveau au-dessus d'un maximum abaissé reste chargé et remboursé.
 - Un effet lié à un minuteur déjà lancé (chrono d'un Gardien engagé) s'applique au prochain lancement.
-- **Implémentation** : `src/engine/economy/kamidana.ts` (achat, remboursement), niveaux dans `GameState.kamidana` (schéma de sauvegarde 2). Les effets se branchent dans le moteur au fil de la milestone 7 et se multiplient avec les autres sources.
+- **Implémentation** : `src/engine/economy/kamidana.ts` (achat, remboursement), niveaux dans `GameState.kamidana` (schéma de sauvegarde 2). Les effets se branchent dans le moteur au fil de la milestone 7 et se multiplient avec les autres sources. Combat (#98) : Bénédiction et Pacte multiplient les frappes dans `combatPower`, la Paume ne multiplie que le toucher (sans effet hors ligne), l'Œil du tengu s'ajoute au multiplicateur de critique, partout où un critique est tiré ou moyenné (combat, hors ligne, « Meilleure équipe »).
 
 ## 5. Formules
 
@@ -148,11 +148,12 @@ Le **kamidana** (神棚) est l'autel domestique où l'on dépose ses ofuda. Chaq
 | PV d'un yōkai à la vague `v` | `12 × 1,13^(v−1) × PV du yōkai / 100` | La stat PV (objet, traits, rareté) fait la résistance |
 | PV d'un Gardien | `12 × 12 × 1,13^(v−1)` | ×2 par cycle éveillé au-delà de 1000 |
 | Âmes par yōkai | `2 × 1,13^(v−1)` | × rareté × clochette ; Gardien ×15 ; +50 % par palier de 100 vagues |
-| Frappe du héros | `1 × 1,0925^niv_lame` | × (1 + attaque d'équipe) × Festival ; critique ×3 |
-| Frappe d'un shikigami | `frappe du héros × 0,5 × attaque / 100 × (1 + 10 % × (niveau − 1))` | toutes les `1 000 ms × 100 / vitesse` |
+| Frappe du héros | `1 × 1,0925^niv_lame × 1,5^niv_bénédiction` | × (1 + attaque d'équipe) × Festival ; critique ×(3 + niv_œil_du_tengu) |
+| Toucher | `frappe du héros × 2^niv_paume` | jamais hors ligne |
+| Frappe d'un shikigami | `frappe du héros × 0,5 × attaque / 100 × (1 + 10 % × (niveau − 1)) × 1,5^niv_pacte` | toutes les `1 000 ms × 100 / vitesse` |
 | Coût de `k` niveaux au Sanctuaire | `base × 1,12^niv × (1,12^k − 1) / 0,12` | |
 | Coût d'un niveau de shikigami | `100 × 1,18^(niveau − 1)` | |
-| Critique | 5 % de base (75 % au plus), ×3 dégâts | + bonus d'apparence des shikigami |
+| Critique | 5 % de base (75 % au plus), ×3 dégâts | + bonus d'apparence des shikigami ; +1 au multiplicateur par niveau d'Œil du tengu |
 | Brûlures | % des PV max par seconde, au plus 9 × les dégâts par seconde espérés des frappes | ×0,2 contre un Gardien |
 | Festival | `étincelles = ⌊5 × (record / 100)^1,8⌋`, bonus `× (1 + 0,05 × étincelles)` | Dégâts et âmes |
 
