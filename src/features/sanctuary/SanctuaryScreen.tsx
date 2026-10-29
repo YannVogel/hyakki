@@ -3,54 +3,34 @@ import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BALANCE, formatNumber, type PurchaseMode, type UpgradeId } from '@/engine';
 import { strings } from '@/i18n';
-import { soulsPerSecond, upgradeViews, useGame, useGameStore } from '@/state';
-import { bodyText, Button, Card, colors, displayText, Icon, Segmented, spacing } from '@/ui';
+import { bodyText, Button, colors, displayText, Segmented, spacing } from '@/ui';
 
-import { SOULS_ICON } from '../shared/icons';
 import { HERO_POSES, heroPoseSize } from '../shared/images';
-import { UpgradeRow } from './UpgradeRow';
+import { KamidanaShop } from './KamidanaShop';
+import { SoulsShop } from './SoulsShop';
 
-const percent = (fraction: number) => String(Math.round(fraction * 10_000) / 100).replace('.', ',');
+type Shop = 'souls' | 'kamidana';
 
-/** What each level brings, from the balance constants (never hard-coded in the text). */
-const EFFECTS: Record<UpgradeId, string> = {
-  blade: strings.sanctuary.upgrades.blade.effect(percent(BALANCE.upgrades.blade.damageGrowth - 1)),
-  foxfire: strings.sanctuary.upgrades.foxfire.effect(
-    percent(BALANCE.upgrades.foxfire.burnPerLevel),
-  ),
-  bell: strings.sanctuary.upgrades.bell.effect(percent(BALANCE.upgrades.bell.soulsPerLevel)),
-  kekkai: strings.sanctuary.upgrades.kekkai.effect(
-    percent(BALANCE.upgrades.kekkai.cooldownPerLevel),
-  ),
-  lanterns: strings.sanctuary.upgrades.lanterns.effect(
-    String(BALANCE.upgrades.lanterns.offlineHoursPerLevel),
-  ),
-};
-
-const MODES = [
-  { value: 1, label: strings.sanctuary.modes.one },
-  { value: 10, label: strings.sanctuary.modes.ten },
-  { value: 'max', label: strings.sanctuary.modes.max },
+const SHOPS = [
+  { value: 'souls', label: strings.shops.souls },
+  { value: 'kamidana', label: strings.shops.kamidana },
 ] as const;
 
 const HERO_HEIGHT = 120;
 
-/** Spend souls on the onmyōji's upgrades, ×1, ×10 or as many as possible. */
+/** Two shops: the Sanctuary (souls, reset at each Festival) and the Kamidana (ofuda, for life). */
 export function SanctuaryScreen() {
-  const game = useGame((store) => store.game);
-  const store = useGameStore();
-  const [mode, setMode] = useState<PurchaseMode>(1);
-  const souls = formatNumber(game.souls);
+  const [shop, setShop] = useState<Shop>('souls');
+  const text = shop === 'souls' ? strings.sanctuary : strings.kamidana;
 
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
           <View style={styles.headerText}>
-            <Text style={displayText('3xl')}>{strings.sanctuary.title}</Text>
-            <Text style={bodyText('base', 700)}>{strings.sanctuary.subtitle}</Text>
+            <Text style={displayText('3xl')}>{text.title}</Text>
+            <Text style={bodyText('base', 700)}>{text.subtitle}</Text>
           </View>
           <Image
             source={HERO_POSES.barrier.source}
@@ -58,32 +38,13 @@ export function SanctuaryScreen() {
             style={heroPoseSize('barrier', HERO_HEIGHT)}
           />
         </View>
-        <Card style={styles.souls}>
-          <Icon parts={SOULS_ICON} size={28} />
-          <View style={styles.soulsText}>
-            <Text style={[bodyText('sm', 800), styles.muted]}>{strings.sanctuary.souls}</Text>
-            <Text style={displayText('2xl')} testID="sanctuary-souls">
-              {souls}
-            </Text>
-          </View>
-          <Text style={bodyText('md', 800)}>
-            {strings.sanctuary.perSecond(formatNumber(soulsPerSecond(game)))}
-          </Text>
-        </Card>
         <Segmented
-          accessibilityLabel={strings.sanctuary.quantity}
-          options={MODES}
-          value={mode}
-          onChange={setMode}
+          accessibilityLabel={strings.shops.label}
+          options={SHOPS}
+          value={shop}
+          onChange={setShop}
         />
-        {upgradeViews(game, mode).map((view) => (
-          <UpgradeRow
-            key={view.id}
-            view={view}
-            effect={EFFECTS[view.id]}
-            onBuy={(upgrade) => store.getState().buyUpgrade(upgrade, mode)}
-          />
-        ))}
+        {shop === 'souls' ? <SoulsShop /> : <KamidanaShop />}
         <Button
           label={strings.settings.open}
           variant="neutral"
@@ -100,7 +61,4 @@ const styles = StyleSheet.create({
   content: { gap: spacing[3], padding: spacing[4] },
   header: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing[2] },
   headerText: { flex: 1, gap: spacing[1] },
-  souls: { flexDirection: 'row', alignItems: 'center', gap: spacing[3], padding: spacing[3] },
-  soulsText: { flex: 1 },
-  muted: { color: colors.muted },
 });

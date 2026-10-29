@@ -24,6 +24,11 @@ import {
   guardianAt,
   guardianMaxHp,
   guardianTimeLimitMs,
+  KAMIDANA_IDS,
+  kamidanaCost,
+  kamidanaEffect,
+  type KamidanaId,
+  kamidanaMaxLevel,
   isGuardianWave,
   nameOf,
   sub,
@@ -159,6 +164,38 @@ export function upgradeViews(state: GameState, mode: PurchaseMode): PurchaseView
       count,
       cost,
       affordable: remaining > 0 && gte(state.souls, cost),
+    };
+  });
+}
+
+export type KamidanaView = {
+  readonly id: KamidanaId;
+  readonly level: number;
+  readonly maxLevel: number;
+  readonly maxed: boolean;
+  readonly cost: number;
+  readonly affordable: boolean;
+  /** What the upgrade gives now, and at the next level (null at the max). */
+  readonly effect: number;
+  readonly nextEffect: number | null;
+};
+
+/** The Kamidana's upgrades, in the engine's order. */
+export function kamidanaViews(state: GameState): KamidanaView[] {
+  return KAMIDANA_IDS.map((id) => {
+    const level = state.kamidana[id];
+    const maxLevel = kamidanaMaxLevel(id);
+    const maxed = level >= maxLevel;
+    const cost = kamidanaCost(id, level);
+    return {
+      id,
+      level,
+      maxLevel,
+      maxed,
+      cost,
+      affordable: !maxed && state.ofuda >= cost,
+      effect: kamidanaEffect(id, level),
+      nextEffect: maxed ? null : kamidanaEffect(id, level + 1),
     };
   });
 }

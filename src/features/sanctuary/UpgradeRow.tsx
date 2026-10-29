@@ -3,17 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { formatNumber, type UpgradeId } from '@/engine';
 import { strings } from '@/i18n';
 import type { PurchaseView } from '@/state';
-import {
-  bodyText,
-  Button,
-  Card,
-  colors,
-  displayText,
-  OutlinedText,
-  outline,
-  radii,
-  spacing,
-} from '@/ui';
+import { bodyText, Button, Card, colors, displayText, spacing } from '@/ui';
+
+import { UpgradeTile } from './UpgradeTile';
 
 const TILE_COLORS: Record<UpgradeId, string> = {
   blade: colors.orange,
@@ -22,8 +14,6 @@ const TILE_COLORS: Record<UpgradeId, string> = {
   kekkai: colors.sky,
   lanterns: colors.purple,
 };
-
-const TILE = 52;
 
 export interface UpgradeRowProps {
   readonly view: PurchaseView;
@@ -42,9 +32,7 @@ export function UpgradeRow({ view, effect, onBuy }: UpgradeRowProps) {
       : strings.sanctuary.notEnough(name, cost);
   return (
     <Card style={styles.row} testID={`upgrade-${view.id}`}>
-      <View style={[styles.tile, { backgroundColor: TILE_COLORS[view.id] }]}>
-        <OutlinedText style={displayText('3xl')}>{kanji}</OutlinedText>
-      </View>
+      <UpgradeTile kanji={kanji} color={TILE_COLORS[view.id]} />
       <View style={styles.text}>
         <View style={styles.title}>
           <Text style={displayText('base')}>{name}</Text>
@@ -71,14 +59,6 @@ export function UpgradeRow({ view, effect, onBuy }: UpgradeRowProps) {
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing[3], padding: spacing[3] },
-  tile: {
-    width: TILE,
-    height: TILE,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: radii.button,
-    ...outline('control'),
-  },
   text: { flex: 1, gap: 2 },
   title: { flexDirection: 'row', alignItems: 'baseline', gap: spacing[2] },
   muted: { color: colors.muted },
