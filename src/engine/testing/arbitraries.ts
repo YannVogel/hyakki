@@ -2,6 +2,7 @@ import * as fc from 'fast-check';
 
 import {
   type GameState,
+  KAMIDANA_IDS,
   SCHEMA_VERSION,
   type Shikigami,
   TALISMAN_IDS,
@@ -61,6 +62,12 @@ export const arbitraryGameState: fc.Arbitrary<GameState> = fc
           sanctuary: fc.record(
             Object.fromEntries(UPGRADE_IDS.map((id) => [id, fc.nat(1000)])) as Record<
               (typeof UPGRADE_IDS)[number],
+              fc.Arbitrary<number>
+            >,
+          ),
+          kamidana: fc.record(
+            Object.fromEntries(KAMIDANA_IDS.map((id) => [id, fc.nat(20)])) as Record<
+              (typeof KAMIDANA_IDS)[number],
               fc.Arbitrary<number>
             >,
           ),

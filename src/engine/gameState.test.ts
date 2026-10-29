@@ -1,6 +1,13 @@
 import * as fc from 'fast-check';
 
-import { createNewGame, enemySeed, SCHEMA_VERSION, TALISMAN_IDS, UPGRADE_IDS } from './gameState';
+import {
+  createNewGame,
+  enemySeed,
+  KAMIDANA_IDS,
+  SCHEMA_VERSION,
+  TALISMAN_IDS,
+  UPGRADE_IDS,
+} from './gameState';
 import { eq } from './numbers';
 import { deriveSeed } from './rng';
 import { GENERATOR_VERSION } from './yokai';
@@ -23,6 +30,7 @@ describe('createNewGame', () => {
     expect(state.shikigami).toEqual([]);
     expect(state.team).toEqual([]);
     expect(Object.keys(state.sanctuary)).toEqual([...UPGRADE_IDS]);
+    expect(state.kamidana).toEqual(Object.fromEntries(KAMIDANA_IDS.map((id) => [id, 0])));
     expect(Object.keys(state.cooldowns)).toEqual([...TALISMAN_IDS]);
   });
 

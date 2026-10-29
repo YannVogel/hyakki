@@ -1,15 +1,20 @@
 import { createStore, type StoreApi } from 'zustand/vanilla';
 
 import {
+  buyKamidana,
   buyUpgrade,
   type CombatEvent,
   type CombatInput,
   createNewGame,
   type GameState,
+  type KamidanaId,
+  type KamidanaPurchaseResult,
+  type KamidanaRefundResult,
   levelUpShikigami,
   type LoadResult,
   type PurchaseMode,
   type PurchaseResult,
+  refundKamidana,
   type RosterResult,
   setTeam,
   startFestival,
@@ -51,6 +56,8 @@ export interface GameStoreState {
   readonly challengeGuardian: () => void;
   readonly tick: (dtMs: number) => void;
   readonly buyUpgrade: (upgrade: UpgradeId, mode: PurchaseMode) => PurchaseResult;
+  readonly buyKamidana: (upgrade: KamidanaId) => KamidanaPurchaseResult;
+  readonly refundKamidana: () => KamidanaRefundResult;
   readonly setTeam: (seeds: readonly number[]) => RosterResult;
   readonly levelUpShikigami: (seed: number) => RosterResult;
   readonly startFestival: () => FestivalResult;
@@ -122,6 +129,8 @@ export function createGameStore(deps: GameStoreDeps): GameStore {
         set({ game: state, events, eventBatch: eventBatch + 1, pendingInputs: [] });
       },
       buyUpgrade: (upgrade, mode) => apply(buyUpgrade(get().game, upgrade, mode)),
+      buyKamidana: (upgrade) => apply(buyKamidana(get().game, upgrade)),
+      refundKamidana: () => apply(refundKamidana(get().game)),
       setTeam: (seeds) => apply(setTeam(get().game, seeds)),
       levelUpShikigami: (seed) => apply(levelUpShikigami(get().game, seed)),
       startFestival: () => apply(startFestival(get().game)),

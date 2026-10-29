@@ -20,7 +20,7 @@ Ces règles sont appliquées par `npm run lint` ([`eslint.config.js`](../../esli
 | `numbers/` | `BigNum` (adaptateur) et formatage français |
 | `yokai/` | générateur procédural : spec, stats, nom |
 | `combat/` | tick, dégâts, vagues, Gardiens, talismans |
-| `economy/` | coûts, gains, Sanctuaire, captures |
+| `economy/` | coûts, gains, Sanctuaire, Kamidana, captures |
 | `prestige/` | Festival |
 | `offline/` | gains hors ligne |
 | `save/` | sérialisation versionnée, validation et migrations |
@@ -71,7 +71,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 
 | Élément | Rôle |
 |---|---|
-| `GameState` | État complet et sérialisable : défilé, ennemi (graine + dégâts subis), âmes, ofuda, étincelles, Sanctuaire, shikigami, équipe, recharges, minuteurs d'attaque, état du RNG, galerie. |
+| `GameState` | État complet et sérialisable : défilé, ennemi (graine + dégâts subis), âmes, ofuda, étincelles, Sanctuaire, Kamidana, shikigami, équipe, recharges, minuteurs d'attaque, état du RNG, galerie. |
 | `createNewGame(seed)` | Premier défilé, vague 1. |
 | `enemySeed(paradeSeed, wave, repeat)` | Graine du yōkai d'une vague ; les répétitions (farm devant un Gardien) ont leur propre graine. |
 | `serialize(state, savedAt)` / `deserialize(text)` | Fichier de sauvegarde ; `deserialize` renvoie un résultat typé, jamais d'exception. |
@@ -113,6 +113,14 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `buyUpgrade(state, upgrade, mode)` | Achat ×1, ×10 ou Max ; résultat typé (`not-enough-souls`, `max-level`). Le solde n'est jamais négatif. |
 | `buyUpgradeLevels(state, upgrade, count)` | Achat d'un nombre exact de niveaux (utilisé par `buyUpgrade` et le harnais d'équilibrage). |
 
+### `economy/` — Kamidana
+
+| Élément | Rôle |
+|---|---|
+| `kamidanaCost(upgrade, level)`, `kamidanaMaxLevel(upgrade)` | Prix en ofuda du niveau suivant (entier, ×2 par niveau) et niveau maximal. |
+| `buyKamidana(state, upgrade)` | Achat d'un niveau ; résultat typé (`not-enough-ofuda`, `max-level`). |
+| `kamidanaRefund(state)`, `refundKamidana(state)` | Montant du remboursement (somme des prix actuels des niveaux possédés) et remboursement total ; résultat typé (`nothing-to-refund`). |
+
 ### `offline/` — progression hors ligne
 
 | Élément | Rôle |
@@ -125,5 +133,5 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | Élément | Rôle |
 |---|---|
 | `festivalPreview(state)` | Débloqué ou non, étincelles à gagner, bonus avant et après (pour l'écran Festival). |
-| `startFestival(state)` | Relance le défilé : remise à zéro des vagues, âmes, Sanctuaire ; conservation des shikigami, de l'équipe, des ofuda et de la galerie ; résultat typé (`locked`). |
+| `startFestival(state)` | Relance le défilé : remise à zéro des vagues, âmes, Sanctuaire ; conservation des shikigami, de l'équipe, des ofuda, du Kamidana et de la galerie ; résultat typé (`locked`). |
 | `festivalSparks(record)`, `festivalBonus(sparks)` | Formules de `docs/GAME_DESIGN.md` § 4.5. |

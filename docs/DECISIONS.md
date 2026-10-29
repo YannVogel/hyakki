@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-29 — Le Kamidana : améliorations permanentes payées en ofuda
+
+- **Décision** (Yann pour la monnaie et les 12 améliorations, #96) : les ofuda, gagnés uniquement sur les Gardiens et déjà conservés au Festival, achètent des améliorations permanentes très puissantes. Le lieu s'appelle **Kamidana** (神棚, l'autel domestique où l'on dépose ses ofuda), sous-titré « l'autel des ofuda ». Coût du niveau `n → n + 1` : `arrondi(base × 2^n)`, un niveau à la fois, avec un niveau maximal par amélioration. Remboursement total, gratuit, à tout moment, au prix actuel des niveaux possédés.
+- **Raison** : les ofuda n'avaient aucun usage ; les réutiliser évite une nouvelle monnaie et rend leur stock aux joueurs de la 1.0. « Kamidana » colle au geste (déposer un ofuda = acheter, le reprendre = rembourser) et ne se confond pas avec le Sanctuaire, contrairement à « Honden » ; « Autel des ofuda », plus limpide, sert de sous-titre. Calculer le remboursement à partir des niveaux évite de sauvegarder les ofuda dépensés et le garde égal au prix de rachat après un rééquilibrage.
+- **Conséquence** : schéma de sauvegarde 2 (migration 1 → 2 : tous les niveaux à 0). La sauvegarde accepte un niveau au-dessus d'un maximum abaissé plus tard, pour ne jamais devenir illisible. L'« arbre de talents du Festival » prévu hors V1 est remplacé par le Kamidana.
+
 ## 2026-10-29 — Son et musique dès la V1, avec expo-audio
 
 - **Décision** (Yann) : le jeu a du son dès la V1 : les 15 bruitages Kenney et deux musiques Suno, « Le défilé en fête » et « Le Gardien approche » (pendant le cut-in et le combat d'un Gardien). Les réglages ont un interrupteur et un volume pour les sons, et un autre pour la musique, indépendants. Lecture par **expo-audio**, dont le plugin est configuré sans micro (`RECORD_AUDIO` bloquée) ni lecture en arrière-plan.
