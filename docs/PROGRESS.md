@@ -8,7 +8,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 |---|---|
 | Milestone en cours | Aucune : 7 · Progression permanente et confort terminée le 29/10 (#96, PR #108 à #119) ; 5 · Publication attend Yann (#47, #48, #63) |
 | Dernière issue terminée | #107 Règles du jeu dans l'onglet Options |
-| Prochaine issue | Publication avec la milestone 7, version 1.0.0 confirmée par Yann le 29/10. #47 : AAB 1.0.0 (8) construit en local, à importer par Yann en test interne ; la 1.0.0 (7) est en examen dans le test fermé, et il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (7) envoyé vers TestFlight le 29/10 au soir, soumission à décider par Yann. #63. Avant soumission : parcours Maestro Android et captures des stores à refaire (interface des milestones 6 et 7) |
+| Prochaine issue | Publication avec la milestone 7, version 1.0.0 confirmée par Yann le 29/10. #47 : 1.0.0 (8) publiée en test interne le 29/10 à 20 h 46 ; la 1.0.0 (7) est en examen dans le test fermé, et il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (7) envoyé vers TestFlight le 29/10 au soir, soumission à décider par Yann. #63. Avant soumission : parcours Maestro Android et captures des stores à refaire (interface des milestones 6 et 7) |
 
 ## Milestones
 
