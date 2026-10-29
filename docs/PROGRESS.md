@@ -8,7 +8,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 |---|---|
 | Milestone en cours | 5 · Publication (attend Yann : #47, #48, #63) ; 6 · Retours de jeu terminée |
 | Dernière issue terminée | #58 Illustrations HD (20 figures ; reste la validation visuelle de Yann) |
-| Prochaine issue | #47 : AAB 1.0.0 (7) à importer dans le test fermé par Yann (remplace la version 5, en examen chez Google), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
+| Prochaine issue | #47 : test fermé 1.0.0 (7) en examen chez Google depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
 
 ## Milestones
 
