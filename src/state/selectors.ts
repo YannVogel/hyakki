@@ -23,6 +23,7 @@ import {
   generate,
   guardianAt,
   guardianMaxHp,
+  guardianTimeLimitMs,
   isGuardianWave,
   nameOf,
   sub,
@@ -69,7 +70,7 @@ export function enemyView(state: GameState): EnemyView {
       hpRatio: remainingRatio(guardianMaxHp(parade.wave), enemy.damage),
       engaged: enemy.guardian.engaged,
       timeLeftMs: enemy.guardian.timeLeftMs,
-      timeRatio: Math.min(1, enemy.guardian.timeLeftMs / BALANCE.guardian.timeLimitMs),
+      timeRatio: Math.min(1, enemy.guardian.timeLeftMs / guardianTimeLimitMs(state)),
     };
   }
   const spec = generate(enemy.seed, state.generatorVersion);

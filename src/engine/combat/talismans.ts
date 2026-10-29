@@ -21,7 +21,7 @@ function weaknessMultiplier(battle: Battle, talisman: TalismanId): number {
     return 1;
   }
   const weakness = GUARDIANS[guardianAt(battle.wave).index].weakness;
-  return ELEMENTS[talisman] === weakness ? BALANCE.talismans.weaknessMultiplier : 1;
+  return ELEMENTS[talisman] === weakness ? battle.power.weaknessMultiplier : 1;
 }
 
 /** Casts a talisman if it is ready (and the fight is not waiting for the player). */
@@ -38,20 +38,21 @@ export function castTalisman(battle: Battle, state: GameState, talisman: Talisma
   battle.cooldowns[talisman] = talismanCooldownMs(talisman, state.sanctuary.kekkai);
   battle.events.push({ type: 'talismanCast', talisman, atMs: battle.elapsed });
   const { kitsunebi, raijin, kekkai } = BALANCE.talismans;
-  const weakness = weaknessMultiplier(battle, talisman);
+  const { heroHitDamage, talismanMultiplier } = battle.power;
+  const factor = weaknessMultiplier(battle, talisman) * talismanMultiplier;
   switch (talisman) {
     case 'kitsunebi':
       battle.effects.burnMs = kitsunebi.burnDurationMs;
-      hit(battle, mul(battle.power.heroHitDamage, kitsunebi.damageMultiplier * weakness), talisman);
+      hit(battle, mul(heroHitDamage, kitsunebi.damageMultiplier * factor), talisman);
       break;
     case 'raijin':
-      hit(battle, mul(battle.power.heroHitDamage, raijin.damageMultiplier * weakness), talisman);
+      hit(battle, mul(heroHitDamage, raijin.damageMultiplier * factor), talisman);
       break;
     case 'kekkai':
       if (battle.guardian !== null) {
         battle.guardian.timeLeftMs += kekkai.guardianExtraMs;
       } else {
-        battle.effects.soulsBoostMs = kekkai.soulsBoostDurationMs;
+        battle.effects.soulsBoostMs = battle.power.soulsBoostMs;
       }
       break;
   }

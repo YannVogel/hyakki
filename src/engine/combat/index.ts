@@ -10,6 +10,7 @@ export {
   guardianAt,
   guardianMaxHp,
   guardianOfuda,
+  guardianTimeLimitMs,
   GUARDIANS,
   isGuardianWave,
   tierMultiplier,

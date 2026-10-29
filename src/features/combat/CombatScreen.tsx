@@ -2,7 +2,13 @@ import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BALANCE, type CombatEvent, formatNumber, GUARDIANS, guardianMaxHp } from '@/engine';
+import {
+  type CombatEvent,
+  formatNumber,
+  GUARDIANS,
+  guardianMaxHp,
+  guardianTimeLimitMs,
+} from '@/engine';
 import { strings } from '@/i18n';
 import {
   enemyView,
@@ -97,7 +103,7 @@ export function CombatScreen() {
           wave={parade.waveInCycle}
           hp={formatNumber(guardianMaxHp(parade.wave))}
           weakness={GUARDIANS[enemy.index].weakness}
-          timeLimitSeconds={BALANCE.guardian.timeLimitMs / 1000}
+          timeLimitSeconds={guardianTimeLimitMs(game) / 1000}
           reduceMotion={reduceMotion}
           onEngage={actions.engageGuardian}
           onFlee={actions.fleeGuardian}

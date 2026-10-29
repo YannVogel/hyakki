@@ -176,7 +176,7 @@ export function simulateOffline(
       ? {
           seed: enemySeed(parade.seed, finalWave),
           damage: ZERO,
-          guardian: { engaged: false, timeLeftMs: BALANCE.guardian.timeLimitMs },
+          guardian: { engaged: false, timeLeftMs: power.guardianTimeMs },
         }
       : { seed: sim.seed, damage: sim.damage, guardian: null },
     souls: sim.souls,

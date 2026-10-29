@@ -1,8 +1,10 @@
 import { BALANCE } from '../balance';
 import type { GameState } from '../gameState';
 import { add, type BigNum, mul, pow, ZERO } from '../numbers';
-import { festivalBonus } from '../prestige';
+// The leaf module, not the index: the Festival computes Head Start souls with combatPower.
+import { festivalBonus } from '../prestige/bonus';
 import { shikigamiHitRatio, shikigamiIntervalMs, teamBonus, teamMembers } from '../shikigami';
+import { guardianTimeLimitMs } from './guardians';
 
 export interface TeamAttacker {
   readonly seed: number;
@@ -23,6 +25,13 @@ export interface CombatPower {
   /** Permanent burn on the current enemy, as a fraction of its max HP per second. */
   readonly burnRate: number;
   readonly soulsMultiplier: number;
+  /** Talismans: damage multiplier of Kitsune-bi and Raijin, and the guardian weakness bonus. */
+  readonly talismanMultiplier: number;
+  readonly weaknessMultiplier: number;
+  /** Duration of Kekkai's souls boost. */
+  readonly soulsBoostMs: number;
+  /** Timer of a guardian when the fight starts. */
+  readonly guardianTimeMs: number;
 }
 
 /**
@@ -31,8 +40,9 @@ export interface CombatPower {
  */
 export function combatPower(state: GameState): CombatPower {
   const { blade, foxfire, bell } = state.sanctuary;
-  const { blessing, tenguEye, inariPalm, shikigamiPact } = state.kamidana;
-  const { upgrades, hero, crit, kamidana } = BALANCE;
+  const { blessing, tenguEye, inariPalm, shikigamiPact, riftEye, greaterTalismans } =
+    state.kamidana;
+  const { upgrades, hero, crit, kamidana, talismans } = BALANCE;
   const members = teamMembers(state);
   const bonus = teamBonus(members);
   const speed = 1 + bonus.speed;
@@ -59,6 +69,12 @@ export function combatPower(state: GameState): CombatPower {
     critMultiplier: crit.multiplier + kamidana.tenguEye.critMultiplierPerLevel * tenguEye,
     burnRate: upgrades.foxfire.burnPerLevel * foxfire + bonus.burn,
     soulsMultiplier: (1 + upgrades.bell.soulsPerLevel * bell) * (1 + bonus.souls) * festival,
+    talismanMultiplier: kamidana.greaterTalismans.damageGrowth ** greaterTalismans,
+    weaknessMultiplier: talismans.weaknessMultiplier + kamidana.riftEye.weaknessPerLevel * riftEye,
+    soulsBoostMs:
+      talismans.kekkai.soulsBoostDurationMs +
+      kamidana.greaterTalismans.soulsBoostMsPerLevel * greaterTalismans,
+    guardianTimeMs: guardianTimeLimitMs(state),
   };
 }
 

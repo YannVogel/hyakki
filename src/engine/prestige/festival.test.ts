@@ -1,11 +1,18 @@
 import * as fc from 'fast-check';
 
-import { combatPower } from '../combat';
-import { type GameState, UPGRADE_IDS } from '../gameState';
-import { div, eq, toNumber } from '../numbers';
+import { combatPower, waveSouls } from '../combat';
+import { createNewGame, enemySeed, type GameState, UPGRADE_IDS } from '../gameState';
+import { add, big, div, eq, toNumber } from '../numbers';
 import { deriveSeed } from '../rng';
 import { arbitraryGameState } from '../testing/arbitraries';
-import { festivalBonus, festivalPreview, festivalSparks, startFestival } from './festival';
+import { festivalBonus } from './bonus';
+import {
+  festivalPreview,
+  festivalSparks,
+  headStartSouls,
+  headStartWave,
+  startFestival,
+} from './festival';
 
 const withRecord = (state: GameState, maxWave: number): GameState => ({
   ...state,
@@ -58,7 +65,8 @@ describe('startFestival', () => {
   it('resets waves, souls and the Sanctuary, keeps shikigami, ofuda, Kamidana and gallery', () => {
     fc.assert(
       fc.property(arbitraryGameState, fc.integer({ min: 101, max: 5000 }), (base, record) => {
-        const state = withRecord(base, record);
+        // Without Head Start: the next parade starts at wave 1.
+        const state = { ...withRecord(base, record), kamidana: { ...base.kamidana, headStart: 0 } };
         const result = startFestival(state);
         if (!result.ok) throw new Error(result.reason);
         const next = result.state;
@@ -97,6 +105,63 @@ describe('startFestival', () => {
         expect(after.soulsMultiplier / before.soulsMultiplier).toBeCloseTo(ratio, 9);
       }),
       { numRuns: 30 },
+    );
+  });
+});
+
+describe('Head Start', () => {
+  it('starts 25 waves further per level, within the hundred of the record', () => {
+    expect(headStartWave(500, 0)).toBe(1);
+    expect(headStartWave(500, 1)).toBe(26);
+    expect(headStartWave(500, 4)).toBe(101);
+    expect(headStartWave(350, 8)).toBe(201);
+    expect(headStartWave(150, 8)).toBe(101);
+    expect(headStartWave(101, 3)).toBe(76);
+  });
+
+  it('never starts on a guardian wave nor beyond what was already crossed', () => {
+    fc.assert(
+      fc.property(fc.integer({ min: 101, max: 20_000 }), fc.nat(50), (record, level) => {
+        const wave = headStartWave(record, level);
+        expect(wave).toBeGreaterThanOrEqual(1);
+        expect(wave).toBeLessThanOrEqual(record);
+        expect(wave % 100).not.toBe(0);
+        expect(headStartWave(record, level)).toBe(wave);
+      }),
+    );
+  });
+
+  it('gives the souls of the skipped waves, one ordinary yōkai each', () => {
+    const state = createNewGame(5);
+    const multiplier = combatPower(state).soulsMultiplier;
+    const expected = add(waveSouls(1), waveSouls(2));
+    expect(toNumber(headStartSouls(state, 3))).toBeCloseTo(toNumber(expected) * multiplier, 9);
+    expect(eq(headStartSouls(state, 1), 0)).toBe(true);
+  });
+
+  it('opens the next parade further on, with those souls and nothing from skipped guardians', () => {
+    fc.assert(
+      fc.property(arbitraryGameState, fc.integer({ min: 1, max: 8 }), (base, level) => {
+        const state = {
+          ...withRecord(base, 650),
+          kamidana: { ...base.kamidana, headStart: level },
+        };
+        const result = startFestival(state);
+        if (!result.ok) throw new Error(result.reason);
+        const next = result.state;
+        const start = 1 + 25 * level;
+        expect(festivalPreview(state).startWave).toBe(start);
+        expect(next.parade).toMatchObject({ wave: start, maxWave: start, farming: false });
+        expect(next.enemy).toEqual({
+          seed: enemySeed(next.parade.seed, start),
+          damage: next.enemy.damage,
+          guardian: null,
+        });
+        expect(eq(next.enemy.damage, 0)).toBe(true);
+        expect(eq(next.souls, headStartSouls({ ...next, souls: big(0) }, start))).toBe(true);
+        expect(next.ofuda).toBe(state.ofuda);
+        expect(next.guardiansDefeated).toEqual(state.guardiansDefeated);
+      }),
     );
   });
 });

@@ -111,3 +111,86 @@ describe('talismans', () => {
     ).toBe(true);
   });
 });
+
+describe('Kamidana: guardians and talismans', () => {
+  const withKamidana = (state: GameState, levels: Partial<GameState['kamidana']>): GameState => ({
+    ...state,
+    kamidana: { ...state.kamidana, ...levels },
+  });
+
+  it('gives the guardian 5 s more per Hourglass level when the fight starts, 50 s at most', () => {
+    const engage = (hourglass: number) =>
+      step(withKamidana(stateAtWave(1, 100), { hourglass }), 0, [ENGAGE]).state.enemy.guardian;
+    expect(engage(0)?.timeLeftMs).toBe(30_000);
+    expect(engage(2)?.timeLeftMs).toBe(40_000);
+    expect(engage(9)?.timeLeftMs).toBe(50_000);
+  });
+
+  it('gives a new guardian the longer timer from its appearance', () => {
+    const state = withKamidana(stateAtWave(4, 99, { blade: 400 }), { hourglass: 3 });
+    const guardian = step(state, 5_000).state.enemy.guardian;
+    expect(guardian).toEqual({ engaged: false, timeLeftMs: 45_000 });
+  });
+
+  it('leaves a running timer alone when the Hourglass changes mid-fight', () => {
+    const state = idle(stateAtWave(1, 100));
+    const fighting = {
+      ...state,
+      enemy: { ...state.enemy, guardian: { engaged: true, timeLeftMs: 12_000 } },
+    };
+    const bought = withKamidana(fighting, { hourglass: 4 });
+    expect(step(bought, 0, [ENGAGE]).state.enemy.guardian?.timeLeftMs).toBe(12_000);
+  });
+
+  it("adds 1 to the weakness bonus per Rift's Eye level", () => {
+    // Kappa (wave 200) is weak to thunder.
+    const raijin = (riftEye: number) => {
+      const state = withKamidana(idle(stateAtWave(3, 200, { blade: 300 })), { riftEye });
+      const [hit] = hits(step(state, 0, [ENGAGE, cast('raijin')]));
+      return hit.type === 'hit' ? toNumber(div(hit.damage, combatPower(state).heroHitDamage)) : 0;
+    };
+    expect(raijin(0)).toBeCloseTo(100, 9);
+    expect(raijin(2)).toBeCloseTo(200, 9);
+  });
+
+  it('doubles Kitsune-bi and Raijin per Greater Talismans level', () => {
+    const state = withKamidana(idle(stateAtWave(5, 50)), { greaterTalismans: 2 });
+    const [raijin] = hits(step(state, 0, [cast('raijin')]));
+    const [fire] = hits(step(state, 0, [cast('kitsunebi')]));
+    expect(raijin.type === 'hit' && toNumber(raijin.damage)).toBe(200);
+    expect(fire.type === 'hit' && toNumber(fire.damage)).toBe(80);
+  });
+
+  it("doubles Kitsune-bi's burn too, still under the burn cap", () => {
+    const burn = (greaterTalismans: number) => {
+      const state = withKamidana(idle(stateAtWave(2, 200, { blade: 260 })), { greaterTalismans });
+      const engaged = step(state, 0, [ENGAGE, cast('kitsunebi')]);
+      const [fire] = hits(engaged);
+      const after = step(engaged.state, 10_000).state.enemy.damage;
+      return fire.type === 'hit' ? toNumber(div(after, guardianMaxHp(200))) : 0;
+    };
+    const fireShare = (level: number) =>
+      toNumber(
+        div(
+          mul(combatPower(stateAtWave(2, 200, { blade: 260 })).heroHitDamage, 20 * 2 ** level),
+          guardianMaxHp(200),
+        ),
+      );
+    expect(burn(1) - fireShare(1)).toBeCloseTo(2 * (burn(0) - fireShare(0)), 9);
+  });
+
+  it("lengthens Kekkai's souls boost by 5 s per Greater Talismans level", () => {
+    const state = withKamidana(stateAtWave(6, 40), { greaterTalismans: 2 });
+    expect(step(state, 0, [cast('kekkai')]).state.effects.soulsBoostMs).toBe(20_000);
+  });
+
+  it('keeps the talismans as they were at level 0', () => {
+    for (const talisman of TALISMAN_IDS) {
+      const state = idle(stateAtWave(7, 300, { blade: 100 }));
+      const zero = withKamidana(state, { riftEye: 0, greaterTalismans: 0, hourglass: 0 });
+      expect(step(zero, 0, [ENGAGE, cast(talisman)])).toEqual(
+        step(state, 0, [ENGAGE, cast(talisman)]),
+      );
+    }
+  });
+});
