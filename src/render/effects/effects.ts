@@ -191,8 +191,16 @@ function request(
   };
 }
 
+export type HitEvent = Extract<CombatEvent, { type: 'hit' }>;
+
+/** When a hit lands, from the moment the step's events are shown: a thrown ofuda flies first. */
+export function landingDelayMs(event: HitEvent, motion: MotionLevel): number {
+  const thrown = motion === 'full' && THROWN.includes(event.source);
+  return event.atMs + (thrown ? DURATION_MS.ofuda : 0);
+}
+
 function hitEffects(
-  event: Extract<CombatEvent, { type: 'hit' }>,
+  event: HitEvent,
   stage: EffectStage,
   motion: MotionLevel,
   variant: number,
@@ -200,8 +208,7 @@ function hitEffects(
 ): SpawnRequest[] {
   const full = motion === 'full';
   const thrown = full && THROWN.includes(event.source);
-  // A thrown ofuda strikes when it lands.
-  const landsAt = event.atMs + (thrown ? DURATION_MS.ofuda : 0);
+  const landsAt = landingDelayMs(event, motion);
   const size = SOURCE_SIZE[event.source] * (event.crit ? CRIT_SIZE : 1);
   const { target } = stage;
   // Above and left of the enemy, clear of its HUD in the top right corner. Two independent draws

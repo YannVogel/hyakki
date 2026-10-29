@@ -9,3 +9,20 @@ export { EffectsLayer, useEffectPool } from './effects/EffectsLayer';
 export type { EffectLayer, EffectPool, EffectsLayerProps } from './effects/EffectsLayer';
 export { effectsForEvents } from './effects/effects';
 export type { EffectStage, MotionLevel } from './effects/effects';
+export {
+  flashMatrix,
+  hitStrength,
+  NO_REACTION,
+  planReaction,
+  REACTION_ATTACK_SHARE,
+  REACTION_SHAPES,
+  reactionForEvents,
+  REDUCED_DIM,
+} from './effects/hitReaction';
+export type {
+  ActiveReaction,
+  HitReaction,
+  HitStrength,
+  ReactionPlan,
+  ReactionShape,
+} from './effects/hitReaction';

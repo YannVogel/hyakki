@@ -1,10 +1,11 @@
-import { Canvas, Group, type Transforms3d } from '@shopify/react-native-skia';
+import { Canvas, ColorMatrix, Group, Paint, type Transforms3d } from '@shopify/react-native-skia';
 import { memo, useMemo } from 'react';
-import { useDerivedValue } from 'react-native-reanimated';
+import { type SharedValue, useDerivedValue } from 'react-native-reanimated';
 
 import type { YokaiSpec } from '@/engine';
 import { useReduceMotion } from '@/ui/motion';
 
+import { flashMatrix } from '../effects/hitReaction';
 import { useFrameClock } from '../frameClock';
 import { DrawNodeView, type Motion } from './DrawNodeView';
 import { drawYokai, YOKAI_FRAME } from './drawYokai';
@@ -33,14 +34,17 @@ export interface YokaiCanvasProps {
   readonly size: number;
   /** Spoken description of the yōkai (name and look). */
   readonly accessibilityLabel: string;
+  /** White flash over the drawing, from 0 to 1 (the enemy is hit). */
+  readonly flash?: SharedValue<number>;
   readonly testID?: string;
 }
 
 /** A generated yōkai drawn with Skia, with its idle animations (off when motion is reduced). */
-export function YokaiCanvas({ spec, size, accessibilityLabel, testID }: YokaiCanvasProps) {
+export function YokaiCanvas({ spec, size, accessibilityLabel, flash, testID }: YokaiCanvasProps) {
   const drawing = useMemo(() => drawYokai(spec), [spec]);
   const reduceMotion = useReduceMotion();
   const motion = useMotion(spec.animationDelay, !reduceMotion);
+  const whiten = useDerivedValue(() => flashMatrix(flash?.value ?? 0));
   return (
     <Canvas
       style={{ width: size, height: size }}
@@ -49,7 +53,16 @@ export function YokaiCanvas({ spec, size, accessibilityLabel, testID }: YokaiCan
       accessibilityLabel={accessibilityLabel}
       testID={testID}
     >
-      <Group transform={[{ scale: size / YOKAI_FRAME }]}>
+      <Group
+        transform={[{ scale: size / YOKAI_FRAME }]}
+        layer={
+          flash === undefined ? undefined : (
+            <Paint>
+              <ColorMatrix matrix={whiten} />
+            </Paint>
+          )
+        }
+      >
         <DrawNodeView node={drawing} motion={reduceMotion ? null : motion} />
       </Group>
     </Canvas>

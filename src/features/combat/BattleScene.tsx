@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Image, type LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector, useTapGesture } from 'react-native-gesture-handler';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 
 import { strings } from '@/i18n';
@@ -21,6 +22,7 @@ import { GUARDIAN_IMAGES, type HeroPose } from '../shared/images';
 import { BattleBackdrop } from './BattleBackdrop';
 import { EnemyHud } from './EnemyHud';
 import { HeroFigure } from './HeroFigure';
+import type { HitReactionValues } from './useHitReaction';
 
 export interface LastHit {
   readonly damage: string;
@@ -37,6 +39,8 @@ export interface BattleSceneProps {
   readonly lastHit: LastHit | null;
   readonly heroPose: HeroPose;
   readonly effects: EffectPool;
+  /** The enemy flinches at the hits (useHitReaction). */
+  readonly reaction: HitReactionValues;
   readonly motion: MotionLevel;
   readonly onTap: () => void;
 }
@@ -64,6 +68,7 @@ export function BattleScene({
   lastHit,
   heroPose,
   effects,
+  reaction,
   motion,
   onTap,
 }: BattleSceneProps) {
@@ -81,6 +86,16 @@ export function BattleScene({
     setBox({ width, height });
   };
   const layout = box === null ? null : sceneLayout(box.width, box.height);
+  const scale = layout?.scale ?? 1;
+  const flinch = useAnimatedStyle(() => ({
+    opacity: 1 - reaction.dim.value,
+    transform: [
+      { translateX: reaction.recoil.value * scale },
+      { scaleX: 1 + reaction.squash.value },
+      { scaleY: 1 - reaction.squash.value },
+    ],
+  }));
+  const guardianFlash = useAnimatedStyle(() => ({ opacity: reaction.flash.value }));
   const place = (x: number, y: number, size: number) => {
     if (layout === null) return null;
     const center = toBox(layout, x, y);
@@ -134,31 +149,52 @@ export function BattleScene({
             accessibilityLabel={strings.combat.heroLabel}
           />
         )}
-        {enemyBox === null ? null : enemy.kind === 'yokai' ? (
-          <View style={[styles.absolute, { left: enemyBox.left, top: enemyBox.top }]}>
-            <YokaiCanvas
-              spec={enemy.spec}
-              size={enemyBox.side}
-              accessibilityLabel={enemyName}
-              testID="enemy-yokai"
-            />
-          </View>
-        ) : (
-          <Image
-            source={GUARDIAN_IMAGES[enemy.index]}
-            accessibilityLabel={enemyName}
-            resizeMode="contain"
-            testID="enemy-guardian"
+        {enemyBox === null ? null : (
+          <Animated.View
             style={[
-              styles.absolute,
+              styles.enemy,
               {
                 left: enemyBox.left,
                 top: enemyBox.top,
                 width: enemyBox.side,
                 height: enemyBox.side,
               },
+              flinch,
             ]}
-          />
+            testID="enemy-reaction"
+          >
+            {enemy.kind === 'yokai' ? (
+              <YokaiCanvas
+                spec={enemy.spec}
+                size={enemyBox.side}
+                accessibilityLabel={enemyName}
+                flash={reaction.flash}
+                testID="enemy-yokai"
+              />
+            ) : (
+              <>
+                <Image
+                  source={GUARDIAN_IMAGES[enemy.index]}
+                  accessibilityLabel={enemyName}
+                  resizeMode="contain"
+                  testID="enemy-guardian"
+                  style={{ width: enemyBox.side, height: enemyBox.side }}
+                />
+                {/* The flash: the same picture, tinted white over its whole silhouette. */}
+                <Animated.Image
+                  source={GUARDIAN_IMAGES[enemy.index]}
+                  resizeMode="contain"
+                  tintColor={colors.paper}
+                  accessible={false}
+                  style={[
+                    styles.flash,
+                    { width: enemyBox.side, height: enemyBox.side },
+                    guardianFlash,
+                  ]}
+                />
+              </>
+            )}
+          </Animated.View>
         )}
         {effectLayer('over')}
         <EnemyHud
@@ -199,6 +235,9 @@ export function BattleScene({
 }
 
 const styles = StyleSheet.create({
+  // Flinches from the feet, like the hero's poses.
+  enemy: { position: 'absolute', transformOrigin: 'bottom' },
+  flash: { position: 'absolute', left: 0, top: 0 },
   scene: {
     flex: 1,
     marginHorizontal: spacing[3],
