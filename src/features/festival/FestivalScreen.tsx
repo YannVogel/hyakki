@@ -90,6 +90,11 @@ export function FestivalScreen({ onDone }: FestivalScreenProps) {
             </Text>
           </Card>
         )}
+        {preview.unlocked && preview.startWave > 1 ? (
+          <Text style={bodyText('base', 800)} testID="festival-head-start">
+            {text.headStart(preview.startWave)}
+          </Text>
+        ) : null}
         <Button
           label={text.start}
           size="large"

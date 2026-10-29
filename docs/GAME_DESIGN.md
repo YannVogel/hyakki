@@ -140,6 +140,7 @@ Le **kamidana** (神棚) est l'autel domestique où l'on dépose ses ofuda. Chaq
 - **Coût** du niveau `n → n + 1` : `arrondi(base × 2^n)` ofuda, achat un niveau à la fois. Valeurs de départ, à calibrer avec le harnais (§ 5.2).
 - **Remboursement** : un seul geste rend tout, au prix actuel des niveaux possédés (somme des coûts). Il vaut donc toujours exactement le prix de rachat, même après un rééquilibrage ; rien d'autre n'est sauvegardé. Un niveau au-dessus d'un maximum abaissé reste chargé et remboursé.
 - Un effet lié à un minuteur déjà lancé (chrono d'un Gardien engagé) s'applique au prochain lancement.
+- **Écran** : dans l'onglet Sanctuaire, un sélecteur passe du Sanctuaire au Kamidana : stock d'ofuda, trois cartes (Combat ; Gardiens et talismans ; Économie), pour chaque bénédiction son niveau, son effet par niveau et sa valeur actuelle → suivante (`kamidanaEffect`), puis « Tout récupérer » après confirmation. L'écran Festival annonce la vague de départ quand le Départ avancé joue.
 - **Implémentation** : `src/engine/economy/kamidana.ts` (achat, remboursement), niveaux dans `GameState.kamidana` (schéma de sauvegarde 2). Les effets se branchent dans le moteur au fil de la milestone 7 et se multiplient avec les autres sources. Combat (#98) : Bénédiction et Pacte multiplient les frappes dans `combatPower`, la Paume ne multiplie que le toucher (sans effet hors ligne), l'Œil du tengu s'ajoute au multiplicateur de critique, partout où un critique est tiré ou moyenné (combat, hors ligne, « Meilleure équipe »). Gardiens et talismans (#99) : le chrono d'un Gardien (`guardianTimeLimitMs`) vaut 30 s plus le Sablier, posé à son apparition puis de nouveau quand le joueur l'affronte (un Sablier acheté pendant le cut-in compte, un chrono déjà lancé ne change pas) ; l'Œil de la faille s'ajoute au ×2 de faiblesse ; les Talismans majeurs multiplient les dégâts de Kitsune-bi et Raijin et la brûlure de Kitsune-bi (toujours sous le plafond des brûlures), et allongent le bonus d'âmes de Kekkai, pas le temps qu'il ajoute à un Gardien. Économie (#100) : la Bourse sacrée multiplie `soulsMultiplier` (yōkai, Gardiens, hors ligne, extrapolation, âmes du Départ avancé) ; la Flamme du Festival multiplie les étincelles avant l'arrondi (`festivalSparks(record, niveau)`) ; la Veille donne l'efficacité hors ligne (`offlineEfficiency` : 50 % + 10 points par niveau, 100 % au plus), sans changer le plafond de durée ; l'Appel des yōkai multiplie les chances de capture (`captureChance(graine, version, multiplicateur)`, 100 % au plus) avec le même nombre de tirages du RNG, donc mêmes graines et mêmes niveaux = mêmes captures.
 
 ## 5. Formules
@@ -208,7 +209,7 @@ Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../d
 2. **Combat** — scène, héros, yōkai, PV, chiffres de dégâts, talismans, barre d'onglets.
 3. **Cut-in de Gardien** — bande des yeux, nom, faiblesse, chrono.
 4. **Shikigami** — équipe active et collection.
-5. **Sanctuaire** — améliorations, ×1 / ×10 / Max.
+5. **Sanctuaire** — améliorations, ×1 / ×10 / Max ; second onglet **Kamidana** (bénédictions en ofuda, remboursement).
 6. **Festival** — prestige.
 7. **Gardiens** — galerie des boss, silhouettes pour ceux pas encore croisés.
 

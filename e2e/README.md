@@ -10,6 +10,7 @@ Parcours de bout en bout joués sur un simulateur iOS ou un émulateur Android p
 | `offline-return.yaml` | Retour hors ligne avec horloge simulée (2 h) : la modale de récolte s'affiche puis se ferme, et l'app demande alors la permission de notifier (refusée) |
 | `settings.yaml` | « Réduire les animations » s'active depuis le Sanctuaire et reste actif après un redémarrage |
 | `sanctuary.yaml` | Après quelques frappes, une amélioration s'achète et son niveau monte aussitôt |
+| `kamidana.yaml` | Au Kamidana (état vitrine, 85 ofuda), une bénédiction s'achète, puis « Tout récupérer » rend les ofuda |
 | `native-check.yaml` | Skia et MMKV tournent dans le development build ; le compteur survit à un redémarrage |
 | `yokai-lab.yaml` | La Fabrique à yōkai (écran de développement) dessine les yōkai en Skia ; une tuile se sélectionne |
 

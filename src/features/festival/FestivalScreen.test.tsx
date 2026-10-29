@@ -87,4 +87,20 @@ describe('FestivalScreen', () => {
     await fireEvent.press(screen.getByTestId('festival-keep-going'));
     expect(onDone).toHaveBeenCalled();
   });
+
+  it('tells where the next parade starts with the Head Start', async () => {
+    const game = withRecord(300);
+    await renderScreen(<FestivalScreen onDone={jest.fn()} />, {
+      ...game,
+      kamidana: { ...game.kamidana, headStart: 2 },
+    });
+    expect(screen.getByTestId('festival-head-start')).toHaveTextContent(
+      strings.festival.headStart(51),
+    );
+  });
+
+  it('says nothing about a head start without the blessing', async () => {
+    await renderScreen(<FestivalScreen onDone={jest.fn()} />, withRecord(300));
+    expect(screen.queryByTestId('festival-head-start')).toBeNull();
+  });
 });

@@ -13,7 +13,7 @@ Un dossier par écran ou flux (combat, sanctuaire, shikigami, gardiens, festival
 |---|---|
 | `shell/` | Écran principal à onglets |
 | `combat/` | Écran Combat : en-tête, scène (frappe détectée sur le thread UI), HUD de l'ennemi, puissance et équipe, talismans, décisions face au Gardien |
-| `sanctuary/` | Écran Sanctuaire : solde et gain par seconde, ×1 / ×10 / Max, améliorations (effets tirés de `BALANCE`) |
+| `sanctuary/` | Onglet Sanctuaire, deux boutiques au choix (`Segmented`) : le Sanctuaire (âmes : solde et gain par seconde, ×1 / ×10 / Max, `SoulsShop`) et le Kamidana (ofuda : 12 bénédictions en trois cartes, valeur actuelle → suivante, « Tout récupérer » avec confirmation, `KamidanaShop`). Effets et valeurs tirés de `BALANCE` et de `kamidanaEffect` |
 | `shikigami/` | Écran Shikigami : équipe active (bonus principal), collection en grille virtualisée (miniatures Skia statiques mémoïsées), fiche (stats, traits, montée de niveau, équipe) |
 | `festival/` | Écran Festival : scène de fête, étincelles à gagner, bonus avant → après, confirmation obligatoire avant de relancer le défilé |
 | `offline/` | Modale de retour hors ligne : durée, yōkai, âmes, vagues, montées de niveau, plafond |

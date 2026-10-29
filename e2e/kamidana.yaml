@@ -1,0 +1,38 @@
+# Kamidana : avec les 85 ofuda de l'état vitrine, une bénédiction s'achète, puis tout se récupère.
+appId: com.parallaxworks.hyakki
+---
+- launchApp:
+    clearState: true
+- longPressOn:
+    id: dev-hub
+- tapOn:
+    id: dev-showcase
+- tapOn:
+    id: tab-sanctuary
+- tapOn:
+    id: segment-kamidana
+- assertVisible:
+    id: kamidana-ofuda
+    text: '85'
+- tapOn:
+    id: buy-kamidana-blessing
+- assertVisible:
+    id: kamidana-ofuda
+    text: '75'
+- assertVisible:
+    id: kamidana-blessing-level
+    text: 'Nv 1 / 10'
+- scrollUntilVisible:
+    element:
+      id: kamidana-refund
+- tapOn:
+    id: kamidana-refund
+- tapOn:
+    id: kamidana-refund-yes
+- scrollUntilVisible:
+    element:
+      id: kamidana-ofuda
+    direction: UP
+- assertVisible:
+    id: kamidana-ofuda
+    text: '85'

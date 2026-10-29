@@ -13,6 +13,49 @@ export function kamidanaMaxLevel(upgrade: KamidanaId): number {
   return BALANCE.kamidana[upgrade].maxLevel;
 }
 
+/**
+ * The main value an upgrade gives at `level`, as the engine applies it: a multiplier (damage,
+ * critical hits, taps, team, weakness, talismans, souls, sparks, captures), the guardian timer in
+ * seconds, the Head Start wave (before the record's cap) or the offline efficiency.
+ */
+export function kamidanaEffect(upgrade: KamidanaId, level: number): number {
+  const { kamidana, crit, hero, guardian, talismans, offline } = BALANCE;
+  switch (upgrade) {
+    case 'blessing':
+      return kamidana.blessing.damageGrowth ** level;
+    case 'tenguEye':
+      return crit.multiplier + kamidana.tenguEye.critMultiplierPerLevel * level;
+    case 'inariPalm':
+      return hero.tapMultiplier * kamidana.inariPalm.tapGrowth ** level;
+    case 'shikigamiPact':
+      return kamidana.shikigamiPact.teamDamageGrowth ** level;
+    case 'hourglass':
+      return (
+        (guardian.timeLimitMs +
+          kamidana.hourglass.extraMsPerLevel * Math.min(level, kamidana.hourglass.maxLevel)) /
+        1000
+      );
+    case 'riftEye':
+      return talismans.weaknessMultiplier + kamidana.riftEye.weaknessPerLevel * level;
+    case 'greaterTalismans':
+      return kamidana.greaterTalismans.damageGrowth ** level;
+    case 'headStart':
+      return 1 + kamidana.headStart.wavesPerLevel * level;
+    case 'sacredPurse':
+      return kamidana.sacredPurse.soulsGrowth ** level;
+    case 'festivalFlame':
+      return 1 + kamidana.festivalFlame.sparksPerLevel * level;
+    case 'vigil':
+      return Math.min(
+        1,
+        offline.efficiency +
+          kamidana.vigil.efficiencyPerLevel * Math.min(level, kamidana.vigil.maxLevel),
+      );
+    case 'yokaiCall':
+      return kamidana.yokaiCall.captureGrowth ** level;
+  }
+}
+
 /** Ofuda to go from `level` to `level + 1`: whole ofuda, since the balance is a count. */
 export function kamidanaCost(upgrade: KamidanaId, level: number): number {
   return Math.round(BALANCE.kamidana[upgrade].baseCost * BALANCE.kamidana.costGrowth ** level);

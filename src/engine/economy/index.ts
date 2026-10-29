@@ -1,6 +1,7 @@
 export {
   buyKamidana,
   kamidanaCost,
+  kamidanaEffect,
   kamidanaMaxLevel,
   kamidanaRefund,
   refundKamidana,

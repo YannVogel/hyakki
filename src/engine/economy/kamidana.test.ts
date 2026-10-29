@@ -1,10 +1,16 @@
 import * as fc from 'fast-check';
 
+import { BALANCE } from '../balance';
+import { combatPower, guardianTimeLimitMs } from '../combat';
 import { createNewGame, type GameState, KAMIDANA_IDS, type KamidanaId } from '../gameState';
+import { div, toNumber } from '../numbers';
+import { offlineEfficiency } from '../offline';
+import { festivalSparks, headStartWave } from '../prestige';
 import { arbitraryGameState } from '../testing/arbitraries';
 import {
   buyKamidana,
   kamidanaCost,
+  kamidanaEffect,
   kamidanaMaxLevel,
   kamidanaRefund,
   refundKamidana,
@@ -139,5 +145,54 @@ describe('refundKamidana', () => {
   it('refunds levels above a lowered maximum too', () => {
     const result = refundKamidana(withOfuda(0, { hourglass: 6 }));
     expect(result.ok && result.ofuda).toBe(10 + 20 + 40 + 80 + 160 + 320);
+  });
+});
+
+describe('kamidanaEffect', () => {
+  const at = (levels: Partial<GameState['kamidana']>) => withOfuda(0, levels);
+
+  it('gives the values the engine applies', () => {
+    fc.assert(
+      fc.property(fc.integer({ min: 0, max: 12 }), (level) => {
+        const base = combatPower(at({}));
+        const power = combatPower(
+          at({
+            blessing: level,
+            tenguEye: level,
+            inariPalm: level,
+            shikigamiPact: level,
+            riftEye: level,
+            greaterTalismans: level,
+            sacredPurse: level,
+            yokaiCall: level,
+          }),
+        );
+        expect(toNumber(div(power.heroHitDamage, base.heroHitDamage))).toBeCloseTo(
+          kamidanaEffect('blessing', level),
+          6,
+        );
+        expect(power.critMultiplier).toBe(kamidanaEffect('tenguEye', level));
+        expect(toNumber(div(power.tapDamage, power.heroHitDamage))).toBeCloseTo(
+          kamidanaEffect('inariPalm', level),
+          6,
+        );
+        expect(power.weaknessMultiplier).toBe(kamidanaEffect('riftEye', level));
+        expect(power.talismanMultiplier).toBe(kamidanaEffect('greaterTalismans', level));
+        expect(power.soulsMultiplier / base.soulsMultiplier).toBeCloseTo(
+          kamidanaEffect('sacredPurse', level),
+          6,
+        );
+        expect(power.captureMultiplier).toBe(kamidanaEffect('yokaiCall', level));
+        expect(guardianTimeLimitMs(at({ hourglass: level }))).toBe(
+          kamidanaEffect('hourglass', level) * 1000,
+        );
+        expect(offlineEfficiency(at({ vigil: level }))).toBe(kamidanaEffect('vigil', level));
+        expect(headStartWave(100_000, level)).toBe(kamidanaEffect('headStart', level));
+        const { sparksBase, sparksExponent } = BALANCE.festival;
+        expect(festivalSparks(1000, level)).toBe(
+          Math.floor(sparksBase * 10 ** sparksExponent * kamidanaEffect('festivalFlame', level)),
+        );
+      }),
+    );
   });
 });
