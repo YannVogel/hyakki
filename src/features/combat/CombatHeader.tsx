@@ -6,7 +6,8 @@ import { strings } from '@/i18n';
 import type { NextGuardianView, ParadeView } from '@/state';
 import { bodyText, colors, displayText, Icon, Pill, ProgressBar, spacing } from '@/ui';
 
-import { OFUDA_ICON, SOULS_ICON } from '../shared/icons';
+import { SOULS_ICON } from '../shared/icons';
+import { OfudaIcon } from '../shared/OfudaIcon';
 import { GUARDIAN_IMAGES } from '../shared/images';
 
 export interface CombatHeaderProps {
@@ -45,7 +46,7 @@ export function CombatHeader({ parade, nextGuardian, souls, ofuda }: CombatHeade
             testID="combat-souls"
           />
           <Pill
-            icon={<Icon parts={OFUDA_ICON} size={20} />}
+            icon={<OfudaIcon size={20} />}
             value={ofudaValue}
             accessibilityLabel={text.ofuda(ofudaValue)}
           />

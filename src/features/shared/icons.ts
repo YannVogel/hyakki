@@ -11,16 +11,6 @@ export const SOULS_ICON: readonly IconPart[] = [
   },
 ];
 
-export const OFUDA_ICON: readonly IconPart[] = [
-  {
-    d: 'M8.5 2.5 h7 a1.5 1.5 0 0 1 1.5 1.5 v16 a1.5 1.5 0 0 1 -1.5 1.5 h-7 a1.5 1.5 0 0 1 -1.5 -1.5 v-16 a1.5 1.5 0 0 1 1.5 -1.5 z',
-    fill: colors.paper,
-    stroke: colors.ink,
-    strokeWidth: 1.8,
-  },
-  { d: 'M10.8 6 h2.4 v12 h-2.4 z', fill: colors.red },
-];
-
 const line =
   (d: string) =>
   (color: string): IconPart[] => [{ d, stroke: color }];

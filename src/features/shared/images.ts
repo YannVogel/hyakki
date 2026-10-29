@@ -1,6 +1,7 @@
 import type { ImageSourcePropType } from 'react-native';
 
-// Illustrations of the hero and the guardians (assets/images, docs/ART_PIPELINE.md).
+// Illustrations of the hero, the guardians, the backdrops and the ofuda (assets/images,
+// docs/ART_PIPELINE.md).
 
 export interface Illustration {
   readonly source: ImageSourcePropType;
@@ -122,4 +123,11 @@ export const FESTIVAL_HEADER: Illustration = {
   source: require('../../../assets/images/backdrops/festival-header.webp'),
   width: 1200,
   height: 800,
+};
+
+/** The ofuda currency, drawn in ChatGPT (#103): a square of 3 × its largest display size. */
+export const OFUDA_IMAGE: Illustration = {
+  source: require('../../../assets/images/icons/ofuda.png'),
+  width: 144,
+  height: 144,
 };

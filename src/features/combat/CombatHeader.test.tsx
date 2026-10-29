@@ -5,6 +5,7 @@ import { strings } from '@/i18n';
 import { nextGuardianView, type NextGuardianView, paradeView } from '@/state';
 import { colors } from '@/ui';
 
+import { OFUDA_IMAGE } from '../shared/images';
 import { CombatHeader } from './CombatHeader';
 
 const renderHeader = (nextGuardian: NextGuardianView) =>
@@ -18,6 +19,12 @@ const renderHeader = (nextGuardian: NextGuardianView) =>
   );
 
 describe('CombatHeader', () => {
+  it('shows the illustrated ofuda next to their count, spoken by the pill only', async () => {
+    await renderHeader({ index: 1, revealed: false });
+    expect(screen.getByTestId('ofuda-icon')).toHaveProp('source', OFUDA_IMAGE.source);
+    expect(screen.getByLabelText(strings.combat.ofuda('3'))).toBeOnTheScreen();
+  });
+
   it('shows an unknown next guardian as a silhouette whose label gives nothing away', async () => {
     await renderHeader({ index: 1, revealed: false });
     const thumbnail = screen.getByLabelText(strings.combat.nextGuardianUnknown);
