@@ -6,7 +6,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 | | |
 |---|---|
-| Milestone en cours | 7 · Progression permanente et confort (#96), une PR par issue à la demande de Yann ; 5 · Publication attend Yann (#47, #48, #63) |
+| Milestone en cours | Aucune : 7 · Progression permanente et confort terminée le 29/10 (#96, PR #108 à #119) ; 5 · Publication attend Yann (#47, #48, #63) |
 | Dernière issue terminée | #107 Règles du jeu dans l'onglet Options |
 | Prochaine issue | Milestone 7 terminée ; reprendre la publication : #47, #48 (nouveaux builds avec la milestone 7 : version à décider par Yann), #63. Publication, #47 : 1.0.0 (7) publiée en test interne et en examen dans le test fermé depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
 
