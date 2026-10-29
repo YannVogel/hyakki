@@ -11,7 +11,7 @@ Miroir des [milestones](https://github.com/YannVogel/hyakki/milestones) et des e
 | **4 · Feel & finitions** | #6 Art : héros et Gardiens, #7 Feel : effets, animations, haptique (+ #28 générateur V2) | Combat fluide et expressif, illustrations définitives | Terminée (PR #60, illustrations HD #58 en PR #92), 60 i/s à mesurer dans #55 |
 | **5 · Publication** | #8 Publication sur les stores | Disponible sur l'App Store et Google Play, étude de cas en ligne | En cours (PR #64, #66) : politique de confidentialité en ligne, app créée et fiches complètes dans les deux consoles (classifications 13+ / PEGI 7), procédure de build, étude de cas. Attendent Yann : #47 et #48 (builds, test fermé de 14 jours, soumission), #63 (vidéo, GIF, liens stores) |
 | **6 · Retours de jeu** | #72 Retours de jeu après la 1.0 | Interface de combat corrigée, confort de l'écran Shikigami, décors illustrés, cycles de difficulté après le 10e Gardien | Terminée (PR #81 à #87) |
-| **7 · Progression permanente et confort** | #96 Améliorations d'ofuda, réactions aux coups, onglet réglages et règles | Le Kamidana (améliorations permanentes payées en ofuda), des ennemis qui réagissent aux coups, un onglet pour les réglages et les règles du jeu | En cours |
+| **7 · Progression permanente et confort** | #96 Améliorations d'ofuda, réactions aux coups, onglet réglages et règles | Le Kamidana (améliorations permanentes payées en ofuda), des ennemis qui réagissent aux coups, un onglet pour les réglages et les règles du jeu | Terminée (PR #108 à #118, une par issue) ; 60 i/s des réactions à mesurer dans #55, cibles du Kamidana à ressentir dans #53 |
 
 ## Ordre conseillé
 

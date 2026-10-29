@@ -21,7 +21,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 4 · Feel & finitions | Terminée (#58 faite le 29/10, validation visuelle par Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 | 6 · Retours de jeu | Terminée (#76 fourni par Yann) | #81 à #87 |
-| 7 · Progression permanente et confort | Terminée : #97 à #107 | une PR par issue |
+| 7 · Progression permanente et confort | Terminée : #97 à #107 | #108 à #118 |
 
 ## Points en suspens
 
