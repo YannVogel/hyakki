@@ -27,6 +27,7 @@ Le jeu est **hybride** :
 | `design/sources/planche-boss.png` | 10 Gardiens (le n° 10 y est remplacé par la version 3 ci-dessous) |
 | `design/sources/nurarihyon-v3.png` | Nurarihyon, version 3, générée seule |
 | `design/sources/hd/` | Les 19 autres figures, générées seules en haute définition (§ 5) |
+| `design/sources/icons/ofuda.png` | Icône de la monnaie ofuda (1254 × 1254, fond crème), générée seule dans la conversation de référence (#103) |
 
 Ordre des poses du héros : 01 attente, 02 attaque, 03 sort de feu, 04 sort de foudre, 05 barrière, 06 touché, 07 K.-O., 08 victoire, 09 sommeil, 10 surpris.
 
