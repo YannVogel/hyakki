@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 7 · Progression permanente et confort (#96), une PR par issue à la demande de Yann ; 5 · Publication attend Yann (#47, #48, #63) |
-| Dernière issue terminée | #101 Écran du Kamidana (second onglet du Sanctuaire, remboursement, Départ avancé au Festival) |
-| Prochaine issue | #102 (équilibrage du Kamidana), puis #103 à #107. Publication, #47 : 1.0.0 (7) publiée en test interne et en examen dans le test fermé depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
+| Dernière issue terminée | #102 Équilibrage du Kamidana (coûts ×3, vagues sautées purifiées d'office, bot qui dépose ses ofuda) |
+| Prochaine issue | #103 et #104 (icône d'ofuda, fournie par Yann), puis #105 à #107. Publication, #47 : 1.0.0 (7) publiée en test interne et en examen dans le test fermé depuis le 29/10 (remplace la version 5), il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (6) envoyé vers TestFlight le 29/10, soumission à décider par Yann. Avant soumission : parcours Maestro et captures des stores à refaire (interface de la milestone 6) |
 
 ## Milestones
 
@@ -21,7 +21,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 4 · Feel & finitions | Terminée (#58 faite le 29/10, validation visuelle par Yann ; icône #59 refaite en milestone 5) | #60 |
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 | 6 · Retours de jeu | Terminée (#76 fourni par Yann) | #81 à #87 |
-| 7 · Progression permanente et confort | En cours : #97 à #101 faits | une PR par issue |
+| 7 · Progression permanente et confort | En cours : #97 à #102 faits | une PR par issue |
 
 ## Points en suspens
 
@@ -36,7 +36,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - Équilibrage : le harnais mesure une graine ; vérifier une cible « au jour près » sur plusieurs défilés (`runProfile(profil, jours, graine)`).
 - Brûlures (28/10) : plafonnées à 9 fois les frappes, sans plancher, pour que la barre de vie des gros sacs à PV descende à vitesse constante (`DECISIONS.md`). À ressentir en jeu par Yann avec le reste de l'équilibrage (#53).
 - Metro pour Maestro : `npx expo start --port 8081 < /dev/null` (le mode CI ne recharge pas le code).
-- Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`.
+- Équilibrage : relancer `npx tsx scripts/simulate.ts` après toute modification de `src/engine/balance.ts`. Kamidana calibré le 29/10 (#102) : la progression est volontairement plus rapide (10e Gardien au jour 18,5 pour le joueur régulier), à ressentir en jeu par Yann (#53).
 - Audio (29/10) : bruitages et musiques branchés (#89, #90), réglages de volume séparés. Musiques Suno de Yann ([défilé](https://suno.com/song/a485fdce-bdfd-457a-a1ff-32e84809ec94), « Le Gardien approche » : [version 1](https://suno.com/song/6ce5284f-9943-4d50-9d27-913817a2d325), [version 2](https://suno.com/song/b841c6aa-3127-4e29-b4c2-43df358c5995)) enregistrées avec OBS faute de quota, silences coupés. Module natif : le son est dans les builds iOS 1.0.0 (5) et (6) et Android (6) et (7).
 
 - Illustrations HD (#58, 29/10) : 19 figures régénérées par Yann, toutes ≥ 900 px (`docs/art/hd-regeneration.md`). Les PNG des figures passent de 5,9 à 25,9 Mo (+20 Mo dans l'app) ; une palette 256 couleurs les diviserait par 7, avec un tramage visible en gros plan : à décider. Elles sont dans les builds iOS 1.0.0 (6) et Android (7).

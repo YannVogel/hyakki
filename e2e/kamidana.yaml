@@ -18,7 +18,7 @@ appId: com.parallaxworks.hyakki
     id: buy-kamidana-blessing
 - assertVisible:
     id: kamidana-ofuda
-    text: '75'
+    text: '55'
 - assertVisible:
     id: kamidana-blessing-level
     text: 'Nv 1 / 10'

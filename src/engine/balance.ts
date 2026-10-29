@@ -98,34 +98,35 @@ export const BALANCE = {
   },
   /**
    * Kamidana: permanent upgrades paid in ofuda. Level n → n + 1 costs round(baseCost × costGrowth^n)
-   * ofuda. Starting assumptions, to calibrate with the harness: a guardian run gives 275 ofuda.
+   * ofuda (a parade through the ten guardians gives 275). Calibrated with the harness (#102): the
+   * regular player places a first ofuda on day 1, every blessing at level 1 within a week.
    */
   kamidana: {
     costGrowth: 2,
     /** × damageGrowth on every hit (hero, tap, shikigami, talismans), compounding. */
-    blessing: { baseCost: 10, maxLevel: 10, damageGrowth: 1.5 },
+    blessing: { baseCost: 30, maxLevel: 10, damageGrowth: 1.5 },
     /** + critMultiplierPerLevel to the critical hit multiplier. */
-    tenguEye: { baseCost: 10, maxLevel: 5, critMultiplierPerLevel: 1 },
+    tenguEye: { baseCost: 30, maxLevel: 5, critMultiplierPerLevel: 1 },
     /** × tapGrowth on the damage of a tap. */
-    inariPalm: { baseCost: 5, maxLevel: 8, tapGrowth: 2 },
+    inariPalm: { baseCost: 15, maxLevel: 8, tapGrowth: 2 },
     /** × teamDamageGrowth on the team's hits. */
-    shikigamiPact: { baseCost: 10, maxLevel: 10, teamDamageGrowth: 1.5 },
+    shikigamiPact: { baseCost: 30, maxLevel: 10, teamDamageGrowth: 1.5 },
     /** + extraMsPerLevel on a guardian's timer. */
-    hourglass: { baseCost: 10, maxLevel: 4, extraMsPerLevel: 5_000 },
+    hourglass: { baseCost: 30, maxLevel: 4, extraMsPerLevel: 5_000 },
     /** + weaknessPerLevel to the multiplier of a talisman matching the guardian's weakness. */
-    riftEye: { baseCost: 10, maxLevel: 5, weaknessPerLevel: 1 },
+    riftEye: { baseCost: 30, maxLevel: 5, weaknessPerLevel: 1 },
     /** × damageGrowth on Kitsune-bi and Raijin; + soulsBoostMsPerLevel on Kekkai's souls boost. */
-    greaterTalismans: { baseCost: 10, maxLevel: 8, damageGrowth: 2, soulsBoostMsPerLevel: 5_000 },
+    greaterTalismans: { baseCost: 30, maxLevel: 8, damageGrowth: 2, soulsBoostMsPerLevel: 5_000 },
     /** A new parade starts wavesPerLevel waves further, within the previous record's hundred. */
-    headStart: { baseCost: 15, maxLevel: 8, wavesPerLevel: 25 },
+    headStart: { baseCost: 45, maxLevel: 8, wavesPerLevel: 25 },
     /** × soulsGrowth on every soul earned. */
-    sacredPurse: { baseCost: 10, maxLevel: 10, soulsGrowth: 2 },
+    sacredPurse: { baseCost: 30, maxLevel: 10, soulsGrowth: 2 },
     /** + sparksPerLevel (share) on the sparks earned at a Festival. */
-    festivalFlame: { baseCost: 15, maxLevel: 8, sparksPerLevel: 0.25 },
+    festivalFlame: { baseCost: 45, maxLevel: 8, sparksPerLevel: 0.25 },
     /** + efficiencyPerLevel on the offline efficiency. */
-    vigil: { baseCost: 10, maxLevel: 5, efficiencyPerLevel: 0.1 },
+    vigil: { baseCost: 30, maxLevel: 5, efficiencyPerLevel: 0.1 },
     /** × captureGrowth on the capture chances, at most 100 %. */
-    yokaiCall: { baseCost: 5, maxLevel: 6, captureGrowth: 1.5 },
+    yokaiCall: { baseCost: 15, maxLevel: 6, captureGrowth: 1.5 },
   },
   festival: {
     /** Unlocked once the record wave is above this one (the first guardian is behind). */

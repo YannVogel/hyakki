@@ -33,10 +33,10 @@ function buyAll(state: GameState, upgrades: readonly KamidanaId[]): GameState {
 
 describe('kamidanaCost', () => {
   it('starts at the base cost and doubles at each level', () => {
-    expect(kamidanaCost('blessing', 0)).toBe(10);
-    expect(kamidanaCost('blessing', 1)).toBe(20);
-    expect(kamidanaCost('blessing', 3)).toBe(80);
-    expect(kamidanaCost('inariPalm', 0)).toBe(5);
+    expect(kamidanaCost('blessing', 0)).toBe(30);
+    expect(kamidanaCost('blessing', 1)).toBe(60);
+    expect(kamidanaCost('blessing', 3)).toBe(240);
+    expect(kamidanaCost('inariPalm', 0)).toBe(15);
   });
 
   it('is a whole, positive number of ofuda up to the max level', () => {
@@ -56,14 +56,14 @@ describe('kamidanaCost', () => {
 
 describe('buyKamidana', () => {
   it('spends the cost and raises the level by one', () => {
-    const result = buyKamidana(withOfuda(25), 'blessing');
-    expect(result.ok && result.cost).toBe(10);
+    const result = buyKamidana(withOfuda(45), 'blessing');
+    expect(result.ok && result.cost).toBe(30);
     expect(result.ok && result.state.ofuda).toBe(15);
     expect(result.ok && result.state.kamidana.blessing).toBe(1);
   });
 
   it('refuses a purchase the ofuda cannot pay', () => {
-    expect(buyKamidana(withOfuda(9), 'blessing')).toEqual({
+    expect(buyKamidana(withOfuda(29), 'blessing')).toEqual({
       ok: false,
       reason: 'not-enough-ofuda',
     });
@@ -144,7 +144,7 @@ describe('refundKamidana', () => {
 
   it('refunds levels above a lowered maximum too', () => {
     const result = refundKamidana(withOfuda(0, { hourglass: 6 }));
-    expect(result.ok && result.ofuda).toBe(10 + 20 + 40 + 80 + 160 + 320);
+    expect(result.ok && result.ofuda).toBe(30 * (1 + 2 + 4 + 8 + 16 + 32));
   });
 });
 

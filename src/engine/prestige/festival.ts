@@ -1,10 +1,11 @@
 import { BALANCE } from '../balance';
-import { waveSouls } from '../combat/enemy';
-import { tierMultiplier } from '../combat/guardians';
+import { waveSouls, yokaiProfile } from '../combat/enemy';
+import { guardianOfuda, isGuardianWave, tierMultiplier } from '../combat/guardians';
 import { combatPower } from '../combat/power';
 import { createNewGame, enemySeed, type GameState } from '../gameState';
-import { add, type BigNum, mul, ZERO } from '../numbers';
-import { deriveSeed } from '../rng';
+import { add, mul, ZERO } from '../numbers';
+import { createRng, deriveSeed } from '../rng';
+import { addCapture, captureChance } from '../shikigami';
 import { festivalBonus } from './bonus';
 
 export interface FestivalPreview {
@@ -38,14 +39,48 @@ export function headStartWave(recordWave: number, level: number): number {
   return Math.max(1, Math.min(1 + BALANCE.kamidana.headStart.wavesPerLevel * level, recordHundred));
 }
 
-/** Souls the skipped waves would have given: one ordinary yōkai each (rarity ×1, no capture). */
-export function headStartSouls(state: GameState, startWave: number): BigNum {
-  const { soulsMultiplier } = combatPower(state);
-  let souls = ZERO;
-  for (let wave = 1; wave < startWave; wave++) {
-    souls = add(souls, mul(waveSouls(wave), tierMultiplier(wave) * soulsMultiplier));
+/**
+ * Purifies the waves a Head Start skips, as if they were played: each yōkai gives its souls and
+ * its capture draw, each guardian (all beaten in the parade that ends) its souls and ofuda. The
+ * harness showed a Head Start slower than none when it gave up the captures and ofuda (#102).
+ */
+export function clearSkippedWaves(state: GameState, startWave: number): GameState {
+  if (startWave <= state.parade.wave) {
+    return state;
   }
-  return souls;
+  const { soulsMultiplier, captureMultiplier } = combatPower(state);
+  const rng = createRng(state.rngState);
+  const version = state.generatorVersion;
+  let souls = state.souls;
+  let ofuda = state.ofuda;
+  let collection = state.shikigami;
+  for (let wave = state.parade.wave; wave < startWave; wave++) {
+    const base = waveSouls(wave);
+    const multiplier = tierMultiplier(wave) * soulsMultiplier;
+    if (isGuardianWave(wave)) {
+      souls = add(souls, mul(base, BALANCE.guardian.soulsMultiplier * multiplier));
+      ofuda += guardianOfuda(wave);
+      continue;
+    }
+    const seed = enemySeed(state.parade.seed, wave);
+    souls = add(souls, mul(base, yokaiProfile(seed, version).soulsFactor * multiplier));
+    if (rng.next() < captureChance(seed, version, captureMultiplier)) {
+      collection = addCapture(collection, seed, version).collection;
+    }
+  }
+  return {
+    ...state,
+    parade: {
+      ...state.parade,
+      wave: startWave,
+      maxWave: Math.max(state.parade.maxWave, startWave),
+    },
+    enemy: { seed: enemySeed(state.parade.seed, startWave), damage: ZERO, guardian: null },
+    souls,
+    ofuda,
+    shikigami: collection,
+    rngState: rng.getState(),
+  };
 }
 
 export function festivalPreview(state: GameState): FestivalPreview {
@@ -62,23 +97,10 @@ export function festivalPreview(state: GameState): FestivalPreview {
   };
 }
 
-/** Moves a fresh parade to its Head Start wave, with the souls of the waves it skips. */
-function skipTo(state: GameState, startWave: number): GameState {
-  if (startWave === 1) {
-    return state;
-  }
-  return {
-    ...state,
-    parade: { ...state.parade, wave: startWave, maxWave: startWave },
-    enemy: { ...state.enemy, seed: enemySeed(state.parade.seed, startWave) },
-    souls: headStartSouls(state, startWave),
-  };
-}
-
 /**
  * Restarts the parade stronger: waves, souls, Sanctuary and talismans start over; shikigami,
  * team, ofuda, Kamidana, sparks and the guardian gallery stay. The new parade's seed derives from
- * the old; with Head Start, it begins further on. Skipped guardians give neither ofuda nor souls.
+ * the old; with Head Start, it begins further on, with what the skipped waves would have given.
  */
 export function startFestival(state: GameState): FestivalResult {
   const { unlocked, sparksToEarn, startWave } = festivalPreview(state);
@@ -90,7 +112,7 @@ export function startFestival(state: GameState): FestivalResult {
   return {
     ok: true,
     sparks: sparksToEarn,
-    state: skipTo(
+    state: clearSkippedWaves(
       {
         ...fresh,
         parade: { ...fresh.parade, number },

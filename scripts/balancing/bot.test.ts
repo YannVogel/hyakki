@@ -20,8 +20,11 @@ import {
   upgradeMaxLevel,
   eq,
   div,
+  KAMIDANA_IDS,
+  kamidanaCost,
+  kamidanaMaxLevel,
 } from '../../src/engine';
-import { canBeatGuardian, pickTeam, spendSouls, wantsFestival } from './bot';
+import { canBeatGuardian, pickTeam, spendOfuda, spendSouls, wantsFestival } from './bot';
 
 const anySouls = fc
   .tuple(fc.double({ min: 1, max: 9.99, noNaN: true }), fc.integer({ min: 0, max: 60 }))
@@ -110,5 +113,32 @@ describe('guardian and Festival decisions', () => {
     // 300 sparks: the bonus would grow by 11 %, enough for a persevering player only.
     expect(wantsFestival({ ...stuck, sparks: 300 }, 1.15)).toBe(false);
     expect(wantsFestival({ ...stuck, sparks: 300 }, 1.05)).toBe(true);
+  });
+});
+
+describe('spendOfuda', () => {
+  const withOfuda = (ofuda: number): GameState => ({ ...createNewGame(1), ofuda });
+
+  it('buys the cheapest blessings first, in the engine order on ties', () => {
+    const after = spendOfuda(withOfuda(30));
+    expect(after.kamidana.inariPalm).toBe(1);
+    expect(after.kamidana.yokaiCall).toBe(1);
+    expect(after.ofuda).toBe(0);
+  });
+
+  it('never goes into debt, never beyond a max level, and leaves nothing it could buy', () => {
+    fc.assert(
+      fc.property(fc.nat(100_000), (ofuda) => {
+        const after = spendOfuda(withOfuda(ofuda));
+        expect(after.ofuda).toBeGreaterThanOrEqual(0);
+        for (const id of KAMIDANA_IDS) {
+          expect(after.kamidana[id]).toBeLessThanOrEqual(kamidanaMaxLevel(id));
+          if (after.kamidana[id] < kamidanaMaxLevel(id)) {
+            expect(kamidanaCost(id, after.kamidana[id])).toBeGreaterThan(after.ofuda);
+          }
+        }
+      }),
+      { numRuns: 50 },
+    );
   });
 });

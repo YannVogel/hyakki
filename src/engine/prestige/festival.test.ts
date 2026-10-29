@@ -1,15 +1,15 @@
 import * as fc from 'fast-check';
 
-import { combatPower, waveSouls } from '../combat';
+import { combatPower, waveSouls, yokaiProfile } from '../combat';
 import { createNewGame, enemySeed, type GameState, UPGRADE_IDS } from '../gameState';
-import { add, big, div, eq, toNumber } from '../numbers';
+import { add, div, eq, gt, mul, toNumber } from '../numbers';
 import { deriveSeed } from '../rng';
 import { arbitraryGameState } from '../testing/arbitraries';
 import { festivalBonus } from './bonus';
 import {
   festivalPreview,
   festivalSparks,
-  headStartSouls,
+  clearSkippedWaves,
   headStartWave,
   startFestival,
 } from './festival';
@@ -133,15 +133,42 @@ describe('Head Start', () => {
     );
   });
 
-  it('gives the souls of the skipped waves, one ordinary yōkai each', () => {
+  it('purifies the skipped waves as if played: souls of each yōkai, then of the guardian', () => {
     const state = createNewGame(5);
-    const multiplier = combatPower(state).soulsMultiplier;
-    const expected = add(waveSouls(1), waveSouls(2));
-    expect(toNumber(headStartSouls(state, 3))).toBeCloseTo(toNumber(expected) * multiplier, 9);
-    expect(eq(headStartSouls(state, 1), 0)).toBe(true);
+    const { soulsMultiplier } = combatPower(state);
+    const yokai = (wave: number) =>
+      mul(
+        waveSouls(wave),
+        yokaiProfile(enemySeed(state.parade.seed, wave), state.generatorVersion).soulsFactor *
+          soulsMultiplier,
+      );
+    const cleared = clearSkippedWaves(state, 3);
+    expect(toNumber(cleared.souls)).toBeCloseTo(toNumber(add(yokai(1), yokai(2))), 9);
+    expect(cleared.parade).toMatchObject({ wave: 3, maxWave: 3 });
+    expect(cleared.enemy).toEqual({
+      seed: enemySeed(state.parade.seed, 3),
+      damage: cleared.enemy.damage,
+      guardian: null,
+    });
+    expect(clearSkippedWaves(state, 1)).toBe(state);
   });
 
-  it('opens the next parade further on, with those souls and nothing from skipped guardians', () => {
+  it('gives the ofuda of the skipped guardians, all beaten in the parade that ends', () => {
+    const state = createNewGame(6);
+    expect(clearSkippedWaves(state, 76).ofuda).toBe(0);
+    expect(clearSkippedWaves(state, 101).ofuda).toBe(5);
+    expect(clearSkippedWaves(state, 201).ofuda).toBe(5 + 10);
+  });
+
+  it('draws the captures of the skipped yōkai, deterministically', () => {
+    const state = { ...createNewGame(7), kamidana: { ...createNewGame(7).kamidana, yokaiCall: 6 } };
+    const cleared = clearSkippedWaves(state, 201);
+    expect(cleared.shikigami.length).toBeGreaterThan(0);
+    expect(cleared.rngState).not.toBe(state.rngState);
+    expect(clearSkippedWaves(state, 201)).toEqual(cleared);
+  });
+
+  it('opens the next parade further on, with what the skipped waves give', () => {
     fc.assert(
       fc.property(arbitraryGameState, fc.integer({ min: 1, max: 8 }), (base, level) => {
         const state = {
@@ -154,16 +181,14 @@ describe('Head Start', () => {
         const start = 1 + 25 * level;
         expect(festivalPreview(state).startWave).toBe(start);
         expect(next.parade).toMatchObject({ wave: start, maxWave: start, farming: false });
-        expect(next.enemy).toEqual({
-          seed: enemySeed(next.parade.seed, start),
-          damage: next.enemy.damage,
-          guardian: null,
-        });
-        expect(eq(next.enemy.damage, 0)).toBe(true);
-        expect(eq(next.souls, headStartSouls({ ...next, souls: big(0) }, start))).toBe(true);
-        expect(next.ofuda).toBe(state.ofuda);
+        expect(next.enemy.guardian).toBeNull();
+        expect(gt(next.souls, 0)).toBe(true);
+        expect(next.ofuda).toBeGreaterThanOrEqual(state.ofuda);
+        expect(next.shikigami.length).toBeGreaterThanOrEqual(state.shikigami.length);
         expect(next.guardiansDefeated).toEqual(state.guardiansDefeated);
+        expect(startFestival(state)).toEqual(result);
       }),
+      { numRuns: 30 },
     );
   });
 });

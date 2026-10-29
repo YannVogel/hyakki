@@ -1,8 +1,8 @@
 export { festivalBonus } from './bonus';
 export {
+  clearSkippedWaves,
   festivalPreview,
   festivalSparks,
-  headStartSouls,
   headStartWave,
   startFestival,
 } from './festival';

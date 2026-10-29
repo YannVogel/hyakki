@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-10-29 — Kamidana calibré : coûts ×3, Gardiens sautés payés
+
+- **Décision** (#102) : les coûts de base du Kamidana sont triplés (15 à 45 ofuda). Le Départ avancé purifie d'office les vagues qu'il saute, comme si on les jouait : âmes de chaque yōkai, tirages de capture, âmes et ofuda des Gardiens.
+- **Raison** : avec les hypothèses de départ, le harnais donnait au joueur régulier toutes les bénédictions au niveau 1 en 3 jours et le 10e Gardien au jour 13,5. Avec des coûts triplés : premier ofuda déposé au jour 1, toutes au niveau 1 au jour 6, 10e Gardien au jour 19 (jamais atteint à J30 avant le Kamidana), Éveil 2 du persévérant au jour 24,5 au lieu de 102. La première version du Départ avancé (un yōkai ordinaire par vague, sans capture ni ofuda) rendait le joueur plus lent que sans lui : un joueur fort gagne une vingtaine de secondes par Festival, mais perdait les ofuda des Gardiens sautés et des centaines de tirages de capture, précieux avec l'Appel des yōkai.
+- **Conséquence** : `docs/balancing/` est régénéré, `GAME_DESIGN.md` § 5.2 donne les nouvelles mesures. Les effets par niveau ne changent pas : ce sont ceux choisis par Yann.
+
 ## 2026-10-29 — Le Kamidana : améliorations permanentes payées en ofuda
 
 - **Décision** (Yann pour la monnaie et les 12 améliorations, #96) : les ofuda, gagnés uniquement sur les Gardiens et déjà conservés au Festival, achètent des améliorations permanentes très puissantes. Le lieu s'appelle **Kamidana** (神棚, l'autel domestique où l'on dépose ses ofuda), sous-titré « l'autel des ofuda ». Coût du niveau `n → n + 1` : `arrondi(base × 2^n)`, un niveau à la fois, avec un niveau maximal par amélioration. Remboursement total, gratuit, à tout moment, au prix actuel des niveaux possédés.
