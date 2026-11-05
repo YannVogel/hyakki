@@ -1,4 +1,4 @@
-import { Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { statsOf, TEAM_SIZE } from '@/engine';
 import { describeYokai, RARITY_NAMES, strings, traitEffectText, traitLabel } from '@/i18n';
@@ -7,12 +7,12 @@ import type { ShikigamiView } from '@/state';
 import {
   bodyText,
   Button,
-  Card,
   Chip,
   colors,
   displayText,
   ProgressBar,
   RarityBadge,
+  Sheet,
   spacing,
   radii,
   statColors,
@@ -81,76 +81,65 @@ export function ShikigamiSheet({
   ] as const;
   const teamFull = !inTeam && teamSize >= TEAM_SIZE;
   return (
-    <Modal visible animationType="slide" transparent onRequestClose={onClose}>
-      <View style={styles.backdrop}>
-        <Card large style={styles.sheet} testID="shikigami-sheet">
-          <ScrollView contentContainerStyle={styles.content}>
-            <View style={styles.stage}>
-              <YokaiCanvas
-                spec={spec}
-                size={180}
-                accessibilityLabel={`${name}, ${describeYokai(spec)}`}
+    <Sheet
+      maxHeight="88%"
+      onRequestClose={onClose}
+      testID="shikigami-sheet"
+      footer={
+        <View style={styles.footer}>
+          <Button label={text.close} variant="neutral" onPress={onClose} testID="shikigami-close" />
+        </View>
+      }
+    >
+      <View style={styles.content}>
+        <View style={styles.stage}>
+          <YokaiCanvas
+            spec={spec}
+            size={180}
+            accessibilityLabel={`${name}, ${describeYokai(spec)}`}
+          />
+        </View>
+        <RarityBadge rarity={RARITY_TOKEN[spec.rarity]} label={RARITY_NAMES[spec.rarity]} />
+        <Text style={displayText('2xl')}>{name}</Text>
+        <Text style={[bodyText('base', 700), styles.muted]}>
+          {describeYokai(spec)} · {text.level(level)}
+        </Text>
+        {rows.map((row) => (
+          <View key={row.key} style={styles.stat}>
+            <Text style={[bodyText('md', 800), styles.statLabel]}>{row.label}</Text>
+            <View style={styles.bar}>
+              <ProgressBar
+                value={row.value / STAT_MAX[row.key]}
+                color={row.color}
+                trackColor={colors.cream}
+                accessibilityLabel={text.statValue(row.label, row.shown)}
               />
             </View>
-            <RarityBadge rarity={RARITY_TOKEN[spec.rarity]} label={RARITY_NAMES[spec.rarity]} />
-            <Text style={displayText('2xl')}>{name}</Text>
-            <Text style={[bodyText('base', 700), styles.muted]}>
-              {describeYokai(spec)} · {text.level(level)}
-            </Text>
-            {rows.map((row) => (
-              <View key={row.key} style={styles.stat}>
-                <Text style={[bodyText('md', 800), styles.statLabel]}>{row.label}</Text>
-                <View style={styles.bar}>
-                  <ProgressBar
-                    value={row.value / STAT_MAX[row.key]}
-                    color={row.color}
-                    trackColor={colors.cream}
-                    accessibilityLabel={text.statValue(row.label, row.shown)}
-                  />
-                </View>
-                <Text style={[displayText('md'), styles.statValue]}>{row.shown}</Text>
-              </View>
-            ))}
-            <Text style={displayText('base')}>{text.traits}</Text>
-            <View style={styles.chips}>
-              {stats.traits.map((trait, index) => (
-                <Chip
-                  key={index}
-                  label={traitLabel(trait.source)}
-                  detail={traitEffectText(trait)}
-                />
-              ))}
-            </View>
-            <LevelUpControl {...levelUp} />
-            <Button
-              label={inTeam ? text.removeFromTeam : teamFull ? text.teamFull : text.addToTeam}
-              variant="neutral"
-              disabled={teamFull}
-              onPress={onToggleTeam}
-              testID="shikigami-team"
-            />
-            <Button
-              label={text.close}
-              variant="neutral"
-              onPress={onClose}
-              testID="shikigami-close"
-            />
-          </ScrollView>
-        </Card>
+            <Text style={[displayText('md'), styles.statValue]}>{row.shown}</Text>
+          </View>
+        ))}
+        <Text style={displayText('base')}>{text.traits}</Text>
+        <View style={styles.chips}>
+          {stats.traits.map((trait, index) => (
+            <Chip key={index} label={traitLabel(trait.source)} detail={traitEffectText(trait)} />
+          ))}
+        </View>
+        <LevelUpControl {...levelUp} />
+        <Button
+          label={inTeam ? text.removeFromTeam : teamFull ? text.teamFull : text.addToTeam}
+          variant="neutral"
+          disabled={teamFull}
+          onPress={onToggleTeam}
+          testID="shikigami-team"
+        />
       </View>
-    </Modal>
+    </Sheet>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: spacing[3],
-    backgroundColor: 'transparent',
-  },
-  sheet: { maxHeight: '88%', backgroundColor: colors.paper },
-  content: { gap: spacing[3], padding: spacing[4] },
+  content: { gap: spacing[3], padding: spacing[4], paddingBottom: spacing[3] },
+  footer: { paddingHorizontal: spacing[4], paddingBottom: spacing[4], paddingTop: spacing[2] },
   stage: { alignItems: 'center', backgroundColor: colors.sky, borderRadius: radii.card },
   muted: { color: colors.muted },
   stat: { flexDirection: 'row', alignItems: 'center', gap: spacing[2] },

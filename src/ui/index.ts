@@ -14,6 +14,8 @@ export { ProgressBar } from './ProgressBar';
 export { RarityBadge } from './RarityBadge';
 export type { RarityToken } from './RarityBadge';
 export { Segmented } from './Segmented';
+export { Sheet } from './Sheet';
+export type { SheetProps } from './Sheet';
 export { Slider, SLIDER_STEP } from './Slider';
 export type { SliderProps } from './Slider';
 export { SoundProvider, useSound } from './sound';

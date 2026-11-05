@@ -7,8 +7,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | | |
 |---|---|
 | Milestone en cours | 8 · Shikigami et confort (#121), branche `milestone/8-shikigami-et-confort` ; 5 · Publication attend Yann (#47, #48, #63) |
-| Dernière issue terminée | #123 Monter un shikigami de ×10, ×100 ou Max |
-| Prochaine issue | #124 Libérer les shikigami non équipés contre des âmes, puis #122 carte du retour hors ligne. Publication (#47, #48) : 1.0.0 (8) en test interne Google Play, 1.0.0 (7) dans TestFlight, soumission à décider par Yann |
+| Dernière issue terminée | #122 La carte du retour hors ligne défile, « Récolter » toujours visible |
+| Prochaine issue | #124 Libérer les shikigami non équipés contre des âmes. Publication (#47, #48) : 1.0.0 (8) en test interne Google Play, 1.0.0 (7) dans TestFlight, soumission à décider par Yann |
 
 ## Milestones
 
@@ -22,7 +22,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 | 6 · Retours de jeu | Terminée (#76 fourni par Yann) | #81 à #87 |
 | 7 · Progression permanente et confort | Terminée : #97 à #107 | #108 à #118 |
-| 8 · Shikigami et confort | En cours : #123 fait | — |
+| 8 · Shikigami et confort | En cours : #123 et #122 faits | — |
 
 ## Points en suspens
 
