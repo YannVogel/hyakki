@@ -1,6 +1,7 @@
 import { BALANCE } from '../balance';
+import { geometricCost, maxGeometricCount } from '../economy/geometric';
 import { type GameState, type Shikigami, TEAM_SIZE } from '../gameState';
-import { type BigNum, div, gte, mul, pow, sub } from '../numbers';
+import { type BigNum, gte, mul, pow, sub } from '../numbers';
 import { generate, type GeneratorVersion } from '../yokai';
 import { shikigamiIntervalMs } from './profile';
 
@@ -68,11 +69,27 @@ export function setTeam(state: GameState, seeds: readonly number[]): RosterResul
   };
 }
 
+/** ×1, ×10, ×100, or as many levels as the souls allow. */
+export type LevelUpMode = 1 | 10 | 100 | 'max';
+
+const GROWTH = BALANCE.shikigami.levelUpCostGrowth;
+
+const nextLevelCost = (level: number): BigNum =>
+  mul(BALANCE.shikigami.levelUpBaseCost, pow(GROWTH, level - 1));
+
 /** Souls needed to gain `count` levels from `level`: a geometric sum, like the Sanctuary. */
 export function levelUpCost(level: number, count = 1): BigNum {
-  const { levelUpBaseCost, levelUpCostGrowth } = BALANCE.shikigami;
-  const first = mul(levelUpBaseCost, pow(levelUpCostGrowth, level - 1));
-  return div(mul(first, sub(pow(levelUpCostGrowth, count), 1)), levelUpCostGrowth - 1);
+  return geometricCost(nextLevelCost(level), GROWTH, count);
+}
+
+/** Most levels affordable with `souls` from `level` (a shikigami has no max level). */
+export function maxLevelUps(level: number, souls: BigNum): number {
+  return maxGeometricCount(nextLevelCost(level), GROWTH, souls);
+}
+
+/** Levels a mode buys from `level`; « Max » is at least 1, to show the next price. */
+export function levelUpCount(level: number, souls: BigNum, mode: LevelUpMode): number {
+  return mode === 'max' ? Math.max(1, maxLevelUps(level, souls)) : mode;
 }
 
 export function levelUpShikigami(state: GameState, seed: number, count = 1): RosterResult {

@@ -7,6 +7,9 @@ import {
   div,
   expectedDps,
   gte,
+  levelUpCost,
+  levelUpCount,
+  type LevelUpMode,
   maxAffordable,
   min,
   mul,
@@ -210,6 +213,20 @@ export function soulsPerSecond(state: GameState): BigNum {
   ].reduce((total, interval) => total + 1000 / interval, 0);
   const killsPerSecond = min(div(expectedDps(power), waveHp(wave)), attacksPerSecond);
   return mul(mul(waveSouls(wave), power.soulsMultiplier * tierMultiplier(wave)), killsPerSecond);
+}
+
+export interface LevelUpView {
+  /** Levels the chosen mode buys (at least 1, to show the next price). */
+  readonly count: number;
+  readonly cost: BigNum;
+  readonly affordable: boolean;
+}
+
+/** A shikigami's level-up for a mode (×1, ×10, ×100, Max). */
+export function levelUpView(state: GameState, level: number, mode: LevelUpMode): LevelUpView {
+  const count = levelUpCount(level, state.souls, mode);
+  const cost = levelUpCost(level, count);
+  return { count, cost, affordable: gte(state.souls, cost) };
 }
 
 export interface ShikigamiView {

@@ -18,6 +18,7 @@ import {
   statColors,
 } from '@/ui';
 
+import { LevelUpControl, type LevelUpControlProps } from './LevelUpControl';
 import { RARITY_TOKEN } from './rarity';
 
 const STAT_MAX = { hp: 420, attack: 460, defense: 360, speed: 420, crit: 0.3 } as const;
@@ -25,9 +26,7 @@ const STAT_MAX = { hp: 420, attack: 460, defense: 360, speed: 420, crit: 0.3 } a
 export interface ShikigamiSheetProps {
   readonly shikigami: ShikigamiView;
   readonly teamSize: number;
-  readonly levelUpCost: string;
-  readonly canLevelUp: boolean;
-  readonly onLevelUp: () => void;
+  readonly levelUp: LevelUpControlProps;
   readonly onToggleTeam: () => void;
   readonly onClose: () => void;
 }
@@ -36,9 +35,7 @@ export interface ShikigamiSheetProps {
 export function ShikigamiSheet({
   shikigami,
   teamSize,
-  levelUpCost,
-  canLevelUp,
-  onLevelUp,
+  levelUp,
   onToggleTeam,
   onClose,
 }: ShikigamiSheetProps) {
@@ -124,14 +121,7 @@ export function ShikigamiSheet({
                 />
               ))}
             </View>
-            <Button
-              label={text.levelUp(levelUpCost)}
-              accessibilityLabel={text.levelUpLabel(levelUpCost)}
-              disabled={!canLevelUp}
-              onPress={onLevelUp}
-              sound="purchase"
-              testID="shikigami-level-up"
-            />
+            <LevelUpControl {...levelUp} />
             <Button
               label={inTeam ? text.removeFromTeam : teamFull ? text.teamFull : text.addToTeam}
               variant="neutral"

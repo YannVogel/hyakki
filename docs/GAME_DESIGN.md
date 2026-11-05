@@ -91,7 +91,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 - À chaque yōkai purifié, tirage de **capture** selon sa rareté : commun 2 %, rare 1 %, épique 0,4 %, légendaire 0,1 %.
 - Capturer une graine déjà possédée donne +1 niveau à ce shikigami.
 - L'**équipe active** (3 places) ajoute ses dégâts automatiques et ses **bonus d'apparence** (cornes = attaque, yeux = critique, etc. — table complète dans [`PROCEDURAL_YOKAI.md`](PROCEDURAL_YOKAI.md)).
-- Un shikigami monte de niveau contre des âmes : `100 × 1,18^(niveau − 1)`.
+- Un shikigami monte de niveau contre des âmes : `100 × 1,18^(niveau − 1)`. La fiche monte ×1, ×10, ×100 ou **Max** (autant de niveaux que le solde le permet, au moins un pour afficher le prix suivant) ; `k` niveaux coûtent la somme géométrique, comme au Sanctuaire, et il n'y a pas de niveau maximal. Le mode choisi reste le même d'une fiche à l'autre pendant la visite de l'écran.
 - **Frappe d'un shikigami** = frappe du héros × 0,5 × attaque / 100 × (1 + 10 % par niveau au-delà du premier), toutes les `1 000 ms × 100 / vitesse` : l'attaque fait la force, la vitesse la cadence. La progression par niveau est linéaire : la frappe du héros, dont elle dépend, se multiplie déjà avec la Lame.
 - **Bonus d'équipe** = somme des traits offensifs des trois membres : attaque (+% de dégâts pour tous), critique (+ points de chance de critique, plafonnée à 75 %), vitesse (+% de cadence pour tous), âmes, brûlure. Les traits de PV et de défense ne jouent que lorsque le yōkai est un ennemi (sa résistance).
 - Les bonus de sources différentes se multiplient (Sanctuaire × équipe × Festival × Kamidana) ; ceux d'une même source s'additionnent.
@@ -216,7 +216,7 @@ Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../d
 1. **Retour hors ligne** — modale de récolte, héros endormi.
 2. **Combat** — scène, héros, yōkai, PV, chiffres de dégâts, talismans, barre d'onglets.
 3. **Cut-in de Gardien** — bande des yeux, nom, faiblesse, chrono.
-4. **Shikigami** — équipe active et collection.
+4. **Shikigami** — équipe active et collection ; fiche d'un shikigami avec montée de niveau ×1 / ×10 / ×100 / Max.
 5. **Sanctuaire** — améliorations, ×1 / ×10 / Max ; second onglet **Kamidana** (bénédictions en ofuda, remboursement).
 6. **Festival** — prestige.
 7. **Gardiens** — galerie des boss, silhouettes pour ceux pas encore croisés.

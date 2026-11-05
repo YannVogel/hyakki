@@ -17,7 +17,7 @@ export interface SegmentedProps<V> {
   readonly accessibilityLabel: string;
 }
 
-/** ×1 / ×10 / Max. */
+/** One choice among a few, such as ×1 / ×10 / Max. */
 export function Segmented<V extends string | number>({
   options,
   value,

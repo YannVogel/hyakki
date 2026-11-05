@@ -1,6 +1,16 @@
 import { fireEvent, screen } from '@testing-library/react-native';
 
-import { bestTeam, big, createNewGame, type GameState, generate, nameOf } from '@/engine';
+import {
+  bestTeam,
+  big,
+  createNewGame,
+  formatNumber,
+  type GameState,
+  generate,
+  levelUpCost,
+  maxLevelUps,
+  nameOf,
+} from '@/engine';
 import { RARITY_NAMES, strings } from '@/i18n';
 
 import { renderScreen } from '../testing/renderScreen';
@@ -104,5 +114,41 @@ describe('ShikigamiScreen', () => {
     await renderScreen(<ShikigamiScreen />, owning([7]));
     await fireEvent.press(screen.getByTestId('shikigami-7'));
     expect(screen.getByTestId('shikigami-level-up')).toBeDisabled();
+  });
+
+  it('levels up ten at once in ×10 mode, and shows the price of the ten', async () => {
+    const souls = 5000;
+    const { store } = await renderScreen(<ShikigamiScreen />, owning([7], [], souls));
+    await fireEvent.press(screen.getByTestId('shikigami-7'));
+    await fireEvent.press(screen.getByRole('radio', { name: strings.shikigami.modes.ten }));
+    const cost = formatNumber(levelUpCost(1, 10));
+    expect(screen.getByTestId('shikigami-level-up')).toHaveTextContent(
+      strings.shikigami.levelUp(10, cost),
+    );
+    await fireEvent.press(screen.getByTestId('shikigami-level-up'));
+    expect(store.getState().game.shikigami[0].level).toBe(11);
+  });
+
+  it('levels up as much as the souls allow in « Max » mode, kept from one card to the next', async () => {
+    const souls = 1_000_000;
+    const { store } = await renderScreen(<ShikigamiScreen />, owning([7, 8], [], souls));
+    await fireEvent.press(screen.getByTestId('shikigami-7'));
+    await fireEvent.press(screen.getByRole('radio', { name: strings.shikigami.modes.max }));
+    await fireEvent.press(screen.getByTestId('shikigami-close'));
+    await fireEvent.press(screen.getByTestId('shikigami-8'));
+    expect(screen.getByRole('radio', { name: strings.shikigami.modes.max })).toBeChecked();
+    await fireEvent.press(screen.getByTestId('shikigami-level-up'));
+    const levels = maxLevelUps(1, big(souls));
+    expect(store.getState().game.shikigami[1].level).toBe(1 + levels);
+  });
+
+  it('cannot level up ×100 when the souls only pay for fewer levels', async () => {
+    await renderScreen(<ShikigamiScreen />, owning([7], [], 5000));
+    await fireEvent.press(screen.getByTestId('shikigami-7'));
+    await fireEvent.press(screen.getByRole('radio', { name: strings.shikigami.modes.hundred }));
+    expect(screen.getByTestId('shikigami-level-up')).toBeDisabled();
+    expect(screen.getByTestId('shikigami-level-up')).toHaveTextContent(
+      strings.shikigami.levelUp(100, formatNumber(levelUpCost(1, 100))),
+    );
   });
 });
