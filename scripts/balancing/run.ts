@@ -12,7 +12,14 @@ import {
   TALISMAN_IDS,
   type TalismanId,
 } from '../../src/engine';
-import { canBeatGuardian, pickTeam, spendOfuda, spendSouls, wantsFestival } from './bot';
+import {
+  canBeatGuardian,
+  pickTeam,
+  releaseSpare,
+  spendOfuda,
+  spendSouls,
+  wantsFestival,
+} from './bot';
 import type { Profile } from './profiles';
 
 const HOUR_MS = 3_600_000;
@@ -71,7 +78,7 @@ function visit(
       milestones.push(milestoneAt(`festival-${current.parade.number - 1}`, clock));
     }
   }
-  current = spendSouls(pickTeam(spendOfuda(current)));
+  current = spendSouls(releaseSpare(pickTeam(spendOfuda(current))));
   recordKamidana(current, clock, milestones);
   const retry =
     canBeatGuardian(current, current.parade.wave + 1, profile.tapsPerSecond) ||

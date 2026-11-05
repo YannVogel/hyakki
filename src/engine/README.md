@@ -114,6 +114,13 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `buyUpgrade(state, upgrade, mode)` | Achat ×1, ×10 ou Max ; résultat typé (`not-enough-souls`, `max-level`). Le solde n'est jamais négatif. |
 | `buyUpgradeLevels(state, upgrade, count)` | Achat d'un nombre exact de niveaux (utilisé par `buyUpgrade` et le harnais d'équilibrage). |
 
+### `economy/` — libérer des shikigami
+
+| Élément | Rôle |
+|---|---|
+| `releaseShikigami(state, seeds)` | Libère des shikigami possédés, jamais un membre de l'équipe, contre des âmes ; résultat typé (`nothing-to-release`, `not-owned`, `in-team`). Aucun tirage du RNG. Dans `economy/` et non `shikigami/` : la valeur passe par `combatPower`, qui importe `shikigami/`. |
+| `releaseWorth(rarity, level)`, `releaseSouls(state, yokai)` | Valeur en yōkai ordinaires (`BALANCE.shikigami.releaseYokai[rareté] × niveau`), puis en âmes de la vague en cours, bonus d'âmes compris sauf Kekkai. |
+
 ### `economy/` — Kamidana
 
 | Élément | Rôle |

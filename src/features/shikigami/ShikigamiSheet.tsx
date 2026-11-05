@@ -20,6 +20,7 @@ import {
 
 import { LevelUpControl, type LevelUpControlProps } from './LevelUpControl';
 import { RARITY_TOKEN } from './rarity';
+import { ReleaseButton } from './ReleaseButton';
 
 const STAT_MAX = { hp: 420, attack: 460, defense: 360, speed: 420, crit: 0.3 } as const;
 
@@ -27,15 +28,20 @@ export interface ShikigamiSheetProps {
   readonly shikigami: ShikigamiView;
   readonly teamSize: number;
   readonly levelUp: LevelUpControlProps;
+  /** Souls it leaves when released, formatted; null for a team member, who cannot be released. */
+  readonly releaseSouls: string | null;
+  readonly onRelease: () => void;
   readonly onToggleTeam: () => void;
   readonly onClose: () => void;
 }
 
-/** Card of a shikigami: look, stats, traits, level-up and team membership. */
+/** Card of a shikigami: look, stats, traits, level-up, team membership and release. */
 export function ShikigamiSheet({
   shikigami,
   teamSize,
   levelUp,
+  releaseSouls,
+  onRelease,
   onToggleTeam,
   onClose,
 }: ShikigamiSheetProps) {
@@ -132,6 +138,9 @@ export function ShikigamiSheet({
           onPress={onToggleTeam}
           testID="shikigami-team"
         />
+        {releaseSouls === null ? null : (
+          <ReleaseButton name={name} souls={releaseSouls} onRelease={onRelease} />
+        )}
       </View>
     </Sheet>
   );

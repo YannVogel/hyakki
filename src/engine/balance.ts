@@ -66,6 +66,11 @@ export const BALANCE = {
     baseIntervalMs: 1000,
     levelUpBaseCost: 100,
     levelUpCostGrowth: 1.18,
+    /**
+     * A released shikigami leaves the souls of `releaseYokai[rarity] × level` ordinary yōkai of
+     * the current wave, every souls bonus included (calibrated with the harness, #124).
+     */
+    releaseYokai: { common: 2, rare: 5, epic: 20, legendary: 100 },
   },
   talismans: {
     kitsunebi: {

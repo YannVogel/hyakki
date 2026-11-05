@@ -8,9 +8,11 @@ import { RARITY_NAMES, strings } from '@/i18n';
 import { YokaiThumbnail } from '@/render';
 import {
   bestTeamView,
+  bulkReleaseViews,
   collectionView,
   type LevelUpView,
   levelUpView,
+  releaseValue,
   type ShikigamiView,
   useGame,
   useGameStore,
@@ -32,6 +34,7 @@ import {
 
 import type { LevelUpControlProps } from './LevelUpControl';
 import { mainTeamBonus, RARITY_TOKEN } from './rarity';
+import { ReleaseCard } from './ReleaseCard';
 import { ShikigamiSheet } from './ShikigamiSheet';
 
 const COLUMNS = 3;
@@ -179,6 +182,12 @@ export function ShikigamiScreen() {
                 testID="best-team"
               />
             </Card>
+            {collection.some((entry) => !entry.inTeam) ? (
+              <ReleaseCard
+                views={bulkReleaseViews(game, collection)}
+                onRelease={(seeds) => store.getState().releaseShikigami(seeds)}
+              />
+            ) : null}
             <Text style={displayText('base')}>
               {strings.shikigami.collection} · {strings.shikigami.count(collection.length)}
             </Text>
@@ -193,6 +202,8 @@ export function ShikigamiScreen() {
           shikigami={selected}
           teamSize={game.team.length}
           levelUp={levelUpProps(selected, levelUpView(game, selected.level, levelUpMode))}
+          releaseSouls={selected.inTeam ? null : formatNumber(releaseValue(game, selected))}
+          onRelease={() => store.getState().releaseShikigami([selected.seed])}
           onToggleTeam={() => toggleTeam(selected)}
           onClose={() => setOpen(null)}
         />

@@ -15,6 +15,8 @@ import {
   type PurchaseMode,
   type PurchaseResult,
   refundKamidana,
+  type ReleaseResult,
+  releaseShikigami,
   type RosterResult,
   setTeam,
   startFestival,
@@ -60,6 +62,7 @@ export interface GameStoreState {
   readonly refundKamidana: () => KamidanaRefundResult;
   readonly setTeam: (seeds: readonly number[]) => RosterResult;
   readonly levelUpShikigami: (seed: number, count: number) => RosterResult;
+  readonly releaseShikigami: (seeds: readonly number[]) => ReleaseResult;
   readonly startFestival: () => FestivalResult;
   readonly save: () => void;
 }
@@ -133,6 +136,7 @@ export function createGameStore(deps: GameStoreDeps): GameStore {
       refundKamidana: () => apply(refundKamidana(get().game)),
       setTeam: (seeds) => apply(setTeam(get().game, seeds)),
       levelUpShikigami: (seed, count) => apply(levelUpShikigami(get().game, seed, count)),
+      releaseShikigami: (seeds) => apply(releaseShikigami(get().game, seeds)),
       startFestival: () => apply(startFestival(get().game)),
       save: () => {
         const savedAt = deps.now();

@@ -2,6 +2,8 @@ export { Button } from './Button';
 export type { ButtonProps, ButtonVariant } from './Button';
 export { Card } from './Card';
 export { Chip } from './Chip';
+export { ConfirmDialog } from './ConfirmDialog';
+export type { ConfirmDialogProps } from './ConfirmDialog';
 export { fontAssets, fontFamily } from './fonts';
 export { HapticsProvider, useHaptics } from './haptics';
 export { Icon } from './Icon';

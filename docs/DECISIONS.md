@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-11-05 — Les shikigami non équipés se libèrent contre des âmes
+
+- **Décision** (Yann pour le principe, #124) : un shikigami hors de l'équipe peut être **libéré**, seul depuis sa fiche ou en lot par rareté, après confirmation. Il laisse les âmes de `k × niveau` yōkai ordinaires de la vague en cours, tous les bonus d'âmes compris sauf Kekkai, avec `k` = 2 (commun), 5 (rare), 20 (épique), 100 (légendaire) (`BALANCE.shikigami.releaseYokai`).
+- **Raison** : seuls trois shikigami combattent, et l'Appel des yōkai remplit la collection par milliers. Les âmes évitent une nouvelle monnaie et suivent la progression d'elles-mêmes ; les ofuda sont écartés, leur rareté fait l'équilibre du Kamidana. « Libérer » prolonge la purification : le yōkai apaisé repart en paix. Pistes écartées : offrir le shikigami à un membre de l'équipe (niveaux sans la courbe de coût, trop fort avec des milliers de shikigami) et un bonus de collection passif (n'allège pas la grille). Les valeurs de `k` sont les plus hautes essayées qui gardent les cibles de `GAME_DESIGN.md` § 5.2 avec un bot qui libère tout (mesures dans le § 5.2).
+- **Conséquence** : pas de nouveau schéma de sauvegarde (la collection rétrécit). Aucun tirage du RNG : une graine libérée peut être capturée de nouveau, comme un nouveau shikigami. Le bot du harnais libère tout ce qui n'est pas dans son équipe, ce qui a déplacé quelques jalons (§ 5.2).
+
 ## 2026-10-29 — Un cinquième onglet « Options » pour les réglages et les règles
 
 - **Décision** (#106, demande de Yann) : les Réglages quittent la page ouverte depuis le bas du Sanctuaire pour un cinquième onglet, **Options**, qui accueillera aussi les règles du jeu (#107). Icône : trois curseurs.

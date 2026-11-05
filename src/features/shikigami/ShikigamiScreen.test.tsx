@@ -10,8 +10,11 @@ import {
   levelUpCost,
   maxLevelUps,
   nameOf,
+  toNumber,
 } from '@/engine';
 import { RARITY_NAMES, strings } from '@/i18n';
+
+import { bulkReleaseViews, collectionView } from '@/state';
 
 import { renderScreen } from '../testing/renderScreen';
 import { ShikigamiScreen } from './ShikigamiScreen';
@@ -150,5 +153,68 @@ describe('ShikigamiScreen', () => {
     expect(screen.getByTestId('shikigami-level-up')).toHaveTextContent(
       strings.shikigami.levelUp(100, formatNumber(levelUpCost(1, 100))),
     );
+  });
+
+  it('releases a shikigami outside the team after a confirmation, for souls', async () => {
+    const { store } = await renderScreen(<ShikigamiScreen />, owning([11, 22], [11], 0));
+    await fireEvent.press(screen.getByTestId('shikigami-22'));
+    await fireEvent.press(screen.getByTestId('shikigami-release'));
+    expect(
+      screen.getByText(strings.shikigami.releaseTitle(nameOf(generate(22, 1)))),
+    ).toBeOnTheScreen();
+    await fireEvent.press(screen.getByTestId('shikigami-release-confirm-yes'));
+    const game = store.getState().game;
+    expect(game.shikigami.map((entry) => entry.seed)).toEqual([11]);
+    expect(toNumber(game.souls)).toBeGreaterThan(0);
+    expect(screen.queryByTestId('shikigami-sheet')).toBeNull();
+  });
+
+  it('keeps the shikigami when the release is cancelled', async () => {
+    const { store } = await renderScreen(<ShikigamiScreen />, owning([11, 22], [11]));
+    await fireEvent.press(screen.getByTestId('shikigami-22'));
+    await fireEvent.press(screen.getByTestId('shikigami-release'));
+    await fireEvent.press(screen.getByTestId('shikigami-release-confirm-no'));
+    expect(store.getState().game.shikigami).toHaveLength(2);
+    expect(screen.getByTestId('shikigami-sheet')).toBeOnTheScreen();
+  });
+
+  it('offers no release to a team member', async () => {
+    await renderScreen(<ShikigamiScreen />, owning([11, 22], [11]));
+    await fireEvent.press(screen.getByTestId('team-11'));
+    expect(screen.queryByTestId('shikigami-release')).toBeNull();
+  });
+
+  it('releases in bulk every shikigami of a rarity outside the team', async () => {
+    const seeds = Array.from({ length: 12 }, (_, index) => index + 1);
+    const game = owning(seeds, [1]);
+    const commons = collectionView(game)
+      .filter((entry) => !entry.inTeam && entry.spec.rarity === 'common')
+      .map((entry) => entry.seed);
+    const { store } = await renderScreen(<ShikigamiScreen />, game);
+    const souls = bulkReleaseViews(game, collectionView(game)).common.souls;
+    expect(commons.length).toBeGreaterThan(0);
+    expect(screen.getByTestId('bulk-release')).toHaveTextContent(
+      strings.shikigami.bulk.release(commons.length, formatNumber(souls)),
+    );
+    await fireEvent.press(screen.getByTestId('bulk-release'));
+    await fireEvent.press(screen.getByTestId('bulk-release-confirm-yes'));
+    const left = store.getState().game.shikigami.map((entry) => entry.seed);
+    expect(left).toContain(1);
+    expect(left.some((seed) => commons.includes(seed))).toBe(false);
+    expect(left).toHaveLength(seeds.length - commons.length);
+  });
+
+  it('has nothing to release in bulk for a rarity without spare shikigami', async () => {
+    await renderScreen(<ShikigamiScreen />, owning([1, 2], [1]));
+    await fireEvent.press(
+      screen.getByRole('radio', { name: strings.shikigami.bulk.rarities.legendary }),
+    );
+    expect(screen.getByTestId('bulk-release')).toBeDisabled();
+    expect(screen.getByTestId('bulk-release')).toHaveTextContent(strings.shikigami.bulk.none);
+  });
+
+  it('hides the bulk release while every shikigami is in the team', async () => {
+    await renderScreen(<ShikigamiScreen />, owning([1, 2], [1, 2]));
+    expect(screen.queryByTestId('bulk-release')).toBeNull();
   });
 });
