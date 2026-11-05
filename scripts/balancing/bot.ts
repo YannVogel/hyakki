@@ -9,6 +9,7 @@ import {
   ZERO,
   levelUpShikigami,
   log10,
+  releaseShikigami,
   lt,
   mul,
   setTeam,
@@ -181,6 +182,15 @@ export function pickTeam(state: GameState): GameState {
     return state;
   }
   const result = setTeam(state, best);
+  return result.ok ? result.state : state;
+}
+
+/** Releases every shikigami outside the team for souls (#124): the most the release can give. */
+export function releaseSpare(state: GameState): GameState {
+  const spare = state.shikigami
+    .map((shikigami) => shikigami.seed)
+    .filter((seed) => !state.team.includes(seed));
+  const result = releaseShikigami(state, spare);
   return result.ok ? result.state : state;
 }
 

@@ -1,13 +1,17 @@
 import * as fc from 'fast-check';
 
 import { createNewGame, type GameState, type Shikigami } from '../gameState';
-import { big, eq, toNumber } from '../numbers';
+import { add, big, div, eq, gte, lt, pow, sub, toNumber, ZERO } from '../numbers';
+import { arbitraryBigNum } from '../testing/arbitraries';
 import { generate, GENERATOR_VERSIONS, statsOf } from '../yokai';
 import {
   addCapture,
   captureChance,
   levelUpCost,
+  levelUpCount,
+  type LevelUpMode,
   levelUpShikigami,
+  maxLevelUps,
   setTeam,
   teamMembers,
 } from './collection';
@@ -15,6 +19,7 @@ import { shikigamiHitRatio, shikigamiIntervalMs, teamBonus } from './profile';
 
 const anySeed = fc.integer({ min: 0, max: 2 ** 31 - 1 });
 const anyVersion = fc.constantFrom(...GENERATOR_VERSIONS);
+const anyLevel = fc.integer({ min: 1, max: 3000 });
 const v1 = (seed: number): Shikigami => ({ seed, level: 1, generatorVersion: 1 });
 
 const owning = (seeds: number[], state: GameState = createNewGame(1)): GameState => ({
@@ -175,5 +180,62 @@ describe('level up', () => {
       reason: 'not-enough-souls',
     });
     expect(levelUpShikigami(owning([7]), 8)).toEqual({ ok: false, reason: 'not-owned' });
+  });
+
+  it('costs exactly ten and a hundred single level-ups for ×10 and ×100', () => {
+    const relativeGap = (a: ReturnType<typeof big>, b: ReturnType<typeof big>) =>
+      eq(a, b) ? 0 : Math.abs(toNumber(div(sub(a, b), a)));
+    fc.assert(
+      fc.property(anyLevel, fc.constantFrom(10, 100), (level, count) => {
+        let sum = ZERO;
+        for (let i = 0; i < count; i++) {
+          sum = add(sum, levelUpCost(level + i));
+        }
+        expect(relativeGap(levelUpCost(level, count), sum)).toBeLessThan(1e-9);
+      }),
+    );
+  });
+
+  it('affords as many levels as possible, never more than the souls allow', () => {
+    fc.assert(
+      fc.property(anyLevel, arbitraryBigNum, (level, souls) => {
+        const count = maxLevelUps(level, souls);
+        expect(gte(souls, levelUpCost(level, count))).toBe(true);
+        expect(lt(souls, levelUpCost(level, count + 1))).toBe(true);
+      }),
+    );
+    expect(maxLevelUps(1, big(99))).toBe(0);
+    expect(maxLevelUps(1, big(101))).toBe(1);
+    expect(maxLevelUps(1, pow(10, 300))).toBeGreaterThan(3000);
+  });
+
+  it('buys the count of ×1, ×10 and ×100, and at least one level in « Max »', () => {
+    expect(([1, 10, 100] as const).map((mode) => levelUpCount(5, ZERO, mode))).toEqual([
+      1, 10, 100,
+    ]);
+    expect(levelUpCount(1, ZERO, 'max')).toBe(1);
+    expect(levelUpCount(1, levelUpCost(1, 42), 'max')).toBe(42);
+  });
+
+  it('never leaves a negative balance, and changes nothing when a mode is not affordable', () => {
+    fc.assert(
+      fc.property(
+        anyLevel,
+        arbitraryBigNum,
+        fc.constantFrom<LevelUpMode[]>(1, 10, 100, 'max'),
+        (level, souls, mode) => {
+          const state = { ...owning([7]), souls, shikigami: [{ ...v1(7), level }] };
+          const count = levelUpCount(level, souls, mode);
+          const result = levelUpShikigami(state, 7, count);
+          if (result.ok) {
+            expect(gte(result.state.souls, 0)).toBe(true);
+            expect(result.state.shikigami[0].level).toBe(level + count);
+          } else {
+            expect(result.reason).toBe('not-enough-souls');
+            expect(lt(souls, levelUpCost(level, count))).toBe(true);
+          }
+        },
+      ),
+    );
   });
 });

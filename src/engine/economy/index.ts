@@ -15,3 +15,5 @@ export {
   upgradeMaxLevel,
 } from './sanctuary';
 export type { PurchaseMode, PurchaseResult } from './sanctuary';
+export { releaseShikigami, releaseSouls, releaseWorth } from './release';
+export type { ReleaseResult } from './release';

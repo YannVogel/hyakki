@@ -74,7 +74,9 @@ Titres sur fond coloré : texte blanc avec **contour encre** (ombre portée de 2
 | `TabBar` | 5 onglets (Combat, Shikigami, Sanctuaire, Festival, Options) ; onglet actif = pastille jaune encrée ; un libellé trop long rétrécit (jusqu'à 80 %) au lieu d'être coupé. |
 | `Chip` | Traits d'un yōkai (« Cornes · +20 % attaque »). |
 | `RarityBadge` | Pastille de couleur + libellé. |
-| `Segmented` | ×1 / ×10 / Max. |
+| `Segmented` | ×1 / ×10 / Max (Sanctuaire), ×1 / ×10 / ×100 / Max (fiche d'un shikigami), rareté à libérer. Un libellé trop long rétrécit (jusqu'à 75 %) au lieu de passer à la ligne. |
+| `ConfirmDialog` | Demande avant une action irréversible (libérer des shikigami) : titre, texte, « oui » rouge et « annuler » neutre. |
+| `Sheet` | Carte qui monte du bas (rapport hors ligne, fiche d'un shikigami) : son contenu défile, son pied (« Récolter », « Fermer ») reste toujours visible, au-dessus de la barre d'accueil. L'indicateur de défilement clignote à l'ouverture sur iOS et reste affiché sur Android. |
 
 Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque composant a un rôle d'accessibilité (`button`, `tab`, `radio`, `progressbar`…), un libellé, et des cibles d'au moins 44 pt. `Button`, `TabBar` et `Segmented` déclenchent un retour haptique via `useHaptics()` et un son via `useSound()` (un clic, ou le son donné au bouton : achat, Festival) : `ui` ne parle pas à la plateforme, les implémentations (`src/services/haptics.ts`, `src/services/audio.ts`) sont fournies par la racine de l'app (`HapticsProvider`, `SoundProvider`). `Slider` règle une valeur de 0 à 1 (volumes) au doigt, ou par dixièmes au lecteur d'écran. En développement, l'écran « Catalogue des composants » (lien depuis l'accueil) les montre tous.
 

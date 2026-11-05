@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen, within } from '@testing-library/react-native';
 
 import { big, generate, nameOf, type OfflineReport } from '@/engine';
 import { strings } from '@/i18n';
@@ -60,6 +60,24 @@ describe('OfflineReturnModal', () => {
     const onCollect = jest.fn();
     await render(<OfflineReturnModal report={report()} onCollect={onCollect} />);
     await fireEvent.press(screen.getByRole('button', { name: strings.offline.collect }));
+    expect(onCollect).toHaveBeenCalled();
+  });
+
+  it('keeps « Récolter » out of the scrolling report, however long the list of level-ups', async () => {
+    const levelUps = Array.from({ length: 30 }, (_, index) => ({
+      seed: 100 + index,
+      generatorVersion: 2 as const,
+      from: 0,
+      to: 1,
+    }));
+    const onCollect = jest.fn();
+    await render(<OfflineReturnModal report={report({ levelUps })} onCollect={onCollect} />);
+    const scroll = screen.getByTestId('offline-report-scroll');
+    // Several seeds can share a name: count the « joins your band » lines instead.
+    const joined = new RegExp(`${strings.offline.levelUp('', 0, 1)}$`);
+    expect(within(scroll).getAllByText(joined)).toHaveLength(levelUps.length);
+    expect(within(scroll).queryByTestId('offline-collect')).toBeNull();
+    await fireEvent.press(screen.getByTestId('offline-collect'));
     expect(onCollect).toHaveBeenCalled();
   });
 });

@@ -24,7 +24,14 @@ import {
   kamidanaCost,
   kamidanaMaxLevel,
 } from '../../src/engine';
-import { canBeatGuardian, pickTeam, spendOfuda, spendSouls, wantsFestival } from './bot';
+import {
+  canBeatGuardian,
+  pickTeam,
+  releaseSpare,
+  spendOfuda,
+  spendSouls,
+  wantsFestival,
+} from './bot';
 
 const anySouls = fc
   .tuple(fc.double({ min: 1, max: 9.99, noNaN: true }), fc.integer({ min: 0, max: 60 }))
@@ -92,6 +99,21 @@ describe('pickTeam', () => {
   it('leaves the state untouched without shikigami', () => {
     const state = createNewGame(1);
     expect(pickTeam(state)).toBe(state);
+  });
+});
+
+describe('releaseSpare', () => {
+  it('releases every shikigami outside the team for souls, and keeps the team', () => {
+    const state = pickTeam(withCollection([5, 6, 7, 8, 9, 10]));
+    const released = releaseSpare(state);
+    expect(released.shikigami.map((entry) => entry.seed).sort()).toEqual([...state.team].sort());
+    expect(released.team).toEqual(state.team);
+    expect(gt(released.souls, state.souls)).toBe(true);
+  });
+
+  it('leaves the state untouched when every shikigami is in the team', () => {
+    const state = pickTeam(withCollection([5, 6]));
+    expect(releaseSpare(state)).toBe(state);
   });
 });
 

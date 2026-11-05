@@ -17,7 +17,7 @@ export interface SegmentedProps<V> {
   readonly accessibilityLabel: string;
 }
 
-/** ×1 / ×10 / Max. */
+/** One choice among a few, such as ×1 / ×10 / Max. */
 export function Segmented<V extends string | number>({
   options,
   value,
@@ -48,7 +48,15 @@ export function Segmented<V extends string | number>({
             style={[styles.option, selected && styles.selected]}
             testID={`segment-${option.value}`}
           >
-            <Text style={bodyText('base', 800)}>{option.label}</Text>
+            {/* A long label (« Légendaires ») shrinks a little rather than wrapping, like the tab bar. */}
+            <Text
+              style={bodyText('base', 800)}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.75}
+            >
+              {option.label}
+            </Text>
           </Pressable>
         );
       })}
@@ -73,6 +81,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.button,
     borderWidth: strokes.small,
     borderColor: 'transparent',
+    paddingHorizontal: spacing[1],
   },
   selected: { backgroundColor: colors.sky, ...outline('small') },
 });

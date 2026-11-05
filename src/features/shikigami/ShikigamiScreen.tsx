@@ -3,10 +3,20 @@ import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { formatNumber, gte, levelUpCost, statsOf, TEAM_SIZE } from '@/engine';
+import { formatNumber, type LevelUpMode, statsOf, TEAM_SIZE } from '@/engine';
 import { RARITY_NAMES, strings } from '@/i18n';
 import { YokaiThumbnail } from '@/render';
-import { bestTeamView, collectionView, type ShikigamiView, useGame, useGameStore } from '@/state';
+import {
+  bestTeamView,
+  bulkReleaseViews,
+  collectionView,
+  type LevelUpView,
+  levelUpView,
+  releaseValue,
+  type ShikigamiView,
+  useGame,
+  useGameStore,
+} from '@/state';
 import {
   bodyText,
   Button,
@@ -22,7 +32,9 @@ import {
   useHaptics,
 } from '@/ui';
 
+import type { LevelUpControlProps } from './LevelUpControl';
 import { mainTeamBonus, RARITY_TOKEN } from './rarity';
+import { ReleaseCard } from './ReleaseCard';
 import { ShikigamiSheet } from './ShikigamiSheet';
 
 const COLUMNS = 3;
@@ -106,6 +118,8 @@ export function ShikigamiScreen() {
   const game = useGame((store) => store.game);
   const store = useGameStore();
   const [open, setOpen] = useState<number | null>(null);
+  // Kept from one card to the next during the visit, not saved.
+  const [levelUpMode, setLevelUpMode] = useState<LevelUpMode>(1);
   const collection = collectionView(game);
   const team = game.team.map((seed) => collection.find((entry) => entry.seed === seed));
   const selected = collection.find((entry) => entry.seed === open);
@@ -118,6 +132,15 @@ export function ShikigamiScreen() {
       : [...game.team, shikigami.seed];
     store.getState().setTeam(next);
   };
+
+  const levelUpProps = (shikigami: ShikigamiView, view: LevelUpView): LevelUpControlProps => ({
+    mode: levelUpMode,
+    onModeChange: setLevelUpMode,
+    count: view.count,
+    cost: formatNumber(view.cost),
+    affordable: view.affordable,
+    onLevelUp: () => store.getState().levelUpShikigami(shikigami.seed, view.count),
+  });
 
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
@@ -159,6 +182,12 @@ export function ShikigamiScreen() {
                 testID="best-team"
               />
             </Card>
+            {collection.some((entry) => !entry.inTeam) ? (
+              <ReleaseCard
+                views={bulkReleaseViews(game, collection)}
+                onRelease={(seeds) => store.getState().releaseShikigami(seeds)}
+              />
+            ) : null}
             <Text style={displayText('base')}>
               {strings.shikigami.collection} · {strings.shikigami.count(collection.length)}
             </Text>
@@ -172,9 +201,9 @@ export function ShikigamiScreen() {
         <ShikigamiSheet
           shikigami={selected}
           teamSize={game.team.length}
-          levelUpCost={formatNumber(levelUpCost(selected.level))}
-          canLevelUp={gte(game.souls, levelUpCost(selected.level))}
-          onLevelUp={() => store.getState().levelUpShikigami(selected.seed)}
+          levelUp={levelUpProps(selected, levelUpView(game, selected.level, levelUpMode))}
+          releaseSouls={selected.inTeam ? null : formatNumber(releaseValue(game, selected))}
+          onRelease={() => store.getState().releaseShikigami([selected.seed])}
           onToggleTeam={() => toggleTeam(selected)}
           onClose={() => setOpen(null)}
         />

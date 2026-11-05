@@ -1,6 +1,7 @@
 import { BALANCE } from '../balance';
 import type { GameState, UpgradeId } from '../gameState';
-import { add, type BigNum, div, gt, log10, lte, mul, pow, sub, ZERO } from '../numbers';
+import { type BigNum, gt, mul, pow, sub } from '../numbers';
+import { geometricCost, maxGeometricCount } from './geometric';
 
 export type PurchaseMode = 1 | 10 | 'max';
 
@@ -15,32 +16,18 @@ export function upgradeMaxLevel(upgrade: UpgradeId): number {
   return 'maxLevel' in data ? data.maxLevel : Infinity;
 }
 
+const firstCost = (upgrade: UpgradeId, level: number): BigNum =>
+  mul(BALANCE.upgrades[upgrade].baseCost, pow(GROWTH, level));
+
 /** Cost of buying `count` levels from `level`: base × 1.15^level × (1.15^count − 1) / 0.15. */
 export function upgradeCost(upgrade: UpgradeId, level: number, count: number): BigNum {
-  if (count <= 0) {
-    return ZERO;
-  }
-  const first = mul(BALANCE.upgrades[upgrade].baseCost, pow(GROWTH, level));
-  return div(mul(first, sub(pow(GROWTH, count), 1)), GROWTH - 1);
+  return geometricCost(firstCost(upgrade, level), GROWTH, count);
 }
 
 /** Most levels affordable with `souls` from `level` (closed form, then checked exactly). */
 export function maxAffordable(upgrade: UpgradeId, level: number, souls: BigNum): number {
   const remaining = upgradeMaxLevel(upgrade) - level;
-  if (remaining <= 0 || gt(upgradeCost(upgrade, level, 1), souls)) {
-    return 0;
-  }
-  const first = mul(BALANCE.upgrades[upgrade].baseCost, pow(GROWTH, level));
-  const ratio = add(div(mul(souls, GROWTH - 1), first), 1);
-  let count = Math.min(remaining, Math.floor(log10(ratio) / Math.log10(GROWTH)));
-  // The logarithm may be off by one either way because of float rounding.
-  while (count > 0 && gt(upgradeCost(upgrade, level, count), souls)) {
-    count -= 1;
-  }
-  while (count < remaining && lte(upgradeCost(upgrade, level, count + 1), souls)) {
-    count += 1;
-  }
-  return count;
+  return maxGeometricCount(firstCost(upgrade, level), GROWTH, souls, remaining);
 }
 
 /** Buys exactly `count` levels (fewer if the max level is closer). */

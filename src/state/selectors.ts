@@ -7,10 +7,16 @@ import {
   div,
   expectedDps,
   gte,
+  levelUpCost,
+  levelUpCount,
+  type LevelUpMode,
   maxAffordable,
   min,
   mul,
   type PurchaseMode,
+  type Rarity,
+  releaseSouls,
+  releaseWorth,
   tierMultiplier,
   UPGRADE_IDS,
   upgradeCost,
@@ -212,6 +218,20 @@ export function soulsPerSecond(state: GameState): BigNum {
   return mul(mul(waveSouls(wave), power.soulsMultiplier * tierMultiplier(wave)), killsPerSecond);
 }
 
+export interface LevelUpView {
+  /** Levels the chosen mode buys (at least 1, to show the next price). */
+  readonly count: number;
+  readonly cost: BigNum;
+  readonly affordable: boolean;
+}
+
+/** A shikigami's level-up for a mode (×1, ×10, ×100, Max). */
+export function levelUpView(state: GameState, level: number, mode: LevelUpMode): LevelUpView {
+  const count = levelUpCount(level, state.souls, mode);
+  const cost = levelUpCost(level, count);
+  return { count, cost, affordable: gte(state.souls, cost) };
+}
+
 export interface ShikigamiView {
   readonly seed: number;
   readonly level: number;
@@ -240,6 +260,36 @@ export function collectionView(state: GameState): ShikigamiView[] {
         rank[a.spec.rarity] - rank[b.spec.rarity] ||
         b.level - a.level,
     );
+}
+
+export interface ReleaseView {
+  /** The shikigami of that rarity outside the team. */
+  readonly seeds: readonly number[];
+  readonly souls: BigNum;
+}
+
+/** Souls a shikigami leaves when released. */
+export function releaseValue(state: GameState, shikigami: ShikigamiView): BigNum {
+  return releaseSouls(state, releaseWorth(shikigami.spec.rarity, shikigami.level));
+}
+
+/** Release in bulk, by rarity, from the collection already drawn (no yōkai drawn again). */
+export function bulkReleaseViews(
+  state: GameState,
+  collection: readonly ShikigamiView[],
+): Record<Rarity, ReleaseView> {
+  const perYokai = releaseSouls(state, 1);
+  const view = (rarity: Rarity): ReleaseView => {
+    const spare = collection.filter((entry) => !entry.inTeam && entry.spec.rarity === rarity);
+    const yokai = spare.reduce((total, entry) => total + releaseWorth(rarity, entry.level), 0);
+    return { seeds: spare.map((entry) => entry.seed), souls: mul(perYokai, yokai) };
+  };
+  return {
+    common: view('common'),
+    rare: view('rare'),
+    epic: view('epic'),
+    legendary: view('legendary'),
+  };
 }
 
 export type GuardianStatus = 'defeated' | 'next' | 'upcoming';

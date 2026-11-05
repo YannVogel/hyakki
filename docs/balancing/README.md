@@ -15,6 +15,6 @@ npx tsx scripts/simulate.ts 60   # 60 jours
 
 Le profil `perseverant` joue comme le joueur régulier mais relance le Festival dès que le bonus progresse de 5 % (les autres attendent +15 %) : il est moins rapide au début, mais c'est le seul qui franchit Nurarihyon et atteint l'Éveil 2 (jalon `eveil-2`, voir [`GAME_DESIGN.md`](../GAME_DESIGN.md) § 5.2).
 
-Les profils sont décrits dans `scripts/balancing/profiles.ts`, la stratégie du bot dans `scripts/balancing/bot.ts` (au Kamidana, il dépose toujours ses ofuda sur la bénédiction la moins chère et ne rembourse jamais). La simulation est déterministe : relancer le script sans changer les constantes redonne exactement les mêmes fichiers.
+Les profils sont décrits dans `scripts/balancing/profiles.ts`, la stratégie du bot dans `scripts/balancing/bot.ts` (au Kamidana, il dépose toujours ses ofuda sur la bénédiction la moins chère et ne rembourse jamais). Le bot libère, à chaque passage, tous les shikigami hors de son équipe (#124). La simulation est déterministe : relancer le script sans changer les constantes redonne exactement les mêmes fichiers.
 
 Toute modification de `balance.ts` s'accompagne d'une nouvelle génération de ces fichiers, et d'une mise à jour du tableau de `GAME_DESIGN.md` § 5.2 si un jalon bouge.

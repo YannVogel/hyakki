@@ -265,7 +265,7 @@ export const fr = {
       shikigami: {
         title: 'Les shikigami',
         body: (common: string, rare: string, epic: string, legendary: string, team: string) =>
-          `Un yōkai purifié peut rejoindre ta collection : ${common}\u00a0% de chances pour un commun, ${rare}\u00a0% pour un rare, ${epic}\u00a0% pour un épique, ${legendary}\u00a0% pour un légendaire. Un doublon fait monter le tien de niveau. ${team} shikigami forment ton équipe : ils frappent avec toi, et leur apparence te donne des bonus (attaque, vitesse, critiques, âmes, brûlure). « Meilleure équipe » choisit pour toi.`,
+          `Un yōkai purifié peut rejoindre ta collection : ${common}\u00a0% de chances pour un commun, ${rare}\u00a0% pour un rare, ${epic}\u00a0% pour un épique, ${legendary}\u00a0% pour un légendaire. Un doublon fait monter le tien de niveau ; tes âmes aussi, par ×1, ×10, ×100 ou Max. ${team} shikigami forment ton équipe : ils frappent avec toi, et leur apparence te donne des bonus (attaque, vitesse, critiques, âmes, brûlure). « Meilleure équipe » choisit pour toi. Ceux que tu n’équipes pas, libère-les : ils te laissent des âmes.`,
       },
       festival: {
         title: 'Le Festival',
@@ -394,8 +394,12 @@ export const fr = {
     stats: { hp: 'PV', attack: 'Attaque', defense: 'Défense', speed: 'Vitesse', crit: 'Critique' },
     statValue: (label: string, value: string) => `${label} : ${value}`,
     traits: 'Ce que son apparence lui donne',
-    levelUp: (cost: string) => `Monter de niveau · ${cost}`,
-    levelUpLabel: (cost: string) => `Monter de niveau pour ${cost} âmes`,
+    quantity: 'Niveaux à monter',
+    modes: { one: '×1', ten: '×10', hundred: '×100', max: 'Max' },
+    levelUp: (count: number, cost: string) =>
+      count === 1 ? `Monter de niveau · ${cost}` : `+ ${count} niveaux · ${cost}`,
+    levelUpLabel: (count: number, cost: string) =>
+      `Monter de ${count} niveau${count > 1 ? 'x' : ''} pour ${cost} âmes`,
     addToTeam: 'Ajouter à l’équipe',
     removeFromTeam: 'Retirer de l’équipe',
     teamFull: 'Équipe complète',
@@ -404,6 +408,28 @@ export const fr = {
       'Équipe les trois shikigami qui frappent le plus fort ensemble, comparés au niveau 1',
     close: 'Fermer',
     guardiansLink: 'Gardiens du défilé',
+    release: (souls: string) => `Libérer · + ${souls} âmes`,
+    releaseLabel: (souls: string) => `Libérer ce shikigami contre ${souls} âmes`,
+    releaseTitle: (name: string) => `Libérer ${name} ?`,
+    releaseBody: (souls: string) =>
+      `Apaisé, il quitte ta bande et te laisse ${souls} âmes. Tu pourras le capturer de nouveau, au niveau 1.`,
+    releaseConfirm: 'Oui, le libérer',
+    releaseCancel: 'Annuler',
+    bulk: {
+      title: 'Libérer des shikigami',
+      hint: 'Hors de l’équipe, un shikigami apaisé repart en paix et te laisse des âmes : plus il est rare et monté, plus il en laisse.',
+      rarity: 'Rareté à libérer',
+      rarities: { common: 'Communs', rare: 'Rares', epic: 'Épiques', legendary: 'Légendaires' },
+      none: 'Aucun à libérer',
+      release: (count: number, souls: string) => `Libérer ${count} · + ${souls} âmes`,
+      releaseLabel: (rarity: string, count: number, souls: string) =>
+        `${rarity} : libérer ${count} shikigami hors de l’équipe contre ${souls} âmes`,
+      confirmTitle: (count: number) =>
+        count > 1 ? `Libérer ces ${count} shikigami ?` : 'Libérer ce shikigami ?',
+      confirmBody: (souls: string) =>
+        `Ils quittent ta bande et te laissent ${souls} âmes. Ton équipe reste, et tu pourras les capturer de nouveau.`,
+      confirm: 'Oui, les libérer',
+    },
   },
   festival: {
     kanji: '祭',

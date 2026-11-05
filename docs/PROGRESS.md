@@ -6,9 +6,9 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 | | |
 |---|---|
-| Milestone en cours | Aucune : 7 · Progression permanente et confort terminée le 29/10 (#96, PR #108 à #119) ; 5 · Publication attend Yann (#47, #48, #63) |
-| Dernière issue terminée | #107 Règles du jeu dans l'onglet Options |
-| Prochaine issue | Publication avec la milestone 7, version 1.0.0 confirmée par Yann le 29/10. #47 : 1.0.0 (8) publiée en test interne le 29/10 à 20 h 46 ; la 1.0.0 (7) est en examen dans le test fermé, et il faut 12 testeurs pendant 14 jours avant la production. #48 : 1.0.0 (7) envoyé vers TestFlight le 29/10 au soir, soumission à décider par Yann. #63. Avant soumission : parcours Maestro Android et captures des stores à refaire (interface des milestones 6 et 7) |
+| Milestone en cours | Aucune : 8 · Shikigami et confort terminée le 05/11 (#121, une PR pour les trois issues) ; 5 · Publication attend Yann (#47, #48, #63) |
+| Dernière issue terminée | #124 Libérer les shikigami non équipés contre des âmes |
+| Prochaine issue | Publication (#47, #48) : 1.0.0 (8) en test interne Google Play, 1.0.0 (7) dans TestFlight, soumission à décider par Yann |
 
 ## Milestones
 
@@ -22,9 +22,11 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 | 5 · Publication | Fiches et déclarations faites dans les deux consoles ; attendent Yann : #47, #48 (builds, test fermé, soumission), #63 | #64, #66 |
 | 6 · Retours de jeu | Terminée (#76 fourni par Yann) | #81 à #87 |
 | 7 · Progression permanente et confort | Terminée : #97 à #107 | #108 à #118 |
+| 8 · Shikigami et confort | Terminée : #122 à #124 | PR de la milestone 8 |
 
 ## Points en suspens
 
+- Milestone 8 (05/11) : une branche et une PR pour la milestone, un commit par issue, à la demande de Yann. Libération des shikigami calibrée avec un bot qui libère tout (`GAME_DESIGN.md` § 5.2) : à ressentir en jeu par Yann (#53). Vérifié sur simulateur iOS (iPhone 17e) ; sur Android, à vérifier par Yann (#125).
 - Milestone 7 (29/10) : à la demande de Yann, **une branche, un commit et une PR par issue**, mergée (merge commit) dans `main` dès que la CI est verte, au lieu d'une PR par milestone.
 - Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
 - Maestro sur Android : l'émulateur doit avoir 4 Go de RAM (`-memory 4096`), sinon les parcours calent ; chaque frappe reste lente (plusieurs dizaines de secondes) car l'écran animé ne se stabilise jamais. Sur iOS : 8/8 avec le build de la milestone 4.
@@ -58,3 +60,4 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 - #47 Google Play : build EAS, test fermé de 14 jours, production (`docs/store/publication.md`).
 - #48 App Store : build EAS, TestFlight, soumission (`docs/store/publication.md`).
 - #63 Vidéo de 30 s, GIF du générateur et liens stores de l'étude de cas.
+- #125 Vérifier la milestone 8 sur Android (carte hors ligne, niveaux en lot, libération).

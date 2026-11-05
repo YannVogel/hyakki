@@ -102,6 +102,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | `addCapture(collection, seed, version)` | Nouveau shikigami au niveau 1, ou +1 niveau pour une graine déjà possédée. |
 | `setTeam(state, seeds)` | Équipe active (3 au plus, distincts, possédés) ; résultat typé. |
 | `levelUpCost(level, count)`, `levelUpShikigami(state, seed, count)` | Montée d'un ou plusieurs niveaux contre des âmes ; résultat typé. |
+| `maxLevelUps(level, souls)`, `levelUpCount(level, souls, mode)`, `LevelUpMode` | Niveaux payables au plus (pas de niveau maximal), et niveaux achetés par un mode ×1, ×10, ×100 ou Max (au moins 1, pour afficher le prix suivant). |
 | `teamMembers(state)`, `teamBonus(members)`, `shikigamiHitRatio`, `shikigamiIntervalMs`, `shikigamiStats` | Bonus d'équipe et puissance d'un shikigami (voir `docs/GAME_DESIGN.md` § 4.4). |
 
 ### `economy/` — Sanctuaire
@@ -109,9 +110,16 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 | Élément | Rôle |
 |---|---|
 | `upgradeCost(upgrade, level, count)` | Coût de `count` niveaux en forme close. |
-| `maxAffordable(upgrade, level, souls)` | Niveaux achetables au plus (logarithme, puis vérification exacte), plafonnés au niveau maximal. |
+| `maxAffordable(upgrade, level, souls)` | Niveaux achetables au plus (logarithme, puis vérification exacte), plafonnés au niveau maximal. Le calcul (`economy/geometric.ts`) est partagé avec la montée de niveau des shikigami. |
 | `buyUpgrade(state, upgrade, mode)` | Achat ×1, ×10 ou Max ; résultat typé (`not-enough-souls`, `max-level`). Le solde n'est jamais négatif. |
 | `buyUpgradeLevels(state, upgrade, count)` | Achat d'un nombre exact de niveaux (utilisé par `buyUpgrade` et le harnais d'équilibrage). |
+
+### `economy/` — libérer des shikigami
+
+| Élément | Rôle |
+|---|---|
+| `releaseShikigami(state, seeds)` | Libère des shikigami possédés, jamais un membre de l'équipe, contre des âmes ; résultat typé (`nothing-to-release`, `not-owned`, `in-team`). Aucun tirage du RNG. Dans `economy/` et non `shikigami/` : la valeur passe par `combatPower`, qui importe `shikigami/`. |
+| `releaseWorth(rarity, level)`, `releaseSouls(state, yokai)` | Valeur en yōkai ordinaires (`BALANCE.shikigami.releaseYokai[rareté] × niveau`), puis en âmes de la vague en cours, bonus d'âmes compris sauf Kekkai. |
 
 ### `economy/` — Kamidana
 

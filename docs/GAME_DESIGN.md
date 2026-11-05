@@ -91,11 +91,12 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 - À chaque yōkai purifié, tirage de **capture** selon sa rareté : commun 2 %, rare 1 %, épique 0,4 %, légendaire 0,1 %.
 - Capturer une graine déjà possédée donne +1 niveau à ce shikigami.
 - L'**équipe active** (3 places) ajoute ses dégâts automatiques et ses **bonus d'apparence** (cornes = attaque, yeux = critique, etc. — table complète dans [`PROCEDURAL_YOKAI.md`](PROCEDURAL_YOKAI.md)).
-- Un shikigami monte de niveau contre des âmes : `100 × 1,18^(niveau − 1)`.
+- Un shikigami monte de niveau contre des âmes : `100 × 1,18^(niveau − 1)`. La fiche monte ×1, ×10, ×100 ou **Max** (autant de niveaux que le solde le permet, au moins un pour afficher le prix suivant) ; `k` niveaux coûtent la somme géométrique, comme au Sanctuaire, et il n'y a pas de niveau maximal. Le mode choisi reste le même d'une fiche à l'autre pendant la visite de l'écran.
 - **Frappe d'un shikigami** = frappe du héros × 0,5 × attaque / 100 × (1 + 10 % par niveau au-delà du premier), toutes les `1 000 ms × 100 / vitesse` : l'attaque fait la force, la vitesse la cadence. La progression par niveau est linéaire : la frappe du héros, dont elle dépend, se multiplie déjà avec la Lame.
 - **Bonus d'équipe** = somme des traits offensifs des trois membres : attaque (+% de dégâts pour tous), critique (+ points de chance de critique, plafonnée à 75 %), vitesse (+% de cadence pour tous), âmes, brûlure. Les traits de PV et de défense ne jouent que lorsque le yōkai est un ennemi (sa résistance).
 - Les bonus de sources différentes se multiplient (Sanctuaire × équipe × Festival × Kamidana) ; ceux d'une même source s'additionnent.
 - Un nouveau membre d'équipe commence un cycle d'attaque complet (pas de frappe gratuite en changeant d'équipe).
+- **Libérer** (#124) : un shikigami hors de l'équipe peut être libéré, après confirmation, depuis sa fiche ou en lot par rareté (carte « Libérer des shikigami » de l'écran Shikigami). Il quitte la collection et laisse les âmes de `k × niveau` yōkai ordinaires de la vague en cours, tous les bonus d'âmes compris (Clochette, équipe, Festival, Bourse sacrée, palier ; pas Kekkai), avec `k` = 2 (commun), 5 (rare), 20 (épique), 100 (légendaire). Aucun tirage du RNG ; une graine libérée peut être capturée de nouveau, au niveau 1 et avec le générateur du défilé en cours. Un membre de l'équipe ne peut pas être libéré.
 - **Meilleure équipe** (bouton de l'écran Shikigami) : équipe les trois shikigami qui font le plus de dégâts ensemble, **chacun jugé au niveau 1** (le yōkai lui-même, pas les niveaux investis : un shikigami très monté peut sortir de l'équipe). Score = dégâts par seconde espérés du héros et de l'équipe à la vague en cours, bonus d'équipe compris (attaque, vitesse, critique, brûlure plafonnée par les frappes) ; départage par le bonus d'âmes, puis par les plus petites graines. Recherche exacte parmi les 12 meilleurs shikigami pris seuls (`bestTeam`), environ 5 ms pour 500 shikigami. Bouton désactivé si la collection est vide ou si l'équipe est déjà la meilleure.
 
 ### 4.5 Festival (prestige)
@@ -116,7 +117,7 @@ Implémentation : coût de `k` niveaux depuis le niveau `n` = `base × 1,12^n ×
 - **Implémentation** (`simulateOffline`) : calcul yōkai par yōkai avec les **dégâts espérés** (critiques moyennés, brûlures comprises), sans rejouer de ticks. La progression s'arrête devant le Gardien suivant : le reste du temps, l'équipe farme la vague d'avant, et le joueur retrouve le Gardien qui l'attend (un Gardien quitté en plein combat l'attend de nouveau, chrono plein). Un joueur parti en farm continue de farmer.
 - Au-delà de **2 000 yōkai** simulés un par un, les âmes de la suite du farm sont extrapolées depuis cet échantillon (même vague, même rendement moyen) ; les captures ne sont tirées que sur l'échantillon. Cela garde le calcul sous la centaine de millisecondes sur mobile.
 - Sur 10 minutes à efficacité 100 %, le résultat reste à ±1 vague et ±15 % d'âmes du combat actif (test de cohérence).
-- Le rapport donne : durée prise en compte, plafond atteint ou non, yōkai purifiés, âmes, vagues (de → à), arrêt devant un Gardien, montées de niveau des shikigami (captures et doublons).
+- Le rapport donne : durée prise en compte, plafond atteint ou non, yōkai purifiés, âmes, vagues (de → à), arrêt devant un Gardien, montées de niveau des shikigami (captures et doublons). Avec l'Appel des yōkai, une absence de 24 h peut en lister des centaines : le rapport défile et « Récolter » reste toujours visible.
 
 ### 4.7 Kamidana (améliorations permanentes)
 
@@ -178,9 +179,9 @@ Toutes ces constantes sont dans `src/engine/balance.ts` : c'est le seul endroit 
 
 ### 5.2 Équilibrage : cibles et mesures
 
-Mesuré par `npx tsx scripts/simulate.ts` (bot simple et déterministe : il achète toujours le moins cher, au Sanctuaire comme au Kamidana où il ne rembourse jamais, aligne ses trois shikigami les plus forts, garde ses talismans d'attaque pour les Gardiens, affronte chaque Gardien et lance un Festival quand il bloque et que le bonus progresse d'au moins 15 %). Trois profils sur 30 jours ; courbes et jalons dans [`docs/balancing/`](balancing/README.md).
+Mesuré par `npx tsx scripts/simulate.ts` (bot simple et déterministe : il achète toujours le moins cher, au Sanctuaire comme au Kamidana où il ne rembourse jamais, aligne ses trois shikigami les plus forts et libère tous les autres à chaque passage, garde ses talismans d'attaque pour les Gardiens, affronte chaque Gardien et lance un Festival quand il bloque et que le bonus progresse d'au moins 15 %). Trois profils sur 30 jours ; courbes et jalons dans [`docs/balancing/`](balancing/README.md).
 
-Le Kamidana (milestone 7) accélère volontairement la progression : les cibles marquées « Kamidana » sont celles de #102, à valider par Yann en jeu (#53). Les mesures d'avant le Kamidana sont entre parenthèses.
+Le Kamidana (milestone 7) accélère volontairement la progression : les cibles marquées « Kamidana » sont celles de #102, à valider par Yann en jeu (#53). Les mesures d'avant le Kamidana sont entre parenthèses. Depuis la libération des shikigami (#124), le bot libère tout ce qui n'est pas dans son équipe : c'est le plus que la libération peut donner.
 
 | Cible (joueur régulier : 3 sessions de 5 min par jour) | Visé | Mesuré |
 |---|---|---|
@@ -189,20 +190,22 @@ Le Kamidana (milestone 7) accélère volontairement la progression : les cibles 
 | Premier ofuda déposé au Kamidana | après le 1er ou le 2e Gardien | jour 1 (2e Gardien) |
 | Toutes les bénédictions au niveau 1 | environ une semaine (Kamidana) | jour 6,2 |
 | Gardien 5 (vague 500) | jours 4 à 10 | jour 4 (5,2) |
-| Record de 800 | jours 7 à 15 (Kamidana ; 15 à 25 avant) | jour 8 (15,5) |
-| Gardien 10 (vague 1000) | avant J30 (Kamidana) | jour 18,5 (non atteint à J30, record 900) |
-| Éveil 2 (Nurarihyon vaincu) | ni trivial ni infranchissable | joueur régulier : jour 18,5 ; persévérant (Festival dès +5 %) : jour 23 (102), puis mur vers la vague 1500 (Gashadokuro éveillé), atteinte au jour 117 sur 200 |
+| Record de 800 | jours 7 à 15 (Kamidana ; 15 à 25 avant) | jour 9 (15,5) |
+| Gardien 10 (vague 1000) | avant J30 (Kamidana) | jour 20 (non atteint à J30, record 900) |
+| Éveil 2 (Nurarihyon vaincu) | ni trivial ni infranchissable | joueur régulier : jour 20 ; persévérant (Festival dès +5 %) : jour 22 ; mesure de #102 sur 200 jours : mur vers la vague 1500 (Gashadokuro éveillé), atteinte au jour 117 |
 | Toutes les bénédictions au maximum | pas avant l'Éveil 2 | non atteint en 200 jours (persévérant) |
-| Départ avancé jamais plus lent que sans | — | régulier : 10e Gardien au jour 18,5 avec ou sans ; actif : jour 6 avec, 6,6 sans ; persévérant : jour 23 avec, 23,5 sans |
+| Départ avancé jamais plus lent que sans | — | mesure de #102, avant la libération : régulier : 10e Gardien au jour 18,5 avec ou sans ; actif : jour 6 avec, 6,6 sans ; persévérant : jour 23 avec, 23,5 sans |
 
 | Cible (autres profils) | Visé | Mesuré |
 |---|---|---|
 | Joueur actif (2 h par jour) : premier Gardien | ≤ 45 min de jeu | 30 min |
 | Joueur actif : Gardien 5 | ≤ 3 jours | jour 0,6 (1) |
-| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 900 / 1100 = 82 % (95 %) |
-| Temps de calcul | 30 jours de simulation en environ 30 s | 4 profils : 12 s (31 s) |
+| Joueur hors ligne (3 passages d'1 min) : meilleur record à J30 | ≥ 80 % du joueur régulier | 900 / 1121 = 80 % (95 %) |
+| Temps de calcul | 30 jours de simulation en environ 30 s | 4 profils : 7 s (31 s) |
 
 Réglage du Kamidana (#102) : avec les coûts de départ, le joueur régulier avait toutes les bénédictions au niveau 1 au jour 3 et battait Nurarihyon au jour 13,5 ; coûts ×2 : jour 16,5 ; ×4 : jour 24,5 ; retenu ×3 (jour 18,5). Les effets par niveau, choisis par Yann, ne changent pas. Le bot mémorise la force de ses shikigami : l'Appel des yōkai lui fait des collections de milliers de shikigami, que la version précédente re-dessinait à chaque tri (10 fois plus lent).
+
+Réglage de la libération (#124), avec un bot qui libère tout hors de son équipe : `k` = 10 / 25 / 100 / 500 (commun à légendaire) avançait le Gardien 5 du joueur régulier au jour 3,5 (sous la cible) et le 10e Gardien du joueur actif de 6 à 4,6 jours ; 5 / 12 / 50 / 250 gardait le Gardien 5 au jour 3,5 ; retenu 2 / 5 / 20 / 100, qui garde toutes les cibles dans leur plage (Gardien 5 au jour 4, record de 800 au jour 9, 10e Gardien au jour 20, joueur hors ligne à 80 % du régulier). Le harnais ne mesure qu'une graine : d'un réglage à l'autre, les jalons tardifs bougent de ±1 jour dans les deux sens.
 
 Mesures avec le générateur V2 (défilés neufs). Sensibilité : d'un défilé à l'autre (graine), le premier Gardien du joueur régulier tombe ou non au jour 1 selon la chance des premiers yōkai et des captures ; sur 12 défilés, il tombe au jour 1 dans 10 cas avec la Lame à 5 âmes (contre 4 avec l'ancien coût de 10). Le harnais mesure une graine fixe (2026) : une cible « au jour près » est donc indicative.
 
@@ -216,7 +219,7 @@ Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../d
 1. **Retour hors ligne** — modale de récolte, héros endormi.
 2. **Combat** — scène, héros, yōkai, PV, chiffres de dégâts, talismans, barre d'onglets.
 3. **Cut-in de Gardien** — bande des yeux, nom, faiblesse, chrono.
-4. **Shikigami** — équipe active et collection.
+4. **Shikigami** — équipe active et collection ; fiche d'un shikigami avec montée de niveau ×1 / ×10 / ×100 / Max.
 5. **Sanctuaire** — améliorations, ×1 / ×10 / Max ; second onglet **Kamidana** (bénédictions en ofuda, remboursement).
 6. **Festival** — prestige.
 7. **Gardiens** — galerie des boss, silhouettes pour ceux pas encore croisés.
