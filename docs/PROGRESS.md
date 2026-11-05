@@ -8,7 +8,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 |---|---|
 | Milestone en cours | Aucune : 8 · Shikigami et confort terminée le 05/11 (#121, une PR pour les trois issues) ; 5 · Publication attend Yann (#47, #48, #63) |
 | Dernière issue terminée | #124 Libérer les shikigami non équipés contre des âmes |
-| Prochaine issue | Publication (#47, #48) : 1.0.0 (8) en test interne Google Play, 1.0.0 (7) dans TestFlight, soumission à décider par Yann |
+| Prochaine issue | Publication (#47, #48) : 1.0.0 (9) construite le 05/11 (milestone 8), à importer en test interne Google Play ; 1.0.0 (8) envoyée vers TestFlight le 05/11 ; soumission à décider par Yann. #125 : vérifier la milestone 8 sur Android |
 
 ## Milestones
 
