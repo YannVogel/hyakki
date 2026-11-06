@@ -24,7 +24,7 @@ Ces règles sont appliquées par `npm run lint` ([`eslint.config.js`](../../esli
 | `prestige/` | Festival |
 | `offline/` | gains hors ligne |
 | `save/` | sérialisation versionnée, validation et migrations |
-| `testing/` | générateurs fast-check et états de test partagés (`stateAtWave`) |
+| `testing/` | générateurs fast-check, états de test partagés (`stateAtWave`) et mesure du temps de calcul (`fastestMs` : le plus rapide de trois appels, après un appel de chauffe) |
 
 Chaque module apparaît avec l'issue qui l'implémente (milestones 1 et 2).
 

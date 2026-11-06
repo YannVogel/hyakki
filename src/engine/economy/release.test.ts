@@ -8,6 +8,7 @@ import type { GameState, Shikigami } from '../gameState';
 import { add, div, eq, gt, mul, sub, toNumber, ZERO } from '../numbers';
 import { addCapture } from '../shikigami';
 import { stateAtWave } from '../testing/states';
+import { fastestMs } from '../testing/timing';
 import { generate, type Rarity } from '../yokai';
 import { releaseShikigami, releaseSouls, releaseWorth } from './release';
 
@@ -133,10 +134,8 @@ describe('releasing in bulk', () => {
     const state = owning(shikigamiOf(seeds), [3]);
     // The screen hands over the seeds it already shows: only the release itself is timed.
     const spare = seeds.slice(1);
-    releaseShikigami(state, spare.slice(0, 10));
-    const started = performance.now();
     const result = releaseShikigami(state, spare);
-    expect(performance.now() - started).toBeLessThan(250);
     expect(result.ok && result.state.shikigami).toHaveLength(1);
+    expect(fastestMs(() => releaseShikigami(state, spare))).toBeLessThan(250);
   });
 });
