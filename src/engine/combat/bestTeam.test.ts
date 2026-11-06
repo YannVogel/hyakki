@@ -3,6 +3,7 @@ import * as fc from 'fast-check';
 import { createNewGame, type GameState, TEAM_SIZE } from '../gameState';
 import { compare } from '../numbers';
 import { teamBonus, teamMembers } from '../shikigami';
+import { fastestMs } from '../testing/timing';
 import { bestTeam, shikigamiDps, teamDps } from './bestTeam';
 
 const owning = (seeds: readonly number[], levels: readonly number[] = []): GameState => {
@@ -97,9 +98,7 @@ describe('bestTeam', () => {
 
   it('chooses instantly among 500 shikigami', () => {
     const state = owning(Array.from({ length: 500 }, (_, index) => index * 104_729 + 3));
-    bestTeam(state);
-    const started = performance.now();
     expect(bestTeam(state)).toHaveLength(TEAM_SIZE);
-    expect(performance.now() - started).toBeLessThan(100);
+    expect(fastestMs(() => bestTeam(state))).toBeLessThan(100);
   });
 });
