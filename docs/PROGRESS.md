@@ -26,6 +26,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 ## Points en suspens
 
+- Dépendances (06/11) : correctifs du SDK 58 appliqués (`npx expo install --fix` : `expo` 58.0.23, `react-native` 0.88.1, `react-native-safe-area-context` 5.11.1, `react-native-screens` 4.30.1, modules Expo…), et `expo-asset` déclaré en dépendance directe, comme le demande `expo-audio`. `expo-doctor` passe (20/20). Les modules natifs changent : les builds 1.0.0 iOS (8) et Android (9) ne les contiennent pas, les prochains builds de store les incluront.
 - Milestone 8 (05/11) : une branche et une PR pour la milestone, un commit par issue, à la demande de Yann. Libération des shikigami calibrée avec un bot qui libère tout (`GAME_DESIGN.md` § 5.2) : à ressentir en jeu par Yann (#53). Vérifié sur simulateur iOS (iPhone 17e) ; sur Android, à vérifier par Yann (#125).
 - Milestone 7 (29/10) : à la demande de Yann, **une branche, un commit et une PR par issue**, mergée (merge commit) dans `main` dès que la CI est verte, au lieu d'une PR par milestone.
 - Milestone 3 : ordre #29, #30, puis #31 → #37. Écrans de développement sous `app/dev/` (appui long sur l'en-tête du défilé). Hub de dev : raccourci « Gardien de la vague 100 » (captures, parcours `guardian.yaml`).
