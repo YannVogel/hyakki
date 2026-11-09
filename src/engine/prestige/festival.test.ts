@@ -86,6 +86,7 @@ describe('startFestival', () => {
         expect(next.ofuda).toBe(state.ofuda);
         expect(next.kamidana).toEqual(state.kamidana);
         expect(next.guardiansDefeated).toEqual(state.guardiansDefeated);
+        expect(next.guardiansBestAwakening).toEqual(state.guardiansBestAwakening);
         expect(next.sparks).toBe(
           state.sparks + festivalSparks(record, state.kamidana.festivalFlame),
         );

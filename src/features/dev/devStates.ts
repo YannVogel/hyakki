@@ -6,17 +6,30 @@ import {
   type GameState,
   generate,
   GENERATOR_VERSION,
+  guardianAt,
   type Rarity,
   setTeam,
   type Shikigami,
 } from '@/engine';
 
-/** Development shortcut: the first parade, in front of the guardian of `wave`, strong enough to win. */
+/**
+ * Development shortcut: the first parade, in front of the guardian of `wave`, strong enough to win
+ * below Éveil 2. The guardians of the waves behind are beaten, as in a real parade, for the gallery.
+ */
 export function devGuardianState(seed: number, wave: number): GameState {
   const state = createNewGame(seed);
+  const guardiansDefeated = new Set<number>();
+  const guardiansBestAwakening = [...state.guardiansBestAwakening];
+  for (let behind = BALANCE.guardian.every; behind < wave; behind += BALANCE.guardian.every) {
+    const { index, awakening } = guardianAt(behind);
+    guardiansDefeated.add(index);
+    guardiansBestAwakening[index] = Math.max(guardiansBestAwakening[index], awakening);
+  }
   return {
     ...state,
     parade: { ...state.parade, wave, maxWave: wave },
+    guardiansDefeated: [...guardiansDefeated],
+    guardiansBestAwakening,
     enemy: {
       seed: enemySeed(seed, wave),
       damage: state.enemy.damage,

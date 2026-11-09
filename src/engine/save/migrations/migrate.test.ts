@@ -27,6 +27,6 @@ describe('migrate', () => {
   });
 
   it('has one migration per published schema before the current one', () => {
-    expect(Object.keys(MIGRATIONS)).toEqual(['1']);
+    expect(Object.keys(MIGRATIONS)).toEqual(['1', '2']);
   });
 });

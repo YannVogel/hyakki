@@ -59,13 +59,14 @@ Combat automatique ──► âmes ──► Sanctuaire (améliorations) ──�
 
 - Vagues 100, 200 … 1000 : un Gardien illustré, **cut-in** animé à son entrée, **30 s** pour le vaincre.
 - Échec : retour à la vague précédente (−1), où le joueur peut farmer avant de retenter.
-- Victoire : ofuda, palier franchi (les vagues suivantes donnent plus d'âmes), Gardien ajouté à la galerie.
+- Victoire : ofuda, palier franchi (les vagues suivantes donnent plus d'âmes), Gardien ajouté à la galerie. Un Gardien éveillé vaincu entre dans la section « Gardiens éveillés » de la galerie, qui garde pour chacun le plus haut Éveil où il est tombé (#133).
 - Ordre V1 : Bake-danuki, Kappa, Karasu-tengu, Tsuchigumo, Yuki-onna, Gashadokuro, Nue, Ibaraki-dōji, Kyūbi no kitsune, Nurarihyon.
 - Au-delà de la vague 1000 : **niveaux d'Éveil**. Chaque fois que Nurarihyon tombe, le défilé repart de la première vague un niveau d'« Éveil » plus haut (Éveil 2, Éveil 3…), et les Gardiens reviennent en version « éveillée » en attendant de nouvelles planches. Un Gardien éveillé garde l'illustration de sa version normale, cernée d'une **aura** violette, en combat, dans le cut-in (qui annonce « Gardien éveillé ! » et son niveau d'Éveil) et sur la vignette du prochain Gardien (#132). Une annonce « Éveil N ! » salue le passage ; l'en-tête affiche « Défilé N · Éveil N » à partir de l'Éveil 2, et toutes les vagues montrées au joueur (en-tête, carte de l'ennemi, cut-in, retour hors ligne, Festival) sont celles du niveau, de 1 à 1000.
 - **Implémentation** :
   - À son apparition, le Gardien **attend** (cut-in) : rien ne combat et le chrono ne tourne pas tant que le joueur n'a pas choisi « Affronter » (`engageGuardian`) ou « Fuir » (`fleeGuardian`).
   - PV = 12 × PV(v) (×2 par cycle éveillé). Âmes = âmes(v) × 15. Ofuda = 5 × rang du Gardien (1 à 10) × 3^cycle : un défilé complet en rapporte 275 à l'Éveil 1, 825 à l'Éveil 2, 2 475 à l'Éveil 3 (#130).
-  - Éveil : l'état garde la vague absolue (pas de changement de sauvegarde) ; niveau = `floor((v − 1) / 1000) + 1`, vague du niveau = `(v − 1) mod 1000 + 1` (`awakeningLevel`, `waveInCycle`). L'éveil d'un Gardien vaut le niveau moins un. Les PV continuent de suivre `1,13^(v−1)` : à vague du niveau égale, tout ennemi du niveau N + 1 est plus résistant qu'au niveau N, sans multiplicateur ajouté. Le Festival ramène au niveau 1 avec les vagues.
+  - Éveil : l'état garde la vague absolue ; niveau = `floor((v − 1) / 1000) + 1`, vague du niveau = `(v − 1) mod 1000 + 1` (`awakeningLevel`, `waveInCycle`). L'éveil d'un Gardien vaut le niveau moins un. Les PV continuent de suivre `1,13^(v−1)` : à vague du niveau égale, tout ennemi du niveau N + 1 est plus résistant qu'au niveau N, sans multiplicateur ajouté. Le Festival ramène au niveau 1 avec les vagues.
+  - Historique des Gardiens éveillés (#133) : `GameState.guardiansBestAwakening` garde, pour chaque Gardien, le plus haut éveil où il est tombé (0 tant que sa version éveillée n'est jamais tombée). Mis à jour à chaque victoire, jamais abaissé, conservé au Festival comme `guardiansDefeated` (schéma de sauvegarde 3).
   - Échec ou fuite : retour à la vague précédente en **farm** ; chaque yōkai vaincu y est remplacé par un nouveau (graine dérivée de la répétition). « Affronter le Gardien » (`challengeGuardian`) le fait revenir.
   - Palier : chaque centaine de vagues franchie donne **+50 % d'âmes** aux vagues suivantes.
   - Les brûlures en % des PV max ne font que **20 %** de leur effet sur un Gardien (sinon elles le videraient en 30 s).
@@ -224,7 +225,7 @@ Maquettes de référence dans Claude Design (lien dans [`design/README.md`](../d
 4. **Shikigami** — équipe active et collection ; fiche d'un shikigami avec montée de niveau ×1 / ×10 / ×100 / Max.
 5. **Sanctuaire** — améliorations, ×1 / ×10 / Max ; second onglet **Kamidana** (bénédictions en ofuda, remboursement).
 6. **Festival** — prestige.
-7. **Gardiens** — galerie des boss, silhouettes pour ceux pas encore croisés.
+7. **Gardiens** — galerie des boss, silhouettes pour ceux pas encore croisés. Une fois Nurarihyon vaincu, une section « Gardiens éveillés » : chacun avec son aura, son record (« Éveil N »), sinon « Prochain » ou « À venir » et une silhouette (#133).
 8. **Options** — cinquième onglet : les réglages et les règles du jeu (une carte par thème : défilé, talismans, Gardiens, Éveil, Sanctuaire, Kamidana, shikigami, Festival, hors ligne). Les règles sont la version joueur de ce document ; leurs chiffres viennent de `BALANCE`.
 
 ## 7. Hors V1

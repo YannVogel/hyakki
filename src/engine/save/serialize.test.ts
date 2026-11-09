@@ -95,6 +95,20 @@ describe('serialize / deserialize', () => {
         (raw.state.shikigami = [{ seed: 5, level: 1, generatorVersion: 0 }]),
     ],
     [
+      'a missing record of the awakened guardians',
+      (raw: { state: Record<string, unknown> }) => delete raw.state.guardiansBestAwakening,
+    ],
+    [
+      'a record of the awakened guardians missing a guardian',
+      (raw: { state: Record<string, unknown> }) =>
+        (raw.state.guardiansBestAwakening = [1, 1, 0, 0, 0, 0, 0, 0, 0]),
+    ],
+    [
+      'a negative awakening',
+      (raw: { state: Record<string, unknown> }) =>
+        (raw.state.guardiansBestAwakening = [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+    ],
+    [
       'a record below the current wave',
       (raw: { state: Record<string, unknown> }) =>
         (raw.state.parade = { ...(raw.state.parade as object), wave: 9, maxWave: 3 }),

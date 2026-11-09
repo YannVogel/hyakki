@@ -1,17 +1,16 @@
-import { big, createNewGame, enemySeed, generate, gt, nameOf, startFestival, step } from '@/engine';
+import { big, createNewGame, enemySeed, generate, gt, nameOf, step } from '@/engine';
 
 import {
   bestTeamView,
   collectionView,
   enemyView,
-  guardianGallery,
-  nextGuardianView,
   paradeView,
   powerPerSecond,
   soulsPerSecond,
   talismanViews,
   upgradeViews,
 } from './selectors';
+import { nextGuardianView } from './guardianSelectors';
 
 const atWave = (wave: number) => {
   const state = createNewGame(3);
@@ -136,63 +135,6 @@ describe('collectionView', () => {
     for (let i = 2; i < view.length; i++) {
       expect(rank[view[i].spec.rarity]).toBeGreaterThanOrEqual(rank[view[i - 1].spec.rarity]);
     }
-  });
-});
-
-describe('guardianGallery', () => {
-  it('marks defeated, next and upcoming guardians, revealing the ones met', () => {
-    const state = {
-      ...createNewGame(1),
-      parade: { ...createNewGame(1).parade, wave: 300, maxWave: 300 },
-      guardiansDefeated: [0, 1],
-    };
-    const gallery = guardianGallery(state);
-    expect(gallery.map((card) => card.status)).toEqual([
-      'defeated',
-      'defeated',
-      'next',
-      'upcoming',
-      'upcoming',
-      'upcoming',
-      'upcoming',
-      'upcoming',
-      'upcoming',
-      'upcoming',
-    ]);
-    expect(gallery.map((card) => card.revealed).slice(0, 4)).toEqual([true, true, true, false]);
-  });
-});
-
-describe('nextGuardianView', () => {
-  const afterBakeDanuki = { ...atWave(101), guardiansDefeated: [0] };
-
-  it('hides the first guardian from a new player', () => {
-    expect(nextGuardianView(createNewGame(1))).toEqual({ index: 0, awakening: 0, revealed: false });
-  });
-
-  it('moves on to a still unknown guardian once the previous one is defeated', () => {
-    expect(nextGuardianView(afterBakeDanuki)).toEqual({
-      index: 1,
-      awakening: 0,
-      revealed: false,
-    });
-  });
-
-  it('reveals a guardian met in the current parade', () => {
-    expect(nextGuardianView(atWave(100))).toEqual({ index: 0, awakening: 0, revealed: true });
-  });
-
-  it('keeps a defeated guardian revealed in the next parade', () => {
-    const festival = startFestival(afterBakeDanuki);
-    expect(festival.ok && nextGuardianView(festival.state)).toEqual({
-      index: 0,
-      awakening: 0,
-      revealed: true,
-    });
-  });
-
-  it('shows an awakened guardian as its normal self, with its awakening', () => {
-    expect(nextGuardianView(atWave(1050))).toEqual({ index: 0, awakening: 1, revealed: true });
   });
 });
 

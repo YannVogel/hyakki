@@ -175,6 +175,24 @@ describe('guardian fights', () => {
     expect(again).toContainEqual(
       expect.objectContaining({ type: 'guardianDefeated', firstTime: false }),
     );
+    expect(won.guardiansBestAwakening).toEqual(state.guardiansBestAwakening);
+  });
+
+  it('records the highest awakening each guardian fell at, never lowering it', () => {
+    const beaten = (wave: number, best: readonly number[]) => {
+      const start = { ...stateAtWave(6, wave, { blade: 5000 }), guardiansBestAwakening: best };
+      const { state: won } = step(start, 1, [ENGAGE]);
+      expect(won.parade.wave).toBe(wave + 1);
+      return won.guardiansBestAwakening;
+    };
+    const none = Array.from({ length: 10 }, () => 0);
+    const kappaAtEveil2 = beaten(1200, none);
+    expect(kappaAtEveil2).toEqual([0, 1, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const kappaAtEveil3 = beaten(2200, kappaAtEveil2);
+    expect(kappaAtEveil3).toEqual([0, 2, 0, 0, 0, 0, 0, 0, 0, 0]);
+    // A later parade, back at Éveil 2: the record stays at Éveil 3.
+    expect(beaten(1200, kappaAtEveil3)).toEqual(kappaAtEveil3);
+    expect(beaten(200, kappaAtEveil3)).toEqual(kappaAtEveil3);
   });
 
   it('never lets a guardian be captured', () => {

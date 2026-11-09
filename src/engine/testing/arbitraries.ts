@@ -86,6 +86,7 @@ export const arbitraryGameState: fc.Arbitrary<GameState> = fc
           }),
           rngState: int32,
           guardiansDefeated: fc.uniqueArray(fc.integer({ min: 0, max: 9 }), { maxLength: 10 }),
+          guardiansBestAwakening: fc.array(fc.nat(50), { minLength: 10, maxLength: 10 }),
         }),
       ),
   );

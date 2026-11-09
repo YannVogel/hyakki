@@ -71,7 +71,7 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 
 | Élément | Rôle |
 |---|---|
-| `GameState` | État complet et sérialisable : défilé, ennemi (graine + dégâts subis), âmes, ofuda, étincelles, Sanctuaire, Kamidana, shikigami, équipe, recharges, minuteurs d'attaque, état du RNG, galerie. |
+| `GameState` | État complet et sérialisable : défilé, ennemi (graine + dégâts subis), âmes, ofuda, étincelles, Sanctuaire, Kamidana, shikigami, équipe, recharges, minuteurs d'attaque, état du RNG, galerie (Gardiens vaincus, et plus haut éveil où chacun est tombé). |
 | `createNewGame(seed)` | Premier défilé, vague 1. |
 | `enemySeed(paradeSeed, wave, repeat)` | Graine du yōkai d'une vague ; les répétitions (farm devant un Gardien) ont leur propre graine. |
 | `serialize(state, savedAt)` / `deserialize(text)` | Fichier de sauvegarde ; `deserialize` renvoie un résultat typé, jamais d'exception. |
@@ -143,5 +143,5 @@ Architecture complète : [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md).
 |---|---|
 | `festivalPreview(state)` | Débloqué ou non, étincelles à gagner, bonus avant et après, vague de départ du prochain défilé (pour l'écran Festival). |
 | `headStartWave(record, level)`, `clearSkippedWaves(state, wave)` | Départ avancé du Kamidana : vague de départ (plafonnée par la centaine du record), puis purification d'office des vagues sautées (âmes, captures, âmes et ofuda des Gardiens). |
-| `startFestival(state)` | Relance le défilé : remise à zéro des vagues, âmes, Sanctuaire ; conservation des shikigami, de l'équipe, des ofuda, du Kamidana et de la galerie ; résultat typé (`locked`). |
+| `startFestival(state)` | Relance le défilé : remise à zéro des vagues, âmes, Sanctuaire ; conservation des shikigami, de l'équipe, des ofuda, du Kamidana et des galeries (normale et éveillée) ; résultat typé (`locked`). |
 | `festivalSparks(record, flameLevel)`, `festivalBonus(sparks)` | Formules de `docs/GAME_DESIGN.md` § 4.5. |

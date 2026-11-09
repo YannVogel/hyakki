@@ -33,8 +33,12 @@ describe('HomeScreen (development hub)', () => {
   it('jumps to the first awakened guardian', async () => {
     const { store } = await renderScreen(<HomeScreen />);
     await fireEvent.press(screen.getByTestId('dev-awakened-guardian'));
-    expect(store.getState().game.parade.wave).toBe(1100);
-    expect(store.getState().game.enemy.guardian).toEqual({ engaged: false, timeLeftMs: 30_000 });
+    const { game } = store.getState();
+    expect(game.parade.wave).toBe(1300);
+    expect(game.enemy.guardian).toEqual({ engaged: false, timeLeftMs: 30_000 });
+    // The guardians behind are beaten: all ten once, Bake-danuki and Kappa at Éveil 2.
+    expect([...game.guardiansDefeated].sort()).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(game.guardiansBestAwakening).toEqual([1, 1, 0, 0, 0, 0, 0, 0, 0, 0]);
   });
 
   it('loads the showcase of the store screenshots', async () => {

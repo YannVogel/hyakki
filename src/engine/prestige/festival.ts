@@ -99,8 +99,9 @@ export function festivalPreview(state: GameState): FestivalPreview {
 
 /**
  * Restarts the parade stronger: waves, souls, Sanctuary and talismans start over; shikigami,
- * team, ofuda, Kamidana, sparks and the guardian gallery stay. The new parade's seed derives from
- * the old; with Head Start, it begins further on, with what the skipped waves would have given.
+ * team, ofuda, Kamidana, sparks and the guardian galleries (normal and awakened) stay. The new
+ * parade's seed derives from the old; with Head Start, it begins further on, with what the skipped
+ * waves would have given.
  */
 export function startFestival(state: GameState): FestivalResult {
   const { unlocked, sparksToEarn, startWave } = festivalPreview(state);
@@ -123,6 +124,7 @@ export function startFestival(state: GameState): FestivalResult {
         team: state.team,
         attackTimers: { hero: 0, team: state.attackTimers.team },
         guardiansDefeated: state.guardiansDefeated,
+        guardiansBestAwakening: state.guardiansBestAwakening,
       },
       startWave,
     ),

@@ -52,7 +52,7 @@ export function HomeScreen() {
             style={styles.devLink}
             testID="dev-awakened-guardian"
             onPress={() => {
-              store.setState({ game: devGuardianState(2026, 1100) });
+              store.setState({ game: devGuardianState(2026, 1300) });
               router.back();
             }}
           >
