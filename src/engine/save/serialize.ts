@@ -1,3 +1,4 @@
+import { BALANCE } from '../balance';
 import {
   type GameState,
   KAMIDANA_IDS,
@@ -69,6 +70,7 @@ const gameStateCheck: Check<GameState> = object<GameState>({
   attackTimers: object({ hero: nonNegative, team: array(nonNegative, TEAM_SIZE) }),
   rngState: seed,
   guardiansDefeated: array(integer(0, 9)),
+  guardiansBestAwakening: array(count, BALANCE.guardian.count),
 });
 
 function checkConsistency(state: GameState): void {
@@ -84,6 +86,9 @@ function checkConsistency(state: GameState): void {
   }
   if (state.attackTimers.team.length !== state.team.length) {
     throw new ShapeError('attackTimers.team', 'one timer per team member');
+  }
+  if (state.guardiansBestAwakening.length !== BALANCE.guardian.count) {
+    throw new ShapeError('guardiansBestAwakening', 'one entry per guardian');
   }
   if (state.parade.maxWave < state.parade.wave) {
     throw new ShapeError('parade.maxWave', 'at least the current wave');

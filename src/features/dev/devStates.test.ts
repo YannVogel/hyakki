@@ -1,6 +1,21 @@
 import { deserialize, generate, serialize, simulateOffline } from '@/engine';
 
-import { devShowcaseState } from './devStates';
+import { devGuardianState, devShowcaseState } from './devStates';
+
+describe('devGuardianState', () => {
+  it('is a valid save, with no guardian behind the first one', () => {
+    const state = devGuardianState(2026, 100);
+    expect(deserialize(serialize(state, 0)).ok).toBe(true);
+    expect(state.guardiansDefeated).toEqual([]);
+  });
+
+  it('beats the guardians behind an awakened one, as a real parade would', () => {
+    const state = devGuardianState(2026, 1300);
+    expect(deserialize(serialize(state, 0)).ok).toBe(true);
+    expect(state.guardiansDefeated).toHaveLength(10);
+    expect(state.guardiansBestAwakening).toEqual([1, 1, 0, 0, 0, 0, 0, 0, 0, 0]);
+  });
+});
 
 describe('devShowcaseState', () => {
   const state = devShowcaseState(2026);

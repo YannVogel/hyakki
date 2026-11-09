@@ -1,4 +1,5 @@
 import { v1ToV2 } from './v1-to-v2';
+import { v2ToV3 } from './v2-to-v3';
 
 /** Raw (JSON) game state, before validation. */
 export type RawState = Record<string, unknown>;
@@ -10,7 +11,7 @@ export type Migration = (state: RawState) => RawState;
  * Migrations by source version: MIGRATIONS[1] turns a v1 state into v2. Each migration lives in
  * its own file (`v1-to-v2.ts`) with its test, and sets the new `schemaVersion`.
  */
-export const MIGRATIONS: Readonly<Record<number, Migration>> = { 1: v1ToV2 };
+export const MIGRATIONS: Readonly<Record<number, Migration>> = { 1: v1ToV2, 2: v2ToV3 };
 
 export class MissingMigrationError extends Error {
   constructor(readonly fromVersion: number) {

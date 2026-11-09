@@ -1,8 +1,9 @@
+import { BALANCE } from './balance';
 import { type BigNum, ZERO } from './numbers';
 import { deriveSeed } from './rng';
 import { GENERATOR_VERSION, type GeneratorVersion } from './yokai';
 
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export const UPGRADE_IDS = ['blade', 'foxfire', 'bell', 'kekkai', 'lanterns'] as const;
 export type UpgradeId = (typeof UPGRADE_IDS)[number];
@@ -87,6 +88,11 @@ export interface GameState {
   readonly rngState: number;
   /** Guardian indices (0 to 9) defeated at least once, in any parade. */
   readonly guardiansDefeated: readonly number[];
+  /**
+   * Highest awakening each guardian (by index) was defeated at, in any parade: 0 while its
+   * awakened self has never fallen (#133).
+   */
+  readonly guardiansBestAwakening: readonly number[];
 }
 
 const zeroBy = <K extends string>(ids: readonly K[]) =>
@@ -117,5 +123,6 @@ export function createNewGame(seed: number): GameState {
     // Wave 0 never hosts a yōkai: its derived seed is free for the combat RNG.
     rngState: deriveSeed(seed, 0),
     guardiansDefeated: [],
+    guardiansBestAwakening: Array.from({ length: BALANCE.guardian.count }, () => 0),
   };
 }

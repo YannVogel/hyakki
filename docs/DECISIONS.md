@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-11-09 — Historique des Gardiens éveillés : schéma de sauvegarde 3
+
+- **Décision** (#133) : `GameState.guardiansBestAwakening` garde, pour chacun des dix Gardiens, le plus haut éveil où il est tombé (0 tant que sa version éveillée n'est jamais tombée), à côté de `guardiansDefeated`, inchangé. La galerie l'affiche dans une section « Gardiens éveillés », visible une fois Nurarihyon vaincu ; la carte d'un Gardien éveillé affiche son nom seul (« Gardiens éveillés » en titre, et « Kyūbi no kitsune éveillé » ne tiendrait pas).
+- **Raison** : un record par Gardien suffit à l'historique (« vaincu jusqu'à l'Éveil N ») et reste borné (dix entiers), là où la liste des victoires grandirait sans fin. Garder `guardiansDefeated` évite de toucher la galerie des Gardiens normaux, le harnais et le Festival.
+- **Conséquence** : schéma de sauvegarde 3. La migration 2 → 3 reconstitue l'historique à partir du record du défilé en cours : un Gardien que le record a dépassé est tombé (le Départ avancé ne saute que des vagues déjà franchies). Les victoires des défilés d'avant le dernier Festival ne sont pas connues : elles reviennent dès que le joueur rebat ces Gardiens.
+
 ## 2026-11-09 — Les Gardiens éveillés rapportent ×3 ofuda par niveau d'Éveil
 
 - **Décision** (Yann, #130) : les ofuda d'un Gardien valent `5 × rang × 3^éveil` (`BALANCE.guardian.awakeningOfudaMultiplier`), au lieu de `5 × rang × (éveil + 1)`. Un défilé complet rapporte 275 ofuda à l'Éveil 1 (inchangé), 825 à l'Éveil 2, 2 475 à l'Éveil 3, 7 425 à l'Éveil 4.

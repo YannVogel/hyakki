@@ -292,47 +292,6 @@ export function bulkReleaseViews(
   };
 }
 
-export type GuardianStatus = 'defeated' | 'next' | 'upcoming';
-
-export interface GuardianCard {
-  readonly index: number;
-  readonly wave: number;
-  readonly status: GuardianStatus;
-  /** Defeated once, or met in the current parade: its look is known. */
-  readonly revealed: boolean;
-}
-
-/** Defeated once, or met in the current parade: its look is known. */
-const isGuardianRevealed = (state: GameState, index: number): boolean =>
-  state.guardiansDefeated.includes(index) ||
-  state.parade.maxWave >= (index + 1) * BALANCE.guardian.every;
-
-export interface NextGuardianView {
-  readonly index: number;
-  readonly revealed: boolean;
-}
-
-/** The guardian waiting at the end of the current hundred; an awakened one keeps its look. */
-export function nextGuardianView(state: GameState): NextGuardianView {
-  const { index } = guardianAt(paradeView(state).nextGuardianWave);
-  return { index, revealed: isGuardianRevealed(state, index) };
-}
-
-/** The ten guardians of the V1 sheet, as the gallery shows them. */
-export function guardianGallery(state: GameState): GuardianCard[] {
-  const { every, count } = BALANCE.guardian;
-  const nextIndex = nextGuardianView(state).index;
-  return Array.from({ length: count }, (_, index) => {
-    const defeated = state.guardiansDefeated.includes(index);
-    return {
-      index,
-      wave: (index + 1) * every,
-      status: defeated ? 'defeated' : index === nextIndex ? 'next' : 'upcoming',
-      revealed: isGuardianRevealed(state, index),
-    };
-  });
-}
-
 export interface BestTeamView {
   /** The three shikigami that deal the most damage together, judged at level 1. */
   readonly team: readonly number[];

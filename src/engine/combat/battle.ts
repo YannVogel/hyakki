@@ -39,6 +39,7 @@ export interface Battle {
   souls: BigNum;
   ofuda: number;
   guardiansDefeated: number[];
+  guardiansBestAwakening: number[];
   collection: Shikigami[];
   /** Time until the next attack: the hero, then each team member. */
   timers: number[];
@@ -69,6 +70,7 @@ export function startBattle(state: GameState): Battle {
     souls: state.souls,
     ofuda: state.ofuda,
     guardiansDefeated: [...state.guardiansDefeated],
+    guardiansBestAwakening: [...state.guardiansBestAwakening],
     collection: [...state.shikigami],
     timers: [state.attackTimers.hero, ...state.attackTimers.team],
     cooldowns: { ...state.cooldowns },
@@ -98,6 +100,7 @@ export function finishBattle(state: GameState, battle: Battle): GameState {
     souls: battle.souls,
     ofuda: battle.ofuda,
     guardiansDefeated: battle.guardiansDefeated,
+    guardiansBestAwakening: battle.guardiansBestAwakening,
     shikigami: battle.collection,
     attackTimers: {
       hero: nonNegative(battle.timers[0]),
@@ -146,7 +149,7 @@ export function retreat(battle: Battle): void {
 
 function defeatGuardian(battle: Battle): void {
   const { wave } = battle;
-  const { index } = guardianAt(wave);
+  const { index, awakening } = guardianAt(wave);
   const ofuda = guardianOfuda(wave);
   const souls = mul(
     waveSouls(wave),
@@ -159,6 +162,7 @@ function defeatGuardian(battle: Battle): void {
   if (firstTime) {
     battle.guardiansDefeated.push(index);
   }
+  battle.guardiansBestAwakening[index] = Math.max(battle.guardiansBestAwakening[index], awakening);
   battle.ofuda += ofuda;
   battle.souls = add(battle.souls, souls);
   battle.events.push({

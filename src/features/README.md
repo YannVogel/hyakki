@@ -19,7 +19,7 @@ Un dossier par écran ou flux (combat, sanctuaire, shikigami, gardiens, festival
 | `shikigami/` | Écran Shikigami : équipe active (bonus principal), collection en grille virtualisée (miniatures Skia statiques mémoïsées), fiche (stats, traits, montée de niveau ×1 / ×10 / ×100 / Max, équipe, libération), libération en lot par rareté (`ReleaseCard`), avec confirmation |
 | `festival/` | Écran Festival : scène de fête, étincelles à gagner, bonus avant → après, confirmation obligatoire avant de relancer le défilé |
 | `offline/` | Modale de retour hors ligne (`Sheet`) : durée, yōkai, âmes, vagues, montées de niveau, plafond ; « Récolter » reste visible sous la liste qui défile |
-| `guardians/` | Galerie des Gardiens (route `/guardians`) : vague, état, silhouette tant qu'un Gardien n'a pas été croisé |
-| `shared/` | Icônes des maquettes, illustrations (héros, Gardiens, décors) et icône illustrée des ofuda (`OfudaIcon`) |
+| `guardians/` | Galerie des Gardiens (route `/guardians`) : vague, état, silhouette tant qu'un Gardien n'a pas été croisé ; une fois Nurarihyon vaincu, la section « Gardiens éveillés » (aura, plus haut Éveil où chacun est tombé). Tuiles dans `GuardianTile.tsx` |
+| `shared/` | Icônes des maquettes, illustrations (héros, Gardiens, décors), illustration d'un Gardien avec l'aura des éveillés (`GuardianArt`) et icône illustrée des ofuda (`OfudaIcon`) |
 | `dev/`, `home/` | Écrans de développement (hub, vérification native, Fabrique, catalogue) |
 | `testing/` | `renderScreen` : rendu d'un écran avec les fournisseurs de l'app et un store en mémoire |

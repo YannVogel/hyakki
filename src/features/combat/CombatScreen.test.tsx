@@ -9,6 +9,27 @@ import { CombatScreen } from './CombatScreen';
 const renderWith = async (game = createNewGame(2026)) =>
   (await renderScreen(<CombatScreen />, game)).store;
 
+/** The scene places the fighters once it knows its size. */
+const renderInScene = async (game: ReturnType<typeof createNewGame>) => {
+  await renderWith(game);
+  await fireEvent(screen.getByTestId('battle-scene'), 'layout', {
+    nativeEvent: { layout: { width: 366, height: 400 } },
+  });
+};
+
+const facingGuardian = (wave: number) => {
+  const state = createNewGame(5);
+  return {
+    ...state,
+    parade: { ...state.parade, wave, maxWave: wave },
+    enemy: {
+      ...state.enemy,
+      seed: enemySeed(5, wave),
+      guardian: { engaged: true, timeLeftMs: 30_000 },
+    },
+  };
+};
+
 const atGuardian = (farming: boolean) => {
   const state = createNewGame(5);
   const wave = farming ? 99 : 100;
@@ -73,6 +94,21 @@ describe('CombatScreen', () => {
       'engageGuardian',
       'fleeGuardian',
     ]);
+  });
+
+  it('draws a guardian of the first level without an aura', async () => {
+    await renderInScene(facingGuardian(100));
+    expect(screen.getByTestId('enemy-guardian')).toBeOnTheScreen();
+    expect(screen.queryByTestId('guardian-aura')).toBeNull();
+  });
+
+  it('surrounds an awakened guardian with its aura', async () => {
+    await renderInScene(facingGuardian(1100));
+    expect(screen.getByTestId('enemy-guardian')).toHaveProp(
+      'accessibilityLabel',
+      strings.guardians.awakened('Bake-danuki'),
+    );
+    expect(screen.getAllByTestId('guardian-aura').length).toBeGreaterThan(0);
   });
 
   it('offers to face the guardian again while farming', async () => {

@@ -7,6 +7,7 @@ export const fr = {
     yokaiLabLink: 'Fabrique à yōkai',
     catalogLink: 'Catalogue des composants',
     guardianShortcut: 'Aller au Gardien de la vague 100',
+    awakenedGuardianShortcut: 'Aller au Gardien éveillé (Éveil 2, vague 300)',
     absenceShortcut: 'Simuler une absence de 2 h',
     showcaseShortcut: 'Charger l’état vitrine (captures des stores)',
   },
@@ -124,8 +125,11 @@ export const fr = {
       'Les neuf queues embrasent le ciel !',
       'Le seigneur des yōkai attend son tour…',
     ],
-    intro: (wave: number) =>
-      wave === 100 ? 'Vague 100 · Premier boss !' : `Vague ${wave} · Gardien !`,
+    intro: (wave: number, level: number) => {
+      if (level > 1) return `Vague ${wave} · Gardien éveillé !`;
+      return wave === 100 ? 'Vague 100 · Premier boss !' : `Vague ${wave} · Gardien !`;
+    },
+    awakeningLevel: (level: number) => `Éveil ${level}`,
     hp: (value: string) => `PV ${value}`,
     weakness: 'Faible au',
     elements: { fire: { kanji: '火', name: 'feu' }, thunder: { kanji: '雷', name: 'foudre' } },
@@ -135,6 +139,10 @@ export const fr = {
     gallerySubtitle: (beaten: number) => `Un boss toutes les 100 vagues · ${beaten} / 10 vaincus`,
     galleryWave: (wave: number) => `Vague ${wave}`,
     status: { defeated: 'Vaincu', next: 'Prochain', upcoming: 'À venir' },
+    awakenedTitle: 'Gardiens éveillés',
+    awakenedSubtitle: (beaten: number) =>
+      `Le plus haut Éveil où chacun est tombé · ${beaten} / 10 vaincus`,
+    awakenedRecordLabel: (level: number) => `vaincu à l’Éveil ${level}`,
     unknown: '???',
     unknownLabel: (wave: number, status: string) => `Gardien inconnu, vague ${wave}, ${status}`,
     knownLabel: (name: string, description: string, wave: number, status: string) =>
