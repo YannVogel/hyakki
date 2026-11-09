@@ -34,7 +34,10 @@ export const RULES: readonly { readonly key: RuleSection; readonly body: string 
       percent(souls.tierBonus),
     ),
   },
-  { key: 'awakening', body: text.awakening.body(decimal(guardian.count)) },
+  {
+    key: 'awakening',
+    body: text.awakening.body(decimal(guardian.count), decimal(guardian.awakeningOfudaMultiplier)),
+  },
   { key: 'sanctuary', body: text.sanctuary.body },
   { key: 'kamidana', body: text.kamidana.body(decimal(KAMIDANA_IDS.length)) },
   {

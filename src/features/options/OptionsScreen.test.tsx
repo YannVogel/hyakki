@@ -66,6 +66,9 @@ describe('OptionsScreen', () => {
     expect(ruleText('offline').join(' ')).toContain(`${offline.maxCapHours}\u00a0h`);
     expect(ruleText('parade').join(' ')).toContain(`×${crit.multiplier} dégâts`);
     expect(ruleText('festival').join(' ')).toContain(`${festival.bonusPerSpark * 100}\u00a0%`);
+    expect(ruleText('awakening').join(' ')).toContain(
+      `multiplie leurs ofuda par ${guardian.awakeningOfudaMultiplier}`,
+    );
   });
 
   it('shows the currencies next to their shop', async () => {

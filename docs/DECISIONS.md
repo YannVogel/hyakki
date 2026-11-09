@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-11-09 — Les Gardiens éveillés rapportent ×3 ofuda par niveau d'Éveil
+
+- **Décision** (Yann, #130) : les ofuda d'un Gardien valent `5 × rang × 3^éveil` (`BALANCE.guardian.awakeningOfudaMultiplier`), au lieu de `5 × rang × (éveil + 1)`. Un défilé complet rapporte 275 ofuda à l'Éveil 1 (inchangé), 825 à l'Éveil 2, 2 475 à l'Éveil 3, 7 425 à l'Éveil 4.
+- **Raison** : les PV des Gardiens doublent à chaque Éveil et chaque niveau du Kamidana coûte le double du précédent ; une récompense linéaire ne suivait pas. Pistes écartées : ×2 par Éveil (identique à l'ancienne formule à l'Éveil 2, le seul niveau atteint en pratique) et ×5 (le Kamidana entier, environ 130 000 ofuda, à portée dès l'Éveil 4).
+- **Conséquence** : pas de nouveau schéma de sauvegarde. La récompense reste un entier sûr, comme l'exige la sauvegarde, jusqu'à l'Éveil 30, très loin du mur mesuré vers la vague 1500. Les règles du jeu affichent le multiplicateur. Harnais : aucun jalon ne bouge sur 30 jours (`GAME_DESIGN.md` § 5.2).
+
 ## 2026-11-05 — Les shikigami non équipés se libèrent contre des âmes
 
 - **Décision** (Yann pour le principe, #124) : un shikigami hors de l'équipe peut être **libéré**, seul depuis sa fiche ou en lot par rareté, après confirmation. Il laisse les âmes de `k × niveau` yōkai ordinaires de la vague en cours, tous les bonus d'âmes compris sauf Kekkai, avec `k` = 2 (commun), 5 (rare), 20 (épique), 100 (légendaire) (`BALANCE.shikigami.releaseYokai`).
