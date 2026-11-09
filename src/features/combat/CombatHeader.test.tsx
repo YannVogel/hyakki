@@ -20,13 +20,13 @@ const renderHeader = (nextGuardian: NextGuardianView) =>
 
 describe('CombatHeader', () => {
   it('shows the illustrated ofuda next to their count, spoken by the pill only', async () => {
-    await renderHeader({ index: 1, revealed: false });
+    await renderHeader({ index: 1, awakening: 0, revealed: false });
     expect(screen.getByTestId('ofuda-icon')).toHaveProp('source', OFUDA_IMAGE.source);
     expect(screen.getByLabelText(strings.combat.ofuda('3'))).toBeOnTheScreen();
   });
 
   it('shows an unknown next guardian as a silhouette whose label gives nothing away', async () => {
-    await renderHeader({ index: 1, revealed: false });
+    await renderHeader({ index: 1, awakening: 0, revealed: false });
     const thumbnail = screen.getByLabelText(strings.combat.nextGuardianUnknown);
     expect(thumbnail).toHaveProp('testID', 'next-guardian-silhouette');
     expect(thumbnail).toHaveProp('tintColor', colors.ink);
@@ -34,12 +34,20 @@ describe('CombatHeader', () => {
   });
 
   it('shows a known next guardian in color, named in its label', async () => {
-    await renderHeader({ index: 1, revealed: true });
+    await renderHeader({ index: 1, awakening: 0, revealed: true });
     const thumbnail = screen.getByLabelText(
       strings.combat.nextGuardian(strings.guardians.names[1]),
     );
     expect(thumbnail).toHaveProp('testID', 'next-guardian-art');
     expect(thumbnail).not.toHaveProp('tintColor');
+    expect(screen.queryByTestId('guardian-aura')).toBeNull();
+  });
+
+  it('surrounds an awakened next guardian with its aura, named awakened', async () => {
+    await renderHeader({ index: 1, awakening: 1, revealed: true });
+    const name = strings.guardians.awakened(strings.guardians.names[1]);
+    expect(screen.getByLabelText(strings.combat.nextGuardian(name))).toBeOnTheScreen();
+    expect(screen.getAllByTestId('guardian-aura').length).toBeGreaterThan(0);
   });
 
   it('starts over at wave 1 of the next awakening level once Nurarihyon falls', async () => {
@@ -60,7 +68,9 @@ describe('CombatHeader', () => {
     expect(screen.getByText(strings.combat.parade(1, 2))).toBeOnTheScreen();
     expect(screen.getByText(strings.combat.wave(1), { exact: false })).toBeOnTheScreen();
     expect(
-      screen.getByLabelText(strings.combat.nextGuardian(strings.guardians.names[0])),
+      screen.getByLabelText(
+        strings.combat.nextGuardian(strings.guardians.awakened(strings.guardians.names[0])),
+      ),
     ).toBeOnTheScreen();
   });
 });

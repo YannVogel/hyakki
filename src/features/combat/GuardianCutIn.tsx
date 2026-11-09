@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -26,7 +26,7 @@ import {
   strokes,
 } from '@/ui';
 
-import { GUARDIAN_IMAGES } from '../shared/images';
+import { GuardianArt } from '../shared/GuardianArt';
 
 const SLIDE_MS = 500;
 const NAME_DELAY_MS = 150;
@@ -44,6 +44,8 @@ export interface GuardianCutInProps {
   readonly name: string;
   /** Guardian wave in its awakening level (100 to 1000). */
   readonly wave: number;
+  /** Awakening level (« Éveil »): above 1, the guardian is awakened. */
+  readonly level: number;
   readonly hp: string;
   readonly weakness: Element;
   readonly timeLimitSeconds: number;
@@ -58,6 +60,7 @@ export function GuardianCutIn({
   index,
   name,
   wave,
+  level,
   hp,
   weakness,
   timeLimitSeconds,
@@ -72,6 +75,7 @@ export function GuardianCutIn({
   const opacity = useSharedValue(0);
   const text = strings.guardians;
   const element = text.elements[weakness];
+  const awakened = level > 1;
 
   useEffect(() => {
     opacity.value = withTiming(1, { duration: FADE_MS });
@@ -105,7 +109,7 @@ export function GuardianCutIn({
       </Text>
       {/* The tab bar below already keeps clear of the bottom edge. */}
       <SafeAreaView style={styles.content} edges={CONTENT_EDGES}>
-        <OutlinedText style={displayText('base')}>{text.intro(wave)}</OutlinedText>
+        <OutlinedText style={displayText('base')}>{text.intro(wave, level)}</OutlinedText>
         <Animated.View
           style={[styles.band, { width: width + 70 }, bandStyle]}
           accessible
@@ -127,10 +131,10 @@ export function GuardianCutIn({
           </Text>
           <Text style={bodyText('base', 800)}>{text.kana[index]}</Text>
         </Animated.View>
-        <Image
-          source={GUARDIAN_IMAGES[index]}
+        <GuardianArt
+          index={index}
+          awakened={awakened}
           accessibilityLabel={text.imageLabel(name, text.descriptions[index])}
-          resizeMode="contain"
           style={styles.guardian}
         />
         <Card style={styles.card}>
@@ -143,6 +147,14 @@ export function GuardianCutIn({
             <Text style={[bodyText('md', 800), styles.chip, styles.timer]}>
               {text.timeLeft(timeLimitSeconds)}
             </Text>
+            {awakened ? (
+              <Text
+                style={[bodyText('md', 800), styles.chip, styles.awakening]}
+                testID="cut-in-awakening"
+              >
+                {text.awakeningLevel(level)}
+              </Text>
+            ) : null}
           </View>
         </Card>
         <View style={styles.actions}>
@@ -210,6 +222,8 @@ const styles = StyleSheet.create({
   hp: { backgroundColor: colors.hpTrack },
   weak: { backgroundColor: colors.cream },
   timer: { backgroundColor: colors.skyLight, borderWidth: strokes.small },
+  // Ink text: the aura's purple on white stays under 4.5:1 at this size; it borders the chip.
+  awakening: { backgroundColor: colors.paper, borderColor: colors.purple },
   actions: {
     marginTop: 'auto',
     alignSelf: 'stretch',

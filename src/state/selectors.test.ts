@@ -167,24 +167,32 @@ describe('nextGuardianView', () => {
   const afterBakeDanuki = { ...atWave(101), guardiansDefeated: [0] };
 
   it('hides the first guardian from a new player', () => {
-    expect(nextGuardianView(createNewGame(1))).toEqual({ index: 0, revealed: false });
+    expect(nextGuardianView(createNewGame(1))).toEqual({ index: 0, awakening: 0, revealed: false });
   });
 
   it('moves on to a still unknown guardian once the previous one is defeated', () => {
-    expect(nextGuardianView(afterBakeDanuki)).toEqual({ index: 1, revealed: false });
+    expect(nextGuardianView(afterBakeDanuki)).toEqual({
+      index: 1,
+      awakening: 0,
+      revealed: false,
+    });
   });
 
   it('reveals a guardian met in the current parade', () => {
-    expect(nextGuardianView(atWave(100))).toEqual({ index: 0, revealed: true });
+    expect(nextGuardianView(atWave(100))).toEqual({ index: 0, awakening: 0, revealed: true });
   });
 
   it('keeps a defeated guardian revealed in the next parade', () => {
     const festival = startFestival(afterBakeDanuki);
-    expect(festival.ok && nextGuardianView(festival.state)).toEqual({ index: 0, revealed: true });
+    expect(festival.ok && nextGuardianView(festival.state)).toEqual({
+      index: 0,
+      awakening: 0,
+      revealed: true,
+    });
   });
 
-  it('shows an awakened guardian as its normal self', () => {
-    expect(nextGuardianView(atWave(1050))).toEqual({ index: 0, revealed: true });
+  it('shows an awakened guardian as its normal self, with its awakening', () => {
+    expect(nextGuardianView(atWave(1050))).toEqual({ index: 0, awakening: 1, revealed: true });
   });
 });
 

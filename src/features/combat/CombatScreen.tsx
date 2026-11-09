@@ -9,7 +9,6 @@ import {
   guardianMaxHp,
   guardianTimeLimitMs,
 } from '@/engine';
-import { strings } from '@/i18n';
 import {
   enemyView,
   nextGuardianView,
@@ -22,6 +21,7 @@ import {
 } from '@/state';
 import { colors, spacing, useHaptics, useReduceMotion, useSound } from '@/ui';
 
+import { guardianName } from '../shared/GuardianArt';
 import { AwakeningBanner } from './AwakeningBanner';
 import { BattleScene, type LastHit } from './BattleScene';
 import { useCombatHaptics } from './combatHaptics';
@@ -39,11 +39,6 @@ import { useHeroPose } from './useHeroPose';
 function lastHitOf(events: readonly CombatEvent[]): LastHit | null {
   const hit = events.findLast((event) => event.type === 'hit');
   return hit?.type === 'hit' ? { damage: formatNumber(hit.damage), crit: hit.crit } : null;
-}
-
-export function guardianName(index: number, awakening: number): string {
-  const name = strings.guardians.names[index];
-  return awakening > 0 ? strings.guardians.awakened(name) : name;
 }
 
 /** The main screen: the parade advances on its own, a tap strikes, talismans on demand. */
@@ -104,6 +99,7 @@ export function CombatScreen() {
           index={enemy.index}
           name={name}
           wave={parade.waveInCycle}
+          level={parade.level}
           hp={formatNumber(guardianMaxHp(parade.wave))}
           weakness={GUARDIANS[enemy.index].weakness}
           timeLimitSeconds={guardianTimeLimitMs(game) / 1000}

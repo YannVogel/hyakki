@@ -309,13 +309,15 @@ const isGuardianRevealed = (state: GameState, index: number): boolean =>
 
 export interface NextGuardianView {
   readonly index: number;
+  /** Above 0, the guardian is awakened: it keeps its look, with an aura. */
+  readonly awakening: number;
   readonly revealed: boolean;
 }
 
 /** The guardian waiting at the end of the current hundred; an awakened one keeps its look. */
 export function nextGuardianView(state: GameState): NextGuardianView {
-  const { index } = guardianAt(paradeView(state).nextGuardianWave);
-  return { index, revealed: isGuardianRevealed(state, index) };
+  const { index, awakening } = guardianAt(paradeView(state).nextGuardianWave);
+  return { index, awakening, revealed: isGuardianRevealed(state, index) };
 }
 
 /** The ten guardians of the V1 sheet, as the gallery shows them. */

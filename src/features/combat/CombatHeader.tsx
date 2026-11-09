@@ -1,14 +1,14 @@
 import { router } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { formatNumber } from '@/engine';
 import { strings } from '@/i18n';
 import type { NextGuardianView, ParadeView } from '@/state';
 import { bodyText, colors, displayText, Icon, Pill, ProgressBar, spacing } from '@/ui';
 
+import { GuardianArt, guardianName } from '../shared/GuardianArt';
 import { SOULS_ICON } from '../shared/icons';
 import { OfudaIcon } from '../shared/OfudaIcon';
-import { GUARDIAN_IMAGES } from '../shared/images';
 
 export interface CombatHeaderProps {
   readonly parade: ParadeView;
@@ -66,19 +66,22 @@ export function CombatHeader({ parade, nextGuardian, souls, ofuda }: CombatHeade
   );
 }
 
-/** The guardian at the end of the bar, a black silhouette until it is known (as in the gallery). */
+/**
+ * The guardian at the end of the bar, a black silhouette until it is known (as in the gallery),
+ * with its aura when awakened.
+ */
 function NextGuardianThumbnail({ guardian }: { guardian: NextGuardianView }) {
-  const { index, revealed } = guardian;
+  const { index, awakening, revealed } = guardian;
   return (
-    <Image
-      source={GUARDIAN_IMAGES[index]}
-      resizeMode="contain"
+    <GuardianArt
+      index={index}
+      awakened={awakening > 0}
       tintColor={revealed ? undefined : colors.ink}
       accessible
       accessibilityRole="image"
       accessibilityLabel={
         revealed
-          ? strings.combat.nextGuardian(strings.guardians.names[index])
+          ? strings.combat.nextGuardian(guardianName(index, awakening))
           : strings.combat.nextGuardianUnknown
       }
       style={styles.thumbnail}

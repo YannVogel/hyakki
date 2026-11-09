@@ -18,6 +18,7 @@ const renderCutIn = (props: Partial<GuardianCutInProps> = {}) =>
         index={3}
         name="Tsuchigumo"
         wave={400}
+        level={1}
         hp="1,2 Md"
         weakness="fire"
         timeLimitSeconds={30}
@@ -37,7 +38,27 @@ describe('GuardianCutIn', () => {
     expect(screen.getByText(strings.guardians.taglines[3])).toBeOnTheScreen();
     expect(screen.getByText(strings.guardians.hp('1,2 Md'))).toBeOnTheScreen();
     expect(screen.getByText(strings.guardians.timeLeft(30))).toBeOnTheScreen();
-    expect(screen.getByText(strings.guardians.intro(400))).toBeOnTheScreen();
+    expect(screen.getByText(strings.guardians.intro(400, 1))).toBeOnTheScreen();
+  });
+
+  it('shows no awakening for a guardian of the first level', async () => {
+    await renderCutIn();
+    expect(screen.queryByTestId('cut-in-awakening')).toBeNull();
+    expect(screen.queryByTestId('guardian-aura')).toBeNull();
+  });
+
+  it('marks an awakened guardian: its level, an aura around it', async () => {
+    await renderCutIn({ name: 'Tsuchigumo éveillé', level: 3 });
+    expect(screen.getByTestId('cut-in-awakening')).toHaveTextContent(
+      strings.guardians.awakeningLevel(3),
+    );
+    expect(screen.getByText(strings.guardians.intro(400, 3))).toBeOnTheScreen();
+    expect(screen.getAllByTestId('guardian-aura').length).toBeGreaterThan(0);
+    expect(
+      screen.getByLabelText(
+        strings.guardians.imageLabel('Tsuchigumo éveillé', strings.guardians.descriptions[3]),
+      ),
+    ).toBeOnTheScreen();
   });
 
   it('lets the player face the guardian or go back one wave', async () => {

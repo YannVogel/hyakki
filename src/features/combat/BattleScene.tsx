@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Image, type LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
+import { type LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector, useTapGesture } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -18,6 +18,7 @@ import {
 import type { EnemyView } from '@/state';
 import { bodyText, colors, hardShadow, outline, radii, spacing, strokes } from '@/ui';
 
+import { GuardianArt } from '../shared/GuardianArt';
 import { GUARDIAN_IMAGES, type HeroPose } from '../shared/images';
 import { BattleBackdrop } from './BattleBackdrop';
 import { EnemyHud } from './EnemyHud';
@@ -173,10 +174,10 @@ export function BattleScene({
               />
             ) : (
               <>
-                <Image
-                  source={GUARDIAN_IMAGES[enemy.index]}
+                <GuardianArt
+                  index={enemy.index}
+                  awakened={enemy.awakening > 0}
                   accessibilityLabel={enemyName}
-                  resizeMode="contain"
                   testID="enemy-guardian"
                   style={{ width: enemyBox.side, height: enemyBox.side }}
                 />

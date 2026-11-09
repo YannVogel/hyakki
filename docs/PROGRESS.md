@@ -6,8 +6,8 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 | | |
 |---|---|
-| Milestone en cours | Aucune : 8 · Shikigami et confort terminée le 05/11 (#121, une PR pour les trois issues), plus #130 ajoutée le 09/11 (sa propre PR) ; 5 · Publication attend Yann (#47, #48, #63) |
-| Dernière issue terminée | #130 Les Gardiens éveillés rapportent ×3 ofuda par niveau d'Éveil |
+| Milestone en cours | 8 · Shikigami et confort, rouverte le 09/11 pour #132 et #133 (une branche, une PR, un commit par issue) ; 5 · Publication attend Yann (#47, #48, #63) |
+| Dernière issue terminée | #132 Repère visuel des Gardiens éveillés : aura et niveau d'Éveil |
 | Prochaine issue | Publication (#47, #48) : 1.0.0 (9) construite le 05/11 (milestone 8), à importer en test interne Google Play ; 1.0.0 (8) envoyée vers TestFlight le 05/11 ; soumission à décider par Yann. #125 : vérifier la milestone 8 sur Android |
 
 ## Milestones
@@ -26,6 +26,7 @@ Journal de reprise du travail autonome (voir [`AGENTS.md`](../AGENTS.md) § 3). 
 
 ## Points en suspens
 
+- Gardiens éveillés (09/11, #132) : aura violette (`GuardianArt`), puce « Éveil N » et intro « Gardien éveillé ! » dans le cut-in. Vérifié sur simulateur iOS (iPhone 17e). Au passage : sur iOS, une image qui perd sa teinte en restant montée dessinait sa silhouette en bleu système (vignette du prochain Gardien quand il devient connu, à la vague 100) ; `GuardianArt` la remonte quand la teinte change.
 - Ofuda des Gardiens éveillés (09/11, #130) : ×3 par niveau d'Éveil au lieu de ×2, ×3, ×4…, choisi par Yann. Aucun jalon du harnais ne bouge sur 30 jours ; à ressentir en jeu à l'Éveil 2 (#53).
 - Dépendances (06/11) : correctifs du SDK 58 appliqués (`npx expo install --fix` : `expo` 58.0.23, `react-native` 0.88.1, `react-native-safe-area-context` 5.11.1, `react-native-screens` 4.30.1, modules Expo…), et `expo-asset` déclaré en dépendance directe, comme le demande `expo-audio`. `expo-doctor` passe (20/20). Les modules natifs changent : les builds 1.0.0 iOS (8) et Android (9) ne les contiennent pas, les prochains builds de store les incluront.
 - Milestone 8 (05/11) : une branche et une PR pour la milestone, un commit par issue, à la demande de Yann. Libération des shikigami calibrée avec un bot qui libère tout (`GAME_DESIGN.md` § 5.2) : à ressentir en jeu par Yann (#53). Vérifié sur simulateur iOS (iPhone 17e) ; sur Android, à vérifier par Yann (#125).

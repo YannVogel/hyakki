@@ -31,6 +31,7 @@ Règle de lint : aucune couleur littérale (`#…`, `rgb(…)`) dans `src/ui/` e
 | `pink` | `#FF8FC7` | Sakura, joues, langues |
 | `grass` / `grassDeep` | `#7FDCA0` / `#5CC88A` | Collines, stat PV |
 | `orange` | `#FF7A45` | Talisman Kitsune-bi |
+| `purple` | `#7B5CFF` | Hakama du héros (vectoriel), aura des Gardiens éveillés, contour de leur niveau d'Éveil (jamais en texte courant : 4,4:1 sur `paper`) |
 
 ### Rareté
 
@@ -86,6 +87,7 @@ Implémentation : `src/ui/` (export groupé dans `src/ui/index.ts`). Chaque comp
 - Héros en combat (`src/features/combat/HeroFigure.tsx`, règles pures dans `heroPose.ts`) : il frappe (attaque et frappes du joueur, 250 ms), lance ses sorts (feu, foudre, barrière selon le talisman, 700 ms), est surpris par un Gardien, fête une victoire, tombe K.-O. sur un échec, est touché quand il fuit, et dort pendant le bilan d'absence. Une réaction forte n'est jamais coupée par une plus faible. Chaque changement de pose s'écrase depuis les pieds en 120 ms ; le héros respire (3 unités en 1,6 s, comme `hk-bob` de la maquette).
 - Réactions de l'ennemi aux coups (#105) : le yōkai ou le Gardien recule (loin du héros), s'écrase depuis les pieds puis revient au repos, et blanchit un instant. Léger pour les shikigami (sans éclair, sinon l'ennemi clignoterait sans cesse), moyen pour le héros et le toucher, fort pour un critique, Kitsune-bi et Raijin ; de 120 à 180 ms. La réaction part quand l'ofuda atterrit, une plus faible ne coupe jamais une plus forte, et l'éclair partage la limite de 2,5 par seconde. Règles pures dans `src/render/effects/hitReaction.ts`, animation sur le thread UI dans `src/features/combat/useHitReaction.ts` ; le yōkai blanchit par une matrice de couleurs Skia, le Gardien par une copie teintée de son image. Animations réduites : rien ne bouge ni ne blanchit, un coup fort atténue seulement l'ennemi un instant.
 - Cut-in de Gardien : fond en rayons tournants, bande blanche des yeux qui glisse depuis la gauche, bandeau jaune du nom depuis la droite. Implémentation : `src/features/combat/GuardianCutIn.tsx` (glissements de 500 ms avec rebond, le nom 150 ms après les yeux ; rayons et yeux en Skia dans `src/render/scene/`).
+- Aura des Gardiens éveillés (#132) : derrière l'illustration, deux copies de sa silhouette teintes en `purple` et agrandies (×1,07 opaque à 85 %, ×1,14 à 35 %), en combat, dans le cut-in, sur la vignette du prochain Gardien et dans la galerie. Statique : rien à couper pour « réduire les animations ». Jamais la couleur seule : le nom dit « éveillé » et le cut-in affiche « Éveil N ». Implémentation : `src/features/shared/GuardianArt.tsx`.
 - Respect strict de « réduire les animations » : les effets deviennent des fondus courts, rien ne tourne ni ne clignote (en combat : chiffres, « Critique ! » et étoile en fondu sur place ; ni ofuda en vol, ni lignes de vitesse, ni éclair, ni pétales).
 
 ## 7. Accessibilité

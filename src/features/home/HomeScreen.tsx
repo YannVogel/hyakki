@@ -50,6 +50,17 @@ export function HomeScreen() {
           <Pressable
             accessibilityRole="button"
             style={styles.devLink}
+            testID="dev-awakened-guardian"
+            onPress={() => {
+              store.setState({ game: devGuardianState(2026, 1100) });
+              router.back();
+            }}
+          >
+            <Text style={styles.subtitle}>{strings.home.awakenedGuardianShortcut}</Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            style={styles.devLink}
             testID="dev-showcase"
             onPress={() => {
               store.setState({ game: devShowcaseState(2026) });
