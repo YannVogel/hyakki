@@ -23,8 +23,9 @@ export const BALANCE = {
     awakeningHpMultiplier: 2,
     soulsMultiplier: 15,
     timeLimitMs: 30_000,
-    /** Ofuda = baseOfuda × guardian rank (1 to 10) × (cycle + 1). */
+    /** Ofuda = baseOfuda × guardian rank (1 to 10) × awakeningOfudaMultiplier^cycle. */
     baseOfuda: 5,
+    awakeningOfudaMultiplier: 3,
     /** Burns in % of max HP are this effective against guardians (they would trivialize them). */
     burnFactor: 0.2,
   },

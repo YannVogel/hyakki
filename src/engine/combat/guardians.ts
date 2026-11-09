@@ -56,9 +56,15 @@ export function guardianMaxHp(wave: number): BigNum {
   );
 }
 
+/**
+ * Ofuda of a guardian: grows with its rank, and exponentially with its awakening, like the cost of
+ * the Kamidana's levels (#130). Whole ofuda, since the balance is a count; a safe integer, as the
+ * save requires, up to Éveil 30, far beyond reach.
+ */
 export function guardianOfuda(wave: number): number {
+  const { baseOfuda, awakeningOfudaMultiplier } = BALANCE.guardian;
   const { index, awakening } = guardianAt(wave);
-  return BALANCE.guardian.baseOfuda * (index + 1) * (awakening + 1);
+  return Math.round(baseOfuda * (index + 1) * awakeningOfudaMultiplier ** awakening);
 }
 
 /** Souls multiplier of the tier: +50 % for each guardian wave already behind. */

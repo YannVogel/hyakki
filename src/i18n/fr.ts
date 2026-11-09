@@ -250,8 +250,8 @@ export const fr = {
       },
       awakening: {
         title: 'L’Éveil',
-        body: (count: string) =>
-          `Après le ${count}e Gardien, Nurarihyon, le défilé repart de la première vague un niveau d’Éveil plus haut : les yōkai y sont plus résistants, et les Gardiens reviennent éveillés.`,
+        body: (count: string, ofuda: string) =>
+          `Après le ${count}e Gardien, Nurarihyon, le défilé repart de la première vague un niveau d’Éveil plus haut : les yōkai y sont plus résistants, et les Gardiens reviennent éveillés. Chaque niveau d’Éveil multiplie leurs ofuda par ${ofuda}.`,
       },
       sanctuary: {
         title: 'Le Sanctuaire',
