@@ -2,6 +2,12 @@
 
 Chaque entrée : date, décision, raison, conséquence. Les plus récentes en haut.
 
+## 2026-11-11 — Chaque Gardien rapporte plus d'ofuda que le précédent
+
+- **Décision** (Yann) : les ofuda de l'Éveil 1 ne changent pas (`5 × rang`, de 5 à 50). Au-delà de Nurarihyon, la récompense grimpe de Gardien en Gardien : `50 × 3^(éveil − 1 + rang / 10)`, soit environ +11,6 % à chaque Gardien et ×3 sur un niveau d'Éveil complet (`guardianOfuda`). Bake-danuki éveillé rapporte 56 ofuda (au lieu de 15), Nurarihyon éveillé 150 (inchangé). Un défilé complet rapporte 275 ofuda à l'Éveil 1, 962 à l'Éveil 2, 2 884 à l'Éveil 3.
+- **Raison** : avec `5 × rang × 3^éveil` (#130), le rang pèse ×10 dans un défilé et l'Éveil seulement ×3 : les trois premiers Gardiens éveillés rapportaient moins que Nurarihyon, alors qu'ils sont des centaines de milliers de fois plus résistants. Pistes écartées : `5 × numéro du Gardien depuis le début` (linéaire au-delà de l'Éveil 2, ce que #130 avait écarté) et une courbe continue dès Bake-danuki (16 ofuda au premier Gardien : tout le début de partie, calibré avec le harnais, serait à reprendre).
+- **Conséquence** : pas de nouveau schéma de sauvegarde, et Nurarihyon garde ses ofuda à chaque Éveil : la récompense reste un entier sûr jusqu'à l'Éveil 30. Les règles du jeu disent que chaque Gardien rapporte plus que le précédent. Harnais : aucun jalon ne bouge sur 30 jours (`GAME_DESIGN.md` § 5.2).
+
 ## 2026-11-09 — Historique des Gardiens éveillés : schéma de sauvegarde 3
 
 - **Décision** (#133) : `GameState.guardiansBestAwakening` garde, pour chacun des dix Gardiens, le plus haut éveil où il est tombé (0 tant que sa version éveillée n'est jamais tombée), à côté de `guardiansDefeated`, inchangé. La galerie l'affiche dans une section « Gardiens éveillés », visible une fois Nurarihyon vaincu ; la carte d'un Gardien éveillé affiche son nom seul (« Gardiens éveillés » en titre, et « Kyūbi no kitsune éveillé » ne tiendrait pas).
