@@ -67,7 +67,7 @@ describe('OptionsScreen', () => {
     expect(ruleText('parade').join(' ')).toContain(`×${crit.multiplier} dégâts`);
     expect(ruleText('festival').join(' ')).toContain(`${festival.bonusPerSpark * 100}\u00a0%`);
     expect(ruleText('awakening').join(' ')).toContain(
-      `multiplie leurs ofuda par ${guardian.awakeningOfudaMultiplier}`,
+      `multiplie ses ofuda par ${guardian.awakeningOfudaMultiplier}`,
     );
   });
 

@@ -45,22 +45,37 @@ describe('guardian formulas', () => {
     expect(toNumber(div(guardianMaxHp(1100), waveHp(1100)))).toBeCloseTo(24, 9);
   });
 
-  it('pays more ofuda for later and awakened guardians', () => {
+  it('pays 5 ofuda per rank in the first level, then climbs on past Nurarihyon', () => {
     expect(guardianOfuda(100)).toBe(5);
     expect(guardianOfuda(1000)).toBe(50);
-    expect(guardianOfuda(1100)).toBe(15);
+    expect(guardianOfuda(1100)).toBe(56);
     expect(guardianOfuda(2000)).toBe(150);
-    expect(guardianOfuda(2100)).toBe(45);
+    expect(guardianOfuda(2100)).toBe(167);
+    expect(guardianOfuda(3000)).toBe(450);
   });
 
-  it('triples the ofuda of a guardian at each awakening level, in whole safe numbers', () => {
+  it('pays every guardian more ofuda than the one before, awakened or not', () => {
     fc.assert(
-      fc.property(fc.integer({ min: 1, max: 10 }), fc.nat(28), (rank, awakening) => {
-        const wave = awakening * CYCLE_WAVES + rank * 100;
-        const awakened = guardianOfuda(wave + CYCLE_WAVES);
-        expect(awakened).toBe(3 * guardianOfuda(wave));
-        expect(Number.isSafeInteger(awakened)).toBe(true);
+      fc.property(fc.integer({ min: 1, max: 299 }), (guardian) => {
+        const wave = guardian * 100;
+        expect(guardianOfuda(wave + 100)).toBeGreaterThan(guardianOfuda(wave));
       }),
+    );
+  });
+
+  it('triples the ofuda of an awakened guardian at each level, in whole safe numbers', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 1, max: 10 }),
+        fc.integer({ min: 1, max: 28 }),
+        (rank, awakening) => {
+          const wave = awakening * CYCLE_WAVES + rank * 100;
+          const awakened = guardianOfuda(wave + CYCLE_WAVES);
+          // Both rewards are rounded: up to half an ofuda each, tripled for the lower one.
+          expect(Math.abs(awakened - 3 * guardianOfuda(wave))).toBeLessThanOrEqual(2);
+          expect(Number.isSafeInteger(awakened)).toBe(true);
+        },
+      ),
     );
   });
 
@@ -226,7 +241,7 @@ describe('guardian fights', () => {
     );
     const won = step(stateAtWave(2, 1100, STRONG), 1, [ENGAGE]);
     expect(won.events).toContainEqual(
-      expect.objectContaining({ type: 'guardianDefeated', index: 0, ofuda: 15 }),
+      expect.objectContaining({ type: 'guardianDefeated', index: 0, ofuda: 56 }),
     );
   });
 

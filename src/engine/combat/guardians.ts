@@ -57,14 +57,22 @@ export function guardianMaxHp(wave: number): BigNum {
 }
 
 /**
- * Ofuda of a guardian: grows with its rank, and exponentially with its awakening, like the cost of
- * the Kamidana's levels (#130). Whole ofuda, since the balance is a count; a safe integer, as the
- * save requires, up to Éveil 30, far beyond reach.
+ * Ofuda of a guardian. In the first awakening level, baseOfuda × its rank, as calibrated with the
+ * harness. Past Nurarihyon, the reward climbs exponentially from one guardian to the next, by
+ * awakeningOfudaMultiplier over a whole level, like the cost of the Kamidana's levels (#130): a
+ * rank factor would make the awakened Bake-danuki pay less than Nurarihyon, though far tougher.
+ * Whole ofuda, since the balance is a count; a safe integer, as the save requires, up to Éveil 30,
+ * far beyond reach.
  */
 export function guardianOfuda(wave: number): number {
-  const { baseOfuda, awakeningOfudaMultiplier } = BALANCE.guardian;
+  const { baseOfuda, count, awakeningOfudaMultiplier } = BALANCE.guardian;
   const { index, awakening } = guardianAt(wave);
-  return Math.round(baseOfuda * (index + 1) * awakeningOfudaMultiplier ** awakening);
+  const rank = index + 1;
+  if (awakening === 0) {
+    return baseOfuda * rank;
+  }
+  const lastGuardianOfuda = baseOfuda * count;
+  return Math.round(lastGuardianOfuda * awakeningOfudaMultiplier ** (awakening - 1 + rank / count));
 }
 
 /** Souls multiplier of the tier: +50 % for each guardian wave already behind. */
